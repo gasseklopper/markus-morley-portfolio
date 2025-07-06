@@ -24,24 +24,31 @@ export default defineConfig(({ command, mode }): UserConfig => {
   return {
     plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Meine Qwik App',
-        short_name: 'QwikApp',
+        name: 'Markus Morley Portfolio',
+        short_name: 'Portfolio',
         start_url: '/',
         scope: '/',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#317EFB',
+        theme_color: '#0f172a',
         icons: [
           {
-            src: 'icons/icon-192x192.png',
+            src: 'assets/icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-512x512.png',
+            src: 'assets/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
+          },
+          {
+            src: 'assets/icons/maskable-icon.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       }

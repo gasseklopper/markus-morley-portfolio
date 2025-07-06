@@ -24,6 +24,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
   return {
     plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'Markus Morley Portfolio',

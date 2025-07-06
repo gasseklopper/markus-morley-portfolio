@@ -9,6 +9,7 @@ function = "entry.netlify-edge"
 framework = "#static"
 [[headers]]
   for = "/assets/images/*"
+  for = "/sw.js"
 [headers.values]
   Cache-Control = "public, max-age=60"
 [[plugins]]

@@ -12,6 +12,7 @@ export default extendConfig(baseConfig, () => {
       },
       outDir: ".netlify/edge-functions/entry.netlify-edge",
     },
+    base: '/', // <- hinzufügen!
     plugins: [netlifyEdgeAdapter(), VitePWA({                         // ✅ PWA Plugin hier einfügen
       registerType: 'autoUpdate',
       injectRegister: 'auto',

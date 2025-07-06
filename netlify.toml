@@ -9,8 +9,10 @@ function = "entry.netlify-edge"
 framework = "#static"
 [[headers]]
   for = "/assets/images/*"
-  [headers.values]
-    Cache-Control = "no-cache"
+[headers.values]
+  Cache-Control = "public, max-age=60"
+[[headers]]
+  for = "/assets/images/*"
 [headers.values]
   Cache-Control = "public, max-age=60"
 [[plugins]]

@@ -27,6 +27,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      outDir: 'public', //
       manifest: {
         name: 'Markus Morley Portfolio',
         short_name: 'Portfolio',

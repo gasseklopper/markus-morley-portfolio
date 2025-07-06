@@ -16,6 +16,7 @@ export default extendConfig(baseConfig, () => {
     plugins: [netlifyEdgeAdapter(), VitePWA({                         // ✅ PWA Plugin hier einfügen
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      outDir: 'public',
       manifest: {
         name: 'Markus Morley Portfolio',
         short_name: 'Portfolio',

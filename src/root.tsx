@@ -1,6 +1,7 @@
-import { component$, isDev } from "@builder.io/qwik";
+import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
+import { registerSW } from 'virtual:pwa-register';
 
 import "./global.css";
 
@@ -10,7 +11,13 @@ export default component$(() => {
    * immediately followed by the document's <head> and <body>.
    *
    * Don't remove the `<head>` and `<body>` elements.
-   */
+  */
+
+  useVisibleTask$(() => {
+    if ('serviceWorker' in navigator) {
+      registerSW();
+    }
+  });
 
   return (
     <QwikCityProvider>

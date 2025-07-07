@@ -28,6 +28,9 @@ export default defineConfig(({ command, mode }): UserConfig => {
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       outDir: 'public', //
+      workbox: {
+        navigateFallback: undefined,
+      },
       manifest: {
         name: 'Markus Morley Portfolio',
         short_name: 'Portfolio',

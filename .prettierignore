@@ -35,3 +35,7 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 server
+public/sw.js
+public/workbox-5ffe50d4.js
+public/manifest.json
+src/entry.netlify-edge.tsx

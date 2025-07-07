@@ -16,7 +16,7 @@ export default extendConfig(baseConfig, () => {
     plugins: [netlifyEdgeAdapter(), VitePWA({                         // ✅ PWA Plugin hier einfügen
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      outDir: 'public',
+      outDir: 'dist',
       workbox: {
         navigateFallback: undefined,
       },

@@ -17,6 +17,9 @@ export default extendConfig(baseConfig, () => {
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       outDir: 'public',
+      workbox: {
+        navigateFallback: undefined,
+      },
       manifest: {
         name: 'Markus Morley Portfolio',
         short_name: 'Portfolio',

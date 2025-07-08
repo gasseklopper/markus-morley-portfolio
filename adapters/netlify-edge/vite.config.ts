@@ -17,6 +17,10 @@ export default extendConfig(baseConfig, () => {
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       outDir: 'dist',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'fonts/Barlow-Bold.woff',
+        'fonts/Barlow-Medium.woff',
+        'fonts/Barlow-Light.woff',
+        'fonts/Barlow-SemiBold.woff'],
       workbox: {
         navigateFallback: undefined,
       },

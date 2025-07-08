@@ -26,7 +26,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png','fonts/Barlow-Bold.woff',
+      includeAssets: ['favicon.png', 'apple-touch-icon.png','fonts/Barlow-Bold.woff',
         'fonts/Barlow-Medium.woff',
         'fonts/Barlow-Light.woff',
         'fonts/Barlow-SemiBold.woff'],

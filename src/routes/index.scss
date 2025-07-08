@@ -1,0 +1,11 @@
+@use "../styles/variables" as *;
+
+.page {
+  padding: $sectionPadding;
+  max-width: $maxWidth;
+  border-radius: $radiusBig;
+}
+
+.title {
+  font: $fontStackBarlowBold;
+}

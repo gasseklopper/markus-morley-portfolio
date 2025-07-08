@@ -1,16 +1,18 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStyles$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import styles from "./index.scss?inline";
 
 export default component$(() => {
+  useStyles$(styles);
   return (
-    <>
-      <h1>Hi 👋</h1>
+    <div class="page">
+      <h1 class="title">Hi 👋</h1>
       <div>
         Can't wait to see what you build with qwik!
         <br />
         Happy coding.
       </div>
-    </>
+    </div>
   );
 });
 

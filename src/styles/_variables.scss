@@ -1,0 +1,97 @@
+/** @format */
+
+// Core variables
+$version: "0.0.1";
+
+// Sizes
+$gutter_30: 1.875rem; // 30px
+$gutter: 1.8rem; // 28.8px
+$maxWidth: 1440px;
+$headerHeight: 80px;
+$headerHeightMobile: 15em;
+$sectionPadding: $gutter * 4;
+$radiusSmall: 4px;
+$radiusBig: 6px;
+$iconSize: 90px;
+$gridMinWidth: 820px;
+
+// Breakpoints
+$bpXXS: 480px;
+$bpXS: 640px;
+$bpS: 960px;
+$bpM: 1024px;
+$bpL: 1280px;
+$bpXL: 1366px;
+$bpXXL: 1920px;
+
+// basicGrid
+$reworkGrid__centering-divisor: -2;
+$reworkGrid__width: $maxWidth;
+$reworkGrid__gutter: $gutter;
+$reworkGrid__sizes: (
+  "small": 0,
+  "medium": $bpXS,
+  "large": $bpM,
+  "huge": $bpL,
+);
+
+// Typography Barlow
+$fontStackBarlowBold:
+  normal 700 100%/1.4 "Barlow bold",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackBarlowMedium:
+  normal 500 100%/1.4 "Barlow medium",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackBarlowLight:
+  normal 300 100%/1.4 "Barlow light",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackBarlowSemibold:
+  normal 600 100%/1.4 "Barlow semibold",
+  Helvetica,
+  Arial,
+  sans-serif;
+
+// Typography Syne
+$fontStackSyneBold:
+  normal 700 100%/1.4 "Syne bold",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackSyneMedium:
+  normal 500 100%/1.4 "Syne medium",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackSyneExtrabold:
+  normal 800 100%/1.4 "Syne extrabold",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackSyneSemibold:
+  normal 600 100%/1.4 "Syne semibold",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackSyneRegular:
+  normal 400 100%/1.4 "Syne regular",
+  Helvetica,
+  Arial,
+  sans-serif;
+
+// Typography berlingo
+$fontStackBerlingoRegular:
+  normal 500 100%/1.4 "berlingo regular",
+  Helvetica,
+  Arial,
+  sans-serif;
+$fontStackBerlingoBold:
+  normal 600 100%/1.4 "berlingo regular",
+  Helvetica,
+  Arial,
+  sans-serif;

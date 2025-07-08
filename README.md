@@ -20,13 +20,17 @@ Inside your project, you'll see the following directory structure:
 └── src/
     ├── components/
     │   └── ...
+    ├── styles/
+    │   └── ...
     └── routes/
         └── ...
 ```
 
-- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.dev/qwikcity/routing/overview/) for more info.
+- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. See `src/routes/index.scss` for an example of using SCSS variables in a route. Please see the [routing docs](https://qwik.dev/qwikcity/routing/overview/) for more info.
 
 - `src/components`: Recommended directory for components.
+
+- `src/styles`: Global styles and SCSS variables.
 
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 

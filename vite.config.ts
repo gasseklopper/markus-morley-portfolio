@@ -26,13 +26,16 @@ export default defineConfig(({ command, mode }): UserConfig => {
     plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      strategies: 'injectManifest',
       includeAssets: ['favicon.png', 'apple-touch-icon.png','fonts/Barlow-Bold.woff',
         'fonts/Barlow-Medium.woff',
         'fonts/Barlow-Light.woff',
         'fonts/Barlow-SemiBold.woff'],
       outDir: 'dist',
       workbox: {
-        navigateFallback: undefined,
+        navigateFallback: '/404',
       },
       manifest: {
         name: 'Markus Morley Portfolio',

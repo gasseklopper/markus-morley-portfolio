@@ -16,13 +16,16 @@ export default extendConfig(baseConfig, () => {
     plugins: [netlifyEdgeAdapter(), VitePWA({                         // ✅ PWA Plugin hier einfügen
       registerType: 'autoUpdate',
       injectRegister: 'auto',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      strategies: 'injectManifest',
       outDir: 'dist',
       includeAssets: ['favicon.png', 'apple-touch-icon.png', 'fonts/Barlow-Bold.woff',
         'fonts/Barlow-Medium.woff',
         'fonts/Barlow-Light.woff',
         'fonts/Barlow-SemiBold.woff'],
       workbox: {
-        navigateFallback: undefined,
+        navigateFallback: '/404',
       },
       manifest: {
         name: 'Markus Morley Portfolio',

@@ -8,6 +8,10 @@
 
 ---
 
+## Dependencies
+
+- [normalize.css](https://necolas.github.io/normalize.css/) - ensures consistent base styling across browsers.
+
 ## Project Structure
 
 This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.

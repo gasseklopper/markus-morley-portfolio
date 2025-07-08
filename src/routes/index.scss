@@ -6,6 +6,18 @@
   border-radius: $radiusBig;
 }
 
-.title {
+.title_barlowBold {
   font: $fontStackBarlowBold;
+}
+
+.title_barlowMedium {
+  font: $fontStackBarlowMedium;
+}
+
+.title_barlowLight {
+  font: $fontStackBarlowLight;
+}
+
+.title_barlowSemibold {
+  font: $fontStackBarlowSemibold;
 }

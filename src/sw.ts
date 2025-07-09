@@ -3,6 +3,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 import { precacheAndRoute } from "workbox-precaching";
+import { clientsClaim } from "workbox-core";
 
 // Fonts to cache for offline use
 const FONT_ASSETS = [
@@ -17,6 +18,9 @@ precacheAndRoute([
   ...self.__WB_MANIFEST,
   ...FONT_ASSETS.map((url) => ({ url, revision: null })),
 ]);
+
+self.skipWaiting();
+clientsClaim();
 
 self.addEventListener("fetch", (event: FetchEvent) => {
   event.respondWith(

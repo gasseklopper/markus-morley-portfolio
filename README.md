@@ -74,7 +74,11 @@ npm run build # or `yarn build`
 
 ## Service Worker
 
-This project uses the `vite-plugin-pwa` plugin to generate a service worker. The service worker pre-caches the site's fonts and routes failed network requests to the `/404` page so users see a friendly message when offline.
+This project uses the `vite-plugin-pwa` plugin to generate a service worker. The
+service worker is registered as soon as the app loads so it controls the
+`start_url` on the initial visit. It pre‑caches the site's fonts and routes
+failed network requests to the `/404` page so users see a friendly message when
+offline.
 
 ## Netlify
 

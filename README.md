@@ -72,6 +72,10 @@ The production build will generate client and server modules by running both cli
 npm run build # or `yarn build`
 ```
 
+## Service Worker
+
+This project uses the `vite-plugin-pwa` plugin to generate a service worker. The service worker pre-caches the site's fonts and routes failed network requests to the `/404` page so users see a friendly message when offline.
+
 ## Netlify
 
 This starter site is configured to deploy to [Netlify Edge Functions](https://docs.netlify.com/edge-functions/overview/), which means it will be rendered at an edge location near to your users.

@@ -80,7 +80,9 @@ It precaches all fonts in `public/fonts` and calls `skipWaiting()` and
 `clientsClaim()` so updates activate right away. Failed network requests are
 routed to `/404` so users see a friendly message when offline. The service
 worker now also caches the rendered HTML and any JSON data so pages can be
-served even when the network is unavailable.
+served even when the network is unavailable. HTML responses are stored in the
+`html-cache` while JSON is kept in `data-cache`, ensuring offline pages and data
+remain separate.
 
 ## Netlify
 

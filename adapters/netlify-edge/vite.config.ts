@@ -15,7 +15,7 @@ export default extendConfig(baseConfig, () => {
     base: '/', // <- hinzufügen!
     plugins: [netlifyEdgeAdapter(), VitePWA({                         // ✅ PWA Plugin hier einfügen
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      injectRegister: 'inline',
       srcDir: 'src',
       filename: 'sw.ts',
       strategies: 'injectManifest',

@@ -75,7 +75,8 @@ npm run build # or `yarn build`
 ## Service Worker
 
 This project uses the `vite-plugin-pwa` plugin to generate a service worker.
-The worker registers immediately so it controls the `start_url` on first visit.
+The plugin injects an inline registration script so the worker registers as soon
+as possible and controls the `start_url` on the next visit.
 It precaches all fonts in `public/fonts` and calls `skipWaiting()` and
 `clientsClaim()` so updates activate right away. Failed network requests are
 routed to `/404` so users see a friendly message when offline. The service

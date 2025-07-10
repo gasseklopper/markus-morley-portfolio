@@ -23,7 +23,41 @@ self.skipWaiting();
 clientsClaim();
 
 self.addEventListener("fetch", (event: FetchEvent) => {
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  const acceptHeader = event.request.headers.get("Accept") || "";
+
+  if (acceptHeader.includes("text/html")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open("html-cache").then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() =>
+          caches.match(event.request).then((resp) => resp || caches.match("/404")),
+        ),
+    );
+    return;
+  }
+
+  if (acceptHeader.includes("application/json")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open("data-cache").then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request) as Promise<Response>),
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).catch(() => caches.match("/404") as Promise<Response>),
+    fetch(event.request).catch(() => caches.match(event.request) as Promise<Response>),
   );
 });

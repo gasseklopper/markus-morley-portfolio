@@ -78,7 +78,9 @@ This project uses the `vite-plugin-pwa` plugin to generate a service worker.
 The worker registers immediately so it controls the `start_url` on first visit.
 It precaches all fonts in `public/fonts` and calls `skipWaiting()` and
 `clientsClaim()` so updates activate right away. Failed network requests are
-routed to `/404` so users see a friendly message when offline.
+routed to `/404` so users see a friendly message when offline. The service
+worker now also caches the rendered HTML and any JSON data so pages can be
+served even when the network is unavailable.
 
 ## Netlify
 

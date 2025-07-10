@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     base: '/', // <- hinzufügen!
     plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      injectRegister: null,
       srcDir: 'src',
       filename: 'sw.ts',
       strategies: 'injectManifest',

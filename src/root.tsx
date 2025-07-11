@@ -3,6 +3,7 @@ import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 import { registerSW } from "virtual:pwa-register";
 
+
 import "./global.css";
 
 export default component$(() => {
@@ -18,6 +19,12 @@ export default component$(() => {
    *
    * Don't remove the `<head>` and `<body>` elements.
    */
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if ("serviceWorker" in navigator) {
+      registerSW()
+    }
+  });
 
   return (
     <QwikCityProvider>

@@ -3,14 +3,9 @@ import {
   Link,
   routeLoader$,
   useNavigate,
-  type RequestHandler,
 } from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import siteConfig from "./../../config/siteConfig.json";
-
-export const onRequest: RequestHandler = (ev) => {
-  ev.status(404);
-};
 
 export const useServerTime = routeLoader$(() => {
   return Date.now();

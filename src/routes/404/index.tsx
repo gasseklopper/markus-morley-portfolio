@@ -1,9 +1,25 @@
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import {
+  Link,
+  routeLoader$,
+  useNavigate,
+  type RequestHandler,
+} from "@builder.io/qwik-city";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import siteConfig from "./../../config/siteConfig.json";
 
+export const onRequest: RequestHandler = (ev) => {
+  ev.status(404);
+};
+
+export const useServerTime = routeLoader$(() => {
+  return Date.now();
+});
+
 export default component$(() => {
+  const nav = useNavigate();
+  const serverTime = useServerTime();
+
   return (
     <div class="page">
       <h1>{siteConfig.page_404.title}</h1>
@@ -11,6 +27,11 @@ export default component$(() => {
       <p>
         <Link href={siteConfig.page_404.link.url}>{siteConfig.page_404.link.text}</Link>
       </p>
+      <div>
+        <Link reload>Refresh (better accessibility)</Link>
+        <button onClick$={() => nav()}>Refresh</button>
+        <p>Server time: {serverTime.value}</p>
+      </div>
     </div>
   );
 });

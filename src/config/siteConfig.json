@@ -2,13 +2,14 @@
   "metadata": {
     "author": "Markus Morley",
     "image": "",
-    "description": "Markus Morley personal portfolio website"
+    "description": "Markus Morley personal portfolio website",
+    "title": "Markus Morley personal portfolio"
   },
   "site_info": {
     "title": "Markus Morley personal portfolio",
     "description": "",
     "base_url": "",
-    "favicon": "/assets/images/logo/favicon.png",
+    "favicon": "/assets/favicon.png",
     "logo": "",
     "logo_dark": "",
     "logo_width": "",
@@ -18,6 +19,14 @@
     "logo_width2": "",
     "logo_height2": "",
     "logo_text": "Markus Morley"
+  },
+  "page_404": {
+    "title": "404 - Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "link": {
+      "text": "Go to Home",
+      "url": "/"
+    }
   },
   "footer_info": {
     "isFixed": false,
@@ -29,7 +38,7 @@
     },
     "promo": {
       "bodytext": "Made with ♡ by Markus Morley",
-      "link": "https://maps.app.goo.gl/JNHvEqWiaBD6fZvUA"
+      "link": "https://markusmorley.de"
     },
     "email": "",
     "mobile": "",

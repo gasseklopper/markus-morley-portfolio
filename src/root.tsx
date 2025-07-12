@@ -1,31 +1,25 @@
-import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
-import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
-import { RouterHead } from "./components/router-head/router-head";
-import { registerSW } from "virtual:pwa-register";
+import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik"
+import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city"
+import { RouterHead } from "./components/router-head/router-head"
+import { registerSW } from "virtual:pwa-register"
 
 
-import "./global.css";
+import "./global.css"
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if ("serviceWorker" in navigator) {
-      registerSW({ immediate: true });
+      registerSW({ immediate: true })
     }
-  });
+  })
+
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
    * immediately followed by the document's <head> and <body>.
    *
    * Don't remove the `<head>` and `<body>` elements.
    */
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    if ("serviceWorker" in navigator) {
-      registerSW()
-    }
-  });
-
   return (
     <QwikCityProvider>
       <head>
@@ -43,5 +37,5 @@ export default component$(() => {
         <RouterOutlet />
       </body>
     </QwikCityProvider>
-  );
-});
+  )
+})

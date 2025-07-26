@@ -52,8 +52,14 @@ This starter includes a few basic routes:
 - `/about` - About section
 - `/portfolio` - Portfolio listing
 
-A sitemap is generated at `/sitemap.xml` using Qwik City. Route metadata is
-defined via a shared `buildHead()` helper to keep pages consistent.
+Individual portfolio project pages are listed in
+`src/config/portfolio-pages.json`. Each page entry provides the title and
+description used by a shared `PortfolioPage` component.
+
+A sitemap is generated at `/sitemap.xml` using Qwik City. Routes are read from
+`src/config/siteConfig.json` along with portfolio pages from
+`src/config/portfolio-pages.json`. Route metadata is defined via a shared
+`buildHead()` helper to keep pages consistent.
 
 ## Scripts
 

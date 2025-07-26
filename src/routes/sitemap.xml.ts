@@ -1,9 +1,11 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
 import siteConfig from "~/config/siteConfig.json";
+import portfolioPages from "~/config/portfolio-pages.json";
 
 export const onGet: RequestHandler = ({ url, headers, send }) => {
   const base = url.origin;
-  const urls = siteConfig.routes
+  const routes = [...siteConfig.routes, ...portfolioPages];
+  const urls = routes
     .map((r: { path: string }) => `<url><loc>${base}${r.path}</loc></url>`)
     .join("");
 

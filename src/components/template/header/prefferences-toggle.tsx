@@ -20,7 +20,8 @@ export const PrefferencesToggle = component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedTheme = localStorage.getItem(themeStorageKey);
-    const defaultTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const defaultTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
       ? siteConfig.theme_preferences.dark
       : siteConfig.theme_preferences.light;
     const currentTheme = storedTheme ?? defaultTheme;
@@ -31,7 +32,8 @@ export const PrefferencesToggle = component$(() => {
     document.documentElement.setAttribute("data-theme", currentTheme);
 
     const storedCursor = localStorage.getItem(cursorAnimationKey);
-    const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches
       ? "false"
       : siteConfig.theme_preferences.cursor;
     const currentCursor = storedCursor ?? defaultCursor;
@@ -72,7 +74,8 @@ export const PrefferencesToggle = component$(() => {
     document.documentElement.setAttribute("data-overlay", currentOverlay);
 
     const storedMotion = localStorage.getItem(motionPreferenceKey);
-    const defaultMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const defaultMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches
       ? "reduce"
       : siteConfig.theme_preferences.motion;
     const currentMotion = storedMotion ?? defaultMotion;

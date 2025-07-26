@@ -1,9 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import {
-  Link,
-  routeLoader$,
-  useNavigate,
-} from "@builder.io/qwik-city";
+import { Link, routeLoader$, useNavigate } from "@builder.io/qwik-city";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -20,7 +16,9 @@ export default component$(() => {
       <h1>{siteConfig.page_404.title}</h1>
       <p>{siteConfig.page_404.description}</p>
       <p>
-        <Link href={siteConfig.page_404.link.url}>{siteConfig.page_404.link.text}</Link>
+        <Link href={siteConfig.page_404.link.url}>
+          {siteConfig.page_404.link.text}
+        </Link>
       </p>
       <div>
         <Link reload>Refresh (better accessibility)</Link>

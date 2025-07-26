@@ -27,7 +27,7 @@ export default component$(() => {
       <head>
         <meta charset="utf-8" />
         <meta name="theme-color" content="#ffffff" />
-        <meta name="robots" content="index" />
+        <meta name="robots" content="index, follow" />
         <meta name="author" content={siteConfig.metadata.author} />
         <meta name="description" content={siteConfig.metadata.description} />
         <meta name="content" content={siteConfig.metadata.description} />

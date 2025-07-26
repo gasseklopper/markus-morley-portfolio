@@ -1,7 +1,7 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from "../index.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
+import { buildHead } from "~/utils/head";
 
 export default component$(() => {
   useStyles$(styles);
@@ -13,12 +13,4 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: `About - ${siteConfig.metadata.title}`,
-  meta: [
-    {
-      name: "description",
-      content: siteConfig.metadata.description,
-    },
-  ],
-};
+export const head = buildHead(`About - ${siteConfig.metadata.title}`);

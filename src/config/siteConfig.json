@@ -82,7 +82,29 @@
       {
         "name": "Home",
         "link": "/"
+      },
+      {
+        "name": "About",
+        "link": "/about"
+      },
+      {
+        "name": "Portfolio",
+        "link": "/portfolio"
       }
     ]
-  }
+  },
+  "routes": [
+    {
+      "name": "Home",
+      "path": "/"
+    },
+    {
+      "name": "About",
+      "path": "/about"
+    },
+    {
+      "name": "Portfolio",
+      "path": "/portfolio"
+    }
+  ]
 }

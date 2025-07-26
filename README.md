@@ -38,6 +38,16 @@ Inside your project, you'll see the following directory structure:
 
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 
+## Routes
+
+This starter includes a few basic routes:
+
+- `/` - Home page
+- `/about` - About section
+- `/portfolio` - Portfolio listing
+
+A sitemap is generated at `/sitemap.xml` using Qwik City.
+
 ## Add Integrations and deployment
 
 Use the `npm run qwik add` command to add additional integrations. Some examples of integrations includes: Cloudflare, Netlify or Express Server, and the [Static Site Generator (SSG)](https://qwik.dev/qwikcity/guides/static-site-generation/).

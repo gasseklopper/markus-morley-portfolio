@@ -31,7 +31,9 @@
   font-style: normal;
   font-display: swap;
 }
-:root {
+:root,
+[data-theme="light"],
+[data-theme="miami"] {
   --font-base: "Barlow light", Helvetica, Arial, sans-serif;
   --font-medium: "Barlow medium", Helvetica, Arial, sans-serif;
   --font-semibold: "Barlow semibold", Helvetica, Arial, sans-serif;
@@ -42,7 +44,7 @@
   --color-primary: #007acc;
 }
 
-.dark {
+[data-theme="dark"] {
   --color-bg: #121212;
   --color-text: #e0e0e0;
   --color-primary: #4dabf7;

@@ -31,3 +31,37 @@
   font-style: normal;
   font-display: swap;
 }
+:root {
+  --font-base: "Barlow light", Helvetica, Arial, sans-serif;
+  --font-medium: "Barlow medium", Helvetica, Arial, sans-serif;
+  --font-semibold: "Barlow semibold", Helvetica, Arial, sans-serif;
+  --font-bold: "Barlow bold", Helvetica, Arial, sans-serif;
+
+  --color-bg: #ffffff;
+  --color-text: #202020;
+  --color-primary: #007acc;
+}
+
+.dark {
+  --color-bg: #121212;
+  --color-text: #e0e0e0;
+  --color-primary: #4dabf7;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-base);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-bold);
+}

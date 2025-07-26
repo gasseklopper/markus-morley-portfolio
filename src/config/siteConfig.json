@@ -75,5 +75,14 @@
       "name": "Github",
       "link": "https://github.com/gasseklopper"
     }
-  ]
+  ],
+  "header_info": {
+    "logo_text": "Markus Morley",
+    "nav": [
+      {
+        "name": "Home",
+        "link": "/"
+      }
+    ]
+  }
 }

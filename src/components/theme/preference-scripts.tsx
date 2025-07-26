@@ -40,7 +40,7 @@ export const LayoutScript = component$(() => {
 export const LayoutDirectionScript = component$(() => {
   const script = `
     document.firstElementChild
-      .setAttribute('data-direction',
+      .setAttribute('data-layout-direction',
         localStorage.getItem('${layoutDirectionPreferenceKey}') ?? 'ltr'
       )`;
   return <script dangerouslySetInnerHTML={script} />;
@@ -58,9 +58,9 @@ export const OverlayScript = component$(() => {
 export const ReduceMotionScript = component$(() => {
   const reduceMotion = `
     document.firstElementChild
-      .setAttribute('cursor-animation',
-        localStorage.getItem('123') ??
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'lights2')
+      .setAttribute('data-motion',
+        localStorage.getItem('${motionPreferenceKey}') ??
+        (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : 'normal')
       )`;
   return <script dangerouslySetInnerHTML={reduceMotion} />;
 });

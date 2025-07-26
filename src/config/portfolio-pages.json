@@ -1,42 +1,62 @@
 [
   {
     "name": "Project 001",
-    "path": "/portfolio/project001"
+    "path": "/portfolio/project001",
+    "title": "Project 001 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 001."
   },
   {
     "name": "Project 002",
-    "path": "/portfolio/project002"
+    "path": "/portfolio/project002",
+    "title": "Project 002 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 002."
   },
   {
     "name": "Project 003",
-    "path": "/portfolio/project003"
+    "path": "/portfolio/project003",
+    "title": "Project 003 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 003."
   },
   {
     "name": "Project 004",
-    "path": "/portfolio/project004"
+    "path": "/portfolio/project004",
+    "title": "Project 004 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 004."
   },
   {
     "name": "Project 005",
-    "path": "/portfolio/project005"
+    "path": "/portfolio/project005",
+    "title": "Project 005 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 005."
   },
   {
     "name": "Project 006",
-    "path": "/portfolio/project006"
+    "path": "/portfolio/project006",
+    "title": "Project 006 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 006."
   },
   {
     "name": "Project 007",
-    "path": "/portfolio/project007"
+    "path": "/portfolio/project007",
+    "title": "Project 007 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 007."
   },
   {
     "name": "Project 008",
-    "path": "/portfolio/project008"
+    "path": "/portfolio/project008",
+    "title": "Project 008 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 008."
   },
   {
     "name": "Project 009",
-    "path": "/portfolio/project009"
+    "path": "/portfolio/project009",
+    "title": "Project 009 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 009."
   },
   {
     "name": "Project 010",
-    "path": "/portfolio/project010"
+    "path": "/portfolio/project010",
+    "title": "Project 010 - Markus Morley personal portfolio",
+    "description": "Dummy content for project 010."
   }
 ]

@@ -41,6 +41,7 @@ Inside your project, you'll see the following directory structure:
 
 - `src/utils`: Shared helpers. For example `src/utils/head.ts` provides a
   `buildHead()` function used across routes to create `DocumentHead` values.
+- `src/config/portfolio-pages.json`: List of individual portfolio pages used for the portfolio listing and sitemap.
 
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 
@@ -52,8 +53,8 @@ This starter includes a few basic routes:
 - `/about` - About section
 - `/portfolio` - Portfolio listing
 
-A sitemap is generated at `/sitemap.xml` using Qwik City. Route metadata is
-defined via a shared `buildHead()` helper to keep pages consistent.
+A sitemap is generated at `/sitemap.xml` using Qwik City.
+Route metadata is defined via a shared `buildHead()` helper to keep pages consistent. Individual portfolio pages are defined in `src/config/portfolio-pages.json` and included in the sitemap.
 
 ## Scripts
 

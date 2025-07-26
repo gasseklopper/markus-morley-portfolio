@@ -67,3 +67,15 @@ h5,
 h6 {
   font-family: var(--font-bold);
 }
+
+/* Layout Direction */
+[data-layout-direction="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[data-layout-direction="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+

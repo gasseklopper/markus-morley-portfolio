@@ -4,7 +4,7 @@ import portfolioPages from "~/config/portfolio-pages.json";
 import { PortfolioPage } from "~/components/portfolio/portfolio-page";
 import { buildHead } from "~/utils/head";
 
-const page = portfolioPages.find((p) => p.path === "/portfolio/project006")!;
+const page = portfolioPages.find((p) => p.path === "/portfolio/project006/")!;
 
 export default component$(() => {
   return <PortfolioPage title={page.title} description={page.description} />;

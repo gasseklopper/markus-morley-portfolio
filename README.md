@@ -36,6 +36,9 @@ Inside your project, you'll see the following directory structure:
 
 - `src/styles`: Global styles and SCSS variables.
 
+- `src/utils`: Shared helpers. For example `src/utils/head.ts` provides a
+  `buildHead()` function used across routes to create `DocumentHead` values.
+
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 
 ## Routes
@@ -46,7 +49,8 @@ This starter includes a few basic routes:
 - `/about` - About section
 - `/portfolio` - Portfolio listing
 
-A sitemap is generated at `/sitemap.xml` using Qwik City.
+A sitemap is generated at `/sitemap.xml` using Qwik City. Route metadata is
+defined via a shared `buildHead()` helper to keep pages consistent.
 
 ## Add Integrations and deployment
 

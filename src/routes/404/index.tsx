@@ -4,8 +4,8 @@ import {
   routeLoader$,
   useNavigate,
 } from "@builder.io/qwik-city";
-import type { DocumentHead } from "@builder.io/qwik-city";
-import siteConfig from "./../../config/siteConfig.json";
+import siteConfig from "~/config/siteConfig.json";
+import { buildHead } from "~/utils/head";
 
 export const useServerTime = routeLoader$(() => {
   return Date.now();
@@ -31,12 +31,7 @@ export default component$(() => {
   );
 });
 
-export const head: DocumentHead = {
-  title: siteConfig.page_404.title,
-  meta: [
-    {
-      name: "description",
-      content: siteConfig.page_404.description,
-    },
-  ],
-};
+export const head = buildHead(
+  siteConfig.page_404.title,
+  siteConfig.page_404.description,
+);

@@ -15,6 +15,11 @@ framework = "#static"
   for = "/assets/images/*"
 [headers.values]
   Cache-Control = "public, max-age=60"
+
+[[headers]]
+  for = "/*"
+[headers.values]
+  X-Robots-Tag = "index, follow"
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
   [plugins.inputs.settings]

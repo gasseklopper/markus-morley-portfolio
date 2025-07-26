@@ -163,3 +163,12 @@ netlify deploy --build
 You must use the `--build` flag whenever you deploy. This ensures that the Edge Functions that this starter site relies on are generated and available when you deploy your site.
 
 Add `--prod` flag to deploy to production.
+
+## Preference scripts
+
+User preferences for theme, layout and motion are applied on first page load via
+inline scripts. These scripts set `data-*` attributes on the `<html>` element so
+the UI reflects saved settings before Qwik hydrates. The bundled component
+`PreferenceScripts` lives in `src/components/theme/preference-scripts.tsx` and is
+injected in `src/root.tsx`. Default values for theme, cursor and layout settings
+come from `src/config/siteConfig.json` so they can be customized per site.

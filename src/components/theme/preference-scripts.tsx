@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import { PrefferencesToggle } from "../template/header/prefferences-toggle";
 import siteConfig from "~/config/siteConfig.json";
 
 export const themeStorageKey = "theme-preference";
@@ -83,3 +84,5 @@ export const PreferenceScripts = component$(() => {
     </>
   );
 });
+
+export { PrefferencesToggle };

@@ -4,6 +4,7 @@ import { RouterHead } from "./components/router-head/router-head";
 import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
 import { Footer } from "./components/template/footer";
+import { Header } from "./components/template/header";
 
 import "./global.css";
 
@@ -40,6 +41,7 @@ export default component$(() => {
         <RouterHead />
       </head>
       <body lang="en">
+        <Header />
         <RouterOutlet />
         <Footer />
       </body>

@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import siteConfig from "~/config/siteConfig.json";
 
 export const themeStorageKey = "theme-preference";
 export const cursorAnimationKey = "theme-cursor-preference";
@@ -13,7 +14,7 @@ export const ThemeScript = component$(() => {
     document.firstElementChild
       .setAttribute('data-theme',
         localStorage.getItem('${themeStorageKey}') ??
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'miami')
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '${siteConfig.theme_preferences.theme}')
       )`;
   return <script dangerouslySetInnerHTML={themeScript} />;
 });
@@ -23,7 +24,7 @@ export const CursorAnimationScript = component$(() => {
     document.firstElementChild
       .setAttribute('data-cursor',
         localStorage.getItem('${cursorAnimationKey}') ??
-        (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'false' : 'true')
+        (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'false' : '${siteConfig.theme_preferences.cursor}')
       )`;
   return <script dangerouslySetInnerHTML={script} />;
 });
@@ -32,7 +33,7 @@ export const LayoutScript = component$(() => {
   const script = `
     document.firstElementChild
       .setAttribute('data-layout',
-        localStorage.getItem('${layoutKey}') ?? 'box'
+        localStorage.getItem('${layoutKey}') ?? '${siteConfig.theme_preferences.layout}'
       )`;
   return <script dangerouslySetInnerHTML={script} />;
 });
@@ -41,7 +42,7 @@ export const LayoutDirectionScript = component$(() => {
   const script = `
     document.firstElementChild
       .setAttribute('data-layout-direction',
-        localStorage.getItem('${layoutDirectionPreferenceKey}') ?? 'ltr'
+        localStorage.getItem('${layoutDirectionPreferenceKey}') ?? '${siteConfig.theme_preferences.layout_direction}'
       )`;
   return <script dangerouslySetInnerHTML={script} />;
 });
@@ -50,7 +51,7 @@ export const OverlayScript = component$(() => {
   const script = `
     document.firstElementChild
       .setAttribute('data-overlay',
-        localStorage.getItem('${overlayPreferenceKey}') ?? 'off'
+        localStorage.getItem('${overlayPreferenceKey}') ?? '${siteConfig.theme_preferences.overlay}'
       )`;
   return <script dangerouslySetInnerHTML={script} />;
 });
@@ -60,7 +61,7 @@ export const ReduceMotionScript = component$(() => {
     document.firstElementChild
       .setAttribute('data-motion',
         localStorage.getItem('${motionPreferenceKey}') ??
-        (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : 'normal')
+        (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : '${siteConfig.theme_preferences.motion}')
       )`;
   return <script dangerouslySetInnerHTML={reduceMotion} />;
 });

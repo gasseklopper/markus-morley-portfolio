@@ -93,6 +93,14 @@
       }
     ]
   },
+  "theme_preferences": {
+    "theme": "miami",
+    "cursor": "true",
+    "layout": "box",
+    "layout_direction": "ltr",
+    "overlay": "off",
+    "motion": "normal"
+  },
   "routes": [
     {
       "name": "Home",

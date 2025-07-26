@@ -170,4 +170,5 @@ User preferences for theme, layout and motion are applied on first page load via
 inline scripts. These scripts set `data-*` attributes on the `<html>` element so
 the UI reflects saved settings before Qwik hydrates. The bundled component
 `PreferenceScripts` lives in `src/components/theme/preference-scripts.tsx` and is
-injected in `src/root.tsx`.
+injected in `src/root.tsx`. Default values for theme, cursor and layout settings
+come from `src/config/siteConfig.json` so they can be customized per site.

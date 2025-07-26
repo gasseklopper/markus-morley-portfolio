@@ -1,5 +1,6 @@
 import { component$, $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { themeStorageKey } from "../../theme/preference-scripts";
+import siteConfig from "~/config/siteConfig.json";
 
 export const ThemeToggle = component$(() => {
   const isDark = useSignal(false);
@@ -17,7 +18,7 @@ export const ThemeToggle = component$(() => {
 
   const toggle$ = $(() => {
     isDark.value = !isDark.value;
-    const newTheme = isDark.value ? "dark" : "miami";
+    const newTheme = isDark.value ? "dark" : siteConfig.theme_preferences.theme;
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem(themeStorageKey, newTheme);
   });

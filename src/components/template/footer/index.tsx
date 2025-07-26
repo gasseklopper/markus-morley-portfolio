@@ -6,9 +6,7 @@ export const Footer = component$(() => {
     <footer>
       {footerData.promo && (
         <p>
-          <a href={footerData.promo.link}>
-            {footerData.promo.bodytext}
-          </a>
+          <a href={footerData.promo.link}>{footerData.promo.bodytext}</a>
         </p>
       )}
       {footerData.email && (
@@ -25,7 +23,8 @@ export const Footer = component$(() => {
       {footerData.open_time && <p>{footerData.open_time}</p>}
       {footerData.address?.name && (
         <p>
-          Address: {footerData.address.link ? (
+          Address:{" "}
+          {footerData.address.link ? (
             <a href={footerData.address.link}>{footerData.address.name}</a>
           ) : (
             footerData.address.name
@@ -36,7 +35,9 @@ export const Footer = component$(() => {
         <p>
           {footerData.copyright.label}{" "}
           {footerData.copyright.link ? (
-            <a href={footerData.copyright.link}>{footerData.copyright.company}</a>
+            <a href={footerData.copyright.link}>
+              {footerData.copyright.company}
+            </a>
           ) : (
             footerData.copyright.company
           )}

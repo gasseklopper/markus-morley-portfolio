@@ -8,7 +8,8 @@ export const ThemeToggle = component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const stored = localStorage.getItem(themeStorageKey);
-    const current = stored ?? document.documentElement.getAttribute("data-theme");
+    const current =
+      stored ?? document.documentElement.getAttribute("data-theme");
     if (current === siteConfig.theme_preferences.dark) {
       isDark.value = true;
     }

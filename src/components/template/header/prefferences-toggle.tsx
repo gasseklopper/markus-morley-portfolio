@@ -20,58 +20,67 @@ export const PrefferencesToggle = component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const storedTheme = localStorage.getItem(themeStorageKey);
-    const currentTheme =
-      storedTheme ?? document.documentElement.getAttribute("data-theme");
-    if (currentTheme === siteConfig.theme_preferences.dark) {
-      isDark.value = true;
+    const defaultTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? siteConfig.theme_preferences.dark
+      : siteConfig.theme_preferences.light;
+    const currentTheme = storedTheme ?? defaultTheme;
+    if (!storedTheme) {
+      localStorage.setItem(themeStorageKey, currentTheme);
     }
-    if (currentTheme) {
-      document.documentElement.setAttribute("data-theme", currentTheme);
-    }
+    isDark.value = currentTheme === siteConfig.theme_preferences.dark;
+    document.documentElement.setAttribute("data-theme", currentTheme);
 
     const storedCursor = localStorage.getItem(cursorAnimationKey);
-    const currentCursor =
-      storedCursor ?? document.documentElement.getAttribute("data-cursor");
-    if (currentCursor) {
-      cursorEnabled.value = currentCursor !== "false";
-      document.documentElement.setAttribute("data-cursor", currentCursor);
+    const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "false"
+      : siteConfig.theme_preferences.cursor;
+    const currentCursor = storedCursor ?? defaultCursor;
+    if (!storedCursor) {
+      localStorage.setItem(cursorAnimationKey, currentCursor);
     }
+    cursorEnabled.value = currentCursor !== "false";
+    document.documentElement.setAttribute("data-cursor", currentCursor);
 
     const storedLayout = localStorage.getItem(layoutKey);
-    const currentLayout =
-      storedLayout ?? document.documentElement.getAttribute("data-layout");
-    if (currentLayout) {
-      boxLayout.value = currentLayout === "box";
-      document.documentElement.setAttribute("data-layout", currentLayout);
+    const defaultLayout = siteConfig.theme_preferences.layout;
+    const currentLayout = storedLayout ?? defaultLayout;
+    if (!storedLayout) {
+      localStorage.setItem(layoutKey, currentLayout);
     }
+    boxLayout.value = currentLayout === "box";
+    document.documentElement.setAttribute("data-layout", currentLayout);
 
     const storedDirection = localStorage.getItem(layoutDirectionPreferenceKey);
-    const currentDirection =
-      storedDirection ??
-      document.documentElement.getAttribute("data-layout-direction");
-    if (currentDirection) {
-      rtlLayout.value = currentDirection === "rtl";
-      document.documentElement.setAttribute(
-        "data-layout-direction",
-        currentDirection,
-      );
+    const defaultDirection = siteConfig.theme_preferences.layout_direction;
+    const currentDirection = storedDirection ?? defaultDirection;
+    if (!storedDirection) {
+      localStorage.setItem(layoutDirectionPreferenceKey, currentDirection);
     }
+    rtlLayout.value = currentDirection === "rtl";
+    document.documentElement.setAttribute(
+      "data-layout-direction",
+      currentDirection,
+    );
 
     const storedOverlay = localStorage.getItem(overlayPreferenceKey);
-    const currentOverlay =
-      storedOverlay ?? document.documentElement.getAttribute("data-overlay");
-    if (currentOverlay) {
-      overlayOn.value = currentOverlay === "on";
-      document.documentElement.setAttribute("data-overlay", currentOverlay);
+    const defaultOverlay = siteConfig.theme_preferences.overlay;
+    const currentOverlay = storedOverlay ?? defaultOverlay;
+    if (!storedOverlay) {
+      localStorage.setItem(overlayPreferenceKey, currentOverlay);
     }
+    overlayOn.value = currentOverlay === "on";
+    document.documentElement.setAttribute("data-overlay", currentOverlay);
 
     const storedMotion = localStorage.getItem(motionPreferenceKey);
-    const currentMotion =
-      storedMotion ?? document.documentElement.getAttribute("data-motion");
-    if (currentMotion) {
-      reducedMotion.value = currentMotion === "reduce";
-      document.documentElement.setAttribute("data-motion", currentMotion);
+    const defaultMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "reduce"
+      : siteConfig.theme_preferences.motion;
+    const currentMotion = storedMotion ?? defaultMotion;
+    if (!storedMotion) {
+      localStorage.setItem(motionPreferenceKey, currentMotion);
     }
+    reducedMotion.value = currentMotion === "reduce";
+    document.documentElement.setAttribute("data-motion", currentMotion);
   });
 
   const toggleTheme$ = $(() => {

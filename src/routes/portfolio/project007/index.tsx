@@ -11,4 +11,7 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`Project 007 - ${siteConfig.metadata.title}`);
+export const head = buildHead(
+  `Project 007 - ${siteConfig.metadata.title}`,
+  "Dummy content for project 007.",
+);

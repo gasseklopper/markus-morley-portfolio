@@ -1,0 +1,11 @@
+@use "./variables" as *;
+
+:root[data-layout="box"] body {
+  max-width: $maxWidth;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+:root[data-layout="full"] body {
+  max-width: none;
+}

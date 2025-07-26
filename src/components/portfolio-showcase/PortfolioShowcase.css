@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.portfolio-showcase {
+  font-family: "Press Start 2P", monospace;
+  background:
+    repeating-linear-gradient(90deg, #1b1b1b 0 50px, #181818 50px 52px),
+    repeating-linear-gradient(#202020 0 50px, #1a1a1a 50px 52px);
+  color: #0ff;
+  padding: 1rem;
+  text-shadow: 0 0 4px #0ff;
+}
+
+.nav-bar ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.nav-bar li {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-bar li:hover {
+  color: #f0f;
+  text-shadow: 0 0 4px #f0f;
+}
+
+.main-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.title-left h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  text-shadow: 0 0 6px #0ff;
+}
+
+.title-right h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #f0f;
+  text-shadow: 0 0 6px #f0f;
+}
+
+.bottom-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  border: 2px solid #0ff;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 8px #0ff;
+}
+
+.card h4 {
+  margin-top: 0;
+}
+
+.project .prototype {
+  border: 1px dashed #0ff;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  margin-top: 0.5rem;
+}
+
+.play-icon {
+  margin-right: 0.5rem;
+  color: #f0f;
+  text-shadow: 0 0 4px #f0f;
+}
+
+.code h4 {
+  color: #ff0;
+  text-shadow: 0 0 4px #ff0;
+}
+
+.code pre {
+  background: #111;
+  color: #ff0;
+  padding: 0.5rem;
+  overflow-x: auto;
+  font-size: 0.75rem;
+  text-shadow: 0 0 4px #ff0;
+}
+
+@media (max-width: 600px) {
+  .main-block {
+    flex-direction: column;
+    text-align: center;
+  }
+  .bottom-blocks {
+    grid-template-columns: 1fr;
+  }
+}

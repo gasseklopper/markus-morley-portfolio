@@ -90,6 +90,10 @@
       {
         "name": "Portfolio",
         "link": "/portfolio"
+      },
+      {
+        "name": "Showcase",
+        "link": "/portfolio-showcase"
       }
     ]
   },
@@ -115,6 +119,10 @@
     {
       "name": "Portfolio",
       "path": "/portfolio"
+    },
+    {
+      "name": "Portfolio Showcase",
+      "path": "/portfolio-showcase"
     }
   ]
 }

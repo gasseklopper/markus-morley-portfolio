@@ -12,6 +12,12 @@
 
 - [normalize.css](https://necolas.github.io/normalize.css/) - ensures consistent base styling across browsers.
 
+## Dark mode
+
+The site uses a simple design system with CSS variables for fonts and colors. A
+toggle in the header switches between light and dark themes and your preference
+is saved in `localStorage`.
+
 ## Project Structure
 
 This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.

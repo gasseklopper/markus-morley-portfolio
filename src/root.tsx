@@ -1,14 +1,43 @@
-import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  isDev,
+  useVisibleTask$,
+  useSignal,
+  useContextProvider,
+  useTask$,
+} from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
 import { Footer } from "./components/template/footer";
 import { Header } from "./components/template/header";
+import { ThemeContext } from "./context/theme-context";
 
 import "./global.css";
 
 export default component$(() => {
+  const theme = useSignal<'light' | 'dark'>('light');
+  useContextProvider(ThemeContext, theme);
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const stored = localStorage.getItem('theme');
+    theme.value =
+      stored === 'dark' || stored === 'light'
+        ? (stored as 'light' | 'dark')
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+    document.documentElement.dataset.theme = theme.value;
+  });
+
+  useTask$(({ track }) => {
+    track(() => theme.value);
+    document.documentElement.dataset.theme = theme.value;
+    localStorage.setItem('theme', theme.value);
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if ("serviceWorker" in navigator) {

@@ -14,7 +14,7 @@ export const ThemeScript = component$(() => {
     document.firstElementChild
       .setAttribute('data-theme',
         localStorage.getItem('${themeStorageKey}') ??
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '${siteConfig.theme_preferences.theme}')
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? '${siteConfig.theme_preferences.dark}' : '${siteConfig.theme_preferences.light}')
       )`;
   return <script dangerouslySetInnerHTML={themeScript} />;
 });

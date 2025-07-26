@@ -8,6 +8,7 @@ import { Header } from "./components/template/header";
 import { PreferenceScripts } from "./components/theme/preference-scripts";
 
 import "./global.css";
+import "./styles/layout.scss";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task

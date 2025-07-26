@@ -5,6 +5,7 @@ import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
 import { Footer } from "./components/template/footer";
 import { Header } from "./components/template/header";
+import { PreferenceScripts } from "./components/theme/preference-scripts";
 
 import "./global.css";
 
@@ -39,6 +40,7 @@ export default component$(() => {
           />
         )}
         <RouterHead />
+        <PreferenceScripts />
       </head>
       <body lang="en">
         <Header />

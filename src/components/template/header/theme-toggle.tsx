@@ -1,26 +1,25 @@
 import { component$, $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { themeStorageKey } from "../../theme/preference-scripts";
 
 export const ThemeToggle = component$(() => {
   const isDark = useSignal(false);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const stored = localStorage.getItem("theme");
+    const stored = localStorage.getItem(themeStorageKey);
     if (stored === "dark") {
       isDark.value = true;
-      document.documentElement.classList.add("dark");
+    }
+    if (stored) {
+      document.documentElement.setAttribute("data-theme", stored);
     }
   });
 
   const toggle$ = $(() => {
     isDark.value = !isDark.value;
-    if (isDark.value) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    const newTheme = isDark.value ? "dark" : "miami";
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem(themeStorageKey, newTheme);
   });
 
   return (

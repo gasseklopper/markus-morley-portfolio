@@ -8,17 +8,20 @@ export const ThemeToggle = component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const stored = localStorage.getItem(themeStorageKey);
-    if (stored === "dark") {
+    const current = stored ?? document.documentElement.getAttribute("data-theme");
+    if (current === siteConfig.theme_preferences.dark) {
       isDark.value = true;
     }
-    if (stored) {
-      document.documentElement.setAttribute("data-theme", stored);
+    if (current) {
+      document.documentElement.setAttribute("data-theme", current);
     }
   });
 
   const toggle$ = $(() => {
     isDark.value = !isDark.value;
-    const newTheme = isDark.value ? "dark" : siteConfig.theme_preferences.theme;
+    const newTheme = isDark.value
+      ? siteConfig.theme_preferences.dark
+      : siteConfig.theme_preferences.light;
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem(themeStorageKey, newTheme);
   });

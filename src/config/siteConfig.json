@@ -94,6 +94,8 @@
     ]
   },
   "theme_preferences": {
+    "light": "light",
+    "dark": "dark",
     "theme": "miami",
     "cursor": "true",
     "layout": "box",

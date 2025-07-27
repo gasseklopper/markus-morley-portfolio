@@ -1,4 +1,5 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { gsap } from "gsap";
 
 /**
  * Animated cursor that follows the mouse. Visibility is controlled via
@@ -14,8 +15,19 @@ export const Cursor = component$(() => {
     const cursorEl = cursorRef.value;
     if (!cursorEl) return;
 
+    // Use gsap.quickTo for smoother updates without creating a new tween
+    const toX = gsap.quickTo(cursorEl, "x", {
+      duration: 0.2,
+      ease: "power3.out",
+    });
+    const toY = gsap.quickTo(cursorEl, "y", {
+      duration: 0.2,
+      ease: "power3.out",
+    });
+
     const handleMove = (e: MouseEvent) => {
-      cursorEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      toX(e.clientX);
+      toY(e.clientY);
     };
 
     window.addEventListener("mousemove", handleMove);

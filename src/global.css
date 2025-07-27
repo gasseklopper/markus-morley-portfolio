@@ -107,7 +107,7 @@ h6 {
   background: var(--cursor-color);
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: transform 0.1s ease-out;
+  /* Animation handled via GSAP */
   z-index: 200;
 }
 

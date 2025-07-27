@@ -42,12 +42,14 @@
   --color-bg: #ffffff;
   --color-text: #202020;
   --color-primary: #007acc;
+  --cursor-color: #000;
 }
 
 [data-theme="dark"] {
   --color-bg: #121212;
   --color-text: #e0e0e0;
   --color-primary: #4dabf7;
+  --cursor-color: #fff;
 }
 
 body {
@@ -92,4 +94,23 @@ h6 {
 
 :root[data-overlay="on"] .overlay {
   display: block;
+}
+
+/* Cursor Follower */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cursor-color);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-out;
+  z-index: 200;
+}
+
+:root[data-cursor="false"] .cursor {
+  display: none;
 }

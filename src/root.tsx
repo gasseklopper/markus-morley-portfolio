@@ -1,5 +1,9 @@
 import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
-import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
+import {
+  QwikCityProvider,
+  RouterOutlet,
+  useNavigate,
+} from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
@@ -13,11 +17,23 @@ import "./global.css";
 import "./styles/layout.scss";
 
 export default component$(() => {
+  const nav = useNavigate();
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if ("serviceWorker" in navigator) {
       registerSW({ immediate: true });
     }
+    const handler = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest("a");
+      if (!anchor) return;
+      if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href.startsWith("http") || href.startsWith("#")) return;
+      e.preventDefault();
+      document.startViewTransition(() => nav(href));
+    };
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
   });
 
   /**

@@ -7,6 +7,7 @@ import { Footer } from "./components/template/footer";
 import { Header } from "./components/template/header";
 import { PreferenceScripts } from "./components/theme/preference-scripts";
 import { Overlay } from "./components/theme/overlay";
+import { Cursor } from "./components/theme/cursor";
 
 import "./global.css";
 import "./styles/layout.scss";
@@ -49,6 +50,7 @@ export default component$(() => {
         <RouterOutlet />
         <Footer />
         <Overlay />
+        <Cursor />
       </body>
     </QwikCityProvider>
   );

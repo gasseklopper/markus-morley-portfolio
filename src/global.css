@@ -93,3 +93,22 @@ h6 {
 :root[data-overlay="on"] .overlay {
   display: block;
 }
+
+/* Cursor Follower */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #000;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-out;
+  z-index: 200;
+}
+
+:root[data-cursor="false"] .cursor {
+  display: none;
+}

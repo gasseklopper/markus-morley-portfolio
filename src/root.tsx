@@ -30,7 +30,11 @@ export default component$(() => {
       const href = anchor.getAttribute("href");
       if (!href || href.startsWith("http") || href.startsWith("#")) return;
       e.preventDefault();
-      document.startViewTransition?.(() => nav(href));
+      if (document.startViewTransition) {
+        document.startViewTransition(() => nav(href));
+      } else {
+        nav(href);
+      }
     };
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);

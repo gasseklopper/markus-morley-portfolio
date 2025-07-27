@@ -78,6 +78,10 @@ export const ReduceMotionScript = component$(() => {
       const value = stored ?? defaultValue;
       if (!stored) localStorage.setItem('${motionPreferenceKey}', value);
       document.firstElementChild.setAttribute('data-motion', value);
+      if (value === 'reduce') {
+        document.firstElementChild.setAttribute('data-cursor', 'false');
+        localStorage.setItem('${cursorAnimationKey}', 'false');
+      }
     })();`;
   return <script dangerouslySetInnerHTML={reduceMotion} />;
 });

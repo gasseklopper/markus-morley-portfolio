@@ -1,4 +1,10 @@
-import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  isDev,
+  useVisibleTask$,
+  useOnDocument,
+  $,
+} from "@builder.io/qwik";
 import {
   QwikCityProvider,
   RouterOutlet,
@@ -18,13 +24,18 @@ import "./styles/layout.scss";
 
 export default component$(() => {
   const nav = useNavigate();
+
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if ("serviceWorker" in navigator) {
       registerSW({ immediate: true });
     }
-    const handler = (e: MouseEvent) => {
-      const anchor = (e.target as HTMLElement).closest("a");
+  });
+
+  useOnDocument(
+    "click",
+    $((e: Event) => {
+      const anchor = (e.target as HTMLElement | null)?.closest("a");
       if (!anchor) return;
       if (anchor.target === "_blank" || anchor.hasAttribute("download")) return;
       const href = anchor.getAttribute("href");
@@ -35,10 +46,8 @@ export default component$(() => {
       } else {
         nav(href);
       }
-    };
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  });
+    }),
+  );
 
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,

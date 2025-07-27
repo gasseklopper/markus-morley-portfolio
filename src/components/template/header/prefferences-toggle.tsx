@@ -84,6 +84,11 @@ export const PrefferencesToggle = component$(() => {
     }
     reducedMotion.value = currentMotion === "reduce";
     document.documentElement.setAttribute("data-motion", currentMotion);
+    if (currentMotion === "reduce") {
+      document.documentElement.setAttribute("data-cursor", "false");
+      localStorage.setItem(cursorAnimationKey, "false");
+      cursorEnabled.value = false;
+    }
   });
 
   const toggleTheme$ = $(() => {
@@ -128,6 +133,10 @@ export const PrefferencesToggle = component$(() => {
     const newValue = reducedMotion.value ? "reduce" : "normal";
     document.documentElement.setAttribute("data-motion", newValue);
     localStorage.setItem(motionPreferenceKey, newValue);
+    const cursorValue = reducedMotion.value ? "false" : "true";
+    document.documentElement.setAttribute("data-cursor", cursorValue);
+    localStorage.setItem(cursorAnimationKey, cursorValue);
+    cursorEnabled.value = cursorValue === "true";
   });
 
   return (

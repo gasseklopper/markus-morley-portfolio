@@ -6,26 +6,23 @@ import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
  * preferences component.
  */
 export const Cursor = component$(() => {
-  const x = useSignal(0);
-  const y = useSignal(0);
+  const cursorRef = useSignal<HTMLDivElement>();
 
   // Track mouse movement on the client
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(({ cleanup }) => {
+    const cursorEl = cursorRef.value;
+    if (!cursorEl) return;
+
     const handleMove = (e: MouseEvent) => {
-      x.value = e.clientX;
-      y.value = e.clientY;
+      cursorEl.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
     };
+
     window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
+    cleanup(() => window.removeEventListener("mousemove", handleMove));
   });
 
-  return (
-    <div
-      class="cursor"
-      style={{ transform: `translate3d(${x.value}px, ${y.value}px, 0)` }}
-    />
-  );
+  return <div ref={cursorRef} class="cursor" />;
 });
 
 export default Cursor;

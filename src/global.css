@@ -78,3 +78,18 @@ h6 {
   direction: ltr;
   text-align: left;
 }
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0.1;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+}
+
+:root[data-overlay="on"] .overlay {
+  display: block;
+}

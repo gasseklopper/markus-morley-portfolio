@@ -6,6 +6,7 @@ import siteConfig from "./config/siteConfig.json";
 import { Footer } from "./components/template/footer";
 import { Header } from "./components/template/header";
 import { PreferenceScripts } from "./components/theme/preference-scripts";
+import { Overlay } from "./components/theme/overlay";
 
 import "./global.css";
 import "./styles/layout.scss";
@@ -47,6 +48,7 @@ export default component$(() => {
         <Header />
         <RouterOutlet />
         <Footer />
+        <Overlay />
       </body>
     </QwikCityProvider>
   );

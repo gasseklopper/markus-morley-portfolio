@@ -1,6 +1,9 @@
 [build]
 publish = "dist"
 command = "npm run build"
+  [build.environment]
+  TERM = "xterm"
+  CYPRESS_CACHE_FOLDER = "./node_modules/CypressBinary"
 
 [[edge_functions]]
 path = "/*"
@@ -25,3 +28,5 @@ framework = "#static"
   package = "netlify-plugin-cypress"
   [plugins.inputs]
     record = false
+  [plugins.inputs.postBuild]
+    enable = true

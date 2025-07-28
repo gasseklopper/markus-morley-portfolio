@@ -22,8 +22,8 @@
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
     "qwik": "qwik",
-    "cypress:open": "cypress open --component",
-    "cypress:run": "cypress run --component",
+    "cypress.open": "cypress open --component",
+    "cypress.run": "cypress run --component",
     "cypress.install": "cypress install"
   },
   "devDependencies": {

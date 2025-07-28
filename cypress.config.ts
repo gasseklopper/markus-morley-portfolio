@@ -3,8 +3,9 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   component: {
     devServer: {
-      framework: "cypress-ct-qwik" as any,
+      framework: "cypress-ct-qwik",
       bundler: "vite",
+      indexHtmlFile: "cypress/support/component-index.html",
     },
   },
 });

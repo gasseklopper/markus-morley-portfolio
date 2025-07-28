@@ -66,6 +66,9 @@ Each portfolio entry also specifies a title and description used by the respecti
 - `npm run lint` - check code quality with ESLint.
 - `npm run cypress.open` - open Cypress component test runner.
 - `npm run cypress.run` - run Cypress component tests in headless mode.
+- `npm run cypress.install` - download the Cypress binary if missing.
+
+
 
 ## Service Worker
 

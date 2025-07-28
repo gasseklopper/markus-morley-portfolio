@@ -23,7 +23,8 @@
     "start": "vite --open --mode ssr",
     "qwik": "qwik",
     "cypress.open": "cypress open --component",
-    "cypress.run": "cypress run --component"
+    "cypress.run": "cypress run --component",
+    "cypress.install": "cypress install"
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.14.1",

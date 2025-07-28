@@ -38,6 +38,10 @@ lerna-debug.log*
 *.sln
 *.sw?
 
+# Cypress output
+cypress/screenshots/
+cypress/videos/
+
 # Yarn
 .yarn/*
 !.yarn/releases

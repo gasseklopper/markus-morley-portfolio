@@ -25,7 +25,7 @@ framework = "#static"
 
 [[plugins]]
   # Run Cypress component tests during build
-  package = "netlify-plugin-cypress"
+  package = "netlify-plugin-cypress@2.2.1"
   [plugins.inputs]
     record = false
   [plugins.inputs.postBuild]

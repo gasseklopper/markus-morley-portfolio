@@ -19,3 +19,9 @@ framework = "#static"
   package = "@netlify/plugin-lighthouse"
   [plugins.inputs.settings]
     preset = "desktop" # Optionally run Lighthouse using a desktop configuration
+
+[[plugins]]
+  # Run Cypress component tests during build
+  package = "netlify-plugin-cypress"
+  [plugins.inputs]
+    record = false

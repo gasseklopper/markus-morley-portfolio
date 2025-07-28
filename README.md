@@ -68,6 +68,8 @@ Each portfolio entry also specifies a title and description used by the respecti
 - `npm run cypress.run` - run Cypress component tests in headless mode.
 - `npm run cypress.install` - download the Cypress binary if missing.
 
+
+
 ## Service Worker
 
 The project uses `vite-plugin-pwa` to provide offline support. Failed requests route to `/404` and both HTML and JSON responses are cached separately.

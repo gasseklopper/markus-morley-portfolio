@@ -31,13 +31,21 @@ export const Cursor = component$(() => {
     };
 
     const handleLeave = () => {
-      toX(window.innerWidth / 2, { duration: 0.6, ease: "power3.inOut" });
-      toY(window.innerHeight / 2, { duration: 0.6, ease: "power3.inOut" });
+      gsap.to(cursorEl, {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
     };
 
     const handleEnter = (e: MouseEvent) => {
-      toX(e.clientX, { duration: 0.6, ease: "power3.inOut" });
-      toY(e.clientY, { duration: 0.6, ease: "power3.inOut" });
+      gsap.to(cursorEl, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
     };
 
     window.addEventListener("mousemove", handleMove);

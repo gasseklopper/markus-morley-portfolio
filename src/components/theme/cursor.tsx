@@ -31,13 +31,13 @@ export const Cursor = component$(() => {
     };
 
     const handleLeave = () => {
-      toX(window.innerWidth / 2);
-      toY(window.innerHeight / 2);
+      toX(window.innerWidth / 2, { duration: 0.6, ease: "power3.inOut" });
+      toY(window.innerHeight / 2, { duration: 0.6, ease: "power3.inOut" });
     };
 
     const handleEnter = (e: MouseEvent) => {
-      toX(e.clientX);
-      toY(e.clientY);
+      toX(e.clientX, { duration: 0.6, ease: "power3.inOut" });
+      toY(e.clientY, { duration: 0.6, ease: "power3.inOut" });
     };
 
     window.addEventListener("mousemove", handleMove);

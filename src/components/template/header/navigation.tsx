@@ -23,8 +23,8 @@ export const Navigation = component$(() => {
         gsap.set(menu, { pointerEvents: "none" });
       },
     });
-    timeline.set(menu, { autoAlpha: 0, pointerEvents: "none", backgroundColor: "#000" });
-    timeline.to(menu, { autoAlpha: 1, pointerEvents: "auto", backgroundColor: "#111", duration: 0.3 });
+    timeline.set(menu, { autoAlpha: 0, pointerEvents: "none" });
+    timeline.to(menu, { autoAlpha: 1, pointerEvents: "auto", duration: 0.3 });
     timeline.from(items, { y: 40, opacity: 0, stagger: 0.1, duration: 0.4 }, "-=0.1");
     tl.value = timeline;
     cleanup(() => timeline.kill());
@@ -45,7 +45,7 @@ export const Navigation = component$(() => {
     <>
       <button
         type="button"
-        class="burger"
+        class={`burger ${isOpen.value ? "hidden" : ""}`}
         aria-label="Menu"
         aria-controls="main-menu"
         aria-expanded={isOpen.value ? "true" : "false"}
@@ -61,6 +61,15 @@ export const Navigation = component$(() => {
         class="menu"
         aria-hidden={isOpen.value ? "false" : "true"}
       >
+        <button
+          type="button"
+          class="close"
+          aria-label="Close menu"
+          onClick$={toggleMenu}
+        >
+          <span />
+          <span />
+        </button>
         <ul>
           {headerData.nav?.map((item) => (
             <li key={item.link}>

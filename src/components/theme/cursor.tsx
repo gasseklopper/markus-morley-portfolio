@@ -16,22 +16,60 @@ export const Cursor = component$(() => {
     if (!cursorEl) return;
 
     // Use gsap.quickTo for smoother updates without creating a new tween
-    const toX = gsap.quickTo(cursorEl, "x", {
+    let toX = gsap.quickTo(cursorEl, "x", {
       duration: 0.2,
       ease: "power3.out",
     });
-    const toY = gsap.quickTo(cursorEl, "y", {
+    let toY = gsap.quickTo(cursorEl, "y", {
       duration: 0.2,
       ease: "power3.out",
     });
+
+    const resetQuickTo = () => {
+      toX = gsap.quickTo(cursorEl, "x", {
+        duration: 0.2,
+        ease: "power3.out",
+      });
+      toY = gsap.quickTo(cursorEl, "y", {
+        duration: 0.2,
+        ease: "power3.out",
+      });
+    };
 
     const handleMove = (e: MouseEvent) => {
       toX(e.clientX);
       toY(e.clientY);
     };
 
+    const handleLeave = () => {
+      gsap.to(cursorEl, {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
+    };
+
+    const handleEnter = () => {
+      toX = gsap.quickTo(cursorEl, "x", {
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
+      toY = gsap.quickTo(cursorEl, "y", {
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
+      gsap.delayedCall(0.6, resetQuickTo);
+    };
+
     window.addEventListener("mousemove", handleMove);
-    cleanup(() => window.removeEventListener("mousemove", handleMove));
+    document.addEventListener("mouseleave", handleLeave);
+    document.addEventListener("mouseenter", handleEnter);
+    cleanup(() => {
+      window.removeEventListener("mousemove", handleMove);
+      document.removeEventListener("mouseleave", handleLeave);
+      document.removeEventListener("mouseenter", handleEnter);
+    });
   });
 
   return <div ref={cursorRef} class="cursor" />;

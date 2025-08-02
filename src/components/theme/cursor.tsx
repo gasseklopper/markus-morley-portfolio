@@ -30,8 +30,24 @@ export const Cursor = component$(() => {
       toY(e.clientY);
     };
 
+    const handleLeave = () => {
+      toX(window.innerWidth / 2);
+      toY(window.innerHeight / 2);
+    };
+
+    const handleEnter = (e: MouseEvent) => {
+      toX(e.clientX);
+      toY(e.clientY);
+    };
+
     window.addEventListener("mousemove", handleMove);
-    cleanup(() => window.removeEventListener("mousemove", handleMove));
+    document.addEventListener("mouseleave", handleLeave);
+    document.addEventListener("mouseenter", handleEnter);
+    cleanup(() => {
+      window.removeEventListener("mousemove", handleMove);
+      document.removeEventListener("mouseleave", handleLeave);
+      document.removeEventListener("mouseenter", handleEnter);
+    });
   });
 
   return <div ref={cursorRef} class="cursor" />;

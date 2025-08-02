@@ -77,24 +77,7 @@ interface SectionProps {
 export const Section = component$<SectionProps>(({ color, text, scroll }) => {
   const ref = useSignal<HTMLElement>();
   const progress = useSignal(0);
-  const visible = useSignal(false);
   const parallax = useSignal(0);
-
-  // Viewport detection
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
-    const el = ref.value;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach(
-          (e) => (visible.value = visible.value || e.isIntersecting),
-        ),
-      { threshold: 0.1 },
-    );
-    io.observe(el);
-    cleanup(() => io.disconnect());
-  });
 
   // Scroll-based animation
   useTask$(({ track }) => {
@@ -110,8 +93,8 @@ export const Section = component$<SectionProps>(({ color, text, scroll }) => {
     parallax.value = lerp(-50, 50, progress.value); // background parallax
   });
 
-  const opacity = () => (visible.value ? lerp(0, 1, progress.value) : 0);
-  const translate = () => (visible.value ? lerp(50, 0, progress.value) : 50);
+  const opacity = () => lerp(0, 1, progress.value);
+  const translate = () => lerp(50, 0, progress.value);
 
   return (
     <section ref={ref} class="section" style={{ background: color }}>

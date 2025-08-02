@@ -30,8 +30,7 @@ const styles = `
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: inherit;
-    will-change: transform;
+    will-change: transform, opacity;
   }
 `;
 
@@ -78,6 +77,7 @@ export const Section = component$<SectionProps>(({ color, text, scroll }) => {
   const ref = useSignal<HTMLElement>();
   const progress = useSignal(0);
   const parallax = useSignal(0);
+  const visibility = useSignal(0);
 
   // Scroll-based animation
   useTask$(({ track }) => {
@@ -90,17 +90,27 @@ export const Section = component$<SectionProps>(({ color, text, scroll }) => {
     const raw = 1 - (rect.top + rect.height) / (vh + rect.height); // normalized 0‑1
     progress.value = Math.min(Math.max(raw, 0), 1);
 
+    const center = rect.top + rect.height / 2;
+    const offset = Math.abs(center - vh / 2);
+    const maxOffset = vh / 2 + rect.height / 2;
+    const visRaw = 1 - offset / maxOffset;
+    visibility.value = Math.max(visRaw, 0);
+
     parallax.value = lerp(-50, 50, progress.value); // background parallax
   });
 
-  const opacity = () => lerp(0, 1, progress.value);
+  const opacity = () => visibility.value;
   const translate = () => lerp(50, 0, progress.value);
 
   return (
-    <section ref={ref} class="section" style={{ background: color }}>
+    <section ref={ref} class="section">
       <div
         class="parallax"
-        style={{ transform: `translateY(${parallax.value}px)` }}
+        style={{
+          background: color,
+          opacity: visibility.value,
+          transform: `translateY(${parallax.value}px)`,
+        }}
       />
       <div
         class="content"

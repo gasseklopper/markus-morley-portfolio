@@ -16,14 +16,25 @@ export const Cursor = component$(() => {
     if (!cursorEl) return;
 
     // Use gsap.quickTo for smoother updates without creating a new tween
-    const toX = gsap.quickTo(cursorEl, "x", {
+    let toX = gsap.quickTo(cursorEl, "x", {
       duration: 0.2,
       ease: "power3.out",
     });
-    const toY = gsap.quickTo(cursorEl, "y", {
+    let toY = gsap.quickTo(cursorEl, "y", {
       duration: 0.2,
       ease: "power3.out",
     });
+
+    const resetQuickTo = () => {
+      toX = gsap.quickTo(cursorEl, "x", {
+        duration: 0.2,
+        ease: "power3.out",
+      });
+      toY = gsap.quickTo(cursorEl, "y", {
+        duration: 0.2,
+        ease: "power3.out",
+      });
+    };
 
     const handleMove = (e: MouseEvent) => {
       toX(e.clientX);
@@ -39,13 +50,16 @@ export const Cursor = component$(() => {
       });
     };
 
-    const handleEnter = (e: MouseEvent) => {
-      gsap.to(cursorEl, {
-        x: e.clientX,
-        y: e.clientY,
+    const handleEnter = () => {
+      toX = gsap.quickTo(cursorEl, "x", {
         duration: 0.6,
         ease: "power3.inOut",
       });
+      toY = gsap.quickTo(cursorEl, "y", {
+        duration: 0.6,
+        ease: "power3.inOut",
+      });
+      gsap.delayedCall(0.6, resetQuickTo);
     };
 
     window.addEventListener("mousemove", handleMove);

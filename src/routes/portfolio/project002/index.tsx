@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import { SportCard } from "~/components/sport-card/SportCard"
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -7,6 +8,7 @@ export default component$(() => {
     <>
       <h1>Project 002</h1>
       <p>Dummy content for project 002.</p>
+      <SportCard />
     </>
   );
 });

@@ -1,0 +1,91 @@
+.sport-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: #fff;
+  padding: 2rem 1rem 4rem;
+  text-align: center;
+  background: linear-gradient(135deg, #ff8a00, #e52e71);
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.sport-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(255, 136, 0, 0.6);
+}
+
+.top-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+}
+
+.moving-text {
+  margin: 0.5rem 0 1rem;
+  font-weight: 900;
+  font-size: 3rem;
+  letter-spacing: 0.15em;
+  transform: skewX(-8deg);
+  text-shadow:
+    0 1px 0 #b71c1c,
+    0 2px 0 #9d1515,
+    0 3px 0 #830e0e,
+    0 4px 0 #690707;
+}
+
+.runner-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.runner {
+  width: 150px;
+  max-width: 60%;
+  animation: run 0.8s ease-in-out infinite alternate;
+  filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.5));
+}
+
+@keyframes run {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 140%;
+  height: 60px;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.4) 0 20px,
+    rgba(255, 255, 255, 0.1) 20px 40px
+  );
+  transform: translateX(-50%) perspective(400px) rotateX(70deg);
+  transform-origin: center top;
+}
+
+@media (max-width: 600px) {
+  .sport-card {
+    padding: 1.5rem 0.5rem 3rem;
+  }
+  .moving-text {
+    font-size: 2rem;
+  }
+  .runner {
+    width: 100px;
+  }
+}

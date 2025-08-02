@@ -1,7 +1,6 @@
 import {
   component$,
   useSignal,
-  useTask$,
   useVisibleTask$,
   useStyles$,
   type Signal,
@@ -80,7 +79,8 @@ export const Section = component$<SectionProps>(({ color, text, scroll }) => {
   const visibility = useSignal(0);
 
   // Scroll-based animation
-  useTask$(({ track }) => {
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
     track(() => scroll.value);
     const el = ref.value;
     if (!el || typeof window === "undefined") return;

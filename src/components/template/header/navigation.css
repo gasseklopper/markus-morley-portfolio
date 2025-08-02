@@ -1,0 +1,84 @@
+.burger {
+  width: 30px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+  color: var(--color-text);
+}
+.burger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: currentColor;
+  border-radius: 2px;
+}
+.burger.hidden {
+  display: none;
+}
+.menu {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+.close span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: currentColor;
+  border-radius: 2px;
+}
+.close span:first-child {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.close span:last-child {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.menu li {
+  margin: 1rem 0;
+}
+.menu a {
+  font-size: 2rem;
+  color: inherit;
+  text-decoration: none;
+}
+.menu a:hover,
+.menu a:focus {
+  text-decoration: underline;
+}

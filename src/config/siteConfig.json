@@ -31,6 +31,10 @@
   "footer_info": {
     "isFixed": false,
     "floating_shape": "",
+    "brand": {
+      "logo": "/assets/favicon.png",
+      "text": "info"
+    },
     "address": {
       "name": "",
       "link": "",
@@ -55,12 +59,34 @@
       "title": "",
       "sub_title": "",
       "input_placeholder": "Enter your email",
+      "button_label": "submit",
       "submit_button": {
         "enable": true,
         "image": "",
         "image_dark": ""
       }
-    }
+    },
+    "nav": {
+      "column1": [
+        { "name": "Main Page", "link": "/" },
+        { "name": "FAQ", "link": "/faq" },
+        { "name": "Works", "link": "/works" },
+        { "name": "About", "link": "/about" }
+      ],
+      "column2": [
+        { "name": "Story", "link": "/story" },
+        { "name": "Privacy Policy", "link": "/privacy-policy" },
+        { "name": "Expertise", "link": "/expertise" },
+        { "name": "Journal", "link": "/journal" }
+      ]
+    },
+    "social": [
+      { "name": "Facebook", "link": "https://facebook.com", "abbr": "Fb" },
+      { "name": "Twitter", "link": "https://twitter.com", "abbr": "Tw" },
+      { "name": "Instagram", "link": "https://instagram.com", "abbr": "In" },
+      { "name": "Dribbble", "link": "https://dribbble.com", "abbr": "Db" },
+      { "name": "LinkedIn", "link": "https://linkedin.com", "abbr": "Li" }
+    ]
   },
   "social": [
     {

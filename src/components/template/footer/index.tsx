@@ -1,13 +1,13 @@
-import { component$, useStore, useOnWindow$ } from "@builder.io/qwik";
+import { component$, useStore,  $, useOnWindow } from "@builder.io/qwik";
 import footerData from "./data";
 
 export const Footer = component$(() => {
   const state = useStore({ showScroll: false });
-
-  useOnWindow$("scroll", () => {
+  
+  useOnWindow("scroll", $(() => {
     state.showScroll = window.scrollY > 100;
-  });
-
+  }));
+  
   return (
     <footer class="bg-gray-800 text-white mt-12">
       <div class="max-w-screen-xl mx-auto px-4 py-8 flex flex-col gap-8 md:flex-row md:justify-between">

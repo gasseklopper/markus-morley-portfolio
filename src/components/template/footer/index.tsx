@@ -1,7 +1,10 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, $, useOnWindow } from "@builder.io/qwik";
 import footerData from "./data";
 
 export const Footer = component$(() => {
+  useOnWindow("load", $(() => {
+    /* noop */
+  }));
   return (
     <footer>
       {footerData.promo && (

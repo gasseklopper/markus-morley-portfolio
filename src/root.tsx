@@ -8,6 +8,7 @@ import { Header } from "./components/template/header";
 import { PreferenceScripts } from "./components/theme/preference-scripts";
 import { Overlay } from "./components/theme/overlay";
 import { Cursor } from "./components/theme/cursor";
+import { LocalhostOutline } from "./components/dev-outline/dev-outline";
 
 import "./global.css";
 import "./styles/layout.scss";
@@ -46,6 +47,7 @@ export default component$(() => {
         <PreferenceScripts />
       </head>
       <body lang="en">
+        {isDev && <LocalhostOutline />}
         <Header />
         <RouterOutlet />
         <Footer />

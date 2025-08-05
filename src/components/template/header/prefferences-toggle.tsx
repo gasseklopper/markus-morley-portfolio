@@ -1,4 +1,10 @@
-import { component$, $, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  $,
+  useSignal,
+  useVisibleTask$,
+  useStylesScoped$,
+} from "@builder.io/qwik";
 import {
   themeStorageKey,
   cursorAnimationKey,
@@ -16,6 +22,103 @@ export const PrefferencesToggle = component$(() => {
   const rtlLayout = useSignal(false);
   const overlayOn = useSignal(false);
   const reducedMotion = useSignal(false);
+
+  useStylesScoped$(`
+    .panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      max-width: 100%;
+      height: 100vh;
+      background: #1c1c1e;
+      color: #fff;
+      padding: 1rem;
+      overflow-y: auto;
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .close-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .group {
+      margin-bottom: 1rem;
+    }
+
+    .group-title {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      background: #2c2c2e;
+      border: 1px solid #3a3a3c;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #3a3a3c;
+    }
+
+    .btn[aria-pressed="true"] {
+      background: #4a4a4c;
+      border-color: #5a5a5c;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      background: #2c2c2e;
+      border: 1px solid #3a3a3c;
+      color: #fff;
+      font-size: 0.875rem;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #5a5a5c;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 640px) {
+      .panel {
+        width: 100%;
+      }
+    }
+  `);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -140,26 +243,152 @@ export const PrefferencesToggle = component$(() => {
   });
 
   return (
-    <div>
-      <button type="button" onClick$={toggleTheme$}>
-        {isDark.value ? "Light" : "Dark"} Mode
+    <aside class="panel" role="dialog" aria-label="UI settings">
+      <button
+        type="button"
+        class="close-btn"
+        aria-label="Close settings"
+      >
+        ×
       </button>
-      <button type="button" onClick$={toggleCursor$}>
-        {cursorEnabled.value ? "Disable" : "Enable"} Cursor
-      </button>
-      <button type="button" onClick$={toggleLayout$}>
-        {boxLayout.value ? "Full" : "Box"} Layout
-      </button>
-      <button type="button" onClick$={toggleDirection$}>
-        {rtlLayout.value ? "LTR" : "RTL"} Direction
-      </button>
-      <button type="button" onClick$={toggleOverlay$}>
-        {overlayOn.value ? "Overlay Off" : "Overlay On"}
-      </button>
-      <button type="button" onClick$={toggleMotion$}>
-        {reducedMotion.value ? "Normal" : "Reduce"} Motion
-      </button>
-    </div>
+
+      <section class="group" aria-labelledby="cursor-title">
+        <h2 id="cursor-title" class="group-title">
+          Cursor
+        </h2>
+        <label class="sr-only" for="cursor-select">
+          Cursor
+        </label>
+        <select
+          id="cursor-select"
+          onChange$={toggleCursor$}
+          value={cursorEnabled.value ? "true" : "false"}
+        >
+          <option value="true">Enable</option>
+          <option value="false">Disable</option>
+        </select>
+      </section>
+
+      <section class="group" aria-labelledby="mode-title">
+        <h2 id="mode-title" class="group-title">
+          Mode
+        </h2>
+        <div class="btn-grid">
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={!isDark.value}
+            onClick$={toggleTheme$}
+          >
+            Light
+          </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={isDark.value}
+            onClick$={toggleTheme$}
+          >
+            Dark
+          </button>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="direction-title">
+        <h2 id="direction-title" class="group-title">
+          Direction
+        </h2>
+        <div class="btn-grid">
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={!rtlLayout.value}
+            onClick$={toggleDirection$}
+          >
+            LTR
+          </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={rtlLayout.value}
+            onClick$={toggleDirection$}
+          >
+            RTL
+          </button>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="layout-title">
+        <h2 id="layout-title" class="group-title">
+          Layout
+        </h2>
+        <div class="btn-grid">
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={!boxLayout.value}
+            onClick$={toggleLayout$}
+          >
+            Full
+          </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={boxLayout.value}
+            onClick$={toggleLayout$}
+          >
+            Box
+          </button>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="overlay-title">
+        <h2 id="overlay-title" class="group-title">
+          Overlay
+        </h2>
+        <div class="btn-grid">
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={overlayOn.value}
+            onClick$={toggleOverlay$}
+          >
+            On
+          </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={!overlayOn.value}
+            onClick$={toggleOverlay$}
+          >
+            Off
+          </button>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="motion-title">
+        <h2 id="motion-title" class="group-title">
+          Motion
+        </h2>
+        <div class="btn-grid">
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={!reducedMotion.value}
+            onClick$={toggleMotion$}
+          >
+            Normal
+          </button>
+          <button
+            type="button"
+            class="btn"
+            aria-pressed={reducedMotion.value}
+            onClick$={toggleMotion$}
+          >
+            Reduce
+          </button>
+        </div>
+      </section>
+    </aside>
   );
 });
 

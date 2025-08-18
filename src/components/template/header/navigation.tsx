@@ -1,8 +1,15 @@
-import { component$, $, useSignal, useVisibleTask$, useStylesScoped$ } from "@builder.io/qwik";
+import {
+  component$,
+  $,
+  useSignal,
+  useVisibleTask$,
+  useStylesScoped$,
+} from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import gsap from "gsap";
 import headerData from "./data";
 import styles from "./navigation.css?inline";
+import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 
 export const Navigation = component$(() => {
   useStylesScoped$(styles);
@@ -25,7 +32,11 @@ export const Navigation = component$(() => {
     });
     timeline.set(menu, { autoAlpha: 0, pointerEvents: "none" });
     timeline.to(menu, { autoAlpha: 1, pointerEvents: "auto", duration: 0.3 });
-    timeline.from(items, { y: 40, opacity: 0, stagger: 0.1, duration: 0.4 }, "-=0.1");
+    timeline.from(
+      items,
+      { y: 40, opacity: 0, stagger: 0.1, duration: 0.4 },
+      "-=0.1",
+    );
     tl.value = timeline;
     cleanup(() => timeline.kill());
   });
@@ -71,13 +82,22 @@ export const Navigation = component$(() => {
           <span />
         </button>
         <ul>
-          {headerData.nav?.map((item) => (
-            <li key={item.link}>
-              <Link href={item.link} onClick$={toggleMenu}>
-                {item.name}
-              </Link>
-            </li>
-          ))}
+          {(
+            headerData.nav as
+              | { name: string; link: string; flag?: string }[]
+              | undefined
+          )
+            ?.filter(
+              (item) =>
+                !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
+            )
+            .map((item) => (
+              <li key={item.link}>
+                <Link href={item.link} onClick$={toggleMenu}>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
         </ul>
       </nav>
     </>

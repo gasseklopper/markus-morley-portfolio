@@ -1,10 +1,13 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
 import siteConfig from "~/config/siteConfig.json";
 import portfolioPages from "~/config/portfolio-pages.json";
+import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 
 export const onGet: RequestHandler = ({ url, headers, send }) => {
   const base = url.origin;
-  const allRoutes = [...siteConfig.routes, ...portfolioPages];
+  const allRoutes = [...siteConfig.routes, ...portfolioPages].filter(
+    (r: { flag?: FeatureFlag }) => !r.flag || isFeatureEnabled(r.flag),
+  );
   const urls = allRoutes
     .map((r: { path: string }) => `<url><loc>${base}${r.path}</loc></url>`)
     .join("");

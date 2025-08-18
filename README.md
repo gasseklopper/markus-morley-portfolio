@@ -52,6 +52,7 @@ This starter includes a few basic routes:
 - `/` - Home page
 - `/about` - About section
 - `/portfolio` - Portfolio listing
+- `/konzept` - Konzept page (set `PUBLIC_FEATURE_KONZEPT=true` to enable)
 
 A sitemap is generated at `/sitemap.xml` using Qwik City.
 Route metadata is defined via a shared `buildHead()` helper to keep pages consistent. Individual portfolio pages are defined in `src/config/portfolio-pages.json` and included in the sitemap.
@@ -67,8 +68,6 @@ Each portfolio entry also specifies a title and description used by the respecti
 - `npm run cypress.open` - open Cypress component test runner.
 - `npm run cypress.run` - run Cypress component tests in headless mode.
 - `npm run cypress.install` - download the Cypress binary if missing.
-
-
 
 ## Service Worker
 

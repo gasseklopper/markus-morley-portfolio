@@ -120,6 +120,11 @@
       {
         "name": "Showcase",
         "link": "/portfolio-showcase"
+      },
+      {
+        "name": "Konzept",
+        "link": "/konzept",
+        "flag": "konzept"
       }
     ]
   },
@@ -149,6 +154,11 @@
     {
       "name": "Portfolio Showcase",
       "path": "/portfolio-showcase"
+    },
+    {
+      "name": "Konzept",
+      "path": "/konzept",
+      "flag": "konzept"
     }
   ]
 }

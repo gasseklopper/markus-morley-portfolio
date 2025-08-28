@@ -52,10 +52,19 @@ This starter includes a few basic routes:
 - `/` - Home page
 - `/about` - About section
 - `/portfolio` - Portfolio listing
+- `/konzept` - Konzept page (set `PUBLIC_FEATURE_KONZEPT=true` to enable)
 
 A sitemap is generated at `/sitemap.xml` using Qwik City.
 Route metadata is defined via a shared `buildHead()` helper to keep pages consistent. Individual portfolio pages are defined in `src/config/portfolio-pages.json` and included in the sitemap.
 Each portfolio entry also specifies a title and description used by the respective page.
+
+## Feature Flags
+
+Optional routes can be toggled at build time using environment variables.
+
+- **Konzept page:** set `PUBLIC_FEATURE_KONZEPT=true` to expose the `/konzept` route, navigation and sitemap entry.
+  - For local development, copy `.env.example` to `.env` and set the variable.
+  - For production builds (Netlify, GitHub Actions/Pages), define the same variable in the build environment (for example Netlify's *Site settings → Build & deploy → Environment* or `[build.environment]` in `netlify.toml`).
 
 ## Scripts
 
@@ -67,8 +76,6 @@ Each portfolio entry also specifies a title and description used by the respecti
 - `npm run cypress.open` - open Cypress component test runner.
 - `npm run cypress.run` - run Cypress component tests in headless mode.
 - `npm run cypress.install` - download the Cypress binary if missing.
-
-
 
 ## Service Worker
 

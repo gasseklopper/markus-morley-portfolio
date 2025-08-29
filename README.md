@@ -53,8 +53,8 @@ Create a `.env` file in the project root to configure optional features. Start f
 cp .env.example .env
 ```
 
-| Variable | Description | Default |
-| -------- | ----------- | ------- |
+| Variable                 | Description                                      | Default |
+| ------------------------ | ------------------------------------------------ | ------- |
 | `PUBLIC_FEATURE_KONZEPT` | Enables the `/konzept` route when set to `true`. | `false` |
 
 ## Routes
@@ -76,7 +76,7 @@ Optional routes can be toggled at build time using environment variables.
 
 - **Konzept page:** set `PUBLIC_FEATURE_KONZEPT=true` to expose the `/konzept` route, navigation and sitemap entry.
   - For local development, copy `.env.example` to `.env` and set the variable.
-  - For production builds (Netlify, GitHub Actions/Pages), define the same variable in the build environment (for example Netlify's *Site settings → Build & deploy → Environment* or `[build.environment]` in `netlify.toml`).
+  - For production builds (Netlify, GitHub Actions/Pages), define the same variable in the build environment (for example Netlify's _Site settings → Build & deploy → Environment_ or `[build.environment]` in `netlify.toml`).
 
 ## Scripts
 
@@ -88,6 +88,14 @@ Optional routes can be toggled at build time using environment variables.
 - `npm run cypress.open` - open Cypress component test runner.
 - `npm run cypress.run` - run Cypress component tests in headless mode.
 - `npm run cypress.install` - download the Cypress binary if missing.
+- `npm run storybook` - start the Storybook environment for isolated component development.
+- `npm run build-storybook` - build the static Storybook site.
+
+## Storybook
+
+This project integrates [Storybook](https://storybook.js.org/) for building and
+previewing components in isolation. Stories reside alongside their components in
+`src/components` and use the `*.stories.tsx` naming convention.
 
 ## Service Worker
 

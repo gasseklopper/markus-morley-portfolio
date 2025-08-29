@@ -45,6 +45,18 @@ Inside your project, you'll see the following directory structure:
 
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 
+## Environment Variables
+
+Create a `.env` file in the project root to configure optional features. Start from the provided example:
+
+```sh
+cp .env.example .env
+```
+
+| Variable | Description | Default |
+| -------- | ----------- | ------- |
+| `PUBLIC_FEATURE_KONZEPT` | Enables the `/konzept` route when set to `true`. | `false` |
+
 ## Routes
 
 This starter includes a few basic routes:

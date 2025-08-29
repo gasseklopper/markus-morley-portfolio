@@ -26,7 +26,8 @@
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
     "storybook": "storybook dev -p 6006",
-    "qwik": "qwik"
+    "qwik": "qwik",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@builder.io/qwik": "^1.14.1",
@@ -46,10 +47,11 @@
     "eslint-plugin-qwik": "^1.14.1",
     "globals": "16.0.0",
     "netlify-cli": "^22.2.2",
+    "patch-package": "^8.0.0",
     "prettier": "3.3.3",
     "sass-embedded": "^1.89.2",
     "storybook": "^8.2.8",
-    "storybook-framework-qwik": "^0.4.0",
+    "storybook-framework-qwik": "^0.4.3",
     "typescript": "5.4.5",
     "typescript-eslint": "8.26.1",
     "undici": "*",

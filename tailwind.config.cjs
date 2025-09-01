@@ -22,15 +22,5 @@ module.exports = {
       },
     },
   },
-  safelist: [
-    "bg-blue-500",
-    "text-white",
-    "p-4",
-    "mt-8",
-    "gap-4",
-    "grid",
-    "grid-cols-1",
-    "xxl:grid-cols-4",
-  ],
   plugins: [],
 };

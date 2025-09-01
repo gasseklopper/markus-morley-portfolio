@@ -13,7 +13,7 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
 export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig }) => {
   useStylesScoped$(styles)
   return (
-    <div id="mobile-menu" hidden={!openSig.value} class="flex md:hidden">
+    <div id="mobile-menu" hidden={!openSig.value} class="flex sm:hidden">
       <div class="flex flex-col w-full">
         {(
           headerData.nav as
@@ -49,7 +49,7 @@ export default component$(() => {
               <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="size-10  self-center" width={32} height={32} />
               {headerData.logo_text && <p class="text-xl font-bold self-center p-4">{headerData.logo_text}</p>}
             </div>
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               <ul class="ml-10 flex items-baseline space-x-4">
                 {(
                   headerData.nav as
@@ -70,7 +70,7 @@ export default component$(() => {
               </ul>
             </div>
           </div>
-          <div class="hidden md:block">
+          <div class="hidden lg:block">
             <div class="flex md:ml-6">
               <button type="button" class="ml-4 flex items-center relative mr-4 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 justify-center">
                 {/* <span class="absolute -inset-2.5"></span> */}
@@ -92,7 +92,12 @@ export default component$(() => {
                 <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                   {/* <span class="absolute -inset-1.5"></span> */}
                   <span class="sr-only">Open user menu</span>
-                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-8 rounded-full outline -outline-offset-1 outline-white/10" width={256} height={256} />
+                  <svg width="32" height="32" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="32" cy="32" r="30" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="32" cy="24" r="10" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M16 48A16 12 0 0 1 48 48" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+
                 </button>
 
                 <el-menu anchor="bottom end" popover="auto" class="w-48 origin-top-right rounded-md bg-gray-800 py-1 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
@@ -115,7 +120,7 @@ export default component$(() => {
               </svg>
             </button>
           </div> */}
-          <div class="-mr-2 flex md:hidden">
+          <div class="-mr-2 flex lg:hidden">
             <button
               type="button"
               class="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"

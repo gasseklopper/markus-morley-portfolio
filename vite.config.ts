@@ -6,7 +6,6 @@ import { defineConfig, type UserConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { qwikVite } from "@builder.io/qwik/optimizer";
 import { qwikCity } from "@builder.io/qwik-city/vite";
-import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import pkg from "./package.json";
 
@@ -24,7 +23,7 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 export default defineConfig(({ command, mode }): UserConfig => {
   return {
     base: '/', // <- hinzufügen!
-    plugins: [tailwindcss(), qwikCity(), qwikVite(), VitePWA({
+    plugins: [qwikCity(), qwikVite(), VitePWA({
       registerType: 'autoUpdate',
       injectRegister: null,
       srcDir: 'src',

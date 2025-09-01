@@ -1,8 +1,10 @@
+@import "normalize.css";
+
+@config "../tailwind.config.cjs";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "normalize.css";
 
 @font-face {
   font-family: "Barlow bold";

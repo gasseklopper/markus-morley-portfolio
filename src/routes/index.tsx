@@ -16,6 +16,13 @@ export default component$(() => {
         <br />
         Happy coding.
       </div>
+
+      <div class="xxl:grid-cols-4 mt-8 grid grid-cols-1 gap-4">
+        <div class="bg-blue-500 p-4 text-white">Item 1</div>
+        <div class="bg-blue-500 p-4 text-white">Item 2</div>
+        <div class="bg-blue-500 p-4 text-white">Item 3</div>
+        <div class="bg-blue-500 p-4 text-white">Item 4</div>
+      </div>
     </div>
   );
 });

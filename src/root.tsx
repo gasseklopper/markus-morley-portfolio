@@ -50,11 +50,11 @@ export default component$(() => {
         {isDev && <LocalhostOutline />}
 
         <div class="flex flex-col min-h-screen">
-          <header class="bg-blue-500 p-4">
+          <header class="bg-slate-700 p-4">
             <Header />
           </header>
           <main class="flex-grow p-4"> <RouterOutlet /></main>
-          <footer class="bg-gray-300 p-4">
+          <footer class="bg-slate-700  p-4">
             <Footer />
           </footer>
         </div>

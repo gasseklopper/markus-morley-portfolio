@@ -1,6 +1,6 @@
 import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
-import { RouterHead } from "./meta/router-head/router-head";
+import { RouterHead } from "./components/router-head/router-head";
 import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
 import { Footer } from "./components/template/footer";

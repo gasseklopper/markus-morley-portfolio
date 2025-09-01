@@ -26,7 +26,7 @@ export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig })
           )
           .map((item) => (
             <div key={item.link} class="mx-auto flex max-w-xs flex-col space-y-4 font-mono text-sm leading-6 font-bold text-white bg-amber-800">
-              <Link href={item.link} class="flex items-center justify-center rounded-lg bg-indigo-500 p-4">
+              <Link href={item.link} class="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
                 {item.name}
               </Link>
             </div>

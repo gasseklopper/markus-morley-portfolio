@@ -6,8 +6,13 @@ import { buildHead } from "~/utils/head";
 export default component$(() => {
   useStyles$(styles);
   return (
-    <div class="page">
+    <div class="page relative">
       <div>
+        <div class="">
+          <img src="/assets/images/heros/image.png" alt="Applicant" />
+          <div class="absolute inset-0 bg-[linear-gradient(25deg,black_5%,gray_60%,white_90%,teal)] bg-cover bg-center mix-blend-multiply" >
+          </div>
+        </div>
         <div class="px-4 sm:px-0">
           <h3 class="text-base/7 font-semibold text-white">Applicant Information</h3>
           <p class="mt-1 max-w-2xl text-sm/6 text-gray-400">Personal details and application.</p>

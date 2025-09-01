@@ -13,7 +13,7 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
 export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig }) => {
   useStylesScoped$(styles)
   return (
-    <div id="mobile-menu" hidden={!openSig.value} class="flex sm:hidden">
+    <div id="mobile-menu" hidden={!openSig.value} class="flex lg:hidden">
       <div class="flex flex-col w-full">
         {(
           headerData.nav as

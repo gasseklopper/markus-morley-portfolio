@@ -71,19 +71,26 @@ export default component$(() => {
             </div>
           </div>
           <div class="hidden md:block">
-            <div class="ml-4 flex items-center md:ml-6">
-              <button type="button" class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
-                <span class="absolute -inset-1.5"></span>
+            <div class="flex md:ml-6">
+              <button type="button" class="ml-4 flex items-center relative mr-4 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 justify-center">
+                {/* <span class="absolute -inset-2.5"></span> */}
                 <span class="sr-only">View notifications</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6">
-                  <path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" stroke-linecap="round" stroke-linejoin="round" />
+                <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 26" class="size-6" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a7 7 0 0 0-7 7v6c0 .6-.2 1.2-.6 1.6L3 19h18l-1.4-2.4c-.4-.4-.6-1-.6-1.6V9a7 7 0 0 0-7-7z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 19a3 3 0 0 0 6 0" />
                 </svg>
               </button>
-
-
+              <button type="button" class="relative rounded-full p-1 mr-4 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+                {/* <span class="absolute -inset-1.5"></span> */}
+                <span class="sr-only">Open settings</span>
+                <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" class="size-6" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" />
+                  <path  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
+                </svg>
+              </button>
               <el-dropdown class="relative ml-3">
                 <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                  <span class="absolute -inset-1.5"></span>
+                  {/* <span class="absolute -inset-1.5"></span> */}
                   <span class="sr-only">Open user menu</span>
                   <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-8 rounded-full outline -outline-offset-1 outline-white/10" width={256} height={256} />
                 </button>

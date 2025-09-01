@@ -37,6 +37,7 @@ export const PrefferencesToggle = component$(() => {
       overflow-y: auto;
       box-shadow: -2px 0 8px rgba(0, 0, 0, 0.5);
       display: flex;
+      display: none;
       flex-direction: column;
       gap: 1rem;
     }

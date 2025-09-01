@@ -1,25 +1,25 @@
-import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
-import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
-import { RouterHead } from "./components/router-head/router-head";
-import { registerSW } from "virtual:pwa-register";
-import siteConfig from "./config/siteConfig.json";
-import { Footer } from "./components/template/footer";
-import { Header } from "./components/template/header";
-import { PreferenceScripts } from "./components/theme/preference-scripts";
-import { Overlay } from "./components/theme/overlay";
-import { Cursor } from "./components/theme/cursor";
-import { LocalhostOutline } from "./components/dev-outline/dev-outline";
+import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik"
+import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city"
+import { RouterHead } from "./components/router-head/router-head"
+import { registerSW } from "virtual:pwa-register"
+import siteConfig from "./config/siteConfig.json"
+import { Footer } from "./components/template/footer"
+import { Header } from "./components/template/header"
+import { PreferenceScripts } from "./components/theme/preference-scripts"
+import { Overlay } from "./components/theme/overlay"
+import { Cursor } from "./components/theme/cursor"
+import { LocalhostOutline } from "./components/dev-outline/dev-outline"
 
-import "./global.css";
-import "./styles/layout.scss";
+import "./global.css"
+import "./styles/layout.scss"
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if ("serviceWorker" in navigator) {
-      registerSW({ immediate: true });
+      registerSW({ immediate: true })
     }
-  });
+  })
 
   /**
    * The root of a QwikCity site always start with the <QwikCityProvider> component,
@@ -48,12 +48,19 @@ export default component$(() => {
       </head>
       <body lang="en">
         {isDev && <LocalhostOutline />}
-        <Header />
-        <RouterOutlet />
-        <Footer />
+
+        <div class="flex flex-col min-h-screen">
+          <header class="bg-blue-500 p-4">
+            <Header />
+          </header>
+          <main class="flex-grow p-4"> <RouterOutlet /></main>
+          <footer class="bg-gray-300 p-4">
+            <Footer />
+          </footer>
+        </div>
         <Overlay />
         <Cursor />
       </body>
     </QwikCityProvider>
-  );
-});
+  )
+})

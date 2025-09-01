@@ -8,7 +8,7 @@ import {
 import { Link } from "@builder.io/qwik-city";
 import gsap from "gsap";
 import headerData from "./data";
-import styles from "./navigation.css?inline";
+import styles from "./navigation2.css?inline";
 import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 
 export const Navigation = component$(() => {

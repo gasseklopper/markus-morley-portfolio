@@ -17,6 +17,7 @@ export default component$(() => {
           <br />
           Happy coding.
         </div>
+        <a href="/grid-examples/">View grid layout examples</a>
       </div>
     </div>
   );

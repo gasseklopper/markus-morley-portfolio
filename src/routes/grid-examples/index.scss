@@ -1,0 +1,14 @@
+@use "../../styles/variables" as *;
+
+.page {
+  padding: $sectionPadding;
+  max-width: $maxWidth;
+}
+
+.demo-row > div {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: $radiusSmall;
+  padding: 1rem;
+  text-align: center;
+}

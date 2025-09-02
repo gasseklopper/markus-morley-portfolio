@@ -13,9 +13,10 @@ export const overlayPreferenceKey = "theme-overlay-preference";
 export const ThemeScript = component$(() => {
   const themeScript = `
     (() => {
+      const themes = ['light','dark','neon','pastell'];
       const stored = localStorage.getItem('${themeStorageKey}');
-      const defaultValue = window.matchMedia('(prefers-color-scheme: dark)').matches ? '${siteConfig.theme_preferences.dark}' : '${siteConfig.theme_preferences.light}';
-      const value = stored ?? defaultValue;
+      const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const value = stored && themes.includes(stored) ? stored : preferred;
       if (!stored) localStorage.setItem('${themeStorageKey}', value);
       document.firstElementChild.setAttribute('data-theme', value);
     })();`;

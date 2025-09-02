@@ -1,4 +1,4 @@
-import { component$, useStyles$ } from "@builder.io/qwik";
+import { component$, useStyles$, useVisibleTask$, useStore } from "@builder.io/qwik";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -35,6 +35,7 @@ const themes: Theme[] = [
       { name: "surface7-light", value: "#64748b" },
       { name: "surface8-light", value: "#475569" },
       { name: "surface-shadow-light", value: "rgba(2, 6, 23, 0.2)" },
+      { name: "shadow-strength-light", value: "12" },
     ],
   },
   {
@@ -63,6 +64,7 @@ const themes: Theme[] = [
       { name: "surface7-dark", value: "#64748b" },
       { name: "surface8-dark", value: "#94a3b8" },
       { name: "surface-shadow-dark", value: "rgba(15, 23, 42, 0.55)" },
+      { name: "shadow-strength-dark", value: "18" },
     ],
   },
   {
@@ -91,6 +93,7 @@ const themes: Theme[] = [
       { name: "surface7-neon", value: "#24516f" },
       { name: "surface8-neon", value: "#2e6a8d" },
       { name: "surface-shadow-neon", value: "rgba(0, 229, 255, 0.45)" },
+      { name: "shadow-strength-neon", value: "22" },
     ],
   },
   {
@@ -119,8 +122,39 @@ const themes: Theme[] = [
       { name: "surface7-pastell", value: "#cbd9ec" },
       { name: "surface8-pastell", value: "#c0cfe6" },
       { name: "surface-shadow-pastell", value: "rgba(36, 48, 67, 0.18)" },
+      { name: "shadow-strength-pastell", value: "10" },
     ],
   },
+];
+
+const currentVarNames = [
+  "brand",
+  "brand-core",
+  "brand-inverted",
+  "brand-inverted-highlight1",
+  "brand-inverted-highlight2",
+  "primary",
+  "secondary",
+  "tertiary",
+  "quaternary",
+  "text1",
+  "text2",
+  "text3",
+  "text4",
+  "surface1",
+  "surface2",
+  "surface3",
+  "surface4",
+  "surface5",
+  "surface6",
+  "surface7",
+  "surface8",
+  "surface-shadow",
+  "shadow-strength",
+  "color-bg",
+  "color-text",
+  "color-primary",
+  "cursor-color",
 ];
 
 const styles = `
@@ -154,9 +188,38 @@ section {
 
 export default component$(() => {
   useStyles$(styles);
+
+  const current = useStore<{ colors: { name: string; value: string }[] }>({
+    colors: [],
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const styles = getComputedStyle(document.documentElement);
+    current.colors = currentVarNames.map((name) => ({
+      name,
+      value: styles.getPropertyValue(`--${name}`).trim(),
+    }));
+  });
+
   return (
     <>
       <h1>Color Theme</h1>
+      <section>
+        <h2>Current</h2>
+        <p>Resolved variables from the active theme.</p>
+        <div class="swatches">
+          {current.colors.map((c) => (
+            <div class="swatch" key={c.name}>
+              <div class="color" style={{ background: c.value }} />
+              <div class="label">
+                <div>{c.name}</div>
+                <div>{c.value}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
       {themes.map((theme) => (
         <section key={theme.name}>
           <h2>{theme.name}</h2>

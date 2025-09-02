@@ -7,10 +7,21 @@
 }
 
 :root[data-layout="full"] body {
-  max-width: none;
+  .page {
+    max-width: 100%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: $gutter;
+    padding-right: $gutter;
+  }
 }
 
+html,
+body {
+  margin: 0px;
+}
 
-html, body { margin: 0px; }
-
-h1 { margin-top: 0; }
+h1 {
+  margin-top: 0;
+}

@@ -208,17 +208,17 @@
       "path": "/portfolio-showcase"
     },
     {
-      "name": "Konzept",
-      "path": "/konzept",
-      "flag": "konzept"
-    },
-    {
       "name": "Impressum",
       "path": "/impressum"
     },
     {
       "name": "Datenschutz",
       "path": "/datenschutz"
+    },
+    {
+      "name": "Konzept",
+      "path": "/konzept",
+      "flag": "konzept"
     }
   ]
 }

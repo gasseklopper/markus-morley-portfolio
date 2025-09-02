@@ -64,6 +64,9 @@ This starter includes a few basic routes:
 - `/` - Home page
 - `/about` - About section
 - `/portfolio` - Portfolio listing
+- `/portfolio-showcase` - Portfolio showcase
+- `/impressum` - Impressum page
+- `/datenschutz` - Datenschutz (privacy policy) page
 - `/konzept` - Konzept page (set `PUBLIC_FEATURE_KONZEPT=true` to enable)
 
 A sitemap is generated at `/sitemap.xml` using Qwik City.

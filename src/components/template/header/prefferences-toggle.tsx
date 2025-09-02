@@ -134,6 +134,10 @@ export const PrefferencesToggle = component$(() => {
     }
     isDark.value = currentTheme === siteConfig.theme_preferences.dark;
     document.documentElement.setAttribute("data-theme", currentTheme);
+    document.documentElement.classList.toggle(
+      "dark",
+      currentTheme === siteConfig.theme_preferences.dark,
+    );
 
     const storedCursor = localStorage.getItem(cursorAnimationKey);
     const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -201,6 +205,7 @@ export const PrefferencesToggle = component$(() => {
       ? siteConfig.theme_preferences.dark
       : siteConfig.theme_preferences.light;
     document.documentElement.setAttribute("data-theme", newTheme);
+    document.documentElement.classList.toggle("dark", isDark.value);
     localStorage.setItem(themeStorageKey, newTheme);
   });
 
@@ -245,11 +250,7 @@ export const PrefferencesToggle = component$(() => {
 
   return (
     <aside class="panel" role="dialog" aria-label="UI settings">
-      <button
-        type="button"
-        class="close-btn"
-        aria-label="Close settings"
-      >
+      <button type="button" class="close-btn" aria-label="Close settings">
         ×
       </button>
 

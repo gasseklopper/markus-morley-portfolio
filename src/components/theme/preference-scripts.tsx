@@ -17,7 +17,9 @@ export const ThemeScript = component$(() => {
       const defaultValue = window.matchMedia('(prefers-color-scheme: dark)').matches ? '${siteConfig.theme_preferences.dark}' : '${siteConfig.theme_preferences.light}';
       const value = stored ?? defaultValue;
       if (!stored) localStorage.setItem('${themeStorageKey}', value);
-      document.firstElementChild.setAttribute('data-theme', value);
+      const root = document.firstElementChild;
+      root.setAttribute('data-theme', value);
+      root.classList.toggle('dark', value === '${siteConfig.theme_preferences.dark}');
     })();`;
   return <script dangerouslySetInnerHTML={themeScript} />;
 });

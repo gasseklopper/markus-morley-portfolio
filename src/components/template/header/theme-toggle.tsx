@@ -15,6 +15,10 @@ export const ThemeToggle = component$(() => {
     }
     if (current) {
       document.documentElement.setAttribute("data-theme", current);
+      document.documentElement.classList.toggle(
+        "dark",
+        current === siteConfig.theme_preferences.dark,
+      );
     }
   });
 
@@ -24,6 +28,7 @@ export const ThemeToggle = component$(() => {
       ? siteConfig.theme_preferences.dark
       : siteConfig.theme_preferences.light;
     document.documentElement.setAttribute("data-theme", newTheme);
+    document.documentElement.classList.toggle("dark", isDark.value);
     localStorage.setItem(themeStorageKey, newTheme);
   });
 

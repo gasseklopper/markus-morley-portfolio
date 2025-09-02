@@ -4,6 +4,7 @@ import {
   component$,
   useSignal,
   useStylesScoped$,
+  useOnWindow,
 } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import headerData from "./data";
@@ -49,6 +50,15 @@ export default component$(() => {
   useStylesScoped$(styles);
   const menuOpen = useSignal(false);
   const isOpen = useSignal(false);
+  useOnWindow(
+    "keydown",
+    $((event: KeyboardEvent) => {
+      if (event.key === "F10") {
+        event.preventDefault();
+        isOpen.value = !isOpen.value;
+      }
+    }),
+  );
   return (
     <nav class="bg-white/50 text-gray-900 dark:bg-black dark:text-gray-100">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

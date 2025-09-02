@@ -4,6 +4,7 @@ import {
   useSignal,
   useVisibleTask$,
   useStylesScoped$,
+  useOnWindow,
   type PropFunction,
 } from "@builder.io/qwik";
 import {
@@ -205,6 +206,15 @@ export const PrefferencesToggle = component$<{
       cursorEnabled.value = false;
     }
   });
+
+  useOnWindow(
+    "keydown",
+    $((event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose$();
+      }
+    }),
+  );
 
   const toggleTheme$ = $(() => {
     isDark.value = !isDark.value;

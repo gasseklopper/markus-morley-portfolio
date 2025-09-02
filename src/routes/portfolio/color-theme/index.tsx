@@ -188,6 +188,16 @@ export default component$(() => {
     currentTheme.value = theme;
     document.documentElement.setAttribute("data-theme", theme);
     updateCurrentColors();
+
+    const observer = new MutationObserver(() => {
+      const newTheme = document.documentElement.getAttribute("data-theme") as ThemeName | null;
+      if (newTheme && themeOptions.includes(newTheme)) {
+        currentTheme.value = newTheme;
+        updateCurrentColors();
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
   });
 
   const setTheme$ = $((theme: ThemeName) => {

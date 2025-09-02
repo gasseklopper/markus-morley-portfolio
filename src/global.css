@@ -1,6 +1,8 @@
 /* @import "normalize.css"; */
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @font-face {
   font-family: "Barlow bold";
   src: url("/fonts/Barlow-Bold.woff") format("woff");

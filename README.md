@@ -11,6 +11,15 @@ Useful links:
 
 ---
 
+## Features
+
+- Light, dark, neon, and pastell themes with persistent preferences
+- Cursor animation toggle that respects reduced motion settings
+- Configurable layout and layout direction options
+- Optional overlay styling
+- Offline support through a PWA service worker
+- Keyboard shortcuts for opening the preferences panel
+
 ## Dependencies
 
 - [normalize.css](https://necolas.github.io/normalize.css/) - ensures consistent base styling across browsers.
@@ -116,12 +125,13 @@ Add `--prod` to publish to production.
 
 ## Preference scripts
 
-User preferences for theme, layout and motion are applied on first page load via
-inline scripts. These scripts set `data-*` attributes on the `<html>` element so
-the UI reflects saved settings before Qwik hydrates. The bundled component
-`PreferenceScripts` lives in `src/components/theme/preference-scripts.tsx` and is
-injected in `src/root.tsx`. Default values for theme, cursor and layout settings
-come from `src/config/siteConfig.json` so they can be customized per site.
+User preferences for theme, cursor, layout, layout direction, overlay and motion
+are applied on first page load via inline scripts. These scripts set `data-*`
+attributes on the `<html>` element so the UI reflects saved settings before
+Qwik hydrates. The bundled component `PreferenceScripts` lives in
+`src/components/theme/preference-scripts.tsx` and is injected in `src/root.tsx`.
+Default values come from `src/config/siteConfig.json` so they can be customized
+per site.
 
 ## Keyboard Shortcuts
 

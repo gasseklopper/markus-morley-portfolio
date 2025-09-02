@@ -10,6 +10,18 @@ export const motionPreferenceKey = "theme-motion-preference";
 export const layoutDirectionPreferenceKey = "theme-layout-direction-preference";
 export const overlayPreferenceKey = "theme-overlay-preference";
 
+const createPreferenceScript = (
+  key: string,
+  attr: string,
+  defaultValue: string,
+) => `
+    (() => {
+      const stored = localStorage.getItem('${key}');
+      const value = stored ?? ${JSON.stringify(defaultValue)};
+      if (!stored) localStorage.setItem('${key}', value);
+      document.firstElementChild.setAttribute('${attr}', value);
+    })();`;
+
 export const ThemeScript = component$(() => {
   const themeScript = `
     (() => {
@@ -36,39 +48,39 @@ export const CursorAnimationScript = component$(() => {
 });
 
 export const LayoutScript = component$(() => {
-  const script = `
-    (() => {
-      const stored = localStorage.getItem('${layoutKey}');
-      const defaultValue = '${siteConfig.theme_preferences.layout}';
-      const value = stored ?? defaultValue;
-      if (!stored) localStorage.setItem('${layoutKey}', value);
-      document.firstElementChild.setAttribute('data-layout', value);
-    })();`;
-  return <script dangerouslySetInnerHTML={script} />;
+  return (
+    <script
+      dangerouslySetInnerHTML={createPreferenceScript(
+        layoutKey,
+        "data-layout",
+        siteConfig.theme_preferences.layout,
+      )}
+    />
+  );
 });
 
 export const LayoutDirectionScript = component$(() => {
-  const script = `
-    (() => {
-      const stored = localStorage.getItem('${layoutDirectionPreferenceKey}');
-      const defaultValue = '${siteConfig.theme_preferences.layout_direction}';
-      const value = stored ?? defaultValue;
-      if (!stored) localStorage.setItem('${layoutDirectionPreferenceKey}', value);
-      document.firstElementChild.setAttribute('data-layout-direction', value);
-    })();`;
-  return <script dangerouslySetInnerHTML={script} />;
+  return (
+    <script
+      dangerouslySetInnerHTML={createPreferenceScript(
+        layoutDirectionPreferenceKey,
+        "data-layout-direction",
+        siteConfig.theme_preferences.layout_direction,
+      )}
+    />
+  );
 });
 
 export const OverlayScript = component$(() => {
-  const script = `
-    (() => {
-      const stored = localStorage.getItem('${overlayPreferenceKey}');
-      const defaultValue = '${siteConfig.theme_preferences.overlay}';
-      const value = stored ?? defaultValue;
-      if (!stored) localStorage.setItem('${overlayPreferenceKey}', value);
-      document.firstElementChild.setAttribute('data-overlay', value);
-    })();`;
-  return <script dangerouslySetInnerHTML={script} />;
+  return (
+    <script
+      dangerouslySetInnerHTML={createPreferenceScript(
+        overlayPreferenceKey,
+        "data-overlay",
+        siteConfig.theme_preferences.overlay,
+      )}
+    />
+  );
 });
 
 export const ReduceMotionScript = component$(() => {

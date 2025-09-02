@@ -80,7 +80,7 @@ export default component$(() => {
       <h1 class="title_barlowBold">Hi 👋 barlowBold</h1>
       <h2 class="title_barlowMedium">Hi 👋 barlowMedium</h2>
       <h3 class="title_barlowLight">Hi 👋 barlowLight</h3>
-      <h4 class="title_barlowSemibold">Hi 👋 barlowSemibold</h4>
+      <h4 class="title_barlowSemibold">Hi 👋 barlow Semibold</h4>
       <div>
         Can't wait to see what you build with qwik!
         <br />

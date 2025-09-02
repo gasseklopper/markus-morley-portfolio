@@ -48,8 +48,7 @@ export default component$(() => {
       </head>
       <body lang="en">
         {isDev && <LocalhostOutline />}
-
-        <div class="flex flex-col min-h-screen">
+        <div class="flex min-h-screen flex-col bg-gray-950 text-gray-100">
           <header class="bg-slate-700 p-4">
             <Header />
           </header>

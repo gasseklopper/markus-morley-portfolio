@@ -52,7 +52,7 @@ export default component$(() => {
           alt="Applicant"
           class="h-full w-full object-cover"
         />
-        <div class="from-surface1 via-surface2/80 absolute inset-0 bg-gradient-to-tr to-transparent" />
+        <div class="from-surface1 via-surface2 absolute inset-0 bg-gradient-to-tr to-transparent opacity-80" />
         <div class="absolute bottom-6 left-6">
           <h1 class="text-text1 text-4xl font-bold">About</h1>
           <p class="text-text2 mt-2 max-w-xl text-sm">

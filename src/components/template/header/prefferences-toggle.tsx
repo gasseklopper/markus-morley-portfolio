@@ -3,7 +3,6 @@ import {
   $,
   useSignal,
   useVisibleTask$,
-  useStylesScoped$,
   useOnWindow,
   type PropFunction,
 } from "@builder.io/qwik";
@@ -27,112 +26,6 @@ export const PrefferencesToggle = component$<{
   const overlayOn = useSignal(false);
   const reducedMotion = useSignal(false);
   const panelRef = useSignal<HTMLElement>();
-
-  useStylesScoped$(`
-      .panel {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 320px;
-        max-width: 100%;
-        height: 100vh;
-        background: var(--color-bg);
-        color: var(--color-text);
-        padding: 1rem;
-        overflow-y: auto;
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.5);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        z-index: 1000;
-      }
-
-      .close-btn {
-        align-self: flex-end;
-        background: transparent;
-        border: none;
-        color: var(--color-text);
-        font-size: 1.25rem;
-        cursor: pointer;
-      }
-
-      .group {
-        margin-bottom: 1rem;
-      }
-
-      .group-title {
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--color-text);
-      }
-
-      .btn-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-      }
-
-      .btn {
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.375rem;
-        background: var(--color-bg);
-        border: 1px solid var(--color-text);
-        color: var(--color-text);
-        cursor: pointer;
-        transition:
-          background 0.2s ease,
-          border-color 0.2s ease,
-          transform 0.1s ease;
-      }
-
-      .btn:hover {
-        background: var(--color-primary);
-        color: var(--color-bg);
-      }
-
-      .btn[aria-pressed="true"] {
-        background: var(--color-primary);
-        border-color: var(--color-primary);
-        color: var(--color-bg);
-        transform: translateY(1px);
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      select {
-        width: 100%;
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.375rem;
-        background: var(--color-bg);
-        border: 1px solid var(--color-text);
-        color: var(--color-text);
-        font-size: 0.875rem;
-      }
-
-      select:focus {
-        outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 2px var(--color-primary);
-      }
-
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0 0 0 0);
-        white-space: nowrap;
-        border: 0;
-      }
-
-      @media (max-width: 640px) {
-        .panel {
-          width: 100%;
-        }
-      }
-    `);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -275,10 +168,15 @@ export const PrefferencesToggle = component$<{
   });
 
   return (
-    <aside ref={panelRef} class="panel" role="dialog" aria-label="UI settings">
+    <aside
+      ref={panelRef}
+      class="fixed top-0 right-0 z-[1000] flex h-screen w-full max-w-full flex-col gap-4 overflow-y-auto bg-[var(--color-bg)] p-4 text-[var(--color-text)] shadow-[-2px_0_8px_rgba(0,0,0,0.5)] sm:w-80"
+      role="dialog"
+      aria-label="UI settings"
+    >
       <button
         type="button"
-        class="close-btn"
+        class="cursor-pointer self-end border-0 bg-transparent text-xl text-[var(--color-text)]"
         aria-label="Close settings"
         onClick$={onClose$}
       >
@@ -298,8 +196,11 @@ export const PrefferencesToggle = component$<{
         </svg>
       </button>
 
-      <section class="group" aria-labelledby="cursor-title">
-        <h2 id="cursor-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="cursor-title">
+        <h2
+          id="cursor-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Cursor
         </h2>
         <label class="sr-only" for="cursor-select">
@@ -309,20 +210,24 @@ export const PrefferencesToggle = component$<{
           id="cursor-select"
           onChange$={toggleCursor$}
           value={cursorEnabled.value ? "true" : "false"}
+          class="w-full rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-sm text-[var(--color-text)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
         >
           <option value="true">Enable</option>
           <option value="false">Disable</option>
         </select>
       </section>
 
-      <section class="group" aria-labelledby="mode-title">
-        <h2 id="mode-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="mode-title">
+        <h2
+          id="mode-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Mode
         </h2>
-        <div class="btn-grid">
+        <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={!isDark.value}
             onClick$={toggleTheme$}
           >
@@ -330,7 +235,7 @@ export const PrefferencesToggle = component$<{
           </button>
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={isDark.value}
             onClick$={toggleTheme$}
           >
@@ -339,14 +244,17 @@ export const PrefferencesToggle = component$<{
         </div>
       </section>
 
-      <section class="group" aria-labelledby="direction-title">
-        <h2 id="direction-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="direction-title">
+        <h2
+          id="direction-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Direction
         </h2>
-        <div class="btn-grid">
+        <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={!rtlLayout.value}
             onClick$={toggleDirection$}
           >
@@ -354,7 +262,7 @@ export const PrefferencesToggle = component$<{
           </button>
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={rtlLayout.value}
             onClick$={toggleDirection$}
           >
@@ -363,14 +271,17 @@ export const PrefferencesToggle = component$<{
         </div>
       </section>
 
-      <section class="group" aria-labelledby="layout-title">
-        <h2 id="layout-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="layout-title">
+        <h2
+          id="layout-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Layout
         </h2>
-        <div class="btn-grid">
+        <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={!boxLayout.value}
             onClick$={toggleLayout$}
           >
@@ -378,7 +289,7 @@ export const PrefferencesToggle = component$<{
           </button>
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={boxLayout.value}
             onClick$={toggleLayout$}
           >
@@ -387,14 +298,17 @@ export const PrefferencesToggle = component$<{
         </div>
       </section>
 
-      <section class="group" aria-labelledby="overlay-title">
-        <h2 id="overlay-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="overlay-title">
+        <h2
+          id="overlay-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Overlay
         </h2>
-        <div class="btn-grid">
+        <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={overlayOn.value}
             onClick$={toggleOverlay$}
           >
@@ -402,7 +316,7 @@ export const PrefferencesToggle = component$<{
           </button>
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={!overlayOn.value}
             onClick$={toggleOverlay$}
           >
@@ -411,14 +325,17 @@ export const PrefferencesToggle = component$<{
         </div>
       </section>
 
-      <section class="group" aria-labelledby="motion-title">
-        <h2 id="motion-title" class="group-title">
+      <section class="space-y-2" aria-labelledby="motion-title">
+        <h2
+          id="motion-title"
+          class="text-base font-bold text-[var(--color-text)]"
+        >
           Motion
         </h2>
-        <div class="btn-grid">
+        <div class="grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={!reducedMotion.value}
             onClick$={toggleMotion$}
           >
@@ -426,7 +343,7 @@ export const PrefferencesToggle = component$<{
           </button>
           <button
             type="button"
-            class="btn"
+            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
             aria-pressed={reducedMotion.value}
             onClick$={toggleMotion$}
           >

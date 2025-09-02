@@ -122,3 +122,14 @@ the UI reflects saved settings before Qwik hydrates. The bundled component
 `PreferenceScripts` lives in `src/components/theme/preference-scripts.tsx` and is
 injected in `src/root.tsx`. Default values for theme, cursor and layout settings
 come from `src/config/siteConfig.json` so they can be customized per site.
+
+## Keyboard Shortcuts
+
+The application provides a couple of handy shortcuts for quickly accessing the
+preferences panel:
+
+- `F10` &ndash; Toggle the preferences panel open or closed.
+- `Escape` &ndash; Close the preferences panel if it is open.
+
+These shortcuts work globally, allowing you to adjust settings without reaching
+for the mouse.

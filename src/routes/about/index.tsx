@@ -37,8 +37,8 @@ export default component$(() => {
             <h3 class="text-xl font-semibold text-white">Design</h3>
             <p class="mt-2">
               I have a deep love for design. Whether it’s creating visually
-              stunning layouts or ensuring seamless user experiences, I strive to
-              merge creativity with functionality in every project. My design
+              stunning layouts or ensuring seamless user experiences, I strive
+              to merge creativity with functionality in every project. My design
               philosophy is rooted in understanding user needs and crafting
               intuitive, engaging interfaces.
             </p>
@@ -46,10 +46,11 @@ export default component$(() => {
           <div>
             <h3 class="text-xl font-semibold text-white">Prototyping</h3>
             <p class="mt-2">
-              Building UX prototypes is a core part of my work. I transform ideas
-              into interactive prototypes that allow for early user testing and
-              feedback. This iterative process helps refine the user experience
-              and ensures that the final product meets user expectations.
+              Building UX prototypes is a core part of my work. I transform
+              ideas into interactive prototypes that allow for early user
+              testing and feedback. This iterative process helps refine the user
+              experience and ensures that the final product meets user
+              expectations.
             </p>
           </div>
           <div>
@@ -92,6 +93,201 @@ export default component$(() => {
             </p>
           </div>
         </div>
+      </section>
+
+      <section class="mt-8 px-4 sm:px-0">
+        <h2 class="text-3xl font-bold text-white">Resume</h2>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-300">
+          <li>
+            <span class="font-semibold">01.01.2021 - 30.06.2021:</span>
+            Creative Developer / Frontend-Developer
+            <a href="https://hauserlacour.de" class="underline">
+              hauserlacour.de
+            </a>
+          </li>
+          <li>
+            <span class="font-semibold">01.07.2021 - 01.01.2022:</span>
+            Accenture / Senior Product Engineer / Frontend-Developer
+            <a href="https://accenture.com" class="underline">
+              accenture.com
+            </a>
+            – TypeScript, Next.js, D3.js
+          </li>
+          <li>
+            <span class="font-semibold">01.07.2021 - 01.01.2022:</span>
+            Sinner Schrader / Product Engineer / Frontend-Developer
+            <a href="https://sinnerschrader.com" class="underline">
+              sinnerschrader.com
+            </a>
+            – TypeScript, React, Web Components
+          </li>
+          <li>
+            <span class="font-semibold">2021:</span> synbionik.com
+          </li>
+          <li>
+            <span class="font-semibold">01.09.2017 - 31.12.2020:</span>
+            UX-Designer / Frontend-Developer
+            <a href="https://comwrap.com" class="underline">
+              comwrap.com
+            </a>
+          </li>
+          <li>
+            <span class="font-semibold">2020:</span> Digital Thinking Concepts
+            and Tools Workshop
+          </li>
+          <li>
+            <span class="font-semibold">2020:</span> Adobe Experience Manager –
+            Frontend Developer (HTML5/CSS3/JavaScript/Webpack)
+          </li>
+          <li>
+            <span class="font-semibold">2020:</span> UX Design Theory Workshop –
+            XDi
+          </li>
+          <li>
+            <span class="font-semibold">2020:</span> Adobe Experience Manager –
+            Core Components Workshop (HTL/Java/CSS/Webpack/JavaScript)
+          </li>
+          <li>
+            <span class="font-semibold">2019:</span> "Wie präsentiere ich
+            richtig" – Kommunikations/Körpersprache Workshop
+          </li>
+          <li>
+            <span class="font-semibold">2019:</span> Udacity Certificate – React
+            Developer (HTML5/CSS3/JavaScript/React/React Native/Ajax/Redux)
+          </li>
+          <li>
+            <span class="font-semibold">2018:</span> css.conf / js.conf.eu –
+            Berlin
+          </li>
+          <li>
+            <span class="font-semibold">2018:</span> Udacity Certificate –
+            Frontend Developer (HTML5/Responsive/ARIA/CSS3/JavaScript)
+          </li>
+          <li>
+            <span class="font-semibold">2017:</span> Malvid Atomic Design
+            Components Library Workshop (BEM/SCSS/Nunjucks/JavaScript ECMA6)
+          </li>
+          <li>
+            <span class="font-semibold">2016:</span> Webdesign – Dieter Roosen
+          </li>
+          <li>
+            <span class="font-semibold">2015:</span> Digital Operator – Frank
+            Weinert
+          </li>
+          <li>
+            <span class="font-semibold">2015:</span> Webdesign – Stefanie
+            Koesling
+          </li>
+          <li>
+            <span class="font-semibold">2014:</span> Retouching – Maggi & Thommy
+            Rezept Ideen
+          </li>
+          <li>
+            <span class="font-semibold">2014:</span> CleverPrinting
+            Colormanagement Certificate
+          </li>
+          <li>
+            <span class="font-semibold">2012:</span> Digital Operator – Dieter
+            Roosen
+          </li>
+          <li>
+            <span class="font-semibold">2011:</span> Webdesign – friedrich und
+            ruppel – hauser lacour
+          </li>
+          <li>
+            <span class="font-semibold">2011:</span> Digital Operator – Stefanie
+            Koesling
+          </li>
+          <li>
+            <span class="font-semibold">2011:</span> Digital Operator – Becker
+            Lacour
+          </li>
+          <li>
+            <span class="font-semibold">2010:</span> Digital Operator – Thomas
+            Goos
+          </li>
+          <li>
+            <span class="font-semibold">2010:</span> Kulissen Bau – Andreas Kopp
+          </li>
+          <li>
+            <span class="font-semibold">2008 - 2014:</span> Fotoassistent –
+            Bernd Mayer
+            <a href="http://berndmayer.com" class="underline">
+              berndmayer.com
+            </a>
+          </li>
+          <li>
+            <span class="font-semibold">2014:</span> Phase One – Lighting for
+            Digital Cameras
+          </li>
+          <li>
+            <span class="font-semibold">2013:</span> Phase One – Capture One
+            Digital Operator Workshop
+          </li>
+        </ul>
+
+        <h3 class="mt-8 text-2xl font-bold text-white">Education</h3>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-300">
+          <li>
+            2008-2014: Visuele Kommunikation – Photography/Painting/Digitale
+            Medien – HFG, Offenbach a.M.
+          </li>
+          <li>
+            2006-2008: Photographer – Photography Peter Behrens Schule –
+            Darmstadt
+          </li>
+          <li>
+            2003-2006: Informationstechnischer Assistent – Werner-von-Siemens
+            Schule, Frankfurt am Main
+          </li>
+        </ul>
+
+        <h3 class="mt-8 text-2xl font-bold text-white">Exhibitions</h3>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-300">
+          <li>
+            2019: Matias Hidalgo – Fashion Photography – New Talents – Vogue.it
+          </li>
+          <li>
+            2019: Matias Hidalgo – Documentation Photography – Kunstverein Lola
+            Montez, Frankfurt
+          </li>
+          <li>
+            2015: Rainer Buchman Porsche 911 „bb Moonracer“ – Fashion
+            Photography, Buch
+          </li>
+          <li>
+            2014: Ernst and Young Benefitt Auktion Neue Talente – Painting –
+            Museum für Angewandte Kunst
+          </li>
+          <li>
+            2013: Streetart – Photography – Kunstverein Lola Montez, Frankfurt
+          </li>
+          <li>
+            2012: 8 Portrait Fotoschau Deutschlands – Photography – Landtag,
+            Dresden
+          </li>
+          <li>
+            2012: Ein Stück vom Kuchen – Photography – Kunstverein Lola Montez,
+            Frankfurt
+          </li>
+          <li>2011: Satelite – Photography – Satelite, Berlin</li>
+          <li>
+            2011: Und das soll Kunst sein – Painting – Kunstverein Lola Montez,
+            Frankfurt
+          </li>
+          <li>
+            2011: Gallus Calling – Painting – Projektraum Balken, Frankfurt
+          </li>
+          <li>2010: V2 – Photography – Sixt Gallusviertel, Frankfurt</li>
+          <li>2009: V1 – Soundperformance – Landungsbrücken, Frankfurt</li>
+          <li>
+            2009: The City Loves You – Photography – Kunstverein Lola Montez,
+            Frankfurt
+          </li>
+          <li>
+            2008: faites le jeu! – Painting – besetztes Haus Westend, Frankfurt
+          </li>
+        </ul>
       </section>
     </div>
   );

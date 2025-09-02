@@ -1,16 +1,19 @@
-import { component$, useStore,  $, useOnWindow } from "@builder.io/qwik";
+import { component$, useStore, $, useOnWindow } from "@builder.io/qwik";
 import footerData from "./data";
 
 export const Footer = component$(() => {
   const state = useStore({ showScroll: false });
-  
-  useOnWindow("scroll", $(() => {
-    state.showScroll = window.scrollY > 100;
-  }));
-  
+
+  useOnWindow(
+    "scroll",
+    $(() => {
+      state.showScroll = window.scrollY > 100;
+    }),
+  );
+
   return (
-    <footer class="bg-gray-800 text-white mt-12">
-      <div class="max-w-screen-xl mx-auto px-4 py-8 flex flex-col gap-8 md:flex-row md:justify-between">
+    <footer class="mt-12 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+      <div class="mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-8 md:flex-row md:justify-between">
         <div class="flex flex-col gap-4">
           <a href="/" class="flex items-center gap-2" aria-label="Home">
             {footerData.brand?.logo && (
@@ -32,11 +35,14 @@ export const Footer = component$(() => {
             </p>
           )}
         </div>
-        <nav aria-label="Footer" class="flex flex-col sm:flex-row gap-8">
+        <nav aria-label="Footer" class="flex flex-col gap-8 sm:flex-row">
           <ul class="space-y-2">
             {footerData.nav?.column1?.map((item) => (
               <li key={item.name}>
-                <a href={item.link} class="hover:underline">
+                <a
+                  href={item.link}
+                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                >
                   {item.name}
                 </a>
               </li>
@@ -45,7 +51,10 @@ export const Footer = component$(() => {
           <ul class="space-y-2">
             {footerData.nav?.column2?.map((item) => (
               <li key={item.name}>
-                <a href={item.link} class="hover:underline">
+                <a
+                  href={item.link}
+                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                >
                   {item.name}
                 </a>
               </li>
@@ -62,11 +71,11 @@ export const Footer = component$(() => {
                 id="footer-email"
                 type="email"
                 placeholder={footerData.subscription.input_placeholder}
-                class="px-3 py-2 rounded-l-md text-gray-900"
+                class="rounded-l-md bg-white px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
               />
               <button
                 type="submit"
-                class="px-4 py-2 bg-blue-600 text-white rounded-r-md"
+                class="rounded-r-md bg-blue-600 px-4 py-2 text-white dark:bg-blue-500"
               >
                 {footerData.subscription.button_label}
               </button>
@@ -78,7 +87,7 @@ export const Footer = component$(() => {
                 <a
                   href={item.link}
                   aria-label={item.name}
-                  class="hover:text-blue-400"
+                  class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
                 >
                   {item.abbr}
                 </a>
@@ -91,7 +100,7 @@ export const Footer = component$(() => {
         <button
           aria-label="Scroll to top"
           onClick$={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          class="fixed bottom-4 right-4 p-3 rounded-full bg-blue-600 text-white shadow-lg"
+          class="fixed right-4 bottom-4 rounded-full bg-blue-600 p-3 text-white shadow-lg"
         >
           <span aria-hidden="true">↑</span>
         </button>

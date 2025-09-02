@@ -3,60 +3,75 @@ import {
   component$,
   useSignal,
   useStylesScoped$,
-} from "@builder.io/qwik"
-import { Link } from "@builder.io/qwik-city"
-import headerData from "./data"
-import styles from "./navigation.css?inline"
-import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
-import PrefferencesToggle from "./prefferences-toggle"
+} from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
+import headerData from "./data";
+import styles from "./navigation.css?inline";
+import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
+import PrefferencesToggle from "./prefferences-toggle";
 
-
-export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig }) => {
-  useStylesScoped$(styles)
-  return (
-    <div id="mobile-menu" hidden={!openSig.value} class="flex lg:hidden">
-      <div class="flex flex-col w-full">
-        {(
-          headerData.nav as
-          | { name: string; link: string; flag?: string }[]
-          | undefined
-        )
-          ?.filter(
-            (item) =>
-              !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
+export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
+  ({ openSig }) => {
+    useStylesScoped$(styles);
+    return (
+      <div id="mobile-menu" hidden={!openSig.value} class="flex lg:hidden">
+        <div class="flex w-full flex-col">
+          {(
+            headerData.nav as
+              | { name: string; link: string; flag?: string }[]
+              | undefined
           )
-          .map((item) => (
-            <div key={item.link} class="mx-auto flex max-w-xs flex-col space-y-4 font-mono text-sm leading-6 font-bold text-white bg-amber-800">
-              <Link href={item.link} class="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-                {item.name}
-              </Link>
-            </div>
-          ))}
+            ?.filter(
+              (item) =>
+                !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
+            )
+            .map((item) => (
+              <div
+                key={item.link}
+                class="mx-auto flex max-w-xs flex-col space-y-4 font-mono text-sm font-bold"
+              >
+                <Link
+                  href={item.link}
+                  class="flex items-center justify-center rounded-md px-3 py-2 text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                >
+                  {item.name}
+                </Link>
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
-  )
-})
-
+    );
+  },
+);
 
 export default component$(() => {
-  useStylesScoped$(styles)
-  const menuOpen = useSignal(false)
-  const isOpen = useSignal(false)
+  useStylesScoped$(styles);
+  const menuOpen = useSignal(false);
+  const isOpen = useSignal(false);
   return (
-    <nav class="bg-white-800/50 dark:bg-black">
+    <nav class="bg-white/50 text-gray-900 dark:bg-black dark:text-gray-100">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
-            <div class="shrink-0 flex" >
-              <img src="/assets/icons/markus-morley_iconic_blockM_light.svg" class="size-10  self-center" width={32} height={32} />
-              {headerData.logo_text && <p class="text-xl font-bold self-center p-4">{headerData.logo_text}</p>}
+            <div class="flex shrink-0">
+              <img
+                src="/assets/icons/markus-morley_iconic_blockM_light.svg"
+                class="size-10 self-center"
+                width={32}
+                height={32}
+              />
+              {headerData.logo_text && (
+                <p class="self-center p-4 text-xl font-bold">
+                  {headerData.logo_text}
+                </p>
+              )}
             </div>
             <div class="hidden lg:block">
               <ul class="ml-10 flex items-baseline space-x-4">
                 {(
                   headerData.nav as
-                  | { name: string; link: string; flag?: string }[]
-                  | undefined
+                    | { name: string; link: string; flag?: string }[]
+                    | undefined
                 )
                   ?.filter(
                     (item) =>
@@ -64,9 +79,12 @@ export default component$(() => {
                   )
                   .map((item) => (
                     <li key={item.link}>
-                      <Link href={item.link} class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
-                        {item.name}
-                      </Link>
+                        <Link
+                          href={item.link}
+                          class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                        >
+                          {item.name}
+                        </Link>
                     </li>
                   ))}
               </ul>
@@ -74,19 +92,54 @@ export default component$(() => {
           </div>
           <div class="hidden lg:block">
             <div class="flex md:ml-6">
-              <button type="button" class="ml-4 flex items-center relative mr-4 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 justify-center">
+                <button
+                  type="button"
+                  class="ml-4 mr-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+                >
                 {/* <span class="absolute -inset-2.5"></span> */}
                 <span class="sr-only">View notifications</span>
-                <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 26" class="size-6" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a7 7 0 0 0-7 7v6c0 .6-.2 1.2-.6 1.6L3 19h18l-1.4-2.4c-.4-.4-.6-1-.6-1.6V9a7 7 0 0 0-7-7z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 19a3 3 0 0 0 6 0" />
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 26"
+                  class="size-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 2a7 7 0 0 0-7 7v6c0 .6-.2 1.2-.6 1.6L3 19h18l-1.4-2.4c-.4-.4-.6-1-.6-1.6V9a7 7 0 0 0-7-7z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 19a3 3 0 0 0 6 0"
+                  />
                 </svg>
               </button>
-              <button onClick$={() => (isOpen.value = !isOpen.value)} type="button" class="relative rounded-full p-1 mr-4 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+                <button
+                  onClick$={() => (isOpen.value = !isOpen.value)}
+                  type="button"
+                  class="relative mr-4 rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+                >
                 {/* <span class="absolute -inset-1.5"></span> */}
                 <span class="sr-only">Open settings</span>
-                <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" class="size-6" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" />
+                <svg
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-width="1.5"
+                  viewBox="0 0 24 24"
+                  class="size-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
                 </svg>
               </button>
@@ -94,18 +147,60 @@ export default component$(() => {
                 <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                   {/* <span class="absolute -inset-1.5"></span> */}
                   <span class="sr-only">Open user menu</span>
-                  <svg width="32" height="32" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="32" cy="32" r="30" stroke-linecap="round" stroke-linejoin="round" />
-                    <circle cx="32" cy="24" r="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M16 48A16 12 0 0 1 48 48" stroke-linecap="round" stroke-linejoin="round" />
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 64 64"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="30"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <circle
+                      cx="32"
+                      cy="24"
+                      r="10"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M16 48A16 12 0 0 1 48 48"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
-
                 </button>
 
-                <el-menu anchor="bottom end" popover="auto" class="w-48 origin-top-right rounded-md bg-gray-800 py-1 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Your profile</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Settings</a>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:outline-hidden">Sign out</a>
+                <el-menu
+                  anchor="bottom end"
+                  popover="auto"
+                  class="w-48 origin-top-right rounded-md bg-white py-1 outline-1 -outline-offset-1 outline-black/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:outline-white/10"
+                >
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                  >
+                    Your profile
+                  </a>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                  >
+                    Settings
+                  </a>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                  >
+                    Sign out
+                  </a>
                 </el-menu>
               </el-dropdown>
             </div>
@@ -125,21 +220,43 @@ export default component$(() => {
           <div class="-mr-2 flex lg:hidden">
             <button
               type="button"
-              class="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
+                class="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-300 dark:hover:text-white"
               aria-controls="mobile-menu"
-              aria-expanded={menuOpen.value ? 'true' : 'false'}
+              aria-expanded={menuOpen.value ? "true" : "false"}
               onClick$={() => (menuOpen.value = !menuOpen.value)}
             >
               <span class="sr-only">Open main menu</span>
               {/* Hamburger icon */}
               {!menuOpen.value ? (
-                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={1.5} aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <svg
+                  class="size-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width={1.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
                 </svg>
               ) : (
                 // X icon
-                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={1.5} aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  class="size-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width={1.5}
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               )}
             </button>
@@ -181,32 +298,44 @@ export default component$(() => {
 
       {/* Mobile panel */}
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <MobileMenu
-          openSig={menuOpen}
-        />
+        <MobileMenu openSig={menuOpen} />
       </div>
       {!isOpen.value ? (
         <></>
       ) : (
         <>
-
-            <div class="">
-              <aside class="fixed top-0 right-0 w-2xl bg-amber-300 z-40" role="dialog" aria-label="UI settings">
-                <button
-                  type="button"
-                  class="close-btn"
-                  aria-label="Close settings"
-                  onClick$={() => (isOpen.value = !isOpen.value)}
+          <div class="">
+            <aside
+              class="fixed top-0 right-0 z-40 w-2xl bg-amber-300"
+              role="dialog"
+              aria-label="UI settings"
+            >
+              <button
+                type="button"
+                class="close-btn"
+                aria-label="Close settings"
+                onClick$={() => (isOpen.value = !isOpen.value)}
+              >
+                <svg
+                  class="size-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width={1.5}
+                  aria-hidden="true"
                 >
-                  <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={1.5} aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                <PrefferencesToggle />
-              </aside>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <PrefferencesToggle />
+            </aside>
           </div>
         </>
       )}
     </nav>
-  )
-})
+  );
+});

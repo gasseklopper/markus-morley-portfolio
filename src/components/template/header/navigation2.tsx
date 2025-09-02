@@ -48,7 +48,7 @@ export default component$(() => {
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
             <div class="shrink-0 flex" >
-              <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="size-10  self-center" width={32} height={32} />
+              <img src="/assets/icons/markus-morley_iconic_blockM_light.svg" class="size-10  self-center" width={32} height={32} />
               {headerData.logo_text && <p class="text-xl font-bold self-center p-4">{headerData.logo_text}</p>}
             </div>
             <div class="hidden lg:block">

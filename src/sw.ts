@@ -1,12 +1,13 @@
 declare const self: ServiceWorkerGlobalScope;
 
-import { precacheAndRoute } from "workbox-precaching";
+import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
 
 // self.__WB_MANIFEST is injected at build time with the files to precache
 self.skipWaiting();
 clientsClaim();
 precacheAndRoute(self.__WB_MANIFEST);
+cleanupOutdatedCaches();
 
 self.addEventListener("fetch", (event: FetchEvent) => {
   const { request } = event;
@@ -15,14 +16,13 @@ self.addEventListener("fetch", (event: FetchEvent) => {
   if (request.destination === "document") {
     event.respondWith(
       caches.open("html-cache").then(async (cache) => {
-        const cached = await cache.match(request);
-        if (cached) return cached;
         try {
           const response = await fetch(request);
           cache.put(request, response.clone());
           return response;
         } catch {
-          return (await caches.match("/404")) as Response;
+          const cached = await cache.match(request);
+          return cached ?? ((await caches.match("/404")) as Response);
         }
       }),
     );

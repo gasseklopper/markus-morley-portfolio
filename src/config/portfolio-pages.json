@@ -1,5 +1,11 @@
 [
   {
+    "name": "Color Theme",
+    "path": "/portfolio/color-theme",
+    "title": "Color Theme - Markus Morley personal portfolio",
+    "description": "Color swatches for light, dark, neon and pastell themes."
+  },
+  {
     "name": "Project 001",
     "path": "/portfolio/project001",
     "title": "Project 001 - Markus Morley personal portfolio",

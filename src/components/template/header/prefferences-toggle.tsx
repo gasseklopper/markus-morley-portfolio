@@ -113,7 +113,12 @@ export const PrefferencesToggle = component$<{
   useOnWindow(
     "pointerdown",
     $((event: PointerEvent) => {
-      if (panelRef.value && !panelRef.value.contains(event.target as Node)) {
+      const target = event.target as HTMLElement | null;
+      if (
+        panelRef.value &&
+        !panelRef.value.contains(target) &&
+        !target?.closest("[data-preferences-toggle]")
+      ) {
         onClose$();
       }
     }),

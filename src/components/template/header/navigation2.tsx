@@ -130,8 +130,8 @@ export default component$(() => {
                 </svg>
               </button>
               <button
+                data-preferences-toggle
                 onClick$={() => (isOpen.value = !isOpen.value)}
-                onPointerDown$={(event) => event.stopPropagation()}
                 type="button"
                 class="relative mr-4 rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
               >

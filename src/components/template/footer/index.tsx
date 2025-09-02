@@ -12,7 +12,7 @@ export const Footer = component$(() => {
   );
 
   return (
-    <footer class="mt-12 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <footer class="bg-surface2 text-text1 mt-12">
       <div class="mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-8 md:flex-row md:justify-between">
         <div class="flex flex-col gap-4">
           <a href="/" class="flex items-center gap-2" aria-label="Home">
@@ -41,7 +41,7 @@ export const Footer = component$(() => {
               <li key={item.name}>
                 <a
                   href={item.link}
-                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                  class="text-text2 hover:text-text1 hover:underline"
                 >
                   {item.name}
                 </a>
@@ -53,7 +53,7 @@ export const Footer = component$(() => {
               <li key={item.name}>
                 <a
                   href={item.link}
-                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                  class="text-text2 hover:text-text1 hover:underline"
                 >
                   {item.name}
                 </a>
@@ -71,11 +71,11 @@ export const Footer = component$(() => {
                 id="footer-email"
                 type="email"
                 placeholder={footerData.subscription.input_placeholder}
-                class="rounded-l-md bg-white px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+                class="bg-surface1 text-text1 rounded-l-md px-3 py-2"
               />
               <button
                 type="submit"
-                class="rounded-r-md bg-blue-600 px-4 py-2 text-white dark:bg-blue-500"
+                class="bg-brand-core text-brand-inverted rounded-r-md px-4 py-2"
               >
                 {footerData.subscription.button_label}
               </button>
@@ -87,7 +87,7 @@ export const Footer = component$(() => {
                 <a
                   href={item.link}
                   aria-label={item.name}
-                  class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                  class="text-text2 hover:text-brand-core"
                 >
                   {item.abbr}
                 </a>
@@ -100,7 +100,7 @@ export const Footer = component$(() => {
         <button
           aria-label="Scroll to top"
           onClick$={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          class="fixed right-4 bottom-4 rounded-full bg-blue-600 p-3 text-white shadow-lg"
+          class="bg-brand-core text-brand-inverted fixed right-4 bottom-4 rounded-full p-3 shadow-lg"
         >
           <span aria-hidden="true">↑</span>
         </button>

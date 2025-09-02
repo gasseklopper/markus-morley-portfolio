@@ -34,7 +34,7 @@ export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
               >
                 <Link
                   href={item.link}
-                  class="flex items-center justify-center rounded-md px-3 py-2 text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                  class="flex items-center justify-center rounded-md px-3 py-2 hover:bg-surface2 hover:text-inherit text-inherit"
                 >
                   {item.name}
                 </Link>
@@ -60,7 +60,7 @@ export default component$(() => {
     }),
   );
   return (
-    <nav class="bg-white/50 text-gray-900 dark:bg-black dark:text-gray-100">
+    <nav class="bg-surface1/50 text-text1 data-[theme=neon]:bg-brand data-[theme=neon]:text-brand-inverted data-[theme=pastell]:bg-brand data-[theme=pastell]:text-brand-inverted">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
@@ -92,7 +92,7 @@ export default component$(() => {
                     <li key={item.link}>
                       <Link
                         href={item.link}
-                        class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                        class="hover:bg-surface2 hover:text-inherit rounded-md px-3 py-2 text-sm font-medium text-inherit"
                       >
                         {item.name}
                       </Link>
@@ -105,7 +105,7 @@ export default component$(() => {
             <div class="flex md:ml-6">
               <button
                 type="button"
-                class="mr-4 ml-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+                class="text-inherit hover:text-inherit focus:outline-brand-core mr-4 ml-4 flex items-center justify-center rounded-full p-1 focus:outline-2 focus:outline-offset-2"
               >
                 {/* <span class="absolute -inset-2.5"></span> */}
                 <span class="sr-only">View notifications</span>
@@ -133,7 +133,7 @@ export default component$(() => {
                 data-preferences-toggle
                 onClick$={() => (isOpen.value = !isOpen.value)}
                 type="button"
-                class="relative mr-4 rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+                class="text-inherit hover:text-inherit focus:outline-brand-core relative mr-4 rounded-full p-1 focus:outline-2 focus:outline-offset-2"
               >
                 {/* <span class="absolute -inset-1.5"></span> */}
                 <span class="sr-only">Open settings</span>
@@ -156,7 +156,7 @@ export default component$(() => {
                 </svg>
               </button>
               <el-dropdown class="relative ml-3">
-                <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                <button class="focus-visible:outline-brand-core relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2">
                   {/* <span class="absolute -inset-1.5"></span> */}
                   <span class="sr-only">Open user menu</span>
                   <svg
@@ -193,23 +193,23 @@ export default component$(() => {
                 <el-menu
                   anchor="bottom end"
                   popover="auto"
-                  class="w-48 origin-top-right rounded-md bg-white py-1 outline-1 -outline-offset-1 outline-black/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:outline-white/10"
+                  class="bg-surface2 outline-surface4/50 w-48 origin-top-right rounded-md py-1 outline-1 -outline-offset-1 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
                 >
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                    class="text-inherit focus:bg-surface3 block px-4 py-2 text-sm focus:outline-hidden"
                   >
                     Your profile
                   </a>
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                    class="text-inherit focus:bg-surface3 block px-4 py-2 text-sm focus:outline-hidden"
                   >
                     Settings
                   </a>
                   <a
                     href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden dark:text-gray-300 dark:focus:bg-white/5"
+                    class="text-inherit focus:bg-surface3 block px-4 py-2 text-sm focus:outline-hidden"
                   >
                     Sign out
                   </a>
@@ -232,7 +232,7 @@ export default component$(() => {
           <div class="-mr-2 flex lg:hidden">
             <button
               type="button"
-              class="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-300 dark:hover:text-white"
+              class="text-inherit hover:text-inherit focus:outline-brand-core inline-flex items-center justify-center rounded-md p-2 focus:outline-2 focus:outline-offset-2"
               aria-controls="mobile-menu"
               aria-expanded={menuOpen.value ? "true" : "false"}
               onClick$={() => (menuOpen.value = !menuOpen.value)}

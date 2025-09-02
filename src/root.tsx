@@ -48,15 +48,15 @@ export default component$(() => {
       </head>
       <body lang="en">
         {isDev && <LocalhostOutline />}
-        <div class="flex min-h-screen flex-col bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
-          <header class="bg-slate-300 p-4 dark:bg-slate-700">
+        <div class="flex min-h-screen flex-col bg-[var(--surface1)] text-[var(--text1)]">
+          <header class="bg-[var(--surface5)] p-4">
             <Header />
           </header>
           <main class="flex-grow p-4">
             {" "}
             <RouterOutlet />
           </main>
-          <footer class="bg-slate-300 p-4 dark:bg-slate-700">
+          <footer class="bg-[var(--surface5)] p-4">
             <Footer />
           </footer>
         </div>

@@ -22,6 +22,7 @@ export const PrefferencesToggle = component$(() => {
   const rtlLayout = useSignal(false);
   const overlayOn = useSignal(false);
   const reducedMotion = useSignal(false);
+  const isOpen = useSignal(false);
 
   useStylesScoped$(`
     .panel {
@@ -36,10 +37,13 @@ export const PrefferencesToggle = component$(() => {
       padding: 1rem;
       overflow-y: auto;
       box-shadow: -2px 0 8px rgba(0, 0, 0, 0.5);
-      display: flex;
       display: none;
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .panel.open {
+      display: flex;
     }
 
     .close-btn {
@@ -244,14 +248,47 @@ export const PrefferencesToggle = component$(() => {
   });
 
   return (
-    <aside class="panel" role="dialog" aria-label="UI settings">
+    <>
       <button
         type="button"
-        class="close-btn"
-        aria-label="Close settings"
+        class="relative rounded-full p-1 mr-4 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
+        onClick$={() => (isOpen.value = true)}
       >
-        ×
+        <span class="sr-only">Open settings</span>
+        <svg
+          stroke="currentColor"
+          fill="none"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+          class="size-6"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z"
+          />
+        </svg>
       </button>
+
+      <aside
+        class={`panel${isOpen.value ? ' open' : ''}`}
+        role="dialog"
+        aria-label="UI settings"
+      >
+        <button
+          type="button"
+          class="close-btn"
+          aria-label="Close settings"
+          onClick$={() => (isOpen.value = false)}
+        >
+          ×
+        </button>
 
       <section class="group" aria-labelledby="cursor-title">
         <h2 id="cursor-title" class="group-title">
@@ -390,6 +427,7 @@ export const PrefferencesToggle = component$(() => {
         </div>
       </section>
     </aside>
+    </>
   );
 });
 

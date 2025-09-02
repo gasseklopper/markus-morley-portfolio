@@ -1,24 +1,8 @@
 @use "../styles/variables" as *;
 
 .page {
-  padding: $sectionPadding 0;
   padding: 0;
-  max-width: $maxWidth;
-  border-radius: $radiusBig;
+  max-width: 100%;
+  border-radius: 0;
 }
 
-.title_barlowBold {
-  font: $fontStackBarlowBold;
-}
-
-.title_barlowMedium {
-  font: $fontStackBarlowMedium;
-}
-
-.title_barlowLight {
-  font: $fontStackBarlowLight;
-}
-
-.title_barlowSemibold {
-  font: $fontStackBarlowSemibold;
-}

@@ -19,7 +19,9 @@ import siteConfig from "~/config/siteConfig.json";
 export const PrefferencesToggle = component$<{
   onClose$: PropFunction<() => void>;
 }>(({ onClose$ }) => {
-  const isDark = useSignal(false);
+  const themes = ["light", "dark", "neon", "pastell"] as const;
+  type Theme = typeof themes[number];
+  const currentTheme = useSignal<Theme>("light");
   const cursorEnabled = useSignal(true);
   const boxLayout = useSignal(false);
   const rtlLayout = useSignal(false);
@@ -29,17 +31,16 @@ export const PrefferencesToggle = component$<{
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const storedTheme = localStorage.getItem(themeStorageKey);
-    const defaultTheme = window.matchMedia("(prefers-color-scheme: dark)")
-      .matches
-      ? siteConfig.theme_preferences.dark
-      : siteConfig.theme_preferences.light;
-    const currentTheme = storedTheme ?? defaultTheme;
+    const storedTheme = localStorage.getItem(themeStorageKey) as Theme | null;
+    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    const theme = storedTheme && themes.includes(storedTheme) ? storedTheme : preferredTheme;
     if (!storedTheme) {
-      localStorage.setItem(themeStorageKey, currentTheme);
+      localStorage.setItem(themeStorageKey, theme);
     }
-    isDark.value = currentTheme === siteConfig.theme_preferences.dark;
-    document.documentElement.setAttribute("data-theme", currentTheme);
+    currentTheme.value = theme;
+    document.documentElement.setAttribute("data-theme", theme);
 
     const storedCursor = localStorage.getItem(cursorAnimationKey);
     const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -124,13 +125,10 @@ export const PrefferencesToggle = component$<{
     }),
   );
 
-  const toggleTheme$ = $(() => {
-    isDark.value = !isDark.value;
-    const newTheme = isDark.value
-      ? siteConfig.theme_preferences.dark
-      : siteConfig.theme_preferences.light;
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem(themeStorageKey, newTheme);
+  const setTheme$ = $((theme: Theme) => {
+    currentTheme.value = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(themeStorageKey, theme);
   });
 
   const toggleCursor$ = $(() => {
@@ -222,30 +220,25 @@ export const PrefferencesToggle = component$<{
         </select>
       </section>
 
-      <section class="space-y-2" aria-labelledby="mode-title">
+      <section class="space-y-2" aria-labelledby="theme-title">
         <h2
-          id="mode-title"
+          id="theme-title"
           class="text-base font-bold text-[var(--color-text)]"
         >
-          Mode
+          Theme
         </h2>
         <div class="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
-            aria-pressed={!isDark.value}
-            onClick$={toggleTheme$}
-          >
-            Light
-          </button>
-          <button
-            type="button"
-            class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
-            aria-pressed={isDark.value}
-            onClick$={toggleTheme$}
-          >
-            Dark
-          </button>
+          {themes.map((t) => (
+            <button
+              key={t}
+              type="button"
+              class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              aria-pressed={currentTheme.value === t}
+              onClick$={[setTheme$, t]}
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
         </div>
       </section>
 

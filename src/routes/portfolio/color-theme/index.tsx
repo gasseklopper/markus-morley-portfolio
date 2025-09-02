@@ -1,4 +1,5 @@
-import { component$, useVisibleTask$, useStore } from "@builder.io/qwik";
+import { component$, useVisibleTask$, useStore, useSignal, $ } from "@builder.io/qwik";
+import { themeStorageKey } from "~/components/theme/preference-scripts";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -158,12 +159,14 @@ const currentVarNames = [
 ];
 
 export default component$(() => {
+  const themeOptions = ["light", "dark", "neon", "pastell"] as const;
+  type ThemeName = (typeof themeOptions)[number];
+  const currentTheme = useSignal<ThemeName>("light");
   const current = useStore<{ colors: { name: string; value: string }[] }>({
     colors: [],
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  const updateCurrentColors = $(() => {
     const styles = getComputedStyle(document.documentElement);
     current.colors = currentVarNames.map((name) => ({
       name,
@@ -171,9 +174,47 @@ export default component$(() => {
     }));
   });
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    const storedTheme = localStorage.getItem(themeStorageKey) as ThemeName | null;
+    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+    const theme =
+      storedTheme && themeOptions.includes(storedTheme) ? storedTheme : preferredTheme;
+    if (!storedTheme) {
+      localStorage.setItem(themeStorageKey, theme);
+    }
+    currentTheme.value = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    updateCurrentColors();
+  });
+
+  const setTheme$ = $((theme: ThemeName) => {
+    currentTheme.value = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(themeStorageKey, theme);
+    updateCurrentColors();
+  });
+
   return (
     <>
-      <h1>Color Theme</h1>
+      <div class="mb-8 flex items-center justify-between">
+        <h1>Color Theme</h1>
+        <div class="flex gap-2">
+          {themeOptions.map((t) => (
+            <button
+              key={t}
+              type="button"
+              class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-1 text-sm text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
+              aria-pressed={currentTheme.value === t}
+              onClick$={() => setTheme$(t)}
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
       <section class="mb-8">
         <h2>Current</h2>
         <p>Resolved variables from the active theme.</p>

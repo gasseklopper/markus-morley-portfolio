@@ -234,7 +234,7 @@ export const PrefferencesToggle = component$<{
               type="button"
               class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-2 text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
               aria-pressed={currentTheme.value === t}
-              onClick$={[setTheme$, t]}
+              onClick$={() => setTheme$(t)}
             >
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </button>

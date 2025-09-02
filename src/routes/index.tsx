@@ -34,29 +34,35 @@ const workItems: WorkItem[] = [
 export default component$(() => {
   useStyles$(styles);
   return (
-    <div class="page bg-white text-black dark:bg-black dark:text-white">
-      <section class="min-h-screen flex flex-col justify-end border-b border-black dark:border-white p-8 md:p-20">
-        <h1 class="text-6xl md:text-8xl font-bold uppercase">Markus Morley</h1>
-        <p class="mt-4 text-xl">Senior KI Frontend Product Engineer</p>
-        <p class="mt-4 max-w-xl text-sm md:text-base">
+    <div class="page bg-surface1 text-text1">
+      <section class="border-surface4 flex min-h-screen flex-col justify-end border-b p-8 md:p-20">
+        <h1 class="text-6xl font-bold uppercase md:text-8xl">Markus Morley</h1>
+        <p class="text-text1 mt-4 text-xl">
+          Senior KI Frontend Product Engineer
+        </p>
+        <p class="text-text2 mt-4 max-w-xl text-sm md:text-base">
           I'm passionate about coding digital experiences and crafting user
           interfaces. Based in Frankfurt am Main, I dedicate my professional
-          life to designing, developing, and bringing to life innovative
-          digital solutions.
+          life to designing, developing, and bringing to life innovative digital
+          solutions.
         </p>
         <a
           href="/portfolio"
-          class="mt-8 inline-block border-2 border-black dark:border-white px-6 py-3 text-sm font-semibold uppercase hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+          class="border-text1 hover:bg-text1 hover:text-surface1 mt-8 inline-block border-2 px-6 py-3 text-sm font-semibold uppercase transition-colors"
         >
           View Portfolio
         </a>
       </section>
 
-      <section class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-black dark:divide-white">
+      <section class="divide-surface4 grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
         {workItems.map((item) => (
           <div key={item.title} class="p-8">
-            <h2 class="text-3xl font-bold uppercase">{item.title}</h2>
-            <p class="mt-4 text-sm md:text-base">{item.description}</p>
+            <h2 class="text-text1 text-3xl font-bold uppercase">
+              {item.title}
+            </h2>
+            <p class="text-text2 mt-4 text-sm md:text-base">
+              {item.description}
+            </p>
           </div>
         ))}
       </section>
@@ -65,4 +71,3 @@ export default component$(() => {
 });
 
 export const head = buildHead(siteConfig.metadata.title);
-

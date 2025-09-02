@@ -8,6 +8,7 @@ import { Link } from "@builder.io/qwik-city"
 import headerData from "./data"
 import styles from "./navigation.css?inline"
 import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
+import PrefferencesToggle from "./prefferences-toggle"
 
 
 export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig }) => {
@@ -40,6 +41,7 @@ export const MobileMenu = component$<{ openSig: Signal<boolean> }>(({ openSig })
 export default component$(() => {
   useStylesScoped$(styles)
   const menuOpen = useSignal(false)
+  const isOpen = useSignal(false)
   return (
     <nav class="bg-gray-800/50">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -80,12 +82,12 @@ export default component$(() => {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 19a3 3 0 0 0 6 0" />
                 </svg>
               </button>
-              <button type="button" class="relative rounded-full p-1 mr-4 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
+              <button onClick$={() => (isOpen.value = !isOpen.value)} type="button" class="relative rounded-full p-1 mr-4 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                 {/* <span class="absolute -inset-1.5"></span> */}
                 <span class="sr-only">Open settings</span>
                 <svg stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" class="size-6" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" />
-                  <path  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
                 </svg>
               </button>
               <el-dropdown class="relative ml-3">
@@ -183,6 +185,28 @@ export default component$(() => {
           openSig={menuOpen}
         />
       </div>
+      {!isOpen.value ? (
+        <></>
+      ) : (
+        <>
+
+            <div class="">
+              <aside class="fixed top-0 right-0 w-2xl bg-amber-300 z-40" role="dialog" aria-label="UI settings">
+                <button
+                  type="button"
+                  class="close-btn"
+                  aria-label="Close settings"
+                  onClick$={() => (isOpen.value = !isOpen.value)}
+                >
+                  <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={1.5} aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <PrefferencesToggle />
+              </aside>
+          </div>
+        </>
+      )}
     </nav>
   )
 })

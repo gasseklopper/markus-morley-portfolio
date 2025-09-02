@@ -37,9 +37,9 @@ export const PrefferencesToggle = component$(() => {
       overflow-y: auto;
       box-shadow: -2px 0 8px rgba(0, 0, 0, 0.5);
       display: flex;
-      display: none;
       flex-direction: column;
       gap: 1rem;
+      z-index: 1000;
     }
 
     .close-btn {
@@ -244,14 +244,7 @@ export const PrefferencesToggle = component$(() => {
   });
 
   return (
-    <aside class="panel" role="dialog" aria-label="UI settings">
-      <button
-        type="button"
-        class="close-btn"
-        aria-label="Close settings"
-      >
-        ×
-      </button>
+<>
 
       <section class="group" aria-labelledby="cursor-title">
         <h2 id="cursor-title" class="group-title">
@@ -389,7 +382,7 @@ export const PrefferencesToggle = component$(() => {
           </button>
         </div>
       </section>
-    </aside>
+      </>
   );
 });
 

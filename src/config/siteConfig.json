@@ -68,24 +68,68 @@
     },
     "nav": {
       "column1": [
-        { "name": "Main Page", "link": "/" },
-        { "name": "FAQ", "link": "/faq" },
-        { "name": "Works", "link": "/works" },
-        { "name": "About", "link": "/about" }
+        {
+          "name": "Main Page",
+          "link": "/"
+        },
+        {
+          "name": "FAQ",
+          "link": "/faq"
+        },
+        {
+          "name": "Works",
+          "link": "/works"
+        },
+        {
+          "name": "About",
+          "link": "/about"
+        }
       ],
       "column2": [
-        { "name": "Story", "link": "/story" },
-        { "name": "Privacy Policy", "link": "/privacy-policy" },
-        { "name": "Expertise", "link": "/expertise" },
-        { "name": "Journal", "link": "/journal" }
+        {
+          "name": "Story",
+          "link": "/story"
+        },
+        {
+          "name": "Privacy Policy",
+          "link": "/privacy-policy"
+        },
+        {
+          "name": "Expertise",
+          "link": "/expertise"
+        },
+        {
+          "name": "Journal",
+          "link": "/journal"
+        }
       ]
     },
     "social": [
-      { "name": "Facebook", "link": "https://facebook.com", "abbr": "Fb" },
-      { "name": "Twitter", "link": "https://twitter.com", "abbr": "Tw" },
-      { "name": "Instagram", "link": "https://instagram.com", "abbr": "In" },
-      { "name": "Dribbble", "link": "https://dribbble.com", "abbr": "Db" },
-      { "name": "LinkedIn", "link": "https://linkedin.com", "abbr": "Li" }
+      {
+        "name": "Facebook",
+        "link": "https://facebook.com",
+        "abbr": "Fb"
+      },
+      {
+        "name": "Twitter",
+        "link": "https://twitter.com",
+        "abbr": "Tw"
+      },
+      {
+        "name": "Instagram",
+        "link": "https://instagram.com",
+        "abbr": "In"
+      },
+      {
+        "name": "Dribbble",
+        "link": "https://dribbble.com",
+        "abbr": "Db"
+      },
+      {
+        "name": "LinkedIn",
+        "link": "https://linkedin.com",
+        "abbr": "Li"
+      }
     ]
   },
   "social": [
@@ -125,6 +169,10 @@
         "name": "Konzept",
         "link": "/konzept",
         "flag": "konzept"
+      },
+      {
+        "name": "Impressum",
+        "link": "/impressum"
       }
     ]
   },
@@ -159,6 +207,10 @@
       "name": "Konzept",
       "path": "/konzept",
       "flag": "konzept"
+    },
+    {
+      "name": "Impressum",
+      "path": "/impressum"
     }
   ]
 }

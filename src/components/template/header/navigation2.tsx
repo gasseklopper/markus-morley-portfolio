@@ -1,4 +1,5 @@
 import {
+  $,
   Signal,
   component$,
   useSignal,
@@ -301,7 +302,7 @@ export default component$(() => {
         <MobileMenu openSig={menuOpen} />
       </div>
       {isOpen.value && (
-        <PrefferencesToggle onClose$={() => (isOpen.value = false)} />
+        <PrefferencesToggle onClose$={$(() => (isOpen.value = false))} />
       )}
     </nav>
   );

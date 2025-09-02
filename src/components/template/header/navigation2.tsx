@@ -1,4 +1,5 @@
 import {
+  $,
   Signal,
   component$,
   useSignal,
@@ -79,12 +80,12 @@ export default component$(() => {
                   )
                   .map((item) => (
                     <li key={item.link}>
-                        <Link
-                          href={item.link}
-                          class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
-                        >
-                          {item.name}
-                        </Link>
+                      <Link
+                        href={item.link}
+                        class="rounded-md px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white"
+                      >
+                        {item.name}
+                      </Link>
                     </li>
                   ))}
               </ul>
@@ -92,10 +93,10 @@ export default component$(() => {
           </div>
           <div class="hidden lg:block">
             <div class="flex md:ml-6">
-                <button
-                  type="button"
-                  class="ml-4 mr-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
-                >
+              <button
+                type="button"
+                class="mr-4 ml-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+              >
                 {/* <span class="absolute -inset-2.5"></span> */}
                 <span class="sr-only">View notifications</span>
                 <svg
@@ -118,11 +119,11 @@ export default component$(() => {
                   />
                 </svg>
               </button>
-                <button
-                  onClick$={() => (isOpen.value = !isOpen.value)}
-                  type="button"
-                  class="relative mr-4 rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
-                >
+              <button
+                onClick$={() => (isOpen.value = !isOpen.value)}
+                type="button"
+                class="relative mr-4 rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+              >
                 {/* <span class="absolute -inset-1.5"></span> */}
                 <span class="sr-only">Open settings</span>
                 <svg
@@ -220,7 +221,7 @@ export default component$(() => {
           <div class="-mr-2 flex lg:hidden">
             <button
               type="button"
-                class="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-300 dark:hover:text-white"
+              class="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-300 dark:hover:text-white"
               aria-controls="mobile-menu"
               aria-expanded={menuOpen.value ? "true" : "false"}
               onClick$={() => (menuOpen.value = !menuOpen.value)}
@@ -300,41 +301,8 @@ export default component$(() => {
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <MobileMenu openSig={menuOpen} />
       </div>
-      {!isOpen.value ? (
-        <></>
-      ) : (
-        <>
-          <div class="">
-            <aside
-              class="fixed top-0 right-0 z-40 w-2xl bg-amber-300"
-              role="dialog"
-              aria-label="UI settings"
-            >
-              <button
-                type="button"
-                class="close-btn"
-                aria-label="Close settings"
-                onClick$={() => (isOpen.value = !isOpen.value)}
-              >
-                <svg
-                  class="size-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width={1.5}
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-              <PrefferencesToggle />
-            </aside>
-          </div>
-        </>
+      {isOpen.value && (
+        <PrefferencesToggle onClose$={$(() => (isOpen.value = false))} />
       )}
     </nav>
   );

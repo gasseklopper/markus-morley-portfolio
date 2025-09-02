@@ -34,25 +34,296 @@
   font-style: normal;
   font-display: swap;
 }
-:root,
-[data-theme="light"],
-[data-theme="miami"] {
+/* Font families */
+:root {
   --font-base: "Barlow light", Helvetica, Arial, sans-serif;
   --font-medium: "Barlow medium", Helvetica, Arial, sans-serif;
   --font-semibold: "Barlow semibold", Helvetica, Arial, sans-serif;
   --font-bold: "Barlow bold", Helvetica, Arial, sans-serif;
-
-  --color-bg: #ffffff;
-  --color-text: #202020;
-  --color-primary: #007acc;
-  --cursor-color: #000;
 }
 
+/* ------------------------------------------------------------------------- */
+/* Palette values per theme (suffix variables) */
+
+/* Light palette */
+:root {
+  --brand-light: #5b6cff;
+  --brand-core-light: #4052ff;
+  --brand-inverted-light: #ffffff;
+  --brand-inverted-highlight1-light: #f0f3ff;
+  --brand-inverted-highlight2-light: #dfe6ff;
+
+  --primary-light: #0ea5e9;
+  --secondary-light: #22c55e;
+  --tertiary-light: #f59e0b;
+  --quaternary-light: #ef4444;
+
+  --text1-light: #0f172a;
+  --text2-light: #334155;
+  --text3-light: #475569;
+  --text4-light: #64748b;
+
+  --surface1-light: #ffffff;
+  --surface2-light: #f8fafc;
+  --surface3-light: #f1f5f9;
+  --surface4-light: #e2e8f0;
+  --surface5-light: #cbd5e1;
+  --surface6-light: #94a3b8;
+  --surface7-light: #64748b;
+  --surface8-light: #475569;
+
+  --surface-shadow-light: rgba(2, 6, 23, 0.2);
+  --shadow-strength-light: 12;
+}
+
+/* Dark palette */
+:root {
+  --brand-dark: #7c7eff;
+  --brand-core-dark: #a5b4fc;
+  --brand-inverted-dark: #0b1220;
+  --brand-inverted-highlight1-dark: #111827;
+  --brand-inverted-highlight2-dark: #1f2937;
+
+  --primary-dark: #22d3ee;
+  --secondary-dark: #4ade80;
+  --tertiary-dark: #fbbf24;
+  --quaternary-dark: #f87171;
+
+  --text1-dark: #f8fafc;
+  --text2-dark: #e2e8f0;
+  --text3-dark: #cbd5e1;
+  --text4-dark: #94a3b8;
+
+  --surface1-dark: #0b1220;
+  --surface2-dark: #0f172a;
+  --surface3-dark: #111827;
+  --surface4-dark: #1f2937;
+  --surface5-dark: #334155;
+  --surface6-dark: #475569;
+  --surface7-dark: #64748b;
+  --surface8-dark: #94a3b8;
+
+  --surface-shadow-dark: rgba(15, 23, 42, 0.55);
+  --shadow-strength-dark: 18;
+}
+
+/* Neon palette */
+:root {
+  --brand-neon: #22ff88;
+  --brand-core-neon: #00ffcc;
+  --brand-inverted-neon: #071016;
+  --brand-inverted-highlight1-neon: #0a1a22;
+  --brand-inverted-highlight2-neon: #0f2430;
+
+  --primary-neon: #39ff14;
+  --secondary-neon: #00e5ff;
+  --tertiary-neon: #ff00e5;
+  --quaternary-neon: #ffe700;
+
+  --text1-neon: #eaffff;
+  --text2-neon: #bff8ff;
+  --text3-neon: #89e6ff;
+  --text4-neon: #59d0f2;
+
+  --surface1-neon: #000810;
+  --surface2-neon: #021320;
+  --surface3-neon: #061c2b;
+  --surface4-neon: #0b2536;
+  --surface5-neon: #123046;
+  --surface6-neon: #1a3b57;
+  --surface7-neon: #24516f;
+  --surface8-neon: #2e6a8d;
+
+  --surface-shadow-neon: rgba(0, 229, 255, 0.45);
+  --shadow-strength-neon: 22;
+}
+
+/* Pastell palette */
+:root {
+  --brand-pastell: #8bb8e8;
+  --brand-core-pastell: #a7c7eb;
+  --brand-inverted-pastell: #ffffff;
+  --brand-inverted-highlight1-pastell: #f5f9ff;
+  --brand-inverted-highlight2-pastell: #e9f2ff;
+
+  --primary-pastell: #a3e3dd;
+  --secondary-pastell: #f7c5cc;
+  --tertiary-pastell: #f6e6a7;
+  --quaternary-pastell: #d9c2e9;
+
+  --text1-pastell: #243043;
+  --text2-pastell: #40506a;
+  --text3-pastell: #5a6a84;
+  --text4-pastell: #7c8aa3;
+
+  --surface1-pastell: #ffffff;
+  --surface2-pastell: #fbfcff;
+  --surface3-pastell: #f6f9fe;
+  --surface4-pastell: #ecf3fb;
+  --surface5-pastell: #e2ecf7;
+  --surface6-pastell: #d6e3f2;
+  --surface7-pastell: #cbd9ec;
+  --surface8-pastell: #c0cfe6;
+
+  --surface-shadow-pastell: rgba(36, 48, 67, 0.18);
+  --shadow-strength-pastell: 10;
+}
+
+/* Token remaps per theme */
+/* Light (default) */
+:root,
+[data-theme="light"] {
+  --brand: var(--brand-light);
+  --brand-core: var(--brand-core-light);
+  --brand-inverted: var(--brand-inverted-light);
+  --brand-inverted-highlight1: var(--brand-inverted-highlight1-light);
+  --brand-inverted-highlight2: var(--brand-inverted-highlight2-light);
+
+  --primary: var(--primary-light);
+  --secondary: var(--secondary-light);
+  --tertiary: var(--tertiary-light);
+  --quaternary: var(--quaternary-light);
+
+  --text1: var(--text1-light);
+  --text2: var(--text2-light);
+  --text3: var(--text3-light);
+  --text4: var(--text4-light);
+
+  --surface1: var(--surface1-light);
+  --surface2: var(--surface2-light);
+  --surface3: var(--surface3-light);
+  --surface4: var(--surface4-light);
+  --surface5: var(--surface5-light);
+  --surface6: var(--surface6-light);
+  --surface7: var(--surface7-light);
+  --surface8: var(--surface8-light);
+
+  --surface-shadow: var(--surface-shadow-light);
+  --shadow-strength: var(--shadow-strength-light);
+
+  /* Legacy variables */
+  --color-bg: var(--surface1);
+  --color-text: var(--text1);
+  --color-primary: var(--primary);
+  --cursor-color: var(--text1);
+}
+
+/* Dark */
 [data-theme="dark"] {
-  --color-bg: #121212;
-  --color-text: #e0e0e0;
-  --color-primary: #4dabf7;
-  --cursor-color: #fff;
+  --brand: var(--brand-dark);
+  --brand-core: var(--brand-core-dark);
+  --brand-inverted: var(--brand-inverted-dark);
+  --brand-inverted-highlight1: var(--brand-inverted-highlight1-dark);
+  --brand-inverted-highlight2: var(--brand-inverted-highlight2-dark);
+
+  --primary: var(--primary-dark);
+  --secondary: var(--secondary-dark);
+  --tertiary: var(--tertiary-dark);
+  --quaternary: var(--quaternary-dark);
+
+  --text1: var(--text1-dark);
+  --text2: var(--text2-dark);
+  --text3: var(--text3-dark);
+  --text4: var(--text4-dark);
+
+  --surface1: var(--surface1-dark);
+  --surface2: var(--surface2-dark);
+  --surface3: var(--surface3-dark);
+  --surface4: var(--surface4-dark);
+  --surface5: var(--surface5-dark);
+  --surface6: var(--surface6-dark);
+  --surface7: var(--surface7-dark);
+  --surface8: var(--surface8-dark);
+
+  --surface-shadow: var(--surface-shadow-dark);
+  --shadow-strength: var(--shadow-strength-dark);
+
+  /* Legacy variables */
+  --color-bg: var(--surface1);
+  --color-text: var(--text1);
+  --color-primary: var(--primary);
+  --cursor-color: var(--text1);
+}
+
+/* Neon */
+[data-theme="neon"] {
+  --brand: var(--brand-neon);
+  --brand-core: var(--brand-core-neon);
+  --brand-inverted: var(--brand-inverted-neon);
+  --brand-inverted-highlight1: var(--brand-inverted-highlight1-neon);
+  --brand-inverted-highlight2: var(--brand-inverted-highlight2-neon);
+
+  --primary: var(--primary-neon);
+  --secondary: var(--secondary-neon);
+  --tertiary: var(--tertiary-neon);
+  --quaternary: var(--quaternary-neon);
+
+  --text1: var(--text1-neon);
+  --text2: var(--text2-neon);
+  --text3: var(--text3-neon);
+  --text4: var(--text4-neon);
+
+  --surface1: var(--surface1-neon);
+  --surface2: var(--surface2-neon);
+  --surface3: var(--surface3-neon);
+  --surface4: var(--surface4-neon);
+  --surface5: var(--surface5-neon);
+  --surface6: var(--surface6-neon);
+  --surface7: var(--surface7-neon);
+  --surface8: var(--surface8-neon);
+
+  --surface-shadow: var(--surface-shadow-neon);
+  --shadow-strength: var(--shadow-strength-neon);
+
+  /* Legacy variables */
+  --color-bg: var(--surface1);
+  --color-text: var(--text1);
+  --color-primary: var(--primary);
+  --cursor-color: var(--text1);
+}
+
+/* Pastell */
+[data-theme="pastell"] {
+  --brand: var(--brand-pastell);
+  --brand-core: var(--brand-core-pastell);
+  --brand-inverted: var(--brand-inverted-pastell);
+  --brand-inverted-highlight1: var(--brand-inverted-highlight1-pastell);
+  --brand-inverted-highlight2: var(--brand-inverted-highlight2-pastell);
+
+  --primary: var(--primary-pastell);
+  --secondary: var(--secondary-pastell);
+  --tertiary: var(--tertiary-pastell);
+  --quaternary: var(--quaternary-pastell);
+
+  --text1: var(--text1-pastell);
+  --text2: var(--text2-pastell);
+  --text3: var(--text3-pastell);
+  --text4: var(--text4-pastell);
+
+  --surface1: var(--surface1-pastell);
+  --surface2: var(--surface2-pastell);
+  --surface3: var(--surface3-pastell);
+  --surface4: var(--surface4-pastell);
+  --surface5: var(--surface5-pastell);
+  --surface6: var(--surface6-pastell);
+  --surface7: var(--surface7-pastell);
+  --surface8: var(--surface8-pastell);
+
+  --surface-shadow: var(--surface-shadow-pastell);
+  --shadow-strength: var(--shadow-strength-pastell);
+
+  /* Legacy variables */
+  --color-bg: var(--surface1);
+  --color-text: var(--text1);
+  --color-primary: var(--primary);
+  --cursor-color: var(--text1);
+}
+
+/* Respect system preference by default */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="neon"]):not([data-theme="pastell"]) {
+    color-scheme: dark;
+  }
 }
 
 /* Layout Direction */

@@ -52,10 +52,10 @@ export default component$(() => {
           alt="Applicant"
           class="h-full w-full object-cover"
         />
-        <div class="absolute inset-0 bg-gradient-to-tr from-black via-gray-800/70 to-transparent" />
+        <div class="absolute inset-0 bg-gradient-to-tr from-white via-gray-100/80 to-transparent dark:from-black dark:via-gray-800/70" />
         <div class="absolute bottom-6 left-6">
-          <h1 class="text-4xl font-bold text-white">About</h1>
-          <p class="mt-2 max-w-xl text-sm text-gray-300">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-white">About</h1>
+          <p class="mt-2 max-w-xl text-sm text-gray-700 dark:text-gray-300">
             This page gives information about the site.
           </p>
         </div>
@@ -64,8 +64,8 @@ export default component$(() => {
       <div class="mx-auto max-w-5xl px-4 py-16">
         {/* Intro */}
         <section>
-          <h2 class="text-3xl font-bold text-white">Hi, I'm Markus Morley</h2>
-          <p class="mt-4 text-gray-300">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Hi, I'm Markus Morley</h2>
+          <p class="mt-4 text-gray-700 dark:text-gray-300">
             I'm passionate about coding digital experiences and crafting user
             interfaces. Based in Frankfurt am Main, I dedicate my professional
             life to designing, developing, and bringing to life innovative
@@ -75,15 +75,15 @@ export default component$(() => {
 
         {/* What I Do */}
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-white">What I Do</h2>
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">What I Do</h2>
           <div class="mt-8 grid gap-8 sm:grid-cols-2">
             {workItems.map((item) => (
               <div
                 key={item.title}
-                class="rounded-lg bg-gray-800/40 p-6 shadow transition hover:bg-gray-800/60"
+                class="rounded-lg bg-gray-100 p-6 shadow transition hover:bg-gray-200 dark:bg-gray-800/40 dark:hover:bg-gray-800/60"
               >
-                <h3 class="text-xl font-semibold text-white">{item.title}</h3>
-                <p class="mt-2 text-gray-300">{item.description}</p>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+                <p class="mt-2 text-gray-700 dark:text-gray-300">{item.description}</p>
               </div>
             ))}
           </div>
@@ -91,8 +91,8 @@ export default component$(() => {
 
         {/* Resume */}
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-white">Resume</h2>
-          <ul class="mt-8 space-y-6 border-l border-gray-700 pl-6 text-gray-300">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Resume</h2>
+          <ul class="mt-8 space-y-6 border-l border-gray-200 pl-6 text-gray-700 dark:border-gray-700 dark:text-gray-300">
             <li class="relative">
               <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-teal-400"></span>
               <span class="font-semibold">01.01.2021 - 30.06.2021:</span>{" "}
@@ -251,8 +251,8 @@ export default component$(() => {
             </li>
           </ul>
 
-          <h3 class="mt-12 text-2xl font-bold text-white">Education</h3>
-          <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-300">
+          <h3 class="mt-12 text-2xl font-bold text-gray-900 dark:text-white">Education</h3>
+          <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-700 dark:text-gray-300">
             <li>
               2008-2014: Visuele Kommunikation – Photography/Painting/Digitale
               Medien – HFG, Offenbach a.M.
@@ -267,8 +267,8 @@ export default component$(() => {
             </li>
           </ul>
 
-          <h3 class="mt-12 text-2xl font-bold text-white">Exhibitions</h3>
-          <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-300">
+          <h3 class="mt-12 text-2xl font-bold text-gray-900 dark:text-white">Exhibitions</h3>
+          <ul class="mt-4 list-disc space-y-2 pl-5 text-gray-700 dark:text-gray-300">
             <li>
               2019: Matias Hidalgo – Fashion Photography – New Talents –
               Vogue.it

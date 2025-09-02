@@ -26,6 +26,7 @@ export const PrefferencesToggle = component$<{
   const rtlLayout = useSignal(false);
   const overlayOn = useSignal(false);
   const reducedMotion = useSignal(false);
+  const panelRef = useSignal<HTMLElement>();
 
   useStylesScoped$(`
       .panel {
@@ -216,6 +217,15 @@ export const PrefferencesToggle = component$<{
     }),
   );
 
+  useOnWindow(
+    "pointerdown",
+    $((event: PointerEvent) => {
+      if (panelRef.value && !panelRef.value.contains(event.target as Node)) {
+        onClose$();
+      }
+    }),
+  );
+
   const toggleTheme$ = $(() => {
     isDark.value = !isDark.value;
     const newTheme = isDark.value
@@ -265,7 +275,7 @@ export const PrefferencesToggle = component$<{
   });
 
   return (
-    <aside class="panel" role="dialog" aria-label="UI settings">
+    <aside ref={panelRef} class="panel" role="dialog" aria-label="UI settings">
       <button
         type="button"
         class="close-btn"

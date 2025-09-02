@@ -157,36 +157,6 @@ const currentVarNames = [
   "cursor-color",
 ];
 
-const currentColorClasses: Record<string, string> = {
-  brand: "bg-[var(--brand)]",
-  "brand-core": "bg-[var(--brand-core)]",
-  "brand-inverted": "bg-[var(--brand-inverted)]",
-  "brand-inverted-highlight1": "bg-[var(--brand-inverted-highlight1)]",
-  "brand-inverted-highlight2": "bg-[var(--brand-inverted-highlight2)]",
-  primary: "bg-[var(--primary)]",
-  secondary: "bg-[var(--secondary)]",
-  tertiary: "bg-[var(--tertiary)]",
-  quaternary: "bg-[var(--quaternary)]",
-  text1: "bg-[var(--text1)]",
-  text2: "bg-[var(--text2)]",
-  text3: "bg-[var(--text3)]",
-  text4: "bg-[var(--text4)]",
-  surface1: "bg-[var(--surface1)]",
-  surface2: "bg-[var(--surface2)]",
-  surface3: "bg-[var(--surface3)]",
-  surface4: "bg-[var(--surface4)]",
-  surface5: "bg-[var(--surface5)]",
-  surface6: "bg-[var(--surface6)]",
-  surface7: "bg-[var(--surface7)]",
-  surface8: "bg-[var(--surface8)]",
-  "surface-shadow": "bg-[var(--surface-shadow)]",
-  "shadow-strength": "bg-[var(--shadow-strength)]",
-  "color-bg": "bg-[var(--color-bg)]",
-  "color-text": "bg-[var(--color-text)]",
-  "color-primary": "bg-[var(--color-primary)]",
-  "cursor-color": "bg-[var(--cursor-color)]",
-};
-
 export default component$(() => {
   const current = useStore<{ colors: { name: string; value: string }[] }>({
     colors: [],
@@ -210,7 +180,7 @@ export default component$(() => {
         <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
           {current.colors.map((c) => (
             <div class="flex items-center gap-2" key={c.name}>
-              <div class={`h-10 w-10 rounded border ${currentColorClasses[c.name]}`} />
+              <div class={`h-10 w-10 rounded border bg-[var(--${c.name})]`} />
               <div class="text-sm">
                 <div>{c.name}</div>
                 <div>{c.value}</div>

@@ -3,6 +3,35 @@ import type { Config } from "tailwindcss";
 export default {
   darkMode: "class",
   content: ["./src/**/*.{html,js,ts,jsx,tsx}"],
+  safelist: [
+    "bg-[var(--brand)]",
+    "bg-[var(--brand-core)]",
+    "bg-[var(--brand-inverted)]",
+    "bg-[var(--brand-inverted-highlight1)]",
+    "bg-[var(--brand-inverted-highlight2)]",
+    "bg-[var(--primary)]",
+    "bg-[var(--secondary)]",
+    "bg-[var(--tertiary)]",
+    "bg-[var(--quaternary)]",
+    "bg-[var(--text1)]",
+    "bg-[var(--text2)]",
+    "bg-[var(--text3)]",
+    "bg-[var(--text4)]",
+    "bg-[var(--surface1)]",
+    "bg-[var(--surface2)]",
+    "bg-[var(--surface3)]",
+    "bg-[var(--surface4)]",
+    "bg-[var(--surface5)]",
+    "bg-[var(--surface6)]",
+    "bg-[var(--surface7)]",
+    "bg-[var(--surface8)]",
+    "bg-[var(--surface-shadow)]",
+    "bg-[var(--shadow-strength)]",
+    "bg-[var(--color-bg)]",
+    "bg-[var(--color-text)]",
+    "bg-[var(--color-primary)]",
+    "bg-[var(--cursor-color)]",
+  ],
   theme: {
     extend: {
       colors: {
@@ -40,4 +69,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config;
+} as Config;

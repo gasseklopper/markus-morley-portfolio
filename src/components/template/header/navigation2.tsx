@@ -105,7 +105,7 @@ export default component$(() => {
             <div class="flex md:ml-6">
               <button
                 type="button"
-                class="mr-4 ml-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
+                class="relative mr-4 ml-4 flex items-center justify-center rounded-full p-1 text-gray-600 hover:text-gray-900 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:text-gray-400 dark:hover:text-white"
               >
                 {/* <span class="absolute -inset-2.5"></span> */}
                 <span class="sr-only">View notifications</span>
@@ -128,6 +128,9 @@ export default component$(() => {
                     d="M9 19a3 3 0 0 0 6 0"
                   />
                 </svg>
+                <span class="bg-brand absolute -top-1 -right-1 inline-flex size-4 items-center justify-center rounded-full text-xs font-bold text-white">
+                  3
+                </span>
               </button>
               <button
                 data-preferences-toggle

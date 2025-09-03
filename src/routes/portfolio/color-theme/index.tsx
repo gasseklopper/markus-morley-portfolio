@@ -1,4 +1,11 @@
-import { component$, useVisibleTask$, useStore, useSignal, $ } from "@builder.io/qwik";
+import {
+  component$,
+  useStore,
+  useSignal,
+  useTask$,
+  $,
+  isBrowser,
+} from "@builder.io/qwik";
 import { themeStorageKey } from "~/components/theme/preference-scripts";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -166,7 +173,8 @@ export default component$(() => {
     colors: [],
   });
 
-  const updateCurrentColors = $(() => {
+  const updateCurrentColors = $(async () => {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
     const styles = getComputedStyle(document.documentElement);
     current.colors = currentVarNames.map((name) => ({
       name,
@@ -174,37 +182,35 @@ export default component$(() => {
     }));
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    const storedTheme = localStorage.getItem(themeStorageKey) as ThemeName | null;
-    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+  useTask$(() => {
+    if (!isBrowser) return;
+    const storedTheme = localStorage.getItem(
+      themeStorageKey,
+    ) as ThemeName | null;
+    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
       ? "dark"
       : "light";
     const theme =
-      storedTheme && themeOptions.includes(storedTheme) ? storedTheme : preferredTheme;
+      storedTheme && themeOptions.includes(storedTheme)
+        ? storedTheme
+        : preferredTheme;
     if (!storedTheme) {
       localStorage.setItem(themeStorageKey, theme);
     }
     currentTheme.value = theme;
-    document.documentElement.setAttribute("data-theme", theme);
-    updateCurrentColors();
+  });
 
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute("data-theme") as ThemeName | null;
-      if (newTheme && themeOptions.includes(newTheme)) {
-        currentTheme.value = newTheme;
-        updateCurrentColors();
-      }
-    });
-    observer.observe(document.documentElement, { attributes: true });
-    return () => observer.disconnect();
+  useTask$(async ({ track }) => {
+    if (!isBrowser) return;
+    track(() => currentTheme.value);
+    document.documentElement.setAttribute("data-theme", currentTheme.value);
+    await updateCurrentColors();
   });
 
   const setTheme$ = $((theme: ThemeName) => {
     currentTheme.value = theme;
-    document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem(themeStorageKey, theme);
-    updateCurrentColors();
   });
 
   return (
@@ -228,7 +234,7 @@ export default component$(() => {
       <section class="mb-8">
         <h2>Current</h2>
         <p>Resolved variables from the active theme.</p>
-        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4">
           {current.colors.map((c) => (
             <div class="flex items-center gap-2" key={c.name}>
               <div class={`h-10 w-10 rounded border bg-[var(--${c.name})]`} />
@@ -244,7 +250,7 @@ export default component$(() => {
         <section key={theme.name} class="mb-8">
           <h2>{theme.name}</h2>
           <p>{theme.description}</p>
-          <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+          <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4">
             {theme.colors.map((c) => (
               <div class="flex items-center gap-2" key={c.name}>
                 <div

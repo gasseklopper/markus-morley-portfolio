@@ -6,6 +6,12 @@
     "description": "Color swatches for light, dark, neon and pastell themes."
   },
   {
+    "name": "Farbkasten",
+    "path": "/portfolio/farbkasten",
+    "title": "Farbkasten - Markus Morley personal portfolio",
+    "description": "Draw on a portrait using the brand color."
+  },
+  {
     "name": "Project 001",
     "path": "/portfolio/project001",
     "title": "Project 001 - Markus Morley personal portfolio",

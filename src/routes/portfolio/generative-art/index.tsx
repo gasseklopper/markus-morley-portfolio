@@ -49,7 +49,7 @@ export default component$(() => {
     };
     morleyDotsCanvas.parentElement?.appendChild(button);
 
-    window.addEventListener("load", init);
+    init();
 
     function init() {
       while (bubbles.length < initBubbles) {

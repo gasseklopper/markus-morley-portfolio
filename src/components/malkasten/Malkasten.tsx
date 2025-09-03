@@ -11,6 +11,10 @@ export const Malkasten = component$(() => {
   const canvasRef = useSignal<HTMLCanvasElement>();
   const drawing = useSignal(false);
   const ctx = useSignal<NoSerialize<CanvasRenderingContext2D> | null>(null);
+  const lastPos = useSignal<{ x: number; y: number } | null>(null);
+  const lastMoveTime = useSignal(0);
+  const dripLength = useSignal(0);
+  const dripInterval = useSignal<number | null>(null);
 
   const reset = $(() => {
     const canvas = canvasRef.value;
@@ -46,14 +50,33 @@ export const Malkasten = component$(() => {
     const start = (e: MouseEvent | TouchEvent) => {
       drawing.value = true;
       const { x, y } = getPos(e);
+      lastPos.value = { x, y };
+      lastMoveTime.value = Date.now();
+      dripLength.value = 0;
       context.beginPath();
       context.moveTo(x, y);
+      if (dripInterval.value === null) {
+        dripInterval.value = window.setInterval(() => {
+          if (!drawing.value || !lastPos.value) return;
+          if (Date.now() - lastMoveTime.value >= 500) {
+            const { x, y } = lastPos.value;
+            dripLength.value += Math.random() * 10;
+            context.beginPath();
+            context.moveTo(x, y);
+            context.lineTo(x, y + dripLength.value);
+            context.stroke();
+          }
+        }, 500);
+      }
     };
 
     const draw = (e: MouseEvent | TouchEvent) => {
       if (!drawing.value) return;
       e.preventDefault();
       const { x, y } = getPos(e);
+      lastPos.value = { x, y };
+      lastMoveTime.value = Date.now();
+      dripLength.value = 0;
       context.strokeStyle = getComputedStyle(
         document.documentElement,
       ).getPropertyValue("--brand");
@@ -78,6 +101,11 @@ export const Malkasten = component$(() => {
 
     const end = () => {
       drawing.value = false;
+      dripLength.value = 0;
+      if (dripInterval.value !== null) {
+        clearInterval(dripInterval.value);
+        dripInterval.value = null;
+      }
       context.beginPath();
     };
 
@@ -96,6 +124,10 @@ export const Malkasten = component$(() => {
       canvas.removeEventListener("touchmove", draw);
       window.removeEventListener("mouseup", end);
       window.removeEventListener("touchend", end);
+      if (dripInterval.value !== null) {
+        clearInterval(dripInterval.value);
+        dripInterval.value = null;
+      }
     };
   });
 

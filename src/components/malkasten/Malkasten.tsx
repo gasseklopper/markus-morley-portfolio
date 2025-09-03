@@ -24,6 +24,7 @@ export const Malkasten = component$(() => {
     }[]
   >([]);
   const dripInterval = useSignal<number | null>(null);
+  const color = useSignal("#000");
 
   const reset = $(() => {
     const canvas = canvasRef.value;
@@ -40,6 +41,9 @@ export const Malkasten = component$(() => {
     const context = canvas.getContext("2d");
     if (!context) return;
     ctx.value = noSerialize(context);
+    color.value = getComputedStyle(document.documentElement)
+      .getPropertyValue("--brand")
+      .trim();
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
@@ -60,9 +64,7 @@ export const Malkasten = component$(() => {
             drip.maxLength - drip.length,
             Math.random() * (drip.maxLength / (drip.duration / 500)),
           );
-          context.strokeStyle = getComputedStyle(
-            document.documentElement,
-          ).getPropertyValue("--brand");
+          context.strokeStyle = color.value;
           context.lineWidth = 5;
           context.lineCap = "round";
           context.beginPath();
@@ -124,9 +126,7 @@ export const Malkasten = component$(() => {
       lastPos.value = { x, y };
       lastTime.value = now;
 
-      context.strokeStyle = getComputedStyle(
-        document.documentElement,
-      ).getPropertyValue("--brand");
+      context.strokeStyle = color.value;
       context.lineWidth = 5;
       context.lineCap = "round";
       context.lineTo(x, y);
@@ -181,6 +181,30 @@ export const Malkasten = component$(() => {
         ref={canvasRef}
         class="absolute inset-0 h-full w-full cursor-crosshair"
       />
+      <div class="absolute top-4 left-4 flex gap-2">
+        <button
+          type="button"
+          onClick$={() => (color.value = "#000")}
+          class="h-6 w-6 rounded-full border border-black bg-black"
+        />
+        <button
+          type="button"
+          onClick$={() => (color.value = "#fff")}
+          class="h-6 w-6 rounded-full border border-black bg-white"
+        />
+        <button
+          type="button"
+          onClick$={() =>
+            (color.value = getComputedStyle(
+              document.documentElement,
+            )
+              .getPropertyValue("--brand")
+              .trim())
+          }
+          class="h-6 w-6 rounded-full border border-black"
+          style="background: var(--brand)"
+        />
+      </div>
       <button
         type="button"
         onClick$={reset}

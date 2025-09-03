@@ -56,8 +56,8 @@ export default component$(() => {
           for (let gridX = 0; gridX < tileCount; gridX++) {
             const px = p.int(gridX * rectSize);
             const py = p.int(gridY * rectSize);
-            const c = img.get(px, py) as p5.Color;
-            colors.push(p.color(c));
+            const c = img.get(px, py) as number[];
+            colors.push(p.color(c[0], c[1], c[2], c[3]));
           }
         }
 

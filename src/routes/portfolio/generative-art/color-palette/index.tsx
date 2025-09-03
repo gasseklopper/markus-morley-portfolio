@@ -26,10 +26,11 @@ export default component$(() => {
               return p.saturation(a) - p.saturation(b);
             case "BRIGHTNESS":
               return p.brightness(a) - p.brightness(b);
-            case "GRAYSCALE":
+            case "GRAYSCALE": {
               const grayA = p.red(a) * 0.222 + p.green(a) * 0.707 + p.blue(a) * 0.071;
               const grayB = p.red(b) * 0.222 + p.green(b) * 0.707 + p.blue(b) * 0.071;
               return grayA - grayB;
+            }
             default:
               return 0;
           }

@@ -82,5 +82,11 @@
     "path": "/portfolio/generative-art/drip-sort",
     "title": "Dripping Sort - Markus Morley personal portfolio",
     "description": "Black-and-white rectangles dripping downward while sorting."
+  },
+  {
+    "name": "Color Palette",
+    "path": "/portfolio/generative-art/color-palette",
+    "title": "Color Palette - Markus Morley personal portfolio",
+    "description": "Extract and sort colors from images using p5.js."
   }
 ]

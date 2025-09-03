@@ -2,6 +2,7 @@ import { component$, useStyles$ } from "@builder.io/qwik";
 import styles from "../index.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
+import { aboutStyles } from "./styleguide";
 
 interface WorkItem {
   title: string;
@@ -44,30 +45,28 @@ const workItems: WorkItem[] = [
 export default component$(() => {
   useStyles$(styles);
   return (
-    <div class="page relative text-[var(--text1)]">
+    <div class={aboutStyles.page}>
       {/* Hero */}
-      <section class="relative h-72 w-full overflow-hidden rounded-b-xl">
+      <section class={aboutStyles.hero.section}>
         <img
           src="/assets/images/heros/image.png"
           alt="Applicant"
-          class="h-full w-full object-cover"
+          class={aboutStyles.hero.image}
         />
-        <div class="absolute inset-0 bg-gradient-to-tr from-[var(--surface1)] via-[var(--surface2)] to-transparent" />
-        <div class="absolute bottom-6 left-6">
-          <h1 class="text-4xl font-bold text-[var(--text1)]">About</h1>
-          <p class="mt-2 max-w-xl text-sm text-[var(--text2)]">
+        <div class={aboutStyles.hero.overlay} />
+        <div class={aboutStyles.hero.content}>
+          <h1 class={aboutStyles.hero.title}>About</h1>
+          <p class={aboutStyles.hero.description}>
             This page gives information about the site.
           </p>
         </div>
       </section>
 
-      <div class="mx-auto max-w-5xl px-4 py-16">
+      <div class={aboutStyles.container}>
         {/* Intro */}
         <section>
-          <h2 class="text-3xl font-bold text-[var(--text1)]">
-            Hi, I'm Markus Morley
-          </h2>
-          <p class="mt-4 text-[var(--text2)]">
+          <h2 class={aboutStyles.intro.heading}>Hi, I'm Markus Morley</h2>
+          <p class={aboutStyles.intro.paragraph}>
             I'm passionate about coding digital experiences and crafting user
             interfaces. Based in Frankfurt am Main, I dedicate my professional
             life to designing, developing, and bringing to life innovative
@@ -76,189 +75,198 @@ export default component$(() => {
         </section>
 
         {/* What I Do */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">What I Do</h2>
-          <div class="mt-8 grid gap-8 sm:grid-cols-2">
+        <section class={aboutStyles.whatIDo.section}>
+          <h2 class={aboutStyles.whatIDo.heading}>What I Do</h2>
+          <div class={aboutStyles.whatIDo.grid}>
             {workItems.map((item) => (
-              <div
-                key={item.title}
-                class="rounded-lg bg-[var(--surface2)] p-6 shadow transition hover:bg-[var(--surface3)]"
-              >
-                <h3 class="text-xl font-semibold text-[var(--text1)]">
-                  {item.title}
-                </h3>
-                <p class="mt-2 text-[var(--text2)]">{item.description}</p>
+              <div key={item.title} class={aboutStyles.whatIDo.card}>
+                <h3 class={aboutStyles.whatIDo.cardTitle}>{item.title}</h3>
+                <p class={aboutStyles.whatIDo.cardDesc}>{item.description}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Resume */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">Resume</h2>
-          <ul class="mt-8 space-y-6 border-l border-[var(--surface4)] pl-6 text-[var(--text2)]">
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">01.01.2021 - 30.06.2021:</span>{" "}
+        <section class={aboutStyles.resume.section}>
+          <h2 class={aboutStyles.resume.heading}>Resume</h2>
+          <ul class={aboutStyles.resume.timeline}>
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>
+                01.01.2021 - 30.06.2021:
+              </span>{" "}
               Creative Developer / Frontend-Developer
-              <a href="https://hauserlacour.de" class="ml-1 underline">
+              <a href="https://hauserlacour.de" class={aboutStyles.link}>
                 hauserlacour.de
               </a>
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">01.07.2021 - 01.01.2022:</span>{" "}
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>
+                01.07.2021 - 01.01.2022:
+              </span>{" "}
               Accenture / Senior Product Engineer / Frontend-Developer
-              <a href="https://accenture.com" class="ml-1 underline">
+              <a href="https://accenture.com" class={aboutStyles.link}>
                 accenture.com
               </a>
               – TypeScript, Next.js, D3.js
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">01.07.2021 - 01.01.2022:</span> Sinner
-              Schrader / Product Engineer / Frontend-Developer
-              <a href="https://sinnerschrader.com" class="ml-1 underline">
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>
+                01.07.2021 - 01.01.2022:
+              </span>{" "}
+              Sinner Schrader / Product Engineer / Frontend-Developer
+              <a href="https://sinnerschrader.com" class={aboutStyles.link}>
                 sinnerschrader.com
               </a>
               – TypeScript, React, Web Components
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2021:</span> synbionik.com
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2021:</span>{" "}
+              synbionik.com
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">01.09.2017 - 31.12.2020:</span>
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>
+                01.09.2017 - 31.12.2020:
+              </span>
               UX-Designer / Frontend-Developer
-              <a href="https://comwrap.com" class="ml-1 underline">
+              <a href="https://comwrap.com" class={aboutStyles.link}>
                 comwrap.com
               </a>
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2020:</span> Digital Thinking Concepts
-              and Tools Workshop
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2020:</span> Digital
+              Thinking Concepts and Tools Workshop
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2020:</span> Adobe Experience Manager
-              – Frontend Developer (HTML5/CSS3/JavaScript/Webpack)
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2020:</span> Adobe
+              Experience Manager – Frontend Developer
+              (HTML5/CSS3/JavaScript/Webpack)
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2020:</span> UX Design Theory Workshop
-              – XDi
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2020:</span> UX Design
+              Theory Workshop – XDi
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2020:</span> Adobe Experience Manager
-              – Core Components Workshop (HTL/Java/CSS/Webpack/JavaScript)
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2020:</span> Adobe
+              Experience Manager – Core Components Workshop
+              (HTL/Java/CSS/Webpack/JavaScript)
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2019:</span> "Wie präsentiere ich
-              richtig" – Kommunikations/Körpersprache Workshop
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2019:</span> "Wie
+              präsentiere ich richtig" – Kommunikations/Körpersprache Workshop
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2019:</span> Udacity Certificate –
-              React Developer (HTML5/CSS3/JavaScript/React/React
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2019:</span> Udacity
+              Certificate – React Developer (HTML5/CSS3/JavaScript/React/React
               Native/Ajax/Redux)
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2018:</span> css.conf / js.conf.eu –
-              Berlin
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2018:</span> css.conf
+              / js.conf.eu – Berlin
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2018:</span> Udacity Certificate –
-              Frontend Developer (HTML5/Responsive/ARIA/CSS3/JavaScript)
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2018:</span> Udacity
+              Certificate – Frontend Developer
+              (HTML5/Responsive/ARIA/CSS3/JavaScript)
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2017:</span> Malvid Atomic Design
-              Components Library Workshop (BEM/SCSS/Nunjucks/JavaScript ECMA6)
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2017:</span> Malvid
+              Atomic Design Components Library Workshop
+              (BEM/SCSS/Nunjucks/JavaScript ECMA6)
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2016:</span> Webdesign – Dieter Roosen
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2016:</span> Webdesign
+              – Dieter Roosen
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2015:</span> Digital Operator – Frank
-              Weinert
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2015:</span> Digital
+              Operator – Frank Weinert
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2015:</span> Webdesign – Stefanie
-              Koesling
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2015:</span> Webdesign
+              – Stefanie Koesling
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2014:</span> Retouching – Maggi &
-              Thommy Rezept Ideen
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2014:</span>{" "}
+              Retouching – Maggi & Thommy Rezept Ideen
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2014:</span> CleverPrinting
-              Colormanagement Certificate
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2014:</span>{" "}
+              CleverPrinting Colormanagement Certificate
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2012:</span> Digital Operator – Dieter
-              Roosen
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2012:</span> Digital
+              Operator – Dieter Roosen
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2011:</span> Webdesign – friedrich und
-              ruppel – hauser lacour
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2011:</span> Webdesign
+              – friedrich und ruppel – hauser lacour
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2011:</span> Digital Operator –
-              Stefanie Koesling
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2011:</span> Digital
+              Operator – Stefanie Koesling
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2011:</span> Digital Operator – Becker
-              Lacour
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2011:</span> Digital
+              Operator – Becker Lacour
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2010:</span> Digital Operator – Thomas
-              Goos
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2010:</span> Digital
+              Operator – Thomas Goos
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2010:</span> Kulissen Bau – Andreas
-              Kopp
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2010:</span> Kulissen
+              Bau – Andreas Kopp
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2008 - 2014:</span> Fotoassistent –
-              Bernd Mayer
-              <a href="http://berndmayer.com" class="ml-1 underline">
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>
+                2008 - 2014:
+              </span>{" "}
+              Fotoassistent – Bernd Mayer
+              <a href="http://berndmayer.com" class={aboutStyles.link}>
                 berndmayer.com
               </a>
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2014:</span> Phase One – Lighting for
-              Digital Cameras
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2014:</span> Phase One
+              – Lighting for Digital Cameras
             </li>
-            <li class="relative">
-              <span class="absolute top-1 -left-3 h-2 w-2 rounded-full bg-[var(--primary)]"></span>
-              <span class="font-semibold">2013:</span> Phase One – Capture One
-              Digital Operator Workshop
+            <li class={aboutStyles.resume.item}>
+              <span class={aboutStyles.resume.bullet}></span>
+              <span class={aboutStyles.resume.subHeading}>2013:</span> Phase One
+              – Capture One Digital Operator Workshop
             </li>
           </ul>
 
-          <h3 class="mt-12 text-2xl font-bold text-[var(--text1)]">
-            Education
-          </h3>
-          <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text2)]">
+          <h3 class={aboutStyles.resumeSubHeading}>Education</h3>
+          <ul class={aboutStyles.resumeList}>
             <li>
               2008-2014: Visuele Kommunikation – Photography/Painting/Digitale
               Medien – HFG, Offenbach a.M.
@@ -273,10 +281,8 @@ export default component$(() => {
             </li>
           </ul>
 
-          <h3 class="mt-12 text-2xl font-bold text-[var(--text1)]">
-            Exhibitions
-          </h3>
-          <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text2)]">
+          <h3 class={aboutStyles.resumeSubHeading}>Exhibitions</h3>
+          <ul class={aboutStyles.resumeList}>
             <li>
               2019: Matias Hidalgo – Fashion Photography – New Talents –
               Vogue.it

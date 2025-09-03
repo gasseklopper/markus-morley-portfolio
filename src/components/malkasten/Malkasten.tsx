@@ -61,8 +61,19 @@ export const Malkasten = component$(() => {
       context.lineCap = "round";
       context.lineTo(x, y);
       context.stroke();
+
+      // prepare a new path for continuous drawing
       context.beginPath();
       context.moveTo(x, y);
+
+      // occasionally draw a drip downwards
+      if (Math.random() < 0.3) {
+        const length = 10 + Math.random() * 20;
+        context.lineTo(x, y + length);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(x, y);
+      }
     };
 
     const end = () => {

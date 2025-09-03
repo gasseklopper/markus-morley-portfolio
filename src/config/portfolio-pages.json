@@ -88,5 +88,11 @@
     "path": "/portfolio/generative-art/color-palette",
     "title": "Color Palette - Markus Morley personal portfolio",
     "description": "Extract and sort colors from images using p5.js."
+  },
+  {
+    "name": "Connected Agents",
+    "path": "/portfolio/generative-art/connected-agents",
+    "title": "Connected Agents - Markus Morley personal portfolio",
+    "description": "Form morphing process by connected random agents."
   }
 ]

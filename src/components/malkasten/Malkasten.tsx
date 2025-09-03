@@ -84,7 +84,7 @@ export const Malkasten = component$(() => {
   return (
     <div class="relative h-96 w-full sm:h-[600px]">
       <img
-        src="/assets/images/runner.png"
+        src="/assets/images/image_malkasten.png"
         alt="Portrait"
         class="absolute inset-0 h-full w-full object-cover"
       />

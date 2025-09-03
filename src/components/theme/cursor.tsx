@@ -8,12 +8,31 @@ import { gsap } from "gsap";
  */
 export const Cursor = component$(() => {
   const cursorRef = useSignal<HTMLDivElement>();
+  const enabled = useSignal(true);
 
-  // Track mouse movement on the client
+  // Observe changes to the `data-cursor` attribute and update the signal
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
+    const update = () => {
+      enabled.value =
+        document.documentElement.getAttribute("data-cursor") !== "false";
+    };
+
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-cursor"],
+    });
+    cleanup(() => observer.disconnect());
+  });
+
+  // Track mouse movement on the client when enabled
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ cleanup, track }) => {
+    track(() => enabled.value);
     const cursorEl = cursorRef.value;
-    if (!cursorEl) return;
+    if (!cursorEl || !enabled.value) return;
 
     // Use gsap.quickTo for smoother updates without creating a new tween
     let toX = gsap.quickTo(cursorEl, "x", {
@@ -72,7 +91,7 @@ export const Cursor = component$(() => {
     });
   });
 
-  return <div ref={cursorRef} class="cursor" />;
+  return enabled.value ? <div ref={cursorRef} class="cursor" /> : null;
 });
 
 export default Cursor;

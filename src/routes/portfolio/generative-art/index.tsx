@@ -6,23 +6,33 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     console.log("Color Stripes");
-    const morleyDotsCanvas = document.getElementById(
+    const canvas = document.getElementById(
       "morleyDotsCanvas",
     ) as HTMLCanvasElement | null;
-    if (!morleyDotsCanvas) return;
+    if (!canvas) return;
 
-    const context = morleyDotsCanvas.getContext("2d");
-    if (!context) return;
-    const c = context;
+    const c = canvas.getContext("2d");
+    if (!c) return;
 
-    morleyDotsCanvas.width = window.innerWidth;
-    morleyDotsCanvas.height = window.innerHeight * 2;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight * 2;
 
-    const w = morleyDotsCanvas.width;
-    const h = morleyDotsCanvas.height;
+    const w = canvas.width;
+    const h = canvas.height;
 
     const initBubbles = 100;
     const minBubbles = 55;
+
+    type Bubble = {
+      x: number;
+      y: number;
+      r: number;
+      vx: number;
+      vy: number;
+      color: string;
+      highlight: string;
+    };
+
     const bubbles: Bubble[] = [];
 
     const button = document.createElement("button");
@@ -42,96 +52,81 @@ export default component$(() => {
     button.style.fontWeight = "bold";
     button.innerText = "download";
     button.onclick = () => {
-      const data = morleyDotsCanvas.toDataURL();
+      const data = canvas.toDataURL();
       const link = document.createElement("a");
       link.download = "morleyDots.png";
       link.href = data;
       link.click();
     };
-    morleyDotsCanvas.parentElement?.appendChild(button);
+    canvas.parentElement?.appendChild(button);
 
-    init();
+    const randomColor = () => {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgb(${r + 20}, ${g + 10}, ${b + 10})`;
+    };
 
-    function init() {
-      while (bubbles.length < initBubbles) {
-        bubbles.push(createBubbles());
-      }
-      draw();
-    }
-
-    class Bubble {
-      constructor(
-        public x: number,
-        public y: number,
-        public r: number,
-        public vx: number,
-        public vy: number,
-        public color = randomColor(),
-        public colorHighLight = randomColor(),
-      ) {}
-
-      draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
-        c.closePath();
-
-        c.beginPath();
-        c.arc(
-          this.x - this.r / 3,
-          this.y - this.r / 3,
-          this.r / 3,
-          0,
-          Math.PI * 2,
-          false,
-        );
-        c.fillStyle = this.colorHighLight;
-        c.fill();
-        c.closePath();
-      }
-    }
-
-    function createBubbles(): Bubble {
+    const createBubble = (): Bubble => {
       const x = Math.random() * w;
       const y = Math.random() * h;
       const r = Math.random() * 33 + 5;
       const vx = Math.random() * 2 - 1;
       const vy = Math.random() * 2 - 1;
-      return new Bubble(x, y, r, vx, vy);
-    }
+      return {
+        x,
+        y,
+        r,
+        vx,
+        vy,
+        color: randomColor(),
+        highlight: randomColor(),
+      };
+    };
 
-    function randomColor(): string {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-      return `rgb(${r + 20}, ${g + 10}, ${b + 10})`;
-    }
+    const drawBubble = (b: Bubble) => {
+      c.beginPath();
+      c.arc(b.x, b.y, b.r, 0, Math.PI * 2, false);
+      c.fillStyle = b.color;
+      c.fill();
+      c.closePath();
 
-    function draw() {
+      c.beginPath();
+      c.arc(b.x - b.r / 3, b.y - b.r / 3, b.r / 3, 0, Math.PI * 2, false);
+      c.fillStyle = b.highlight;
+      c.fill();
+      c.closePath();
+    };
+
+    const draw = () => {
       c.fillStyle = randomColor();
 
       for (let i = 0; i < bubbles.length; i++) {
-        const currentBubble = bubbles[i];
-        currentBubble.r = currentBubble.r + (0.06 % currentBubble.r);
-        currentBubble.x += currentBubble.vx;
-        currentBubble.y += currentBubble.vy;
-        currentBubble.draw();
+        const current = bubbles[i];
+        current.r = current.r + (0.06 % current.r);
+        current.x += current.vx;
+        current.y += current.vy;
+        drawBubble(current);
 
         if (
-          currentBubble.x + currentBubble.r > w ||
-          currentBubble.x - currentBubble.r < 0 ||
-          currentBubble.y - currentBubble.r < 10 ||
-          currentBubble.r > 180
+          current.x + current.r > w ||
+          current.x - current.r < 0 ||
+          current.y - current.r < 10 ||
+          current.r > 180
         ) {
           bubbles.splice(i, 1);
           if (bubbles.length < minBubbles) {
-            bubbles.splice(i, 0, createBubbles());
+            bubbles.splice(i, 0, createBubble());
           }
         }
       }
       requestAnimationFrame(draw);
+    };
+
+    while (bubbles.length < initBubbles) {
+      bubbles.push(createBubble());
     }
+    draw();
   });
 
   return <canvas id="morleyDotsCanvas" />;

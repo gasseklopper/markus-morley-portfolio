@@ -1,9 +1,17 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 
 export const Malkasten = component$(() => {
   const canvasRef = useSignal<HTMLCanvasElement>();
   const drawing = useSignal(false);
   const ctx = useSignal<CanvasRenderingContext2D | null>(null);
+
+  const reset = $(() => {
+    const canvas = canvasRef.value;
+    const context = ctx.value;
+    if (canvas && context) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  });
 
   // Setup canvas and event listeners when component is visible
   useVisibleTask$(() => {
@@ -84,6 +92,13 @@ export const Malkasten = component$(() => {
         ref={canvasRef}
         class="absolute inset-0 h-full w-full cursor-crosshair"
       />
+      <button
+        type="button"
+        onClick$={reset}
+        class="absolute top-4 right-4 rounded bg-white/80 px-3 py-1 text-sm"
+      >
+        Reset
+      </button>
     </div>
   );
 });

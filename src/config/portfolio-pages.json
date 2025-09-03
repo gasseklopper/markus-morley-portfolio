@@ -76,5 +76,11 @@
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",
     "description": "Interactive generative art example."
+  },
+  {
+    "name": "Dripping Sort",
+    "path": "/portfolio/generative-art/drip-sort",
+    "title": "Dripping Sort - Markus Morley personal portfolio",
+    "description": "Black-and-white rectangles dripping downward while sorting."
   }
 ]

@@ -1,12 +1,12 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import p5 from "p5";
+import type p5 from "p5";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    let sketchInstance: p5;
+  useVisibleTask$(async () => {
+    const { default: P5 } = await import("p5");
     const sketch = (p: p5) => {
       let img: p5.Image;
       let colors: p5.Color[] = [];
@@ -87,7 +87,7 @@ export default component$(() => {
       };
     };
 
-    sketchInstance = new p5(sketch);
+    const sketchInstance: p5 = new P5(sketch);
     return () => {
       sketchInstance.remove();
     };

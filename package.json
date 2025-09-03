@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "gsap": "^3.13.0",
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "p5": "^1.11.10"
   }
 }

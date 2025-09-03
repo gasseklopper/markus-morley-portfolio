@@ -70,5 +70,11 @@
     "path": "/portfolio/project010",
     "title": "Project 010 - Markus Morley personal portfolio",
     "description": "Dummy content for project 010."
+  },
+  {
+    "name": "Generative Art",
+    "path": "/portfolio/generative-art",
+    "title": "Generative Art - Markus Morley personal portfolio",
+    "description": "Interactive p5 generative art example."
   }
 ]

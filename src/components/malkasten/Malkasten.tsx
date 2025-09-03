@@ -1,9 +1,16 @@
-import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  noSerialize,
+  type NoSerialize,
+  useSignal,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 
 export const Malkasten = component$(() => {
   const canvasRef = useSignal<HTMLCanvasElement>();
   const drawing = useSignal(false);
-  const ctx = useSignal<CanvasRenderingContext2D | null>(null);
+  const ctx = useSignal<NoSerialize<CanvasRenderingContext2D> | null>(null);
 
   const reset = $(() => {
     const canvas = canvasRef.value;
@@ -19,7 +26,7 @@ export const Malkasten = component$(() => {
     if (!canvas) return;
     const context = canvas.getContext("2d");
     if (!context) return;
-    ctx.value = context;
+    ctx.value = noSerialize(context);
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;

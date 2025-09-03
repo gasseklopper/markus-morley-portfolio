@@ -1,9 +1,10 @@
 import {
   component$,
-  useVisibleTask$,
   useStore,
   useSignal,
+  useTask$,
   $,
+  isBrowser,
 } from "@builder.io/qwik";
 import { themeStorageKey } from "~/components/theme/preference-scripts";
 import siteConfig from "~/config/siteConfig.json";
@@ -181,8 +182,8 @@ export default component$(() => {
     }));
   });
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useTask$(() => {
+    if (!isBrowser) return;
     const storedTheme = localStorage.getItem(
       themeStorageKey,
     ) as ThemeName | null;
@@ -198,27 +199,18 @@ export default component$(() => {
       localStorage.setItem(themeStorageKey, theme);
     }
     currentTheme.value = theme;
-    document.documentElement.setAttribute("data-theme", theme);
-    await updateCurrentColors();
-
-    const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute(
-        "data-theme",
-      ) as ThemeName | null;
-      if (newTheme && themeOptions.includes(newTheme)) {
-        currentTheme.value = newTheme;
-        updateCurrentColors();
-      }
-    });
-    observer.observe(document.documentElement, { attributes: true });
-    return () => observer.disconnect();
   });
 
-  const setTheme$ = $(async (theme: ThemeName) => {
-    currentTheme.value = theme;
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem(themeStorageKey, theme);
+  useTask$(async ({ track }) => {
+    if (!isBrowser) return;
+    track(() => currentTheme.value);
+    document.documentElement.setAttribute("data-theme", currentTheme.value);
     await updateCurrentColors();
+  });
+
+  const setTheme$ = $((theme: ThemeName) => {
+    currentTheme.value = theme;
+    localStorage.setItem(themeStorageKey, theme);
   });
 
   return (

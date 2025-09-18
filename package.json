@@ -26,6 +26,7 @@
     "preview": "qwik build preview && vite preview --open",
     "start": "vite --open --mode ssr",
     "storybook": "storybook dev -p 6006",
+    "test": "vitest run",
     "postinstall": "patch-package",
     "qwik": "qwik"
   },
@@ -61,7 +62,8 @@
     "undici": "*",
     "vite": "^5.4.19",
     "vite-plugin-pwa": "^1.0.1",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^2.1.8"
   },
   "dependencies": {
     "gsap": "^3.13.0",

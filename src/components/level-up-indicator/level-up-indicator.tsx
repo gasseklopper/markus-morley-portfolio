@@ -1,5 +1,4 @@
 import { $, component$, useSignal, useStylesScoped$, useVisibleTask$, type QRL, type Signal } from "@builder.io/qwik";
-import { Portal } from "@builder.io/qwik-city";
 import styles from "./level-up-indicator.css?inline";
 import { getNextDelay } from "./get-next-delay";
 import { useReducedMotion } from "~/utils/use-reduced-motion";
@@ -186,6 +185,15 @@ export const LevelUpIndicator = component$<LevelUpIndicatorProps>((props) => {
       return;
     }
 
+    const doc = hostEl.ownerDocument;
+    const placeholder = doc?.createComment("level-up-indicator-anchor") ?? null;
+    const originalParent = hostEl.parentNode;
+
+    if (placeholder && originalParent && originalParent.contains(hostEl) && doc?.body) {
+      originalParent.replaceChild(placeholder, hostEl);
+      doc.body.appendChild(hostEl);
+    }
+
     const observer = new MutationObserver((records) => {
       for (const record of records) {
         if (record.type === "attributes" && record.attributeName === CELEBRATE_ATTR) {
@@ -196,7 +204,11 @@ export const LevelUpIndicator = component$<LevelUpIndicatorProps>((props) => {
     });
 
     observer.observe(hostEl, { attributes: true, attributeFilter: [CELEBRATE_ATTR] });
-    cleanup(() => observer.disconnect());
+    cleanup(() => {
+      observer.disconnect();
+      hostEl.remove();
+      placeholder?.remove();
+    });
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -236,31 +248,29 @@ export const LevelUpIndicator = component$<LevelUpIndicatorProps>((props) => {
   };
 
   return (
-    <Portal>
-      <div
-        ref={hostRef}
-        class="level-up-indicator"
-        style={styleMap}
-        data-reduced={reducedMotion.value ? "true" : "false"}
-        data-active={isBursting.value ? "true" : "false"}
-      >
-        <div class="edge edge-left">
-          <div class="line line-core" />
-          <div class="line line-glow" />
-          <div class="line line-rgb" />
-        </div>
-        <div class="edge edge-right">
-          <div class="line line-core" />
-          <div class="line line-glow" />
-          <div class="line line-rgb" />
-        </div>
-        {ariaLiveMode !== "off" && (
-          <span class="screen-reader-only" aria-live={ariaLiveMode} aria-atomic="true">
-            {announceTick.value > 0 ? `Level up! ${announceTick.value}` : ""}
-          </span>
-        )}
+    <div
+      ref={hostRef}
+      class="level-up-indicator"
+      style={styleMap}
+      data-reduced={reducedMotion.value ? "true" : "false"}
+      data-active={isBursting.value ? "true" : "false"}
+    >
+      <div class="edge edge-left">
+        <div class="line line-core" />
+        <div class="line line-glow" />
+        <div class="line line-rgb" />
       </div>
-    </Portal>
+      <div class="edge edge-right">
+        <div class="line line-core" />
+        <div class="line line-glow" />
+        <div class="line line-rgb" />
+      </div>
+      {ariaLiveMode !== "off" && (
+        <span class="screen-reader-only" aria-live={ariaLiveMode} aria-atomic="true">
+          {announceTick.value > 0 ? `Level up! ${announceTick.value}` : ""}
+        </span>
+      )}
+    </div>
   );
 });
 

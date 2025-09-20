@@ -77,8 +77,8 @@
           "link": "/faq"
         },
         {
-          "name": "Works",
-          "link": "/works"
+          "name": "Portfolio",
+          "link": "/portfolio"
         },
         {
           "name": "About",
@@ -87,16 +87,16 @@
       ],
       "column2": [
         {
-          "name": "Story",
-          "link": "/story"
+          "name": "404",
+          "link": "/404"
         },
         {
           "name": "Datenschutz",
           "link": "/datenschutz"
         },
         {
-          "name": "Expertise",
-          "link": "/expertise"
+          "name": "Impressum",
+          "link": "/impressum"
         },
         {
           "name": "Journal",

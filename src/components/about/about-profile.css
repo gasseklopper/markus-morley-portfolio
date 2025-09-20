@@ -1,0 +1,70 @@
+.about-profile {
+  container: about-profile / inline-size;
+}
+
+.about-profile__layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-profile__details {
+  display: flex;
+  flex-direction: column;
+  container: about-profile-details / inline-size;
+}
+
+.about-profile__facts {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.about-profile__services-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@container about-profile (min-width: 74rem) {
+  .about-profile__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .about-profile__details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+@container about-profile (min-width: 90rem) {
+  .about-profile__layout {
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+  }
+}
+
+@container about-profile-details (min-width: 40rem) {
+  .about-profile__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-profile__services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container about-profile-details (min-width: 60rem) {
+  .about-profile__facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-profile__services-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container about-profile-details (min-width: 80rem) {
+  .about-profile__services-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

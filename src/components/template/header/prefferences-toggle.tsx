@@ -28,12 +28,18 @@ export const PrefferencesToggle = component$<{
   const overlayOn = useSignal(false);
   const reducedMotion = useSignal(false);
   const panelRef = useSignal<HTMLElement>();
+  const portalRootRef = useSignal<HTMLElement>();
   const isAnimatingIn = useSignal(false);
   const isClosing = useSignal(false);
   const CLOSE_ANIMATION_MS = 360;
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    const root = portalRootRef.value;
+    if (root && root.parentElement !== document.body) {
+      document.body.appendChild(root);
+    }
+
     const storedTheme = localStorage.getItem(themeStorageKey) as Theme | null;
     const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
@@ -114,7 +120,12 @@ export const PrefferencesToggle = component$<{
       isAnimatingIn.value = true;
     });
 
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      if (root && root.parentElement === document.body) {
+        document.body.removeChild(root);
+      }
+    };
   });
 
   const startClose$ = $(() => {
@@ -210,7 +221,10 @@ export const PrefferencesToggle = component$<{
     "group relative flex items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-3 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] aria-[pressed=true]:border-[var(--primary)] aria-[pressed=true]:bg-[var(--surface-glass-2)] aria-[pressed=true]:text-[var(--text1)] aria-[pressed=true]:shadow-[0_18px_48px_var(--surface-shadow)]";
 
   return (
-    <div class="fixed inset-0 z-[1000] flex justify-end">
+    <div
+      ref={portalRootRef}
+      class="absolute inset-0 z-[1000] flex justify-end"
+    >
       <div
         class={[
           "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-500",
@@ -220,7 +234,7 @@ export const PrefferencesToggle = component$<{
       <aside
         ref={panelRef}
         class={[
-          "relative z-[1001] flex h-full w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-all duration-500 will-change-[transform,opacity] sm:px-8",
+          "relative z-[1001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-all duration-500 will-change-[transform,opacity] sm:px-8",
           isAnimatingIn.value ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
         ]}
         role="dialog"

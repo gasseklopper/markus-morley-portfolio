@@ -12,9 +12,24 @@ import styles from "./navigation.css?inline";
 import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 
+type NavItem = {
+  name: string;
+  link: string;
+  flag?: string;
+};
+
+const getNavItems = () =>
+  (Array.isArray(headerData.nav) ? headerData.nav : []) as NavItem[];
+
+const getFilteredNavItems = () =>
+  getNavItems().filter(
+    (item) => !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
+  );
+
 export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
   ({ openSig }) => {
     useStylesScoped$(styles);
+    const navItems = getFilteredNavItems();
     return (
       <div
         id="mobile-menu"
@@ -24,24 +39,15 @@ export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
         <div
           class="flex flex-col gap-3 rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-4 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] backdrop-blur-lg transition-colors duration-300"
         >
-          {(
-            headerData.nav as
-              | { name: string; link: string; flag?: string }[]
-              | undefined
-          )
-            ?.filter(
-              (item) =>
-                !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
-            )
-            .map((item) => (
-              <Link
-                key={item.link}
-                href={item.link}
-                class="flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-2 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-              >
-                {item.name}
-              </Link>
-            ))}
+          {navItems.map((item) => (
+            <Link
+              key={item.link}
+              href={item.link}
+              class="flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-2 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
       </div>
     );
@@ -52,6 +58,7 @@ export default component$(() => {
   useStylesScoped$(styles);
   const menuOpen = useSignal(false);
   const isOpen = useSignal(false);
+  const navItems = getFilteredNavItems();
   useOnWindow(
     "keydown",
     $((event: KeyboardEvent) => {
@@ -84,18 +91,10 @@ export default component$(() => {
                 </p>
               )}
             </div>
-            <div class="hidden lg:block">
-              <ul class="ml-10 flex items-center gap-3">
-                {(
-                  headerData.nav as
-                    | { name: string; link: string; flag?: string }[]
-                    | undefined
-                )
-                  ?.filter(
-                    (item) =>
-                      !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
-                  )
-                  .map((item) => (
+            {navItems.length > 0 && (
+              <div class="hidden lg:block">
+                <ul class="ml-10 flex items-center gap-3">
+                  {navItems.map((item) => (
                     <li key={item.link}>
                       <Link
                         href={item.link}
@@ -105,8 +104,9 @@ export default component$(() => {
                       </Link>
                     </li>
                   ))}
-              </ul>
-            </div>
+                </ul>
+              </div>
+            )}
           </div>
           <div class="hidden lg:flex items-center gap-4">
             <button

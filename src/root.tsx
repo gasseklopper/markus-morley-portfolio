@@ -49,7 +49,7 @@ export default component$(() => {
       <body lang="en">
         {isDev && <LocalhostOutline />}
         <div class="flex min-h-screen flex-col bg-[var(--surface1)] text-[var(--text1)]">
-          <header class="px-4 pt-6 md:px-8">
+          <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
             <Header />
           </header>
           <main class="flex-grow px-4 py-6 md:px-8">

@@ -225,7 +225,7 @@ export const PrefferencesToggle = component$<{
   return (
     <div
       ref={portalRootRef}
-      class="fixed inset-0 z-[1000] flex justify-end"
+      class="fixed inset-0 z-[3000] flex justify-end"
     >
       <div
         class={[
@@ -236,7 +236,7 @@ export const PrefferencesToggle = component$<{
       <aside
         ref={panelRef}
         class={[
-          "relative z-[1001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-[transform,opacity] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity] sm:px-8",
+          "relative z-[3001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-[transform,opacity] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity] sm:px-8",
           isAnimatingIn.value ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
         ]}
         role="dialog"

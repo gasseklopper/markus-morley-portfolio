@@ -1,5 +1,23 @@
 @use "./variables" as *;
 
+:root {
+  --layout-shell-max: 72rem;
+}
+
+.layout-shell {
+  width: 100%;
+  max-width: min(100%, var(--layout-shell-max));
+  margin-left: auto;
+  margin-right: auto;
+  transition: max-width 0.3s ease, margin 0.3s ease;
+}
+
+:root[data-layout="full"] .layout-shell {
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 :root[data-layout="box"] body {
   max-width: $maxWidth;
   margin-left: auto;

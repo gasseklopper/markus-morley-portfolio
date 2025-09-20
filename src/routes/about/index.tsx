@@ -41,6 +41,79 @@ const workItems: WorkItem[] = [
   },
 ];
 
+const rawToolStack = [
+  "Adobe CC",
+  "Adobe Experience Manager",
+  "Airbnb CSS / Sass Styleguide",
+  "Airbnb's ESLint config",
+  "Anime.js",
+  "Atom",
+  "Atomic Design",
+  "Babel",
+  "BasicLightbox",
+  "basicGrid",
+  "BEM",
+  "Brackets",
+  "Browserify",
+  "BrowserStack",
+  "Browsersync",
+  "caniuse.com",
+  "Chrome Developer Tools",
+  "CodePen",
+  "Color Profiles",
+  "CSS Tricks Almanac",
+  "CSS3",
+  "ECMA",
+  "Edge",
+  "Emmet",
+  "eslint",
+  "EZ",
+  "Firefox",
+  "Flaticon",
+  "Foundation",
+  "GitHub Desktop",
+  "GitHub",
+  "Google Chrome",
+  "Google Fonts",
+  "GreenSock-JS",
+  "Gulp",
+  "Handlebars",
+  "HTML5",
+  "InVision",
+  "jsfiddle.net",
+  "Mac",
+  "Malvid",
+  "Modernizr",
+  "Muzli",
+  "NPM",
+  "Nunjucks",
+  "Placeholder",
+  "Prepros",
+  "prettier",
+  "React",
+  "Rest API",
+  "Safari",
+  "Sass/SCSS",
+  "Sketch",
+  "Skeleton",
+  "SMACSS",
+  "Spectre.css",
+  "Semantic UI",
+  "Storybook",
+  "stylelint",
+  "Typo3",
+  "TypeKit",
+  "Unsplash",
+  "Visual Studio Code",
+  "webpack",
+  "Windows",
+  "YARN",
+];
+
+const toolStack = Array.from(new Set(rawToolStack)).sort((a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: "base" })
+);
+
 export default component$(() => {
   useStyles$(styles);
   return (
@@ -91,6 +164,24 @@ export default component$(() => {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* Tool Stack */}
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-[var(--text1)]">Tool Stack</h2>
+          <p class="mt-4 text-[var(--text2)]">
+            A curated set of tools, frameworks, and platforms I rely on to
+            design, build, and refine digital products.
+          </p>
+          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
+            {toolStack.map((tool) => (
+              <li key={tool}>
+                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
+                  {tool}
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* Resume */}

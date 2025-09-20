@@ -79,12 +79,26 @@ export default component$(() => {
         <div class="flex min-h-[4.5rem] items-center justify-between gap-6">
           <div class="flex items-center gap-4">
             <div class="flex shrink-0 items-center gap-3">
-              <img
-                src="/assets/icons/markus-morley_iconic_blockM_light.svg"
-                class="size-12 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-2 shadow-[0_12px_36px_var(--surface-shadow)] transition-colors duration-300"
-                width={32}
-                height={32}
-              />
+              <div
+                class="flex size-12 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-2 text-[var(--primary)] shadow-[0_12px_36px_var(--surface-shadow)] transition-colors duration-300"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 1024 1024"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-full"
+                  fill="none"
+                >
+                  <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+                  <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+                  <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+                  <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+                  <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+                  <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+                  <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+                  <rect x="652" y="652" width="280" height="280" fill="currentColor" />
+                </svg>
+              </div>
               {headerData.logo_text && (
                 <p class="text-xl font-semibold text-[var(--text1)]">
                   {headerData.logo_text}

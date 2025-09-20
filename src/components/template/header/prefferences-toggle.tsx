@@ -31,7 +31,7 @@ export const PrefferencesToggle = component$<{
   const portalRootRef = useSignal<HTMLElement>();
   const isAnimatingIn = useSignal(false);
   const isClosing = useSignal(false);
-  const CLOSE_ANIMATION_MS = 360;
+  const PANEL_TRANSITION_MS = 520;
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -136,9 +136,11 @@ export const PrefferencesToggle = component$<{
     isClosing.value = true;
     isAnimatingIn.value = false;
 
+    const timeout = reducedMotion.value ? 0 : PANEL_TRANSITION_MS;
+
     setTimeout(() => {
       onClose$();
-    }, CLOSE_ANIMATION_MS);
+    }, timeout);
   });
 
   useOnWindow(
@@ -227,14 +229,14 @@ export const PrefferencesToggle = component$<{
     >
       <div
         class={[
-          "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-500",
+          "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           isAnimatingIn.value ? "opacity-100" : "opacity-0",
         ]}
       />
       <aside
         ref={panelRef}
         class={[
-          "relative z-[1001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-all duration-500 will-change-[transform,opacity] sm:px-8",
+          "relative z-[1001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-[transform,opacity] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity] sm:px-8",
           isAnimatingIn.value ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
         ]}
         role="dialog"

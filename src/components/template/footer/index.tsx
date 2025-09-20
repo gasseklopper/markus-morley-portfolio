@@ -12,48 +12,60 @@ export const Footer = component$(() => {
   );
 
   return (
-    <footer class="mt-12 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-      <div class="mx-auto flex max-w-screen-xl flex-col gap-8 px-4 py-8 md:flex-row md:justify-between">
-        <div class="flex flex-col gap-4">
-          <a href="/" class="flex items-center gap-2" aria-label="Home">
+    <footer class="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_bottom,_var(--surface2)_0%,_var(--surface1)_80%)] px-6 py-12 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+      <div class="flex flex-col gap-12 md:flex-row md:justify-between">
+        <div class="flex max-w-sm flex-col gap-5">
+          <a
+            href="/"
+            class="group inline-flex items-center gap-3 text-[var(--text1)] transition-colors duration-300"
+            aria-label="Home"
+          >
             {footerData.brand?.logo && (
               <img
                 src={footerData.brand.logo}
                 alt=""
                 width="32"
                 height="32"
-                class="h-8 w-auto"
+                class="size-12 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-2 shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 group-hover:border-[var(--primary)] group-hover:shadow-[0_18px_45px_var(--surface-shadow)]"
               />
             )}
-            <span class="font-semibold">{footerData.brand?.text}</span>
+            <span class="text-lg font-semibold tracking-tight">
+              {footerData.brand?.text}
+            </span>
           </a>
           {footerData.promo && (
-            <p class="text-sm">
-              <a href={footerData.promo.link} class="underline">
+            <p class="text-sm leading-relaxed">
+              <a
+                href={footerData.promo.link}
+                class="text-[var(--primary)] underline decoration-[var(--primary)]/60 underline-offset-4 transition-colors duration-300 hover:text-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)]"
+              >
                 {footerData.promo.bodytext}
               </a>
             </p>
           )}
         </div>
-        <nav aria-label="Footer" class="flex flex-col gap-8 sm:flex-row">
-          <ul class="space-y-2">
+        <nav
+          aria-label="Footer"
+          class="grid flex-1 gap-8 text-sm sm:grid-cols-2 md:max-w-xl"
+        >
+          <ul class="space-y-3">
             {footerData.nav?.column1?.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.link}
-                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                  class="inline-flex items-center text-[var(--text2)] transition-colors duration-300 hover:text-[var(--primary)] hover:underline hover:decoration-[var(--primary)]/60"
                 >
                   {item.name}
                 </a>
               </li>
             ))}
           </ul>
-          <ul class="space-y-2">
+          <ul class="space-y-3">
             {footerData.nav?.column2?.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.link}
-                  class="text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-300 dark:hover:text-white"
+                  class="inline-flex items-center text-[var(--text2)] transition-colors duration-300 hover:text-[var(--primary)] hover:underline hover:decoration-[var(--primary)]/60"
                 >
                   {item.name}
                 </a>
@@ -61,9 +73,12 @@ export const Footer = component$(() => {
             ))}
           </ul>
         </nav>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-6">
           {footerData.subscription?.enable && (
-            <form class="flex" aria-label="Email subscription">
+            <form
+              class="flex items-center gap-2 rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-1 shadow-[0_12px_36px_var(--surface-shadow)] transition-colors duration-300 focus-within:border-[var(--primary)] focus-within:shadow-[0_18px_45px_var(--surface-shadow)]"
+              aria-label="Email subscription"
+            >
               <label for="footer-email" class="sr-only">
                 Email
               </label>
@@ -71,23 +86,23 @@ export const Footer = component$(() => {
                 id="footer-email"
                 type="email"
                 placeholder={footerData.subscription.input_placeholder}
-                class="rounded-l-md bg-white px-3 py-2 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+                class="w-full flex-1 rounded-full bg-transparent px-4 py-2 text-sm text-[var(--text1)] placeholder:text-[var(--text3)] focus:outline-none"
               />
               <button
                 type="submit"
-                class="rounded-r-md bg-blue-600 px-4 py-2 text-white dark:bg-blue-500"
+                class="rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-[var(--brand-inverted)] shadow-[0_18px_50px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
               >
                 {footerData.subscription.button_label}
               </button>
             </form>
           )}
-          <ul class="flex gap-4" aria-label="Social media">
+          <ul class="flex items-center gap-3" aria-label="Social media">
             {footerData.social?.map((item) => (
               <li key={item.name}>
                 <a
                   href={item.link}
                   aria-label={item.name}
-                  class="text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400"
+                  class="grid size-10 place-items-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-xs font-semibold uppercase tracking-[0.3em] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
                 >
                   {item.abbr}
                 </a>
@@ -100,7 +115,7 @@ export const Footer = component$(() => {
         <button
           aria-label="Scroll to top"
           onClick$={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          class="fixed right-4 bottom-4 rounded-full bg-blue-600 p-3 text-white shadow-lg"
+          class="fixed right-4 bottom-4 rounded-full border border-[var(--surface-border)] bg-[var(--primary)] p-3 text-[var(--brand-inverted)] shadow-[0_24px_60px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
         >
           <span aria-hidden="true">↑</span>
         </button>

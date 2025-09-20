@@ -29,12 +29,6 @@
     grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
     align-items: start;
   }
-
-  .about-profile__details {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: stretch;
-  }
 }
 
 @container about-profile (min-width: 90rem) {
@@ -60,11 +54,5 @@
 
   .about-profile__services-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@container about-profile-details (min-width: 80rem) {
-  .about-profile__services-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

@@ -41,74 +41,78 @@ const workItems: WorkItem[] = [
   },
 ];
 
-const toolStack: string[] = [
-  "Emmet",
-  "Foundation",
-  "Semantic UI",
-  "Skeleton",
-  "Spectre.css",
-  "Sass/SCSS",
-  "CSS Tricks Almanac",
-  "stylelint",
-  "Atomic Design",
-  "ECMA",
-  "BEM",
-  "SMACSS",
+const rawToolStack = [
+  "Adobe CC",
+  "Adobe Experience Manager",
   "Airbnb CSS / Sass Styleguide",
-  "Babel",
-  "eslint",
-  "HTML5",
-  "prettier",
-  "jsfiddle.net",
   "Airbnb's ESLint config",
-  "Atom",
-  "Brackets",
-  "Visual Studio Code",
-  "CodePen",
-  "React",
   "Anime.js",
-  "GreenSock-JS",
-  "CSS3",
-  "Handlebars",
-  "Nunjucks",
-  "InVision",
-  "Typo3",
-  "EZ",
-  "Storybook",
-  "Gulp",
-  "NPM",
-  "YARN",
+  "Atom",
+  "Atomic Design",
+  "Babel",
+  "BasicLightbox",
+  "basicGrid",
+  "BEM",
+  "Brackets",
   "Browserify",
-  "webpack",
   "BrowserStack",
-  "Rest API",
+  "Browsersync",
   "caniuse.com",
   "Chrome Developer Tools",
-  "Modernizr",
-  "Placeholder",
-  "Malvid",
-  "basicGrid",
-  "BasicLightbox",
-  "Unsplash",
-  "Github",
-  "GitDesktop",
-  "Browsersync",
-  "Prepros",
-  "Google Fonts",
-  "TypeKit",
-  "Flaticon",
-  "Muzli",
-  "Adobe Experience Manager",
-  "Adobe CC",
-  "Sketch",
-  "Mac",
-  "Windows",
-  "Colorprofiles",
-  "Google Chrome",
-  "Firefox",
+  "CodePen",
+  "Color Profiles",
+  "CSS Tricks Almanac",
+  "CSS3",
+  "ECMA",
   "Edge",
+  "Emmet",
+  "eslint",
+  "EZ",
+  "Firefox",
+  "Flaticon",
+  "Foundation",
+  "GitHub Desktop",
+  "GitHub",
+  "Google Chrome",
+  "Google Fonts",
+  "GreenSock-JS",
+  "Gulp",
+  "Handlebars",
+  "HTML5",
+  "InVision",
+  "jsfiddle.net",
+  "Mac",
+  "Malvid",
+  "Modernizr",
+  "Muzli",
+  "NPM",
+  "Nunjucks",
+  "Placeholder",
+  "Prepros",
+  "prettier",
+  "React",
+  "Rest API",
   "Safari",
+  "Sass/SCSS",
+  "Sketch",
+  "Skeleton",
+  "SMACSS",
+  "Spectre.css",
+  "Semantic UI",
+  "Storybook",
+  "stylelint",
+  "Typo3",
+  "TypeKit",
+  "Unsplash",
+  "Visual Studio Code",
+  "webpack",
+  "Windows",
+  "YARN",
 ];
+
+const toolStack = Array.from(new Set(rawToolStack)).sort((a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: "base" })
+);
 
 export default component$(() => {
   useStyles$(styles);
@@ -169,16 +173,15 @@ export default component$(() => {
             A curated set of tools, frameworks, and platforms I rely on to
             design, build, and refine digital products.
           </p>
-          <div class="mt-8 flex flex-wrap gap-3">
+          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
             {toolStack.map((tool) => (
-              <span
-                key={tool}
-                class="rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]"
-              >
-                {tool}
-              </span>
+              <li key={tool}>
+                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
+                  {tool}
+                </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
         {/* Resume */}

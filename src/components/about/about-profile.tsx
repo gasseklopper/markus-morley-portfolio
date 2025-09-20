@@ -68,9 +68,34 @@ const socialLinks: SocialLink[] = [
 export const AboutProfile = component$(() => {
   useStylesScoped$(styles);
   return (
-    <section class="about-profile layout-shell relative mt-16 w-full overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+    <section class="about-profile layout-shell relative mt-16 w-full overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top_left,_color-mix(in_srgb,var(--surface2)_92%,transparent)_0%,_var(--surface1)_68%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -left-32 -top-28 h-64 w-64 rounded-full bg-[radial-gradient(circle,_color-mix(in_srgb,var(--primary)_45%,transparent)_0%,_transparent_70%)] opacity-70 blur-3xl md:-left-40 md:-top-32 md:h-80 md:w-80"
+      />
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -right-24 bottom-[-10%] h-72 w-72 rounded-full bg-[radial-gradient(circle,_color-mix(in_srgb,var(--tertiary)_38%,transparent)_0%,_transparent_70%)] opacity-40 blur-3xl md:-right-32 md:h-96 md:w-96"
+      />
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute left-[-40%] top-1/2 h-px w-[160%] -translate-y-1/2 rotate-[18deg] bg-[color-mix(in_srgb,var(--surface5)_45%,transparent)] opacity-60"
+      />
       <div class="about-profile__layout flex flex-col gap-12">
-        <div class="relative flex flex-col items-center gap-6 rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-8 py-10 text-center shadow-[0_20px_60px_var(--surface-shadow)] backdrop-blur-md transition-colors duration-300">
+        <div class="relative flex flex-col items-center gap-6 overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-8 py-10 text-center shadow-[0_20px_60px_var(--surface-shadow)] backdrop-blur-md transition-colors duration-300">
+          <div
+            aria-hidden="true"
+            class="absolute inset-0 bg-[radial-gradient(circle_at_20%_22%,color-mix(in_srgb,var(--primary)_32%,var(--surface1)_68%)_0%,color-mix(in_srgb,var(--tertiary)_30%,var(--surface1)_70%)_42%,color-mix(in_srgb,var(--surface1)_88%,transparent)_100%)] transition-transform duration-500"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute -left-16 -top-20 h-40 w-40 rounded-full bg-[radial-gradient(circle,_color-mix(in_srgb,var(--primary)_48%,transparent)_0%,_transparent_70%)] opacity-60 blur-3xl"
+          />
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute -right-12 bottom-[-18%] h-48 w-48 rounded-full bg-[radial-gradient(circle,_color-mix(in_srgb,var(--tertiary)_35%,transparent)_0%,_transparent_70%)] opacity-40 blur-3xl"
+          />
+          <div class="relative flex flex-col items-center gap-6">
           <div class="relative h-40 w-40 overflow-hidden rounded-full border-4 border-[var(--primary)] bg-[var(--surface1)] shadow-[0_15px_45px_var(--surface-shadow)]">
             <ImgHeroPortrait
               alt="Portrait of Markus Morley"
@@ -111,74 +136,93 @@ export const AboutProfile = component$(() => {
               ))}
             </div>
           </div>
+          </div>
         </div>
 
         <div class="about-profile__details flex flex-col gap-12">
-          <article class="about-profile__biography rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
-            <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
-                  Biography
-                </p>
-                <h3 class="text-3xl font-semibold text-[var(--text1)]">Biography</h3>
-              </div>
-            </header>
-            <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
-              I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
-            </p>
-            <dl class="about-profile__facts mt-8 gap-4">
-              {biographyItems.map((item) => (
-                <div
-                  key={item.label}
-                  class="flex flex-col gap-1 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-4 transition-colors duration-300"
-                >
-                  <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--text3)]">
-                    {item.label}
-                  </dt>
-                  <dd class="text-base font-semibold text-[var(--text1)]">{item.value}</dd>
+          <article class="about-profile__biography relative overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+            <div
+              aria-hidden="true"
+              class="absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,color-mix(in_srgb,var(--primary)_28%,var(--surface1)_72%)_0%,color-mix(in_srgb,var(--tertiary)_26%,var(--surface1)_74%)_38%,color-mix(in_srgb,var(--surface1)_90%,transparent)_100%)] opacity-90"
+            />
+            <div class="relative flex flex-col">
+              <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
+                    Biography
+                  </p>
+                  <h3 class="text-3xl font-semibold text-[var(--text1)]">Biography</h3>
                 </div>
-              ))}
-            </dl>
+              </header>
+              <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
+                I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
+              </p>
+              <dl class="about-profile__facts mt-8 gap-4">
+                {biographyItems.map((item) => (
+                  <div
+                    key={item.label}
+                    class="flex flex-col gap-1 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-4 transition-colors duration-300"
+                  >
+                    <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--text3)]">
+                      {item.label}
+                    </dt>
+                    <dd class="text-base font-semibold text-[var(--text1)]">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </article>
 
-          <article class="about-profile__services rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
-            <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
-                  My Services
-                </p>
-                <h3 class="text-3xl font-semibold text-[var(--text1)]">My Services</h3>
-              </div>
-            </header>
-            <div class="about-profile__services-grid gap-6">
-              {services.map((service) => (
-                <div
-                  key={service.title}
-                  class="group relative flex h-full flex-col gap-4 rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_16px_60px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_24px_80px_var(--surface-shadow)]"
-                >
-                  <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-2xl font-semibold text-[var(--primary)] shadow-[0_8px_24px_var(--surface-shadow)] transition-colors duration-300">
-                    {service.title[0]}
-                  </span>
-                  <h4 class="text-xl font-semibold text-[var(--text1)]">{service.title}</h4>
-                  <p class="leading-relaxed text-[var(--text2)]">{service.description}</p>
-                  <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--primary)] transition-colors duration-300 group-hover:text-[var(--brand-core)]">
-                    Learn More
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      class="h-4 w-4"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M5.22 14.78a.75.75 0 0 1 0-1.06L10.94 8l-5.72-5.72a.75.75 0 1 1 1.06-1.06l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
+          <article class="about-profile__services relative overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+            <div
+              aria-hidden="true"
+              class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,color-mix(in_srgb,var(--primary)_28%,var(--surface1)_72%)_0%,color-mix(in_srgb,var(--tertiary)_30%,var(--surface1)_70%)_46%,color-mix(in_srgb,var(--surface1)_90%,transparent)_100%)] opacity-90"
+            />
+            <div class="relative flex flex-col">
+              <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
+                    My Services
+                  </p>
+                  <h3 class="text-3xl font-semibold text-[var(--text1)]">My Services</h3>
                 </div>
-              ))}
+              </header>
+              <div class="about-profile__services-grid gap-6">
+                {services.map((service) => (
+                  <div
+                    key={service.title}
+                    class="group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_16px_60px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_24px_80px_var(--surface-shadow)]"
+                  >
+                    <div
+                      aria-hidden="true"
+                      class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,color-mix(in_srgb,var(--primary)_22%,var(--surface1)_78%)_0%,color-mix(in_srgb,var(--tertiary)_24%,var(--surface1)_76%)_42%,color-mix(in_srgb,var(--surface1)_92%,transparent)_100%)] opacity-90 transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div class="relative flex flex-col gap-4">
+                      <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-2xl font-semibold text-[var(--primary)] shadow-[0_8px_24px_var(--surface-shadow)] transition-colors duration-300">
+                        {service.title[0]}
+                      </span>
+                      <h4 class="text-xl font-semibold text-[var(--text1)]">{service.title}</h4>
+                      <p class="leading-relaxed text-[var(--text2)]">{service.description}</p>
+                      <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--primary)] transition-colors duration-300 group-hover:text-[var(--brand-core)]">
+                        Learn More
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-4 w-4"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.22 14.78a.75.75 0 0 1 0-1.06L10.94 8l-5.72-5.72a.75.75 0 1 1 1.06-1.06l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </article>
         </div>

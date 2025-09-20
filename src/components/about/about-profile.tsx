@@ -114,7 +114,7 @@ export const AboutProfile = component$(() => {
         </div>
 
         <div class="about-profile__details flex flex-col gap-12">
-          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+          <article class="about-profile__biography rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
@@ -141,7 +141,7 @@ export const AboutProfile = component$(() => {
             </dl>
           </article>
 
-          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+          <article class="about-profile__services rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">

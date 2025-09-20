@@ -41,6 +41,75 @@ const workItems: WorkItem[] = [
   },
 ];
 
+const toolStack: string[] = [
+  "Emmet",
+  "Foundation",
+  "Semantic UI",
+  "Skeleton",
+  "Spectre.css",
+  "Sass/SCSS",
+  "CSS Tricks Almanac",
+  "stylelint",
+  "Atomic Design",
+  "ECMA",
+  "BEM",
+  "SMACSS",
+  "Airbnb CSS / Sass Styleguide",
+  "Babel",
+  "eslint",
+  "HTML5",
+  "prettier",
+  "jsfiddle.net",
+  "Airbnb's ESLint config",
+  "Atom",
+  "Brackets",
+  "Visual Studio Code",
+  "CodePen",
+  "React",
+  "Anime.js",
+  "GreenSock-JS",
+  "CSS3",
+  "Handlebars",
+  "Nunjucks",
+  "InVision",
+  "Typo3",
+  "EZ",
+  "Storybook",
+  "Gulp",
+  "NPM",
+  "YARN",
+  "Browserify",
+  "webpack",
+  "BrowserStack",
+  "Rest API",
+  "caniuse.com",
+  "Chrome Developer Tools",
+  "Modernizr",
+  "Placeholder",
+  "Malvid",
+  "basicGrid",
+  "BasicLightbox",
+  "Unsplash",
+  "Github",
+  "GitDesktop",
+  "Browsersync",
+  "Prepros",
+  "Google Fonts",
+  "TypeKit",
+  "Flaticon",
+  "Muzli",
+  "Adobe Experience Manager",
+  "Adobe CC",
+  "Sketch",
+  "Mac",
+  "Windows",
+  "Colorprofiles",
+  "Google Chrome",
+  "Firefox",
+  "Edge",
+  "Safari",
+];
+
 export default component$(() => {
   useStyles$(styles);
   return (
@@ -89,6 +158,25 @@ export default component$(() => {
                 </h3>
                 <p class="mt-2 text-[var(--text2)]">{item.description}</p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Tool Stack */}
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-[var(--text1)]">Tool Stack</h2>
+          <p class="mt-4 text-[var(--text2)]">
+            A curated set of tools, frameworks, and platforms I rely on to
+            design, build, and refine digital products.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            {toolStack.map((tool) => (
+              <span
+                key={tool}
+                class="rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]"
+              >
+                {tool}
+              </span>
             ))}
           </div>
         </section>

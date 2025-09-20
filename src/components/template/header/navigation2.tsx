@@ -64,7 +64,7 @@ export default component$(() => {
   return (
     <nav
       class={[
-        "relative mx-auto flex w-full max-w-6xl flex-col rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_80%)] text-[var(--text1)] shadow-[0_24px_90px_var(--surface-shadow)] backdrop-blur-xl transition-colors duration-300",
+        "relative z-[2000] mx-auto flex w-full max-w-6xl flex-col rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_80%)] text-[var(--text1)] shadow-[0_24px_90px_var(--surface-shadow)] backdrop-blur-xl transition-colors duration-300",
         isOpen.value ? "overflow-visible" : "overflow-hidden",
       ].join(" ")}
     >

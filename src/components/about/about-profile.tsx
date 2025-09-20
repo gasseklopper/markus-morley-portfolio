@@ -1,126 +1,165 @@
 import { component$ } from "@builder.io/qwik";
 import ImgHeroPortrait from "~/media/assets/images/heros/image.png?jsx";
 
-const biographyItems = [
-  { label: "Name", value: "Michel Hark" },
-  { label: "Nationality", value: "Germany" },
-  { label: "Phone", value: "+49 170 874 302" },
-  { label: "Email", value: "info@example.com" },
+type BiographyItem = {
+  label: string;
+  value: string;
+};
+
+type Service = {
+  title: string;
+  description: string;
+};
+
+type SocialLink = {
+  name: string;
+  href: string;
+  abbr: string;
+};
+
+const biographyItems: BiographyItem[] = [
+  { label: "Name", value: "Markus Morley" },
+  { label: "Role", value: "Senior Frontend Engineer" },
+  { label: "Location", value: "Frankfurt am Main, Germany" },
+  { label: "Email", value: "hello@markusmorley.de" },
   { label: "Experience", value: "10+ years" },
   { label: "Freelance", value: "Available" },
-  { label: "Website", value: "michel.hark.de" },
-  { label: "Language", value: "German, English" },
+  { label: "Website", value: "markusmorley.de" },
+  { label: "Languages", value: "German, English" },
 ];
 
-const services = [
+const services: Service[] = [
   {
-    title: "Design",
-    description: "Creative interaction design for my client who don't love.",
+    title: "Product Design",
+    description:
+      "Designing thoughtful, inclusive digital journeys from discovery to delivery with a focus on measurable business impact.",
   },
   {
-    title: "Development",
-    description: "Creative interaction design for my client who don't love.",
+    title: "Frontend Engineering",
+    description:
+      "Building resilient, high-performance interfaces with modern frameworks, type-safe tooling, and automated quality gates.",
   },
   {
-    title: "Marketing",
-    description: "Creative interaction design for my client who don't love.",
+    title: "Design Systems",
+    description:
+      "Scaling design language and component libraries that empower teams with accessible tokens, documentation, and governance.",
+  },
+];
+
+const socialLinks: SocialLink[] = [
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/markus-morley/",
+    abbr: "Li",
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com/gasseklopper",
+    abbr: "Gh",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/yelrom_/",
+    abbr: "In",
   },
 ];
 
 export const AboutProfile = component$(() => {
   return (
-    <section class="relative mx-auto mt-16 w-full max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#202859] via-[#1c2149] to-[#151935] px-6 py-12 text-white shadow-2xl md:px-12">
+    <section class="relative mx-auto mt-16 w-full max-w-6xl overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
       <div class="grid gap-12 lg:grid-cols-[320px_1fr] lg:items-start">
-        <div class="relative flex flex-col items-center gap-6 rounded-[2.5rem] bg-[#272f65]/70 px-8 py-10 text-center backdrop-blur">
-          <div class="relative h-40 w-40 overflow-hidden rounded-full border-4 border-white/20 bg-white/10">
+        <div class="relative flex flex-col items-center gap-6 rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-8 py-10 text-center shadow-[0_20px_60px_var(--surface-shadow)] backdrop-blur-md transition-colors duration-300">
+          <div class="relative h-40 w-40 overflow-hidden rounded-full border-4 border-[var(--primary)] bg-[var(--surface1)] shadow-[0_15px_45px_var(--surface-shadow)]">
             <ImgHeroPortrait
-              alt="Adam Hark portrait"
+              alt="Portrait of Markus Morley"
               class="h-full w-full object-cover"
               loading="lazy"
             />
           </div>
           <div>
-            <h2 class="text-2xl font-semibold">Adam Hark</h2>
-            <p class="mt-1 text-sm uppercase tracking-widest text-white/70">
-              Back-End Developer
+            <h2 class="text-2xl font-semibold text-[var(--text1)]">Markus Morley</h2>
+            <p class="mt-1 text-sm font-medium uppercase tracking-[0.4em] text-[var(--text3)]">
+              Senior Frontend Engineer
             </p>
           </div>
           <a
-            class="inline-flex items-center justify-center rounded-full bg-[#fdd446] px-6 py-3 text-sm font-semibold text-[#121429] shadow-lg shadow-[#fdd446]/40 transition hover:-translate-y-0.5 hover:bg-[#ffe27d] hover:shadow-xl"
+            class="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--brand-inverted)] shadow-[0_18px_45px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)] hover:shadow-[0_22px_60px_var(--brand-glow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
             href="#download-cv"
           >
             Download CV
           </a>
-          <div class="flex flex-col items-center gap-3 text-sm text-white/60">
-            <span class="font-semibold uppercase tracking-[0.3em] text-white/50">
+          <div class="flex flex-col items-center gap-3 text-sm text-[var(--text3)]">
+            <span class="font-semibold uppercase tracking-[0.3em] text-[var(--text3)]">
               Follow me
             </span>
             <div class="flex items-center gap-3">
-              <span class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/80 shadow-inner">
-                in
-              </span>
-              <span class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/80 shadow-inner">
-                dr
-              </span>
-              <span class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white/80 shadow-inner">
-                be
-              </span>
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Follow Markus on ${social.name}`}
+                  class="grid h-10 w-10 place-items-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-[var(--text2)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,_var(--surface1)_35%,_transparent)] transition-all duration-300 hover:scale-105 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+                >
+                  <span class="text-xs font-semibold uppercase tracking-widest">
+                    {social.abbr}
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
         <div class="flex flex-col gap-12">
-          <article class="rounded-[2.5rem] bg-white/5 p-8 text-sm text-white/80 shadow-lg shadow-black/20 backdrop-blur">
+          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
-                <p class="text-xs uppercase tracking-[0.4em] text-[#fdd446]">
+                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
                   Biography
                 </p>
-                <h3 class="text-3xl font-semibold text-white">Biography</h3>
+                <h3 class="text-3xl font-semibold text-[var(--text1)]">Biography</h3>
               </div>
             </header>
-            <p class="max-w-3xl leading-relaxed">
-              Hi, my name is Michel Hark and I began using WordPress when first began. I've
-              spent most of my professional life over the last ten years designing,
-              programming and operating WordPress sites go beyond with exclusive design.
-              Apart from this I love to travel, mentor designers, review design websites and
-              read books on everything related to design. I have also given lectures in
-              various educational institutions. So I love creating creative content, and you
-              can find most of my works here.
+            <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
+              I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
             </p>
             <dl class="mt-8 grid gap-4 sm:grid-cols-2">
               {biographyItems.map((item) => (
-                <div key={item.label} class="flex flex-col gap-1 rounded-2xl bg-white/5 p-4">
-                  <dt class="text-xs font-semibold uppercase tracking-wide text-white/60">
+                <div
+                  key={item.label}
+                  class="flex flex-col gap-1 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-4 transition-colors duration-300"
+                >
+                  <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--text3)]">
                     {item.label}
                   </dt>
-                  <dd class="text-base font-medium text-white">{item.value}</dd>
+                  <dd class="text-base font-semibold text-[var(--text1)]">{item.value}</dd>
                 </div>
               ))}
             </dl>
           </article>
 
-          <article class="rounded-[2.5rem] bg-white/5 p-8 text-white/80 shadow-lg shadow-black/20 backdrop-blur">
-            <header class="mb-8 flex items-center justify-between">
+          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+            <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p class="text-xs uppercase tracking-[0.4em] text-[#fdd446]">
+                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
                   My Services
                 </p>
-                <h3 class="text-3xl font-semibold text-white">My Services</h3>
+                <h3 class="text-3xl font-semibold text-[var(--text1)]">My Services</h3>
               </div>
             </header>
             <div class="grid gap-6 md:grid-cols-3">
               {services.map((service) => (
                 <div
                   key={service.title}
-                  class="group relative flex flex-col gap-3 rounded-3xl bg-[#272f65]/70 p-6 text-sm text-white/70 transition duration-300 hover:-translate-y-1 hover:bg-[#313b86]/80"
+                  class="group relative flex h-full flex-col gap-4 rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_16px_60px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_24px_80px_var(--surface-shadow)]"
                 >
-                  <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-2xl font-semibold text-white/80">
+                  <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-2xl font-semibold text-[var(--primary)] shadow-[0_8px_24px_var(--surface-shadow)] transition-colors duration-300">
                     {service.title[0]}
                   </span>
-                  <h4 class="text-xl font-semibold text-white">{service.title}</h4>
-                  <p class="leading-relaxed">{service.description}</p>
-                  <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#fdd446]">
+                  <h4 class="text-xl font-semibold text-[var(--text1)]">{service.title}</h4>
+                  <p class="leading-relaxed text-[var(--text2)]">{service.description}</p>
+                  <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--primary)] transition-colors duration-300 group-hover:text-[var(--brand-core)]">
                     Learn More
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

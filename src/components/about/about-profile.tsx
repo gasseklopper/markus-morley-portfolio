@@ -1,5 +1,6 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import ImgHeroPortrait from "~/media/assets/images/heros/image.png?jsx";
+import styles from "./about-profile.css?inline";
 
 type BiographyItem = {
   label: string;
@@ -65,9 +66,10 @@ const socialLinks: SocialLink[] = [
 ];
 
 export const AboutProfile = component$(() => {
+  useStylesScoped$(styles);
   return (
-    <section class="layout-shell relative mt-16 w-full overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
-      <div class="grid gap-12 lg:grid-cols-[320px_1fr] lg:items-start">
+    <section class="about-profile layout-shell relative mt-16 w-full overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+      <div class="about-profile__layout flex flex-col gap-12">
         <div class="relative flex flex-col items-center gap-6 rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-8 py-10 text-center shadow-[0_20px_60px_var(--surface-shadow)] backdrop-blur-md transition-colors duration-300">
           <div class="relative h-40 w-40 overflow-hidden rounded-full border-4 border-[var(--primary)] bg-[var(--surface1)] shadow-[0_15px_45px_var(--surface-shadow)]">
             <ImgHeroPortrait
@@ -111,8 +113,8 @@ export const AboutProfile = component$(() => {
           </div>
         </div>
 
-        <div class="flex flex-col gap-12">
-          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+        <div class="about-profile__details flex flex-col gap-12">
+          <article class="about-profile__biography rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
@@ -124,7 +126,7 @@ export const AboutProfile = component$(() => {
             <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
               I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
             </p>
-            <dl class="mt-8 grid gap-4 sm:grid-cols-2">
+            <dl class="about-profile__facts mt-8 gap-4">
               {biographyItems.map((item) => (
                 <div
                   key={item.label}
@@ -139,7 +141,7 @@ export const AboutProfile = component$(() => {
             </dl>
           </article>
 
-          <article class="rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
+          <article class="about-profile__services rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
@@ -148,7 +150,7 @@ export const AboutProfile = component$(() => {
                 <h3 class="text-3xl font-semibold text-[var(--text1)]">My Services</h3>
               </div>
             </header>
-            <div class="grid gap-6 md:grid-cols-3">
+            <div class="about-profile__services-grid gap-6">
               {services.map((service) => (
                 <div
                   key={service.title}

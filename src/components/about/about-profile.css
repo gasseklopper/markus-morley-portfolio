@@ -82,3 +82,13 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+@container about-profile (min-width: 96rem) {
+  .about-profile__layout {
+    grid-template-columns: minmax(0, 360px) repeat(2, minmax(0, 1fr));
+  }
+
+  .about-profile__details {
+    display: contents;
+  }
+}

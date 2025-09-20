@@ -12,7 +12,7 @@ export const Footer = component$(() => {
   );
 
   return (
-    <footer class="relative mx-auto w-full max-w-6xl overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_bottom,_var(--surface2)_0%,_var(--surface1)_80%)] px-6 py-12 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+    <footer class="layout-shell relative w-full overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_bottom,_var(--surface2)_0%,_var(--surface1)_80%)] px-6 py-12 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
       <div class="flex flex-col gap-12 md:flex-row md:justify-between">
         <div class="flex max-w-sm flex-col gap-5">
           <a

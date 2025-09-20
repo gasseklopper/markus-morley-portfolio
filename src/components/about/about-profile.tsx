@@ -66,7 +66,7 @@ const socialLinks: SocialLink[] = [
 
 export const AboutProfile = component$(() => {
   return (
-    <section class="relative mx-auto mt-16 w-full max-w-6xl overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+    <section class="layout-shell relative mt-16 w-full overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_70%)] px-6 py-12 text-[var(--text1)] shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
       <div class="grid gap-12 lg:grid-cols-[320px_1fr] lg:items-start">
         <div class="relative flex flex-col items-center gap-6 rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-8 py-10 text-center shadow-[0_20px_60px_var(--surface-shadow)] backdrop-blur-md transition-colors duration-300">
           <div class="relative h-40 w-40 overflow-hidden rounded-full border-4 border-[var(--primary)] bg-[var(--surface1)] shadow-[0_15px_45px_var(--surface-shadow)]">

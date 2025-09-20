@@ -106,28 +106,18 @@
     },
     "social": [
       {
-        "name": "Facebook",
-        "link": "https://facebook.com",
-        "abbr": "Fb"
-      },
-      {
-        "name": "Twitter",
-        "link": "https://twitter.com",
-        "abbr": "Tw"
-      },
-      {
         "name": "Instagram",
-        "link": "https://instagram.com",
+        "link": "https://www.instagram.com/yelrom_/",
         "abbr": "In"
       },
       {
-        "name": "Dribbble",
-        "link": "https://dribbble.com",
-        "abbr": "Db"
+        "name": "GitHub",
+        "link": "https://github.com/gasseklopper",
+        "abbr": "Gh"
       },
       {
         "name": "LinkedIn",
-        "link": "https://linkedin.com",
+        "link": "https://www.linkedin.com/in/markus-morley/",
         "abbr": "Li"
       }
     ]

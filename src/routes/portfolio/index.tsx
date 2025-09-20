@@ -21,6 +21,28 @@ const heroHighlights = [
   { label: "Location", value: "Frankfurt am Main, Germany" },
 ];
 
+type PortfolioPage = (typeof portfolioPages)[number];
+
+const getProjectBadge = (page: PortfolioPage) => {
+  if (page.path === "/portfolio/color-theme") {
+    return "Design Tokens";
+  }
+
+  if (page.path === "/portfolio/farbkasten") {
+    return "Creative Coding";
+  }
+
+  if (page.path.startsWith("/portfolio/generative-art")) {
+    return page.path === "/portfolio/generative-art" ? "Generative Hub" : "Experiment";
+  }
+
+  if (page.name.toLowerCase().includes("project")) {
+    return "Case Study";
+  }
+
+  return "Case Study";
+};
+
 const socialLinks = [
   {
     name: "LinkedIn",
@@ -184,7 +206,7 @@ export default component$(() => {
                 class="group relative flex h-full flex-col gap-4 overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_24px_80px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_32px_110px_var(--surface-shadow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
               >
                 <span class="inline-flex w-fit items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.38em] text-[var(--text3)] transition-colors duration-300 group-hover:border-[var(--primary)] group-hover:text-[var(--primary)]">
-                  {p.category ?? "Case Study"}
+                  {getProjectBadge(p)}
                 </span>
                 <h3 class="text-2xl font-semibold text-[var(--text1)] transition-colors duration-300 group-hover:text-[var(--primary)]">
                   {p.name}

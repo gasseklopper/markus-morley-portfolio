@@ -74,6 +74,11 @@
 
   --surface-shadow-light: rgba(2, 6, 23, 0.2);
   --shadow-strength-light: 12;
+
+  --surface-border-light: color-mix(in srgb, var(--surface4-light) 55%, transparent);
+  --surface-glass-1-light: color-mix(in srgb, var(--surface2-light) 88%, transparent);
+  --surface-glass-2-light: color-mix(in srgb, var(--surface3-light) 82%, transparent);
+  --brand-glow-light: color-mix(in srgb, var(--primary-light) 45%, transparent);
 }
 
 /* Dark palette */
@@ -105,6 +110,11 @@
 
   --surface-shadow-dark: rgba(15, 23, 42, 0.55);
   --shadow-strength-dark: 18;
+
+  --surface-border-dark: color-mix(in srgb, var(--surface4-dark) 45%, transparent);
+  --surface-glass-1-dark: color-mix(in srgb, var(--surface2-dark) 75%, transparent);
+  --surface-glass-2-dark: color-mix(in srgb, var(--surface3-dark) 68%, transparent);
+  --brand-glow-dark: color-mix(in srgb, var(--primary-dark) 40%, transparent);
 }
 
 /* Neon palette */
@@ -136,6 +146,11 @@
 
   --surface-shadow-neon: rgba(0, 229, 255, 0.45);
   --shadow-strength-neon: 22;
+
+  --surface-border-neon: color-mix(in srgb, var(--surface5-neon) 52%, transparent);
+  --surface-glass-1-neon: color-mix(in srgb, var(--surface3-neon) 78%, transparent);
+  --surface-glass-2-neon: color-mix(in srgb, var(--surface4-neon) 70%, transparent);
+  --brand-glow-neon: color-mix(in srgb, var(--primary-neon) 55%, transparent);
 }
 
 /* Pastell palette */
@@ -167,6 +182,11 @@
 
   --surface-shadow-pastell: rgba(36, 48, 67, 0.18);
   --shadow-strength-pastell: 10;
+
+  --surface-border-pastell: color-mix(in srgb, var(--surface5-pastell) 50%, transparent);
+  --surface-glass-1-pastell: color-mix(in srgb, var(--surface2-pastell) 88%, transparent);
+  --surface-glass-2-pastell: color-mix(in srgb, var(--surface3-pastell) 82%, transparent);
+  --brand-glow-pastell: color-mix(in srgb, var(--primary-pastell) 45%, transparent);
 }
 
 /* Token remaps per theme */
@@ -200,6 +220,11 @@
 
   --surface-shadow: var(--surface-shadow-light);
   --shadow-strength: var(--shadow-strength-light);
+
+  --surface-border: var(--surface-border-light);
+  --surface-glass-1: var(--surface-glass-1-light);
+  --surface-glass-2: var(--surface-glass-2-light);
+  --brand-glow: var(--brand-glow-light);
 
   /* Legacy variables */
   --color-bg: var(--surface1);
@@ -238,6 +263,11 @@
   --surface-shadow: var(--surface-shadow-dark);
   --shadow-strength: var(--shadow-strength-dark);
 
+  --surface-border: var(--surface-border-dark);
+  --surface-glass-1: var(--surface-glass-1-dark);
+  --surface-glass-2: var(--surface-glass-2-dark);
+  --brand-glow: var(--brand-glow-dark);
+
   /* Legacy variables */
   --color-bg: var(--surface1);
   --color-text: var(--text1);
@@ -275,6 +305,11 @@
   --surface-shadow: var(--surface-shadow-neon);
   --shadow-strength: var(--shadow-strength-neon);
 
+  --surface-border: var(--surface-border-neon);
+  --surface-glass-1: var(--surface-glass-1-neon);
+  --surface-glass-2: var(--surface-glass-2-neon);
+  --brand-glow: var(--brand-glow-neon);
+
   /* Legacy variables */
   --color-bg: var(--surface1);
   --color-text: var(--text1);
@@ -311,6 +346,11 @@
 
   --surface-shadow: var(--surface-shadow-pastell);
   --shadow-strength: var(--shadow-strength-pastell);
+
+  --surface-border: var(--surface-border-pastell);
+  --surface-glass-1: var(--surface-glass-1-pastell);
+  --surface-glass-2: var(--surface-glass-2-pastell);
+  --brand-glow: var(--brand-glow-pastell);
 
   /* Legacy variables */
   --color-bg: var(--surface1);

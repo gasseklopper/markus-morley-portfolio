@@ -2,6 +2,8 @@ import { component$, useStyles$ } from "@builder.io/qwik";
 import styles from "../index.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
+import { AboutProfile } from "~/components/about/about-profile";
+import ImgHero from "~/media/assets/images/heros/image.png?jsx";
 
 interface WorkItem {
   title: string;
@@ -120,11 +122,7 @@ export default component$(() => {
     <div class="page relative text-[var(--text1)]">
       {/* Hero */}
       <section class="relative h-72 w-full overflow-hidden rounded-b-xl">
-        <img
-          src="/assets/images/heros/image.png"
-          alt="Applicant"
-          class="h-full w-full object-cover"
-        />
+        <ImgHero alt="Applicant" class="h-full w-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-tr from-[var(--surface1)] via-[var(--surface2)] to-transparent" />
         <div class="absolute bottom-6 left-6">
           <h1 class="text-4xl font-bold text-[var(--text1)]">About</h1>
@@ -133,6 +131,8 @@ export default component$(() => {
           </p>
         </div>
       </section>
+
+      <AboutProfile />
 
       <div class="mx-auto max-w-5xl px-4 py-16">
         {/* Intro */}

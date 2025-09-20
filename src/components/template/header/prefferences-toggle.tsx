@@ -225,7 +225,7 @@ export const PrefferencesToggle = component$<{
   return (
     <div
       ref={portalRootRef}
-      class="absolute inset-0 z-[1000] flex justify-end"
+      class="fixed inset-0 z-[1000] flex justify-end"
     >
       <div
         class={[

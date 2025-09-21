@@ -101,8 +101,6 @@ export const handleOverlayScrimPointerDown = (
   const toggleId = getToggleIdFromElement(toggleElement);
 
   if (toggleId) {
-    event.stopPropagation();
-    event.preventDefault();
     dispatchHeaderOverlayToggle(toggleId);
     return;
   }

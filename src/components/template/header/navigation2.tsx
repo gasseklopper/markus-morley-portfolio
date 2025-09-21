@@ -164,6 +164,18 @@ export default component$(() => {
       void toggleOverlay(detail);
     }),
   );
+  const toggleNotifications$ = $(() => {
+    void toggleOverlay("notifications");
+  });
+
+  const togglePreferences$ = $(() => {
+    void toggleOverlay("preferences");
+  });
+
+  const toggleAccount$ = $(() => {
+    void toggleOverlay("account");
+  });
+
   const overlayToggleButtonClass =
     "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
 
@@ -229,7 +241,7 @@ export default component$(() => {
               type="button"
               data-notifications-toggle
               aria-expanded={notificationsOpen.value ? "true" : "false"}
-              onClick$={[toggleOverlay, "notifications"]}
+              onClick$={toggleNotifications$}
               class={[
                 overlayToggleButtonClass,
                 notificationsOpen.value
@@ -268,7 +280,7 @@ export default component$(() => {
             </button>
             <button
               data-preferences-toggle
-              onClick$={[toggleOverlay, "preferences"]}
+              onClick$={togglePreferences$}
               type="button"
               class={[
                 overlayToggleButtonClass,
@@ -301,7 +313,7 @@ export default component$(() => {
               type="button"
               data-account-toggle
               aria-expanded={accountOpen.value ? "true" : "false"}
-              onClick$={[toggleOverlay, "account"]}
+              onClick$={toggleAccount$}
               class={[
                 accountToggleButtonClass,
                 accountOpen.value

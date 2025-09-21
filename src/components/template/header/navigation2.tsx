@@ -5,12 +5,15 @@ import {
   useSignal,
   useStylesScoped$,
   useOnWindow,
+  useVisibleTask$,
 } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import headerData from "./data";
 import styles from "./navigation.css?inline";
 import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
+import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
+import AccountPanel from "./account-panel";
 
 type NavItem = {
   name: string;
@@ -58,13 +61,68 @@ export default component$(() => {
   useStylesScoped$(styles);
   const menuOpen = useSignal(false);
   const isOpen = useSignal(false);
+  const notificationsOpen = useSignal(false);
+  const accountOpen = useSignal(false);
+  const unreadCount = useSignal(
+    defaultNotifications.filter((item) => item.unread).length,
+  );
   const navItems = getFilteredNavItems();
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    type StoredNotification = { unread?: boolean };
+
+    const readFromStorage = () => {
+      try {
+        const stored = localStorage.getItem("notifications-state");
+        if (!stored) {
+          unreadCount.value = defaultNotifications.filter(
+            (item) => item.unread,
+          ).length;
+          return;
+        }
+
+        const parsed = JSON.parse(stored) as StoredNotification[];
+        if (Array.isArray(parsed)) {
+          unreadCount.value = parsed.filter((item) => item?.unread).length;
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+      unreadCount.value = defaultNotifications.filter((item) => item.unread).length;
+    };
+
+    const handleUpdate = (event: Event) => {
+      const custom = event as CustomEvent<StoredNotification[] | undefined>;
+      const detail = custom.detail;
+      if (Array.isArray(detail)) {
+        unreadCount.value = detail.filter((item) => item?.unread).length;
+        return;
+      }
+
+      readFromStorage();
+    };
+
+    readFromStorage();
+
+    window.addEventListener("notifications:update", handleUpdate);
+
+    return () => {
+      window.removeEventListener("notifications:update", handleUpdate);
+    };
+  });
   useOnWindow(
     "keydown",
     $((event: KeyboardEvent) => {
       if (event.key === "F10") {
         event.preventDefault();
-        isOpen.value = !isOpen.value;
+        const next = !isOpen.value;
+        isOpen.value = next;
+        if (next) {
+          notificationsOpen.value = false;
+          accountOpen.value = false;
+        }
       }
     }),
   );
@@ -125,6 +183,16 @@ export default component$(() => {
           <div class="hidden lg:flex items-center gap-4">
             <button
               type="button"
+              data-notifications-toggle
+              aria-expanded={notificationsOpen.value ? "true" : "false"}
+              onClick$={() => {
+                const next = !notificationsOpen.value;
+                notificationsOpen.value = next;
+                if (next) {
+                  isOpen.value = false;
+                  accountOpen.value = false;
+                }
+              }}
               class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
             >
               {/* <span class="absolute -inset-2.5"></span> */}
@@ -149,12 +217,19 @@ export default component$(() => {
                 />
               </svg>
               <span class="absolute -top-1 -right-1 inline-flex size-5 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--primary)] text-xs font-semibold text-[var(--brand-inverted)] shadow-[0_12px_30px_var(--brand-glow)]">
-                3
+                {unreadCount.value}
               </span>
             </button>
             <button
               data-preferences-toggle
-              onClick$={() => (isOpen.value = !isOpen.value)}
+              onClick$={() => {
+                const next = !isOpen.value;
+                isOpen.value = next;
+                if (next) {
+                  notificationsOpen.value = false;
+                  accountOpen.value = false;
+                }
+              }}
               type="button"
               class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
             >
@@ -178,68 +253,52 @@ export default component$(() => {
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09c0-.66-.39-1.26-1-1.51a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06c.45-.45.58-1.14.33-1.82a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09c.66 0 1.26-.39 1.51-1a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06c.45.45 1.14.58 1.82.33.61-.25 1-.85 1-1.51V3a2 2 0 1 1 4 0v.09c0 .66.39 1.26 1 1.51.68.25 1.37.12 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06c-.45.45-.58 1.14-.33 1.82.25.61.85 1 1.51 1H21a2 2 0 1 1 0 4h-.09c-.66 0-1.26.39-1.51 1z" />
               </svg>
             </button>
-            <el-dropdown class="relative">
-              <button
-                class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+            <button
+              type="button"
+              data-account-toggle
+              aria-expanded={accountOpen.value ? "true" : "false"}
+              onClick$={() => {
+                const next = !accountOpen.value;
+                accountOpen.value = next;
+                if (next) {
+                  isOpen.value = false;
+                  notificationsOpen.value = false;
+                }
+              }}
+              class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+            >
+              {/* <span class="absolute -inset-1.5"></span> */}
+              <span class="sr-only">Open user menu</span>
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 64 64"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {/* <span class="absolute -inset-1.5"></span> */}
-                <span class="sr-only">Open user menu</span>
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 64 64"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="32"
-                    cy="32"
-                    r="30"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <circle
-                    cx="32"
-                    cy="24"
-                    r="10"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M16 48A16 12 0 0 1 48 48"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-
-              <el-menu
-                anchor="bottom end"
-                popover="auto"
-                class="w-52 origin-top-right rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-2 text-[var(--text2)] shadow-[0_20px_60px_var(--surface-shadow)] transition data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-150 data-[enter]:ease-out data-[leave]:duration-100 data-[leave]:ease-in backdrop-blur-lg"
-              >
-                <a
-                  href="#"
-                  class="block rounded-xl px-4 py-2 text-sm font-medium text-[var(--text2)] transition-colors duration-200 hover:bg-[var(--surface-glass-1)] hover:text-[var(--text1)] focus:bg-[var(--surface-glass-1)] focus:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-                >
-                  Your profile
-                </a>
-                <a
-                  href="#"
-                  class="block rounded-xl px-4 py-2 text-sm font-medium text-[var(--text2)] transition-colors duration-200 hover:bg-[var(--surface-glass-1)] hover:text-[var(--text1)] focus:bg-[var(--surface-glass-1)] focus:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-                >
-                  Settings
-                </a>
-                <a
-                  href="#"
-                  class="block rounded-xl px-4 py-2 text-sm font-medium text-[var(--text2)] transition-colors duration-200 hover:bg-[var(--surface-glass-1)] hover:text-[var(--text1)] focus:bg-[var(--surface-glass-1)] focus:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-                >
-                  Sign out
-                </a>
-              </el-menu>
-            </el-dropdown>
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="30"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <circle
+                  cx="32"
+                  cy="24"
+                  r="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M16 48A16 12 0 0 1 48 48"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
           {/* <div class="-mr-2 flex md:hidden">
             <button type="button" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
@@ -302,8 +361,16 @@ export default component$(() => {
       <div class="px-4 pb-4 sm:px-6 lg:px-8">
         <MobileMenu openSig={menuOpen} />
       </div>
+      {notificationsOpen.value && (
+        <NotificationsPanel
+          onClose$={$(() => (notificationsOpen.value = false))}
+        />
+      )}
       {isOpen.value && (
         <PrefferencesToggle onClose$={$(() => (isOpen.value = false))} />
+      )}
+      {accountOpen.value && (
+        <AccountPanel onClose$={$(() => (accountOpen.value = false))} />
       )}
     </nav>
   );

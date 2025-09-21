@@ -3,14 +3,13 @@ import styles from "../index.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 import { AboutProfile } from "~/components/about/about-profile";
+import {
+  AboutExpertise,
+  type ExpertiseItem,
+} from "~/components/about/about-expertise";
 import ImgHero from "~/media/assets/images/heros/image.png?jsx";
 
-interface WorkItem {
-  title: string;
-  description: string;
-}
-
-const workItems: WorkItem[] = [
+const expertiseItems: ExpertiseItem[] = [
   {
     title: "Design",
     description:
@@ -161,7 +160,7 @@ export default component$(() => {
 
       <AboutProfile />
 
-      <div class="mx-auto max-w-5xl px-4 py-16">
+      <div class="layout-shell py-16">
         {/* Intro */}
         <section>
           <h2 class="text-3xl font-bold text-[var(--text1)]">
@@ -175,23 +174,11 @@ export default component$(() => {
           </p>
         </section>
 
-        {/* What I Do */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">What I Do</h2>
-          <div class="mt-8 grid gap-8 sm:grid-cols-2">
-            {workItems.map((item) => (
-              <div
-                key={item.title}
-                class="rounded-lg bg-[var(--surface2)] p-6 shadow transition hover:bg-[var(--surface3)]"
-              >
-                <h3 class="text-xl font-semibold text-[var(--text1)]">
-                  {item.title}
-                </h3>
-                <p class="mt-2 text-[var(--text2)]">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <AboutExpertise
+          class="mt-20"
+          items={expertiseItems}
+          description="My approach blends research-led design exploration with code that ships. Each engagement flexes between discovery, prototyping, and resilient delivery so brands feel fearless across every touchpoint."
+        />
 
         {/* Tool Stack */}
         <section class="mt-16">

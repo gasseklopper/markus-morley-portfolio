@@ -126,6 +126,12 @@ export default component$(() => {
       }
     }),
   );
+  const overlayToggleButtonClass =
+    "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
+
+  const accountToggleButtonClass =
+    "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]";
+
   return (
     <nav
       class={[
@@ -193,12 +199,21 @@ export default component$(() => {
                   accountOpen.value = false;
                 }
               }}
-              class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+              class={[
+                overlayToggleButtonClass,
+                notificationsOpen.value
+                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
+                  : "",
+              ].join(" ")}
             >
               {/* <span class="absolute -inset-2.5"></span> */}
               <span class="sr-only">View notifications</span>
               <svg
-                stroke="currentColor"
+                stroke={
+                  notificationsOpen.value
+                    ? "var(--primary)"
+                    : "var(--text2)"
+                }
                 fill="none"
                 stroke-width="1.5"
                 viewBox="0 0 24 26"
@@ -231,12 +246,17 @@ export default component$(() => {
                 }
               }}
               type="button"
-              class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+              class={[
+                overlayToggleButtonClass,
+                isOpen.value
+                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
+                  : "",
+              ].join(" ")}
             >
               {/* <span class="absolute -inset-1.5"></span> */}
               <span class="sr-only">Open settings</span>
               <svg
-                stroke="currentColor"
+                stroke={isOpen.value ? "var(--primary)" : "var(--text2)"}
                 fill="none"
                 stroke-width="1.5"
                 viewBox="0 0 24 24"
@@ -265,7 +285,12 @@ export default component$(() => {
                   notificationsOpen.value = false;
                 }
               }}
-              class="group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+              class={[
+                accountToggleButtonClass,
+                accountOpen.value
+                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
+                  : "",
+              ].join(" ")}
             >
               {/* <span class="absolute -inset-1.5"></span> */}
               <span class="sr-only">Open user menu</span>
@@ -274,7 +299,7 @@ export default component$(() => {
                 height="32"
                 viewBox="0 0 64 64"
                 fill="none"
-                stroke="currentColor"
+                stroke={accountOpen.value ? "var(--primary)" : "var(--text2)"}
                 stroke-width="3"
                 xmlns="http://www.w3.org/2000/svg"
               >

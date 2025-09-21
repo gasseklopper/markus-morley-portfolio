@@ -6,9 +6,7 @@ import {
   useOnWindow,
   type PropFunction,
 } from "@builder.io/qwik";
-import handleOverlayScrimPointerDown, {
-  isOverlayToggleForwarded,
-} from "./overlay-scrim-handler";
+import handleOverlayScrimPointerDown from "./overlay-scrim-handler";
 import {
   themeStorageKey,
   cursorAnimationKey,
@@ -158,7 +156,7 @@ export const PrefferencesToggle = component$<{
   useOnWindow(
     "pointerdown",
     $((event: PointerEvent) => {
-      if (isOverlayToggleForwarded(event)) {
+      if (event.defaultPrevented) {
         return;
       }
 

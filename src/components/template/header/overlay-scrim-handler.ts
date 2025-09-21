@@ -1,89 +1,109 @@
-const HEADER_TOGGLE_SELECTOR =
-  "[data-notifications-toggle],[data-preferences-toggle],[data-account-toggle]";
+export type HeaderOverlayToggleId =
+  | "notifications"
+  | "preferences"
+  | "account";
 
-export type OverlayScrimPointerEvent = PointerEvent & {
-  __overlayToggleForwarded?: true;
+const NOTIFICATIONS_TOGGLE_SELECTOR = "[data-notifications-toggle]";
+const PREFERENCES_TOGGLE_SELECTOR = "[data-preferences-toggle]";
+const ACCOUNT_TOGGLE_SELECTOR = "[data-account-toggle]";
+
+export const HEADER_TOGGLE_SELECTOR = [
+  NOTIFICATIONS_TOGGLE_SELECTOR,
+  PREFERENCES_TOGGLE_SELECTOR,
+  ACCOUNT_TOGGLE_SELECTOR,
+].join(",");
+
+export const HEADER_TOGGLE_EVENT = "header:toggle";
+
+const resolveHeaderToggleElement = (
+  element: Element | null,
+): HTMLElement | null =>
+  (element?.closest(HEADER_TOGGLE_SELECTOR) as HTMLElement | null) ?? null;
+
+const getToggleIdFromElement = (
+  element: HTMLElement | null,
+): HeaderOverlayToggleId | null => {
+  if (!element) {
+    return null;
+  }
+
+  if (element.matches(NOTIFICATIONS_TOGGLE_SELECTOR)) {
+    return "notifications";
+  }
+
+  if (element.matches(PREFERENCES_TOGGLE_SELECTOR)) {
+    return "preferences";
+  }
+
+  if (element.matches(ACCOUNT_TOGGLE_SELECTOR)) {
+    return "account";
+  }
+
+  return null;
 };
 
-export const isOverlayToggleForwarded = (
-  event: PointerEvent,
-): event is OverlayScrimPointerEvent =>
-  Boolean((event as OverlayScrimPointerEvent).__overlayToggleForwarded);
+const findToggleBelowPointer = (event: PointerEvent): HTMLElement | null => {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const scrim = event.currentTarget as HTMLElement | null;
+  const container = scrim?.parentElement ?? null;
+  const restorePointerEvents: Array<() => void> = [];
+
+  const disablePointerEvents = (element: HTMLElement | null) => {
+    if (!element) {
+      return;
+    }
+
+    const previous = element.style.pointerEvents;
+    element.style.pointerEvents = "none";
+    restorePointerEvents.push(() => {
+      element.style.pointerEvents = previous;
+    });
+  };
+
+  disablePointerEvents(scrim);
+  disablePointerEvents(container);
+
+  const elementBelow = document.elementFromPoint(
+    event.clientX,
+    event.clientY,
+  );
+
+  restorePointerEvents.forEach((restore) => restore());
+
+  return resolveHeaderToggleElement(elementBelow);
+};
+
+export const dispatchHeaderOverlayToggle = (
+  toggle: HeaderOverlayToggleId,
+) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(
+    new CustomEvent<HeaderOverlayToggleId>(HEADER_TOGGLE_EVENT, {
+      detail: toggle,
+    }),
+  );
+};
 
 export const handleOverlayScrimPointerDown = (
   event: PointerEvent,
   startClose: () => void,
 ) => {
-  const target = event.target as HTMLElement | null;
-  if (target?.closest(HEADER_TOGGLE_SELECTOR)) {
-    return;
-  }
+  const directToggle = resolveHeaderToggleElement(
+    event.target as Element | null,
+  );
+  const toggleElement = directToggle ?? findToggleBelowPointer(event);
+  const toggleId = getToggleIdFromElement(toggleElement);
 
-  let toggleBelow: HTMLElement | null = null;
-
-  if (typeof document !== "undefined") {
-    const scrim = event.currentTarget as HTMLElement | null;
-    const container = scrim?.parentElement;
-
-    if (scrim && container) {
-      const previousScrimPointerEvents = scrim.style.pointerEvents;
-      const previousContainerPointerEvents = container.style.pointerEvents;
-
-      scrim.style.pointerEvents = "none";
-      container.style.pointerEvents = "none";
-
-      const elementBelow = document.elementFromPoint(
-        event.clientX,
-        event.clientY,
-      );
-
-      scrim.style.pointerEvents = previousScrimPointerEvents;
-      container.style.pointerEvents = previousContainerPointerEvents;
-
-      toggleBelow = elementBelow?.closest(HEADER_TOGGLE_SELECTOR) as
-        | HTMLElement
-        | null;
-    }
-  }
-
-  if (toggleBelow) {
-    (event as OverlayScrimPointerEvent).__overlayToggleForwarded = true;
+  if (toggleId) {
     event.stopPropagation();
-
-    const eventInit: PointerEventInit & MouseEventInit = {
-      bubbles: true,
-      cancelable: true,
-      composed: true,
-      clientX: event.clientX,
-      clientY: event.clientY,
-      button: event.button,
-      buttons: event.buttons,
-      altKey: event.altKey,
-      ctrlKey: event.ctrlKey,
-      metaKey: event.metaKey,
-      shiftKey: event.shiftKey,
-      pointerType: event.pointerType,
-      pointerId: event.pointerId,
-      width: event.width,
-      height: event.height,
-      pressure: event.pressure,
-      tangentialPressure: event.tangentialPressure,
-      tiltX: event.tiltX,
-      tiltY: event.tiltY,
-      twist: event.twist,
-      isPrimary: event.isPrimary,
-      screenX: event.screenX,
-      screenY: event.screenY,
-      movementX: event.movementX,
-      movementY: event.movementY,
-    };
-
-    setTimeout(() => {
-      toggleBelow?.dispatchEvent(new PointerEvent("pointerdown", eventInit));
-      toggleBelow?.dispatchEvent(new PointerEvent("pointerup", eventInit));
-      toggleBelow?.dispatchEvent(new MouseEvent("click", eventInit));
-    });
-
+    event.preventDefault();
+    dispatchHeaderOverlayToggle(toggleId);
     return;
   }
 

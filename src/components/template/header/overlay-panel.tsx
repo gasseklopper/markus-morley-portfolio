@@ -7,9 +7,7 @@ import {
   useVisibleTask$,
   type PropFunction,
 } from "@builder.io/qwik";
-import handleOverlayScrimPointerDown, {
-  isOverlayToggleForwarded,
-} from "./overlay-scrim-handler";
+import handleOverlayScrimPointerDown from "./overlay-scrim-handler";
 
 const PANEL_TRANSITION_MS = 520;
 
@@ -120,7 +118,7 @@ export const OverlayPanel = component$<OverlayPanelProps>(
     useOnWindow(
       "pointerdown",
       $((event: PointerEvent) => {
-        if (isOverlayToggleForwarded(event)) {
+        if (event.defaultPrevented) {
           return;
         }
 

@@ -1,6 +1,5 @@
 import {
   $,
-  Signal,
   component$,
   useSignal,
   useStylesScoped$,
@@ -14,6 +13,11 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
 import AccountPanel from "./account-panel";
+import {
+  HEADER_TOGGLE_EVENT,
+  dispatchHeaderOverlayToggle,
+  type HeaderOverlayToggleId,
+} from "./overlay-scrim-handler";
 
 type NavItem = {
   name: string;
@@ -70,6 +74,11 @@ export default component$(() => {
   const isOpen = useSignal(false);
   const notificationsOpen = useSignal(false);
   const accountOpen = useSignal(false);
+  const overlaySignals = {
+    notifications: notificationsOpen,
+    preferences: isOpen,
+    account: accountOpen,
+  } as const;
   const unreadCount = useSignal(
     defaultNotifications.filter((item) => item.unread).length,
   );
@@ -131,6 +140,26 @@ export default component$(() => {
           accountOpen.value = false;
         }
       }
+    }),
+  );
+  useOnWindow(
+    HEADER_TOGGLE_EVENT,
+    $((event: Event) => {
+      const { detail } = event as CustomEvent<
+        HeaderOverlayToggleId | undefined
+      >;
+
+      if (!detail) {
+        return;
+      }
+
+      const next = !overlaySignals[detail].value;
+
+      (Object.keys(overlaySignals) as HeaderOverlayToggleId[]).forEach(
+        (key) => {
+          overlaySignals[key].value = key === detail ? next : false;
+        },
+      );
     }),
   );
   const overlayToggleButtonClass =
@@ -198,14 +227,7 @@ export default component$(() => {
               type="button"
               data-notifications-toggle
               aria-expanded={notificationsOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !notificationsOpen.value;
-                notificationsOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
+              onClick$={$(() => dispatchHeaderOverlayToggle("notifications"))}
               class={[
                 overlayToggleButtonClass,
                 notificationsOpen.value
@@ -244,14 +266,7 @@ export default component$(() => {
             </button>
             <button
               data-preferences-toggle
-              onClick$={() => {
-                const next = !isOpen.value;
-                isOpen.value = next;
-                if (next) {
-                  notificationsOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
+              onClick$={$(() => dispatchHeaderOverlayToggle("preferences"))}
               type="button"
               class={[
                 overlayToggleButtonClass,
@@ -284,14 +299,7 @@ export default component$(() => {
               type="button"
               data-account-toggle
               aria-expanded={accountOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !accountOpen.value;
-                accountOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  notificationsOpen.value = false;
-                }
-              }}
+              onClick$={$(() => dispatchHeaderOverlayToggle("account"))}
               class={[
                 accountToggleButtonClass,
                 accountOpen.value

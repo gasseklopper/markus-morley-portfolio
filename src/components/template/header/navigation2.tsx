@@ -24,9 +24,16 @@ type NavItem = {
 const getNavItems = () =>
   (Array.isArray(headerData.nav) ? headerData.nav : []) as NavItem[];
 
+const excludedNavLinks = new Set(["/datenschutz", "/impressum"]);
+
+const isExcludedNavItem = (item: NavItem) =>
+  excludedNavLinks.has(item.link.toLowerCase());
+
 const getFilteredNavItems = () =>
   getNavItems().filter(
-    (item) => !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
+    (item) =>
+      !isExcludedNavItem(item) &&
+      (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
   );
 
 export const MobileMenu = component$<{ openSig: Signal<boolean> }>(

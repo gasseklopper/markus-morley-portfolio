@@ -23,9 +23,14 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
     items,
     ...sectionProps
   }) => {
+    const { class: className, ...restSectionProps } = sectionProps;
+
     return (
-      <section {...sectionProps}>
-        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section
+        {...restSectionProps}
+        class={["w-full", className].filter(Boolean).join(" ")}
+      >
+        <div class="mx-auto w-full max-w-6xl">
           <div class="relative overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top_left,var(--surface-glass-1)_0%,var(--surface1)_65%)] shadow-[0_30px_80px_-40px_var(--surface-shadow)]">
             <div
               class="pointer-events-none absolute inset-x-12 -top-40 h-80 rounded-full bg-[radial-gradient(circle,var(--primary)_0%,transparent_65%)] opacity-20 blur-3xl"

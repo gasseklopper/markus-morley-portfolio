@@ -132,9 +132,14 @@ export const OverlayPanel = component$<OverlayPanelProps>(
       <div ref={portalRootRef} class="fixed inset-0 z-[3000] flex justify-end">
         <div
           class={[
-            "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
             isAnimatingIn.value ? "opacity-100" : "opacity-0",
           ]}
+          onPointerDown$={$((event: PointerEvent) => {
+            event.stopPropagation();
+            event.preventDefault();
+            startClose$();
+          })}
         />
         <aside
           ref={panelRef}

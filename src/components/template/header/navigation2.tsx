@@ -1,6 +1,7 @@
 import {
   $,
   component$,
+  type Signal,
   useSignal,
   useStylesScoped$,
   useOnWindow,

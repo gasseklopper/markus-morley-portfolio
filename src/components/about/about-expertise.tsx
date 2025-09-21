@@ -1,11 +1,13 @@
 import { component$, type QwikIntrinsicElements } from "@builder.io/qwik";
 
+type SectionProps = QwikIntrinsicElements["section"];
+
 export interface ExpertiseItem {
   title: string;
   description: string;
 }
 
-export interface AboutExpertiseProps extends QwikIntrinsicElements["section"] {
+export interface AboutExpertiseProps extends SectionProps {
   heading?: string;
   kicker?: string;
   description?: string;

@@ -139,12 +139,6 @@ export default component$(() => {
                 </p>
                 <div class="flex flex-wrap items-center gap-4">
                   <Link
-                    href="/portfolio-showcase"
-                    class="inline-flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.34em] text-[var(--text2)] shadow-[0_16px_50px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-1)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-                  >
-                    View showcase
-                  </Link>
-                  <Link
                     href="/about"
                     class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.34em] text-[var(--primary)] transition-transform transition-colors duration-300 hover:-translate-y-0.5 hover:text-[var(--brand-core)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
                   >

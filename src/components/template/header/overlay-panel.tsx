@@ -7,6 +7,7 @@ import {
   useVisibleTask$,
   type PropFunction,
 } from "@builder.io/qwik";
+import handleOverlayScrimPointerDown from "./overlay-scrim-handler";
 
 const PANEL_TRANSITION_MS = 520;
 
@@ -128,9 +129,6 @@ export const OverlayPanel = component$<OverlayPanelProps>(
       }),
     );
 
-    const headerToggleSelector =
-      "[data-notifications-toggle],[data-preferences-toggle],[data-account-toggle]";
-
     return (
       <div ref={portalRootRef} class="fixed inset-0 z-[3000] flex justify-end">
         <div
@@ -139,57 +137,7 @@ export const OverlayPanel = component$<OverlayPanelProps>(
             isAnimatingIn.value ? "opacity-100" : "opacity-0",
           ]}
           onPointerDown$={$((event: PointerEvent) => {
-            const target = event.target as HTMLElement | null;
-            if (target?.closest(headerToggleSelector)) {
-              return;
-            }
-
-            let toggleBelow: HTMLElement | null = null;
-            if (typeof document !== "undefined") {
-              const scrim = event.target as HTMLElement | null;
-              const container = scrim?.parentElement;
-              if (scrim && container) {
-                const previousScrimPointerEvents = scrim.style.pointerEvents;
-                const previousContainerPointerEvents =
-                  container.style.pointerEvents;
-
-                scrim.style.pointerEvents = "none";
-                container.style.pointerEvents = "none";
-
-                const elementBelow = document.elementFromPoint(
-                  event.clientX,
-                  event.clientY,
-                );
-
-                scrim.style.pointerEvents = previousScrimPointerEvents;
-                container.style.pointerEvents = previousContainerPointerEvents;
-
-                toggleBelow = elementBelow?.closest(headerToggleSelector) as
-                  | HTMLElement
-                  | null;
-              }
-            }
-
-            if (toggleBelow) {
-              const eventInit: PointerEventInit & MouseEventInit = {
-                bubbles: true,
-                cancelable: true,
-                composed: true,
-                clientX: event.clientX,
-                clientY: event.clientY,
-              };
-
-              setTimeout(() => {
-                toggleBelow.dispatchEvent(new PointerEvent("pointerdown", eventInit));
-                toggleBelow.dispatchEvent(new PointerEvent("pointerup", eventInit));
-                toggleBelow.dispatchEvent(new MouseEvent("click", eventInit));
-              });
-              return;
-            }
-
-            event.stopPropagation();
-            event.preventDefault();
-            startClose$();
+            handleOverlayScrimPointerDown(event, () => startClose$());
           })}
         />
         <aside

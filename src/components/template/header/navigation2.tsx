@@ -209,7 +209,11 @@ export default component$(() => {
               {/* <span class="absolute -inset-2.5"></span> */}
               <span class="sr-only">View notifications</span>
               <svg
-                stroke="currentColor"
+                stroke={
+                  notificationsOpen.value
+                    ? "var(--primary)"
+                    : "var(--text2)"
+                }
                 fill="none"
                 stroke-width="1.5"
                 viewBox="0 0 24 26"
@@ -252,7 +256,7 @@ export default component$(() => {
               {/* <span class="absolute -inset-1.5"></span> */}
               <span class="sr-only">Open settings</span>
               <svg
-                stroke="currentColor"
+                stroke={isOpen.value ? "var(--primary)" : "var(--text2)"}
                 fill="none"
                 stroke-width="1.5"
                 viewBox="0 0 24 24"
@@ -295,7 +299,7 @@ export default component$(() => {
                 height="32"
                 viewBox="0 0 64 64"
                 fill="none"
-                stroke="currentColor"
+                stroke={accountOpen.value ? "var(--primary)" : "var(--text2)"}
                 stroke-width="3"
                 xmlns="http://www.w3.org/2000/svg"
               >

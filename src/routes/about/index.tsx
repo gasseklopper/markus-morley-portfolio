@@ -121,14 +121,41 @@ export default component$(() => {
   return (
     <div class="page relative text-[var(--text1)]">
       {/* Hero */}
-      <section class="relative h-72 w-full overflow-hidden rounded-b-xl">
-        <ImgHero alt="Applicant" class="h-full w-full object-cover" />
-        <div class="absolute inset-0 bg-gradient-to-tr from-[var(--surface1)] via-[var(--surface2)] to-transparent" />
-        <div class="absolute bottom-6 left-6">
-          <h1 class="text-4xl font-bold text-[var(--text1)]">About</h1>
-          <p class="mt-2 max-w-xl text-sm text-[var(--text2)]">
-            This page gives information about the site.
-          </p>
+      <section class="relative overflow-hidden rounded-b-3xl border-b-4 border-l-4 border-[var(--text1)] bg-[var(--surface1)] text-[var(--text1)] shadow-[12px_12px_0_0_var(--surface3)]">
+        <div
+          class="absolute inset-0 bg-[linear-gradient(135deg,var(--surface2)_0%,transparent_60%)]"
+          aria-hidden="true"
+        />
+        <div
+          class="absolute -top-24 right-16 h-64 w-64 rotate-6 border-4 border-[var(--text1)] bg-[var(--primary)] opacity-70 mix-blend-screen md:right-32"
+          aria-hidden="true"
+        />
+        <div class="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 py-16 md:flex-row md:items-end md:justify-between md:px-12">
+          <div class="max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.6em] text-[var(--text3)]">
+              Statement
+            </p>
+            <h1 class="mt-4 text-5xl font-black uppercase leading-[0.9] md:text-6xl">
+              Brutalist design & code for fearless brands.
+            </h1>
+            <p class="mt-6 max-w-xl text-base text-[var(--text2)] md:text-lg">
+              I'm Markus Morley, a hybrid designer and front-end engineer crafting
+              digital experiences with unapologetic personality and pixel-perfect
+              execution.
+            </p>
+          </div>
+          <div class="flex flex-col items-start gap-6 md:items-end">
+            <div class="inline-flex items-center gap-3 rounded-md border border-[var(--text1)] bg-[var(--surface1)] px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.35em]">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]" aria-hidden="true" />
+              Available for collaborations
+            </div>
+            <div class="relative -rotate-3 overflow-hidden border-4 border-[var(--text1)] bg-[var(--surface2)] shadow-[10px_10px_0_0_var(--text1)] transition hover:rotate-0">
+              <ImgHero alt="Markus Morley portrait" class="h-48 w-40 object-cover md:h-60 md:w-48" />
+              <div class="absolute inset-x-0 bottom-0 bg-[var(--surface1)]/80 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.4em] text-[var(--text1)]">
+                About
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

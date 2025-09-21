@@ -160,7 +160,7 @@ export default component$(() => {
 
       <AboutProfile />
 
-      <div class="mx-auto max-w-5xl px-4 py-16">
+      <div class="layout-shell px-6 py-16 md:px-12">
         {/* Intro */}
         <section>
           <h2 class="text-3xl font-bold text-[var(--text1)]">

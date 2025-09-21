@@ -1,6 +1,15 @@
 const HEADER_TOGGLE_SELECTOR =
   "[data-notifications-toggle],[data-preferences-toggle],[data-account-toggle]";
 
+export type OverlayScrimPointerEvent = PointerEvent & {
+  __overlayToggleForwarded?: true;
+};
+
+export const isOverlayToggleForwarded = (
+  event: PointerEvent,
+): event is OverlayScrimPointerEvent =>
+  Boolean((event as OverlayScrimPointerEvent).__overlayToggleForwarded);
+
 export const handleOverlayScrimPointerDown = (
   event: PointerEvent,
   startClose: () => void,
@@ -38,6 +47,9 @@ export const handleOverlayScrimPointerDown = (
   }
 
   if (toggleBelow) {
+    (event as OverlayScrimPointerEvent).__overlayToggleForwarded = true;
+    event.stopPropagation();
+
     const eventInit: PointerEventInit & MouseEventInit = {
       bubbles: true,
       cancelable: true,

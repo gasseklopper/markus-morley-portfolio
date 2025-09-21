@@ -16,7 +16,6 @@ import NotificationsPanel, { defaultNotifications } from "./notifications-panel"
 import AccountPanel from "./account-panel";
 import {
   HEADER_TOGGLE_EVENT,
-  dispatchHeaderOverlayToggle,
   type HeaderOverlayToggleId,
 } from "./overlay-scrim-handler";
 
@@ -143,6 +142,14 @@ export default component$(() => {
       }
     }),
   );
+  const toggleOverlay = $((toggleId: HeaderOverlayToggleId) => {
+    const next = !overlaySignals[toggleId].value;
+
+    (Object.keys(overlaySignals) as HeaderOverlayToggleId[]).forEach((key) => {
+      overlaySignals[key].value = key === toggleId ? next : false;
+    });
+  });
+
   useOnWindow(
     HEADER_TOGGLE_EVENT,
     $((event: Event) => {
@@ -154,13 +161,7 @@ export default component$(() => {
         return;
       }
 
-      const next = !overlaySignals[detail].value;
-
-      (Object.keys(overlaySignals) as HeaderOverlayToggleId[]).forEach(
-        (key) => {
-          overlaySignals[key].value = key === detail ? next : false;
-        },
-      );
+      void toggleOverlay(detail);
     }),
   );
   const overlayToggleButtonClass =
@@ -228,7 +229,7 @@ export default component$(() => {
               type="button"
               data-notifications-toggle
               aria-expanded={notificationsOpen.value ? "true" : "false"}
-              onClick$={$(() => dispatchHeaderOverlayToggle("notifications"))}
+              onClick$={[toggleOverlay, "notifications"]}
               class={[
                 overlayToggleButtonClass,
                 notificationsOpen.value
@@ -267,7 +268,7 @@ export default component$(() => {
             </button>
             <button
               data-preferences-toggle
-              onClick$={$(() => dispatchHeaderOverlayToggle("preferences"))}
+              onClick$={[toggleOverlay, "preferences"]}
               type="button"
               class={[
                 overlayToggleButtonClass,
@@ -300,7 +301,7 @@ export default component$(() => {
               type="button"
               data-account-toggle
               aria-expanded={accountOpen.value ? "true" : "false"}
-              onClick$={$(() => dispatchHeaderOverlayToggle("account"))}
+              onClick$={[toggleOverlay, "account"]}
               class={[
                 accountToggleButtonClass,
                 accountOpen.value

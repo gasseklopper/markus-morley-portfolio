@@ -89,6 +89,10 @@ export const Navigation = component$(() => {
           )
             ?.filter(
               (item) =>
+                !["/datenschutz", "/impressum"].includes(item.link.toLowerCase()),
+            )
+            .filter(
+              (item) =>
                 !item.flag || isFeatureEnabled(item.flag as FeatureFlag),
             )
             .map((item) => (

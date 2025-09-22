@@ -14,10 +14,7 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
 import AccountPanel from "./account-panel";
-import {
-  HEADER_TOGGLE_EVENT,
-  type HeaderOverlayToggleId,
-} from "./overlay-scrim-handler";
+import { type HeaderOverlayToggleId } from "./overlay-scrim-handler";
 
 type NavItem = {
   name: string;
@@ -150,20 +147,6 @@ export default component$(() => {
     });
   });
 
-  useOnWindow(
-    HEADER_TOGGLE_EVENT,
-    $((event: Event) => {
-      const { detail } = event as CustomEvent<
-        HeaderOverlayToggleId | undefined
-      >;
-
-      if (!detail) {
-        return;
-      }
-
-      void toggleOverlay(detail);
-    }),
-  );
   const toggleNotifications$ = $(() => {
     void toggleOverlay("notifications");
   });

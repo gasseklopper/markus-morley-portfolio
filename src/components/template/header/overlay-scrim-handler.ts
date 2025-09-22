@@ -13,8 +13,6 @@ export const HEADER_TOGGLE_SELECTOR = [
   ACCOUNT_TOGGLE_SELECTOR,
 ].join(",");
 
-export const HEADER_TOGGLE_EVENT = "header:toggle";
-
 const resolveHeaderToggleElement = (
   element: Element | null,
 ): HTMLElement | null =>
@@ -76,20 +74,6 @@ const findToggleBelowPointer = (event: PointerEvent): HTMLElement | null => {
   return resolveHeaderToggleElement(elementBelow);
 };
 
-export const dispatchHeaderOverlayToggle = (
-  toggle: HeaderOverlayToggleId,
-) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.dispatchEvent(
-    new CustomEvent<HeaderOverlayToggleId>(HEADER_TOGGLE_EVENT, {
-      detail: toggle,
-    }),
-  );
-};
-
 export const handleOverlayScrimPointerDown = (
   event: PointerEvent,
   startClose: () => void,
@@ -100,8 +84,22 @@ export const handleOverlayScrimPointerDown = (
   const toggleElement = directToggle ?? findToggleBelowPointer(event);
   const toggleId = getToggleIdFromElement(toggleElement);
 
-  if (toggleId) {
-    dispatchHeaderOverlayToggle(toggleId);
+  if (toggleId && toggleElement) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    Promise.resolve().then(() => {
+      if (typeof toggleElement.focus === "function") {
+        try {
+          toggleElement.focus({ preventScroll: true });
+        } catch {
+          toggleElement.focus();
+        }
+      }
+
+      toggleElement.click();
+    });
+
     return;
   }
 

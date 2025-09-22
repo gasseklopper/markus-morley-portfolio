@@ -14,7 +14,10 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
 import AccountPanel from "./account-panel";
-import { type HeaderOverlayToggleId } from "./overlay-scrim-handler";
+import {
+  HEADER_TOGGLE_EVENT,
+  type HeaderOverlayToggleId,
+} from "./overlay-scrim-handler";
 
 type NavItem = {
   name: string;
@@ -158,6 +161,20 @@ export default component$(() => {
   const toggleAccount$ = $(() => {
     void toggleOverlay("account");
   });
+
+  useOnWindow(
+    HEADER_TOGGLE_EVENT,
+    $((event: Event) => {
+      const detail = (
+        event as CustomEvent<{ toggleId?: HeaderOverlayToggleId }>
+      ).detail;
+      if (!detail?.toggleId) {
+        return;
+      }
+
+      void toggleOverlay(detail.toggleId);
+    }),
+  );
 
   const overlayToggleButtonClass =
     "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";

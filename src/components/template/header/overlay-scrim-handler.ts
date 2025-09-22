@@ -3,6 +3,12 @@ export type HeaderOverlayToggleId =
   | "preferences"
   | "account";
 
+export const HEADER_TOGGLE_EVENT = "header:toggle";
+
+type HeaderToggleEventDetail = {
+  toggleId: HeaderOverlayToggleId;
+};
+
 const NOTIFICATIONS_TOGGLE_SELECTOR = "[data-notifications-toggle]";
 const PREFERENCES_TOGGLE_SELECTOR = "[data-preferences-toggle]";
 const ACCOUNT_TOGGLE_SELECTOR = "[data-account-toggle]";
@@ -81,24 +87,20 @@ export const handleOverlayScrimPointerDown = (
   const directToggle = resolveHeaderToggleElement(
     event.target as Element | null,
   );
-  const toggleElement = directToggle ?? findToggleBelowPointer(event);
-  const toggleId = getToggleIdFromElement(toggleElement);
+  const toggleId = getToggleIdFromElement(
+    directToggle ?? findToggleBelowPointer(event),
+  );
 
-  if (toggleId && toggleElement) {
+  if (toggleId) {
     event.stopPropagation();
     event.preventDefault();
-
-    Promise.resolve().then(() => {
-      if (typeof toggleElement.focus === "function") {
-        try {
-          toggleElement.focus({ preventScroll: true });
-        } catch {
-          toggleElement.focus();
-        }
-      }
-
-      toggleElement.click();
-    });
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent<HeaderToggleEventDetail>(HEADER_TOGGLE_EVENT, {
+          detail: { toggleId },
+        }),
+      );
+    }
 
     return;
   }

@@ -1,4 +1,4 @@
-import { component$, useStyles$ } from "@builder.io/qwik";
+import { component$, useSignal, useStyles$ } from "@builder.io/qwik";
 import styles from "../index.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -74,6 +74,80 @@ const rawToolStackCMS = [
   "TanStack Query/Table",
 ];
 
+
+// ----------------------------------------------
+// Sample data (replace with CMS/JSON)
+// ----------------------------------------------
+interface Role {
+  company: string
+  title: string
+  period: string
+  location: string
+  bullets: string[]
+  tech: string[]
+}
+
+const experience: Role[] = [
+  {
+    company: "Freelance / Contract",
+    title: "Creative Developer / Senior Frontend Engineer",
+    period: "2020 – 2023",
+    location: "Remote / EU",
+    bullets: [
+      "Delivered scalable web apps & design systems for SaaS, fintech and e‑commerce",
+      "Drove performance optimisations; lighthouse +35–45% across key properties",
+      "Partnered with design to translate Figma prototypes into production",
+    ],
+    tech: ["React", "Next.js", "TypeScript", "GraphQL", "TanStack", "Contentful"],
+  },
+  {
+    company: "[Company Name]",
+    title: "Senior Frontend Engineer / Product Engineer",
+    period: "2018 – 2020",
+    location: "Frankfurt am Main",
+    bullets: [
+      "Led FE architecture for large‑scale platform (thousands of DAU)",
+      "Introduced component library & DX tooling; delivery time −30%",
+      "Mentored juniors; set standards & code review rituals",
+    ],
+    tech: ["React", "Next.js", "TypeScript", "Jest", "Cypress", "Storybook"],
+  },
+  {
+    company: "[Company Name]",
+    title: "Frontend Developer / UI Engineer",
+    period: "2014 – 2018",
+    location: "—",
+    bullets: [
+      "Built accessible, responsive interfaces for enterprise SaaS",
+      "Integrated REST/GraphQL APIs; implemented web performance budgets",
+    ],
+    tech: ["React", "Redux", "Sass", "Webpack", "GraphQL"],
+  },
+]
+
+interface EducationItem {
+  school: string
+  credential: string
+  period: string
+  notes?: string
+}
+
+const education: EducationItem[] = [
+  {
+    school: "Hochschule Darmstadt",
+    credential: "Diploma — Visual Communication / Interactive Media",
+    period: "2006 – 2010",
+    notes: "Focus on prototyping, interactive systems & photography",
+  },
+]
+
+interface ExhibitionItem { year: string; venue: string; title: string }
+const exhibitions: ExhibitionItem[] = [
+  { year: "2023", venue: "[Gallery] Frankfurt", title: "Hybrid Analog – Fractal Photonics" },
+  { year: "2022", venue: "[Gallery] London", title: "Generative Landscapes" },
+  { year: "2021", venue: "[Festival] Wiesbaden", title: "Light + Code" },
+];
+
 // const rawToolStack2 = [
 //   "Adobe CC",
 //   "Adobe Experience Manager",
@@ -144,12 +218,54 @@ const rawToolStackCMS = [
 // ];
 // console.log(rawToolStack2);
 
+
+export const Pill = component$((props: { label: string }) => {
+  return (
+    <span class="inline-flex items-center rounded-full border bg-slate-50 px-3 py-1 text-xs shadow-sm">
+      {props.label}
+    </span>
+  )
+})
+
+export const SectionTitle = component$((props: { label: string; sub?: string; icon?: 'building' | 'cap' | 'sparkles' }) => {
+  return (
+    <div class="flex items-start gap-3">
+      <div class="p-2 rounded-xl shadow-sm bg-white/60 backdrop-blur">
+        {/* tiny inline icons */}
+        {props.icon === 'building' && (
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 21h18M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M6 10h12M10 6h4M10 14h4M10 18h4" />
+          </svg>
+        )}
+        {props.icon === 'cap' && (
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 7l9-4 9 4-9 4-9-4z" /><path d="M21 10v6a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-6" />
+          </svg>
+        )}
+        {props.icon === 'sparkles' && (
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 3l1.5 3L10 7l-3.5 1L5 11 3.5 8 0 7l3.5-1L5 3zm14 2l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4zM9 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z" />
+          </svg>
+        )}
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold tracking-tight">{props.label}</h2>
+        {props.sub && <p class="mt-0.5 text-sm text-muted-foreground">{props.sub}</p>}
+      </div>
+    </div>
+  )
+});
+
 const toolStack = Array.from(new Set(rawToolStackCore)).sort((a, b) =>
   a.localeCompare(b, undefined, { sensitivity: "base" })
 );
 
 export default component$(() => {
   useStyles$(styles);
+
+  const tab = useSignal<'experience' | 'education' | 'exhibitions'>("experience")
+  const showExpo = useSignal(false);
+
   return (
     <div class="page relative text-[var(--text1)]">
       {/* Hero */}
@@ -229,6 +345,23 @@ export default component$(() => {
           </ul>
         </section>
 
+        { /* CMS & Platforms */}
+        <section class="mt-16">
+          <h2 class="text-3xl font-bold text-[var(--text1)]">CMS & Platforms</h2>
+          {/* <p class="mt-4 text-[var(--text2)]">
+            A curated set of tools, frameworks, and platforms I have experience with.
+          </p> */}
+          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
+            {rawToolStackCMS.map((tool) => (
+              <li key={tool}>
+                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
+                  {tool}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         {/* Also Experienced With  */}
         <section class="mt-16">
           <h2 class="text-3xl font-bold text-[var(--text1)]">Design & Prototyping</h2>
@@ -263,22 +396,123 @@ export default component$(() => {
           </ul>
         </section>
 
-        { /* CMS & Platforms */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">CMS & Platforms</h2>
-          {/* <p class="mt-4 text-[var(--text2)]">
-            A curated set of tools, frameworks, and platforms I have experience with.
-          </p> */}
-          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
-            {rawToolStackCMS.map((tool) => (
-              <li key={tool}>
-                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
-                  {tool}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {/* Resume */}
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          {/* Tabs header */}
+          <h2 class="text-3xl font-bold text-[var(--text1)]">Resume</h2>
+          <div class="mb-6">
+            <div class="grid w-full grid-cols-3 overflow-hidden rounded-2xl border bg-white/60 shadow-sm backdrop-blur">
+              {(['experience', 'education', 'exhibitions'] as const).map((key) => (
+                <button
+                  key={key}
+                  onClick$={() => (tab.value = key)}
+                  class={{
+                    'px-4 py-2 text-sm font-medium transition': true,
+                    'bg-white shadow-sm': tab.value === key,
+                    'text-muted-foreground hover:bg-white/50': tab.value !== key,
+                  }}
+                >
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Experience */}
+          {tab.value === 'experience' && (
+            <div class="grid gap-4 md:gap-6 lg:grid-cols-2">
+              {experience.map((role) => (
+                <div key={role.title} class="rounded-2xl border bg-gradient-to-b from-white/70 to-white/40 shadow-sm">
+                  <div class="p-5 pb-2">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-base font-semibold leading-tight">{role.title}</h3>
+                      <span class="text-xs text-muted-foreground">{role.period}</span>
+                    </div>
+                    <div class="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+                      {/* building icon */}
+                      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M6 10h12M10 6h4M10 14h4M10 18h4" /></svg>
+                      {role.company}
+                      <span class="mx-1">•</span>
+                      <span>{role.location}</span>
+                    </div>
+                  </div>
+                  <div class="p-5 pt-0">
+                    <ul class="list-disc space-y-1.5 pl-5 text-sm text-foreground/80">
+                      {role.bullets.map((b) => (
+                        <li key={b}>{b}</li>
+                      ))}
+                    </ul>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                      {role.tech.map((t) => (
+                        <Pill key={t} label={t} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Education */}
+          {tab.value === 'education' && (
+            <div class="rounded-2xl border bg-gradient-to-b from-white/70 to-white/40 shadow-sm">
+              <div class="p-6">
+                <SectionTitle label="Education" sub="Formal studies & credentials" icon="cap" />
+                <div class="mt-4 grid gap-4">
+                  {education.map((e) => (
+                    <div key={e.credential} class="grid gap-2 md:grid-cols-[1fr_auto] md:items-center">
+                      <div>
+                        <h3 class="font-medium">{e.credential}</h3>
+                        <p class="text-sm text-muted-foreground">{e.school}</p>
+                        {e.notes && <p class="mt-1 text-sm">{e.notes}</p>}
+                      </div>
+                      <div class="text-sm text-muted-foreground md:text-right">{e.period}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Exhibitions */}
+          {tab.value === 'exhibitions' && (
+            <div class="rounded-2xl border bg-gradient-to-b from-white/70 to-white/40 shadow-sm">
+              <div class="p-6">
+                <SectionTitle label="Exhibitions" sub="Selected shows & festivals" icon="sparkles" />
+                <div class="mt-4">
+                  <button
+                    class="w-full rounded-xl border px-4 py-2 text-left text-sm hover:bg-white/60"
+                    onClick$={() => (showExpo.value = !showExpo.value)}
+                  >
+                    {showExpo.value ? 'Hide list' : 'View list'}
+                  </button>
+                  <div class={{ 'grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-3': true, hidden: !showExpo.value }}>
+                    {exhibitions.map((ex) => (
+                      <div key={ex.title} class="rounded-xl border bg-white/60 p-3">
+                        <div class="text-xs text-muted-foreground">{ex.year}</div>
+                        <div class="font-medium leading-tight">{ex.title}</div>
+                        <div class="text-xs text-muted-foreground">{ex.venue}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Footer CTA */}
+          <div class="mt-10 flex flex-col items-center gap-3">
+            <p class="max-w-xl text-center text-sm text-muted-foreground">
+              Interested in collaborating? I build robust, elegant frontends and scalable design systems for ambitious teams.
+            </p>
+            <div class="flex gap-3">
+              <a href="/contact" class="rounded-2xl border bg-white px-4 py-2 shadow-sm hover:bg-white/80">Get in touch</a>
+              <a href="/portfolio" class="rounded-2xl border px-4 py-2 hover:bg-white/60">View portfolio</a>
+              <a href="/cv.pdf" class="rounded-2xl bg-black px-4 py-2 text-white hover:opacity-90">Download CV</a>
+            </div>
+          </div>
+        </div>
+
 
         {/* Resume */}
         <section class="mt-16">
@@ -512,6 +746,8 @@ export default component$(() => {
           </ul>
         </section>
       </div>
+
+
     </div>
   );
 });

@@ -31,19 +31,19 @@ const biographyItems: BiographyItem[] = [
 
 const services: Service[] = [
   {
-    title: "Product Design",
+    title: "Product Design & Prototyping",
     description:
-      "Designing thoughtful, inclusive digital journeys from discovery to delivery with a focus on measurable business impact.",
+      "Figma, design systems, rapid iteration. Crafting user-centric designs and interactive prototypes that align with business goals and user needs.",
   },
   {
     title: "Frontend Engineering",
     description:
-      "Building resilient, high-performance interfaces with modern frameworks, type-safe tooling, and automated quality gates.",
+      "React, Next.js, TypeScript, GraphQL. Crafting performant, accessible, and scalable web applications with modern frameworks and best practices.",
   },
   {
-    title: "Design Systems",
+    title: "Scalable Design Systems",
     description:
-      "Scaling design language and component libraries that empower teams with accessible tokens, documentation, and governance.",
+      "Building and maintaining component libraries for enterprise teams. Scaling design language and component libraries that empower teams with accessible tokens, documentation, and governance.",
   },
 ];
 
@@ -118,14 +118,12 @@ export const AboutProfile = component$(() => {
             <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
-                  Biography
+                  Markus Morley
                 </p>
-                <h3 class="text-3xl font-semibold text-[var(--text1)]">Biography</h3>
+                <h3 class="text-3xl font-semibold text-[var(--text1)]">Senior Frontend Engineer & Product Designer</h3>
               </div>
             </header>
-            <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
-              I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
-            </p>
+
             <dl class="about-profile__facts mt-8 gap-4">
               {biographyItems.map((item) => (
                 <div
@@ -139,6 +137,9 @@ export const AboutProfile = component$(() => {
                 </div>
               ))}
             </dl>
+            <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
+              Bridging design and engineering to craft scalable, performant, and user-focused digital experiences.
+            </p>
           </article>
 
           <article class="about-profile__services rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">

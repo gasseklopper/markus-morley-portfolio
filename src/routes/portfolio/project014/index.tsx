@@ -465,12 +465,12 @@ export default component$(() => {
           Data Visualization Projects
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
-          Visualization projects.
+          This choropleth pulls TopoJSON county shapes and education stats with parallel fetch calls, converts them with
+          topojson-client helpers, and renders the map through D3 geo paths, threshold color scales, and layered state meshes.
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
-          Finish them all to earn your Data Visualization certification.
+          Use the refresh-and-fetch button to fire both AJAX requests again, recompute the legend, and redraw the projection
+          so the map stays synced with the latest dataset.
         </p>
       </section>
 

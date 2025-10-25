@@ -8,7 +8,7 @@ import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
 const styles = `
-  .page {
+  .choropleth-page {
     display: grid;
     gap: clamp(2rem, 5vw, 3rem);
     padding: clamp(2.5rem, 4vw, 5rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 8vw, 6rem);
@@ -20,7 +20,7 @@ const styles = `
     min-height: 100vh;
   }
 
-  .map-shell {
+  .choropleth-page .map-shell {
     position: relative;
     margin: 0 auto;
     width: min(1040px, 100%);
@@ -37,7 +37,7 @@ const styles = `
     overflow: hidden;
   }
 
-  .map-shell::after {
+  .choropleth-page .map-shell::after {
     content: "";
     position: absolute;
     inset: 10% 15% auto auto;
@@ -49,27 +49,27 @@ const styles = `
     filter: blur(6px);
   }
 
-  header {
+  .choropleth-page header {
     display: grid;
     gap: 1rem;
     max-width: 720px;
   }
 
-  #title {
+  .choropleth-page #title {
     font-size: clamp(2.5rem, 4vw, 3.5rem);
     font-family: var(--font-semibold);
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
 
-  #description {
+  .choropleth-page #description {
     font-size: clamp(0.95rem, 1vw + 0.5rem, 1.125rem);
     color: var(--text2);
     line-height: 1.65;
     max-width: 56ch;
   }
 
-  svg {
+  .choropleth-page svg {
     width: 100%;
     height: auto;
     border-radius: 1.5rem;
@@ -82,7 +82,7 @@ const styles = `
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface-border) 40%, transparent);
   }
 
-  .county {
+  .choropleth-page .county {
     stroke: color-mix(in srgb, var(--surface-border) 55%, transparent);
     stroke-width: 0.4px;
     transition: transform 0.18s ease, filter 0.18s ease, stroke-width 0.18s ease;
@@ -90,41 +90,41 @@ const styles = `
     cursor: pointer;
   }
 
-  .county:hover,
-  .county:focus-visible {
+  .choropleth-page .county:hover,
+  .choropleth-page .county:focus-visible {
     stroke-width: 1.2px;
     filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--surface-shadow) 60%, transparent));
   }
 
-  .state-boundary {
+  .choropleth-page .state-boundary {
     fill: none;
     stroke: color-mix(in srgb, var(--surface-border) 96%, transparent);
     stroke-width: 1.2px;
     pointer-events: none;
   }
 
-  #legend {
+  .choropleth-page #legend {
     font-family: var(--font-medium);
     fill: color-mix(in srgb, var(--text2) 90%, transparent);
   }
 
-  #legend rect {
+  .choropleth-page #legend rect {
     stroke: color-mix(in srgb, var(--surface-border) 75%, transparent);
     stroke-width: 0.5px;
     rx: 6px;
   }
 
-  .legend-axis path,
-  .legend-axis line {
+  .choropleth-page .legend-axis path,
+  .choropleth-page .legend-axis line {
     stroke: color-mix(in srgb, var(--surface-border) 70%, transparent);
   }
 
-  .legend-axis text {
+  .choropleth-page .legend-axis text {
     fill: color-mix(in srgb, var(--text3) 96%, transparent);
     font-size: clamp(0.65rem, 0.6rem + 0.22vw, 0.8rem);
   }
 
-  #tooltip {
+  .choropleth-page #tooltip {
     position: absolute;
     pointer-events: none;
     opacity: 0;
@@ -142,16 +142,16 @@ const styles = `
     z-index: 10;
   }
 
-  #tooltip strong {
+  .choropleth-page #tooltip strong {
     font-family: var(--font-semibold);
   }
 
   @media (max-width: 768px) {
-    .map-shell {
+    .choropleth-page .map-shell {
       border-radius: 1.75rem;
     }
 
-    svg {
+    .choropleth-page svg {
       border-radius: 1.25rem;
     }
   }
@@ -411,7 +411,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="page">
+    <div class="page choropleth-page">
       <header>
         <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Visualization Studio</p>
         <h1 id="title">United States Education Attainment</h1>

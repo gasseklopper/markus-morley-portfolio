@@ -75,7 +75,7 @@ const styles = `
     max-width: 56ch;
   }
 
-  .choropleth-page svg {
+  .choropleth-page .map-shell svg {
     width: 100%;
     height: auto;
     border-radius: 1.5rem;
@@ -157,7 +157,7 @@ const styles = `
       border-radius: 1.75rem;
     }
 
-    .choropleth-page svg {
+  .choropleth-page .map-shell svg {
       border-radius: 1.25rem;
     }
   }

@@ -96,6 +96,12 @@
     "description": "Interactive D3 choropleth highlighting education attainment across U.S. counties."
   },
   {
+    "name": "Project 015",
+    "path": "/portfolio/project015",
+    "title": "Project 015 - Markus Morley personal portfolio",
+    "description": "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

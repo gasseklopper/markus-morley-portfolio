@@ -173,8 +173,16 @@ export default component$(() => {
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      const xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d")).ticks(width < 720 ? 6 : 10);
-      const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%M:%S")).ticks(8);
+      const xAxis = d3
+        .axisBottom<number>(xScale)
+        .tickFormat(d3.format("d"))
+        .ticks(width < 720 ? 6 : 10);
+
+      const timeFormatter = d3.timeFormat("%M:%S");
+      const yAxis = d3
+        .axisLeft<Date | d3.NumberValue>(yScale)
+        .tickFormat((value) => timeFormatter(value as Date))
+        .ticks(8);
 
       chartGroup
         .append("g")
@@ -241,17 +249,17 @@ export default component$(() => {
 
       points
         .on("mouseenter", function (event, d) {
-          showTooltip(event, d);
+          showTooltip(event as MouseEvent, d);
           d3.select(this).raise();
         })
         .on("mousemove", function (event, d) {
-          showTooltip(event, d);
+          showTooltip(event as MouseEvent, d);
         })
         .on("mouseleave", () => {
           hideTooltip();
         })
         .on("focus", function (event, d) {
-          showTooltip(event, d);
+          showTooltip(event as FocusEvent, d);
           d3.select(this).raise();
         })
         .on("blur", () => {

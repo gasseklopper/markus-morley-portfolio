@@ -132,9 +132,19 @@ export default component$(() => {
       svg.selectAll("*").remove();
       svg.attr("width", width).attr("height", height);
 
-      const xAxisScale = d3
+      const dateExtent = d3.extent(dataset, (d) => d.date);
+      const minDate = dateExtent[0];
+      const maxDate = dateExtent[1];
+
+      if (!minDate || !maxDate) {
+        return;
+      }
+
+      const lastDatePlusQuarter = d3.timeMonth.offset(maxDate, 3);
+
+      const xScale = d3
         .scaleTime()
-        .domain(d3.extent(dataset, (d) => d.date) as [Date, Date])
+        .domain([minDate, lastDatePlusQuarter])
         .range([0, innerWidth]);
 
       const yScale = d3
@@ -143,20 +153,18 @@ export default component$(() => {
         .nice()
         .range([innerHeight, 0]);
 
-      const xScale = d3
-        .scaleBand<string>()
-        .domain(dataset.map((d) => d.rawDate))
-        .range([0, innerWidth])
-        .paddingInner(0)
-        .paddingOuter(0);
-
-      const barWidth = xScale.bandwidth() || innerWidth / dataset.length;
+      const getBarWidth = (date: Date) => {
+        const currentX = xScale(date) ?? 0;
+        const nextQuarter = d3.timeMonth.offset(date, 3);
+        const nextX = xScale(nextQuarter) ?? innerWidth;
+        return Math.max(0, nextX - currentX);
+      };
 
       const chartGroup = svg
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      const xAxis = d3.axisBottom<Date>(xAxisScale).ticks(width < 720 ? 6 : 12);
+      const xAxis = d3.axisBottom<Date>(xScale).ticks(width < 720 ? 6 : 12);
       const yAxis = d3.axisLeft<number>(yScale);
 
       chartGroup
@@ -181,11 +189,11 @@ export default component$(() => {
         .attr("class", "bar")
         .attr("data-date", (d) => d.rawDate)
         .attr("data-gdp", (d) => d.gdp.toString())
-        .attr("x", (d) => xScale(d.rawDate) ?? 0)
+        .attr("x", (d) => xScale(d.date) ?? 0)
         .attr("y", (d) => yScale(d.gdp))
-        .attr("width", barWidth)
+        .attr("width", (d) => getBarWidth(d.date))
         .attr("height", (d) => innerHeight - yScale(d.gdp))
-        .attr("rx", Math.min(6, barWidth / 2))
+        .attr("rx", (d) => Math.min(6, getBarWidth(d.date) / 2))
         .attr("ry", (d) => Math.min(6, (innerHeight - yScale(d.gdp)) / 2))
         .on("mouseenter", function (event, d) {
           const [x, y] = d3.pointer(event, wrapperElement);

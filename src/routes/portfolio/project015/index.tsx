@@ -23,12 +23,16 @@ const caseStudyStyles = `
     text-align: center;
   }
 
+  .case-study-intro h1 {
+    color: var(--text1, #f8fafc);
+  }
+
   .case-study-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     justify-content: center;
-    color: color-mix(in srgb, var(--text1, #f8fafc) 70%, transparent);
+    color: var(--text3, #94a3b8);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.32em;
@@ -37,13 +41,14 @@ const caseStudyStyles = `
   .case-study-description {
     font-size: clamp(1rem, 0.9rem + 0.4vw, 1.15rem);
     line-height: 1.7;
-    color: color-mix(in srgb, var(--text1, #f8fafc) 78%, transparent);
+    color: var(--text2, #e2e8f0);
     max-width: 72ch;
   }
 
   .case-study-layout {
     display: grid;
     gap: clamp(2rem, 5vw, 3rem);
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .case-study-notes {
@@ -60,13 +65,13 @@ const caseStudyStyles = `
     text-transform: uppercase;
     letter-spacing: 0.24em;
     font-size: 0.95rem;
-    color: color-mix(in srgb, var(--text1, #f8fafc) 86%, transparent);
+    color: var(--text1, #f8fafc);
   }
 
   .case-study-notes p {
     text-align: left;
     max-width: none;
-    color: color-mix(in srgb, var(--text1, #f8fafc) 72%, transparent);
+    color: var(--text2, #e2e8f0);
   }
 
   .open-demo-link {
@@ -93,11 +98,9 @@ const caseStudyStyles = `
     box-shadow: 0 24px 80px color-mix(in srgb, var(--primary, #38bdf8) 55%, transparent);
   }
 
-  @media (min-width: 1024px) {
-    .case-study-layout {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-      align-items: start;
-    }
+  .visual-wrapper {
+    justify-self: center;
+    width: 100%;
   }
 `;
 

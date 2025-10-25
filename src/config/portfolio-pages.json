@@ -78,6 +78,12 @@
     "description": "Interactive D3 bar chart visualizing US GDP."
   },
   {
+    "name": "Project 012",
+    "path": "/portfolio/project012",
+    "title": "Project 012 - Markus Morley personal portfolio",
+    "description": "Interactive D3 scatterplot visualizing professional cycling times."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

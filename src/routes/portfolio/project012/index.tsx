@@ -124,6 +124,12 @@ const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenc
 const FCC_TEST_SCRIPT_ID = "fcc-testable-projects";
 const FCC_TEST_SCRIPT_SRC = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
 
+const triggerDomContentLoaded = () => {
+  if (document.readyState !== "loading") {
+    document.dispatchEvent(new Event("DOMContentLoaded"));
+  }
+};
+
 interface CyclistDatum {
   name: string;
   nationality: string;
@@ -144,7 +150,9 @@ export default component$(() => {
   // Load FCC testing bundle for manual verification when available
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (document.getElementById(FCC_TEST_SCRIPT_ID)) {
+    const existingScript = document.getElementById(FCC_TEST_SCRIPT_ID);
+    if (existingScript) {
+      triggerDomContentLoaded();
       return;
     }
 
@@ -152,6 +160,7 @@ export default component$(() => {
     script.id = FCC_TEST_SCRIPT_ID;
     script.src = FCC_TEST_SCRIPT_SRC;
     script.async = true;
+    script.addEventListener("load", triggerDomContentLoaded);
     document.body.appendChild(script);
 
     return () => {

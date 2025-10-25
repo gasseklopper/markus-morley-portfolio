@@ -59,6 +59,8 @@ const styles = `
 `;
 
 const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
+const FCC_TEST_SCRIPT_ID = "fcc-testable-projects";
+const FCC_TEST_SCRIPT_SRC = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
 
 interface GdpDatum {
   date: Date;
@@ -72,6 +74,24 @@ export default component$(() => {
   const svgRef = useSignal<SVGSVGElement>();
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
+
+  // Load FCC testing bundle for manual verification when available
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (document.getElementById(FCC_TEST_SCRIPT_ID)) {
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = FCC_TEST_SCRIPT_ID;
+    script.src = FCC_TEST_SCRIPT_SRC;
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      script.remove();
+    };
+  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
@@ -103,7 +123,7 @@ export default component$(() => {
       svg.selectAll("*").remove();
       svg.attr("width", width).attr("height", height);
 
-      const xScale = d3
+      const xAxisScale = d3
         .scaleTime()
         .domain(d3.extent(dataset, (d) => d.date) as [Date, Date])
         .range([0, innerWidth]);
@@ -114,13 +134,20 @@ export default component$(() => {
         .nice()
         .range([innerHeight, 0]);
 
-      const barWidth = innerWidth / dataset.length;
+      const xScale = d3
+        .scaleBand<string>()
+        .domain(dataset.map((d) => d.rawDate))
+        .range([0, innerWidth])
+        .paddingInner(0)
+        .paddingOuter(0);
+
+      const barWidth = xScale.bandwidth() || innerWidth / dataset.length;
 
       const chartGroup = svg
         .append("g")
         .attr("transform", `translate(${margin.left},${margin.top})`);
 
-      const xAxis = d3.axisBottom<Date>(xScale).ticks(width < 720 ? 6 : 12);
+      const xAxis = d3.axisBottom<Date>(xAxisScale).ticks(width < 720 ? 6 : 12);
       const yAxis = d3.axisLeft<number>(yScale);
 
       chartGroup
@@ -145,7 +172,7 @@ export default component$(() => {
         .attr("class", "bar")
         .attr("data-date", (d) => d.rawDate)
         .attr("data-gdp", (d) => d.gdp.toString())
-        .attr("x", (d) => xScale(d.date) ?? 0)
+        .attr("x", (d) => xScale(d.rawDate) ?? 0)
         .attr("y", (d) => yScale(d.gdp))
         .attr("width", barWidth)
         .attr("height", (d) => innerHeight - yScale(d.gdp))

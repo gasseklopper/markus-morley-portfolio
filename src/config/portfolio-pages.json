@@ -90,6 +90,12 @@
     "description": "Interactive D3 heat map visualizing global temperature variance."
   },
   {
+    "name": "Project 014",
+    "path": "/portfolio/project014",
+    "title": "Project 014 - Markus Morley personal portfolio",
+    "description": "Interactive D3 choropleth highlighting education attainment across U.S. counties."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

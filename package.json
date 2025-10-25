@@ -58,6 +58,7 @@
     "storybook-framework-qwik": "^0.4.3",
     "tailwindcss": "^4.1.4",
     "typescript": "5.4.5",
+    "@types/topojson-client": "^3.1.5",
     "typescript-eslint": "8.26.1",
     "undici": "*",
     "vite": "^5.4.19",
@@ -66,6 +67,7 @@
   },
   "dependencies": {
     "d3": "^7.9.0",
+    "topojson-client": "^3.1.0",
     "gsap": "^3.13.0",
     "normalize.css": "^8.0.1",
     "p5": "^1.11.10"

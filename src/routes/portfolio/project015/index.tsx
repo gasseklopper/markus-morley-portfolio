@@ -111,6 +111,15 @@ interface TreeMapNode {
 const DATASET_URL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json";
 
+const FCC_TEST_SCRIPT_ID = "fcc-testable-projects";
+const FCC_TEST_SCRIPT_SRC = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
+
+const triggerDomContentLoaded = () => {
+  if (document.readyState !== "loading") {
+    document.dispatchEvent(new Event("DOMContentLoaded"));
+  }
+};
+
 const COLOR_PALETTE = [
   "#38bdf8",
   "#22d3ee",
@@ -134,6 +143,29 @@ export default component$(() => {
     const container = d3.select<HTMLElement, unknown>("#treemap-container");
     if (container.empty()) {
       return;
+    }
+
+    let cleanupTestScript: (() => void) | undefined;
+    const existingScript = document.getElementById(FCC_TEST_SCRIPT_ID);
+    if (existingScript) {
+      triggerDomContentLoaded();
+    } else {
+      const script = document.createElement("script");
+      const handleLoad = () => {
+        script.removeEventListener("load", handleLoad);
+        triggerDomContentLoaded();
+      };
+
+      script.id = FCC_TEST_SCRIPT_ID;
+      script.src = FCC_TEST_SCRIPT_SRC;
+      script.async = true;
+      script.addEventListener("load", handleLoad);
+      document.body.append(script);
+
+      cleanupTestScript = () => {
+        script.removeEventListener("load", handleLoad);
+        script.remove();
+      };
     }
 
     const data = (await fetch(DATASET_URL).then((response) => response.json())) as TreeMapNode;
@@ -254,13 +286,9 @@ export default component$(() => {
       .attr("y", legendRectSize - 4)
       .text((category) => category);
 
-    if (d3.select<HTMLScriptElement, unknown>("#fcc-test-suite").empty()) {
-      const script = document.createElement("script");
-      script.id = "fcc-test-suite";
-      script.src = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
-      script.async = true;
-      document.body.append(script);
-    }
+    return () => {
+      cleanupTestScript?.();
+    };
   });
 
   return (

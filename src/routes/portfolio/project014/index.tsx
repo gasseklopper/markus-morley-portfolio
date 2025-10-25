@@ -2,6 +2,7 @@ import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@build
 import * as d3 from "d3";
 import { feature, mesh } from "topojson-client";
 import type { Feature, FeatureCollection, Geometry, MultiLineString } from "geojson";
+import type { GeoPermissibleObjects } from "d3";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -283,9 +284,12 @@ export default component$(() => {
           .append("g")
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const geoPath = d3.geoPath();
         const mapWidth = width - margin.left - margin.right;
         const mapHeight = height - margin.top - margin.bottom - 120;
+        const projection = d3
+          .geoAlbersUsa()
+          .fitSize([mapWidth, mapHeight], countyFeatures as unknown as GeoPermissibleObjects);
+        const geoPath = d3.geoPath(projection);
 
         const mapGroup = chartGroup
           .append("g")
@@ -341,10 +345,13 @@ export default component$(() => {
           });
 
         if (stateMesh) {
-          statesGroup
-            .append("path")
-            .attr("class", "state-boundary")
-            .attr("d", geoPath(stateMesh));
+          const statePath = geoPath(stateMesh as unknown as GeoPermissibleObjects);
+          if (statePath) {
+            statesGroup
+              .append("path")
+              .attr("class", "state-boundary")
+              .attr("d", statePath);
+          }
         }
 
         const legendWidth = Math.min(mapWidth, 520);
@@ -384,15 +391,6 @@ export default component$(() => {
           .attr("y", 52)
           .attr("text-anchor", "middle")
           .text("Adults with bachelor's degree or higher");
-
-        const mapBBox = mapGroup.node()?.getBBox();
-        if (mapBBox) {
-          const scale = Math.min(mapWidth / mapBBox.width, mapHeight / mapBBox.height);
-          const translateX = (mapWidth - scale * mapBBox.width) / 2 - scale * mapBBox.x;
-          const translateY = (mapHeight - scale * mapBBox.height) / 2 - scale * mapBBox.y;
-
-          mapGroup.attr("transform", `translate(${translateX}, ${translateY}) scale(${scale})`);
-        }
       };
 
       renderChart();

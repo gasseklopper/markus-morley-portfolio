@@ -13,10 +13,10 @@ const styles = `
   .chart-theme {
     --chart-bg-1: color-mix(in srgb, var(--surface-glass-1) 82%, transparent);
     --chart-bg-2: color-mix(in srgb, var(--surface-glass-2) 88%, transparent);
-    --chart-dot-clean-fill: color-mix(in srgb, var(--primary) 82%, #ffffff 18%);
-    --chart-dot-clean-stroke: color-mix(in srgb, var(--primary) 96%, #ffffff 4%);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--quaternary) 82%, #ffffff 18%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--quaternary) 96%, #ffffff 4%);
+    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 86%, #ffffff 14%);
+    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
+    --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 82%, #ffffff 18%);
+    --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #ffffff 4%);
   }
 
   svg {
@@ -31,19 +31,19 @@ const styles = `
   :global([data-theme="dark"]) .chart-theme {
     --chart-bg-1: color-mix(in srgb, var(--surface2) 72%, rgba(148, 163, 184, 0.25) 28%);
     --chart-bg-2: color-mix(in srgb, var(--surface3) 82%, rgba(148, 163, 184, 0.18) 18%);
+    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 88%, #f8fafc 12%);
+    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 96%, #f8fafc 4%);
     --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 88%, #f8fafc 12%);
     --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #f8fafc 4%);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--quaternary) 88%, #f8fafc 12%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--quaternary) 96%, #f8fafc 4%);
   }
 
   :global([data-theme="neon"]) .chart-theme {
     --chart-bg-1: color-mix(in srgb, #062438 70%, rgba(57, 255, 20, 0.12) 30%);
     --chart-bg-2: color-mix(in srgb, #092f47 82%, rgba(0, 229, 255, 0.16) 18%);
+    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 90%, #ffffff 10%);
+    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
     --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 90%, #ffffff 10%);
     --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 98%, #ffffff 2%);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--tertiary) 90%, #ffffff 10%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--tertiary) 98%, #ffffff 2%);
   }
 
   #tooltip {
@@ -261,6 +261,12 @@ export default component$(() => {
           .data(dataset)
           .join("circle")
           .attr("class", (d) => `dot ${d.doping ? "dot--doping" : "dot--clean"}`)
+          .attr("fill", (d) =>
+            d.doping ? "var(--chart-dot-doping-fill)" : "var(--chart-dot-clean-fill)"
+          )
+          .attr("stroke", (d) =>
+            d.doping ? "var(--chart-dot-doping-stroke)" : "var(--chart-dot-clean-stroke)"
+          )
           .attr("r", dotRadius)
           .attr("cx", (d) => xScale(d.year))
           .attr("cy", (d) => yScale(d.time))
@@ -377,7 +383,17 @@ export default component$(() => {
           .attr("r", dotRadius)
           .attr("cx", 0)
           .attr("cy", 0)
-          .attr("class", (d) => `dot ${d.className}`);
+          .attr("class", (d) => `dot ${d.className}`)
+          .attr("fill", (d) =>
+            d.className === "dot--doping"
+              ? "var(--chart-dot-doping-fill)"
+              : "var(--chart-dot-clean-fill)"
+          )
+          .attr("stroke", (d) =>
+            d.className === "dot--doping"
+              ? "var(--chart-dot-doping-stroke)"
+              : "var(--chart-dot-clean-stroke)"
+          );
 
         legendGroup
           .append("text")

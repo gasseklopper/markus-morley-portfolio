@@ -478,7 +478,7 @@ export default component$(() => {
         <button
           type="button"
           onClick$={handleRefresh}
-          class="inline-flex items-center gap-2 rounded-full border border-transparent bg-transparent px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+          class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isLoading.value}
         >
           <svg
@@ -487,7 +487,7 @@ export default component$(() => {
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
-            class={`h-4 w-4 ${isLoading.value ? "animate-spin" : ""}`}
+            class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
             aria-hidden="true"
           >
             <path

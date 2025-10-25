@@ -1,4 +1,4 @@
-import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useSignal, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
 import * as d3 from "d3";
 import { feature, mesh } from "topojson-client";
 import type { Feature, FeatureCollection, Geometry, MultiLineString } from "geojson";
@@ -181,16 +181,16 @@ type CountyObjects = {
 };
 
 const colorPalette = [
-  "#eef2ff",
-  "#c7d2fe",
-  "#a5b4fc",
-  "#818cf8",
-  "#6366f1",
-  "#4f46e5",
+  "#f1f5ff",
+  "#dbeafe",
+  "#bfdbfe",
+  "#93c5fd",
+  "#60a5fa",
+  "#3b82f6",
 ];
 
 export default component$(() => {
-  useStylesScoped$(styles);
+  useStyles$(styles);
 
   const svgRef = useSignal<SVGSVGElement>();
   const tooltipRef = useSignal<HTMLDivElement>();
@@ -285,9 +285,10 @@ export default component$(() => {
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
         const mapWidth = width - margin.left - margin.right;
-        const mapHeight = height - margin.top - margin.bottom - 120;
+        const legendSpace = width > 720 ? 110 : 130;
+        const mapHeight = height - margin.top - margin.bottom - legendSpace;
         const projection = d3
-          .geoAlbersUsa()
+          .geoIdentity()
           .fitSize([mapWidth, mapHeight], countyFeatures as unknown as GeoPermissibleObjects);
         const geoPath = d3.geoPath(projection);
 

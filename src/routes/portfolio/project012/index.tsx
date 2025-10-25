@@ -71,6 +71,10 @@ const styles = `
     cursor: pointer;
   }
 
+  .legend-dot {
+    stroke-width: 1.5px;
+  }
+
   .dot:focus-visible {
     outline: none;
     filter: drop-shadow(0 0 12px color-mix(in srgb, var(--primary) 50%, transparent));
@@ -395,7 +399,7 @@ export default component$(() => {
           .attr("r", dotRadius)
           .attr("cx", 0)
           .attr("cy", 0)
-          .attr("class", (d) => `dot ${d.className}`)
+          .attr("class", (d) => `legend-dot ${d.className}`)
           .attr("fill", (d) =>
             d.className === "dot--doping"
               ? "var(--chart-dot-doping-fill)"

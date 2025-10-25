@@ -515,12 +515,12 @@ export default component$(() => {
           Data Visualization Projects
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
-          Visualization projects.
+          The heat map ingests the NASA temperature dataset via fetch, then leans on D3 band scales and threshold color ramps
+          to position each month while encoding variance with an accessible tooltip and keyboard support.
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
-          Finish them all to earn your Data Visualization certification.
+          Trigger the refresh-and-fetch control to repeat the AJAX workflow, recompute the legend, and redraw the grid so the
+          visualization reflects the latest payload end-to-end.
         </p>
       </div>
 

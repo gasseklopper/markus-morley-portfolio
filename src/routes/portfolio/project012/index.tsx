@@ -492,12 +492,12 @@ export default component$(() => {
           Data Visualization Projects
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
-          Visualization projects.
+          Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
+          scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
-          Finish them all to earn your Data Visualization certification.
+          Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
+          and interactions respond to the live dataset.
         </p>
       </div>
 

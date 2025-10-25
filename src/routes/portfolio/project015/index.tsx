@@ -350,12 +350,12 @@ export default component$(() => {
             Data Visualization Projects
           </p>
           <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
-            Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
-            Visualization projects.
+            The treemap consumes the FreeCodeCamp video game sales feed with fetch, shapes it into a D3 hierarchy, and applies
+            the treemap layout to size every rectangle by revenue while tinting genres with a custom palette.
           </p>
           <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
-            In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
-            Finish them all to earn your Data Visualization certification.
+            Tap the refresh-and-fetch control to rerun the AJAX call, rebuild the hierarchy, and regenerate tooltips so the
+            interactive grid always reflects the live dataset.
           </p>
         </section>
 

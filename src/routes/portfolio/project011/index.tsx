@@ -295,12 +295,12 @@ export default component$(() => {
           Data Visualization Projects
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
-          Visualization projects.
+          This build streams the Federal Reserve GDP archive through fetch, then channels the JSON into D3 time and linear
+          scales to plot each quarter with precise axes, transitions, and accessible tooltips.
         </p>
         <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
-          Finish them all to earn your Data Visualization certification.
+          The refresh-and-fetch button reruns the AJAX request on demand, rebuilding the SVG so you can watch the data
+          pipeline power this certification project in real time.
         </p>
       </div>
 

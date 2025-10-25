@@ -1,4 +1,10 @@
-import { component$, useSignal, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStyles$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import * as d3 from "d3";
 import { feature, mesh } from "topojson-client";
 import type { Feature, FeatureCollection, Geometry, MultiLineString } from "geojson";
@@ -69,7 +75,7 @@ const styles = `
     max-width: 56ch;
   }
 
-  .choropleth-page svg {
+  .choropleth-page .map-shell svg {
     width: 100%;
     height: auto;
     border-radius: 1.5rem;
@@ -151,7 +157,7 @@ const styles = `
       border-radius: 1.75rem;
     }
 
-    .choropleth-page svg {
+  .choropleth-page .map-shell svg {
       border-radius: 1.25rem;
     }
   }
@@ -195,6 +201,15 @@ export default component$(() => {
   const svgRef = useSignal<SVGSVGElement>();
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
+  const isLoading = useSignal(true);
+  const errorMessage = useSignal<string | null>(null);
+  const refreshCounter = useSignal(0);
+
+  const handleRefresh = $(() => {
+    isLoading.value = true;
+    errorMessage.value = null;
+    refreshCounter.value++;
+  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -217,22 +232,38 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(async ({ track }) => {
+    track(() => refreshCounter.value);
+
     const svgElement = svgRef.value;
     const tooltipElement = tooltipRef.value;
     const wrapperElement = wrapperRef.value;
 
     if (!svgElement || !tooltipElement || !wrapperElement) {
+      isLoading.value = false;
       return;
     }
 
     const svg = d3.select(svgElement);
     const tooltip = d3.select(tooltipElement);
+    let cleanup: (() => void) | undefined;
 
     try {
+      isLoading.value = true;
+      errorMessage.value = null;
       const [educationResponse, countyResponse] = await Promise.all([
-        fetch(EDUCATION_DATA_URL),
-        fetch(COUNTY_DATA_URL),
+        fetch(EDUCATION_DATA_URL, {
+          headers: {
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        }),
+        fetch(COUNTY_DATA_URL, {
+          headers: {
+            Accept: "application/json",
+          },
+          cache: "no-store",
+        }),
       ]);
 
       if (!educationResponse.ok || !countyResponse.ok) {
@@ -402,12 +433,20 @@ export default component$(() => {
 
       resizeObserver.observe(wrapperElement);
 
-      return () => {
+      cleanup = () => {
         resizeObserver.disconnect();
+        svg.selectAll("*").remove();
       };
     } catch (error) {
       console.error(error);
+      errorMessage.value = "Failed to load county education data. Please try again.";
+    } finally {
+      isLoading.value = false;
     }
+
+    return () => {
+      cleanup?.();
+    };
   });
 
   return (
@@ -420,6 +459,52 @@ export default component$(() => {
           U.S. counties. Hover to reveal local insights and watch the legend adapt responsively to the canvas.
         </p>
       </header>
+
+      <section class="mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
+        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+          Data Visualization Projects
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
+          Visualization projects.
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
+          Finish them all to earn your Data Visualization certification.
+        </p>
+      </section>
+
+      <div class="mx-auto mt-8 flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+        <button
+          type="button"
+          onClick$={handleRefresh}
+          class="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface-glass-1)_70%,transparent)] px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.18em] text-[var(--text3)] shadow-sm transition-all duration-200 hover:border-[var(--primary)]/50 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+          disabled={isLoading.value}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            class={`h-[0.65rem] w-[0.65rem] ${isLoading.value ? "animate-spin" : ""}`}
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+            />
+          </svg>
+          {isLoading.value ? "Refreshing" : "Refresh data"}
+        </button>
+        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+          {isLoading.value && <span>Loading dataset…</span>}
+          {!isLoading.value && errorMessage.value && (
+            <span class="text-[var(--primary)]">{errorMessage.value}</span>
+          )}
+        </div>
+      </div>
 
       <section class="map-shell" ref={wrapperRef}>
         <svg ref={svgRef} role="img" aria-labelledby="title description" />

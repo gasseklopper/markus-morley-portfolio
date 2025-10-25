@@ -205,8 +205,8 @@ export default component$(() => {
         const isCompact = width < 720;
         const height = isCompact ? 480 : 520;
         const margin = isCompact
-          ? { top: 72, right: 40, bottom: 76, left: 68 }
-          : { top: 84, right: 60, bottom: 64, left: 80 };
+          ? { top: 72, right: 40, bottom: 136, left: 68 }
+          : { top: 84, right: 60, bottom: 124, left: 80 };
         const innerWidth = Math.max(width - margin.left - margin.right, 200);
         const innerHeight = height - margin.top - margin.bottom;
 
@@ -362,10 +362,13 @@ export default component$(() => {
           .attr("font-family", "var(--font-medium)")
           .text("Year");
 
+        const legendYOffset = innerHeight + (isCompact ? 96 : 80);
+        const legendXOffset = 0;
+
         const legend = chartGroup
           .append("g")
           .attr("id", "legend")
-          .attr("transform", isCompact ? `translate(0, ${innerHeight + 32})` : `translate(${Math.max(innerWidth - 220, 0)}, -44)`);
+          .attr("transform", `translate(${legendXOffset}, ${legendYOffset})`);
 
         const legendItems: Array<{ label: string; className: string }> = [
           { label: "Riders with doping allegations", className: "dot--doping" },

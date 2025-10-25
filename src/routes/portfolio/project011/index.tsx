@@ -133,7 +133,17 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const response = await fetch(DATA_URL);
+      const response = await fetch(DATA_URL, {
+        headers: {
+          Accept: "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
       const payload: { data: [string, number][] } = await response.json();
 
       const dataset: GdpDatum[] = payload.data.map(([date, gdp]) => ({
@@ -298,7 +308,7 @@ export default component$(() => {
         <button
           type="button"
           onClick$={handleRefresh}
-          class="inline-flex items-center gap-2 rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-colors duration-300 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+          class="inline-flex items-center gap-2 rounded-full border border-transparent bg-transparent px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
           disabled={isLoading.value}
         >
           <svg

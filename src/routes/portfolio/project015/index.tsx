@@ -187,7 +187,18 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const data = (await fetch(DATASET_URL).then((response) => response.json())) as TreeMapNode;
+      const response = await fetch(DATASET_URL, {
+        headers: {
+          Accept: "application/json",
+        },
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const data = (await response.json()) as TreeMapNode;
 
       const width = 960;
       const height = 600;
@@ -352,7 +363,7 @@ export default component$(() => {
           <button
             type="button"
             onClick$={handleRefresh}
-            class="inline-flex items-center gap-2 rounded-full border border-[var(--surface-border, #1e293b)] bg-[color-mix(in_srgb,var(--surface-glass-2, rgba(30,41,59,0.72))_95%,transparent)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text2, #cbd5f5)] shadow-[0_12px_36px_rgba(15,23,42,0.45)] transition-colors duration-300 hover:border-[var(--primary, #38bdf8)] hover:text-[var(--primary, #38bdf8)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] disabled:cursor-not-allowed disabled:opacity-70"
+            class="inline-flex items-center gap-2 rounded-full border border-transparent bg-transparent px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-[var(--text3, #94a3b8)] transition-colors duration-200 hover:text-[var(--primary, #38bdf8)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isLoading.value}
           >
             <svg

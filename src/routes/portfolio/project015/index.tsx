@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$, useStylesScoped$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useVisibleTask$, useStylesScoped$ } from "@builder.io/qwik";
 import * as d3 from "d3";
 import treemapStyles from "./treemap.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
@@ -141,10 +141,23 @@ const COLOR_PALETTE = [
 export default component$(() => {
   useStylesScoped$(`${treemapStyles}\n${caseStudyStyles}`);
 
+  const isLoading = useSignal(true);
+  const errorMessage = useSignal<string | null>(null);
+  const refreshCounter = useSignal(0);
+
+  const handleRefresh = $(() => {
+    isLoading.value = true;
+    errorMessage.value = null;
+    refreshCounter.value++;
+  });
+
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(async ({ track }) => {
+    track(() => refreshCounter.value);
+
     const container = d3.select<HTMLElement, unknown>("#treemap-container");
     if (container.empty()) {
+      isLoading.value = false;
       return;
     }
 
@@ -171,126 +184,136 @@ export default component$(() => {
       };
     }
 
-    const data = (await fetch(DATASET_URL).then((response) => response.json())) as TreeMapNode;
+    try {
+      isLoading.value = true;
+      errorMessage.value = null;
+      const data = (await fetch(DATASET_URL).then((response) => response.json())) as TreeMapNode;
 
-    const width = 960;
-    const height = 600;
+      const width = 960;
+      const height = 600;
 
-    const hierarchyRoot = d3
-      .hierarchy<TreeMapNode>(data)
-      .sum((d) => d.value)
-      .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+      const hierarchyRoot = d3
+        .hierarchy<TreeMapNode>(data)
+        .sum((d) => d.value)
+        .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
-    const treemap = d3.treemap<TreeMapNode>().size([width, height]).paddingInner(2).round(true);
+      const treemap = d3.treemap<TreeMapNode>().size([width, height]).paddingInner(2).round(true);
 
-    const root = treemap(hierarchyRoot);
+      const root = treemap(hierarchyRoot);
 
-    const leaves = root.leaves();
-    const categories = Array.from(new Set(leaves.map((leaf) => leaf.data.category)));
+      const leaves = root.leaves();
+      const categories = Array.from(new Set(leaves.map((leaf) => leaf.data.category)));
 
-    const color = d3
-      .scaleOrdinal<string, string>()
-      .domain(categories)
-      .range(COLOR_PALETTE.slice(0, Math.max(categories.length, 2)));
+      const color = d3
+        .scaleOrdinal<string, string>()
+        .domain(categories)
+        .range(COLOR_PALETTE.slice(0, Math.max(categories.length, 2)));
 
-    container.selectAll("*").remove();
+      container.selectAll("*").remove();
 
-    const svg = container
-      .append("svg")
-      .attr("class", "treemap-svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", `0 0 ${width} ${height}`)
-      .attr("role", "img")
-      .attr("aria-labelledby", "title description");
+      const svg = container
+        .append("svg")
+        .attr("class", "treemap-svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("role", "img")
+        .attr("aria-labelledby", "title description");
 
-    const tooltip = d3.select<HTMLDivElement, unknown>("#tooltip");
+      const tooltip = d3.select<HTMLDivElement, unknown>("#tooltip");
 
-    const tiles = svg
-      .selectAll<SVGGElement, typeof leaves[number]>("g")
-      .data(leaves)
-      .join("g")
-      .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+      const tiles = svg
+        .selectAll<SVGGElement, typeof leaves[number]>("g")
+        .data(leaves)
+        .join("g")
+        .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
 
-    tiles
-      .append("rect")
-      .attr("class", "tile")
-      .attr("data-name", (d) => d.data.name)
-      .attr("data-category", (d) => d.data.category)
-      .attr("data-value", (d) => d.data.value)
-      .attr("width", (d) => Math.max(0, d.x1 - d.x0))
-      .attr("height", (d) => Math.max(0, d.y1 - d.y0))
-      .attr("fill", (d) => color(d.data.category))
-      .on("mousemove", (event, d) => {
-        const [x, y] = [event.clientX + 20, event.clientY - 28];
-        tooltip
-          .classed("visible", true)
-          .style("left", `${x}px`)
-          .style("top", `${y}px`)
-          .attr("data-value", d.data.value)
-          .html(
-            `<strong>${d.data.name}</strong><br />Category: ${d.data.category}<br />Value: ${d.data.value.toLocaleString()}`,
-          );
-      })
-      .on("mouseleave", () => {
-        tooltip.classed("visible", false);
-      });
+      tiles
+        .append("rect")
+        .attr("class", "tile")
+        .attr("data-name", (d) => d.data.name)
+        .attr("data-category", (d) => d.data.category)
+        .attr("data-value", (d) => d.data.value)
+        .attr("width", (d) => Math.max(0, d.x1 - d.x0))
+        .attr("height", (d) => Math.max(0, d.y1 - d.y0))
+        .attr("fill", (d) => color(d.data.category))
+        .on("mousemove", (event, d) => {
+          const [x, y] = [event.clientX + 20, event.clientY - 28];
+          tooltip
+            .classed("visible", true)
+            .style("left", `${x}px`)
+            .style("top", `${y}px`)
+            .attr("data-value", d.data.value)
+            .html(
+              `<strong>${d.data.name}</strong><br />Category: ${d.data.category}<br />Value: ${d.data.value.toLocaleString()}`,
+            );
+        })
+        .on("mouseleave", () => {
+          tooltip.classed("visible", false);
+        });
 
-    tiles
-      .append("text")
-      .attr("class", "tile-label")
-      .selectAll("tspan")
-      .data((d) => d.data.name.split(/\s+/g))
-      .join("tspan")
-      .attr("x", 6)
-      .attr("y", (_d, i) => 16 + i * 12)
-      .text((word) => word);
+      tiles
+        .append("text")
+        .attr("class", "tile-label")
+        .selectAll("tspan")
+        .data((d) => d.data.name.split(/\s+/g))
+        .join("tspan")
+        .attr("x", 6)
+        .attr("y", (_d, i) => 16 + i * 12)
+        .text((word) => word);
 
-    const legendRoot = d3.select<HTMLElement, unknown>("#legend");
-    legendRoot.selectAll("*").remove();
+      const legendRoot = d3.select<HTMLElement, unknown>("#legend");
+      legendRoot.selectAll("*").remove();
 
-    const legendWidth = 720;
-    const legendRectSize = 18;
-    const legendPadding = 12;
-    const itemsPerRow = Math.max(1, Math.floor(legendWidth / 180));
+      const legendWidth = 720;
+      const legendRectSize = 18;
+      const legendPadding = 12;
+      const itemsPerRow = Math.max(1, Math.floor(legendWidth / 180));
 
-    const legendSvg = legendRoot
-      .append("svg")
-      .attr("width", "100%")
-      .attr(
-        "viewBox",
-        `0 0 ${legendWidth} ${Math.ceil(categories.length / itemsPerRow) * 32}`,
-      )
-      .attr("role", "presentation");
+      const legendSvg = legendRoot
+        .append("svg")
+        .attr("width", "100%")
+        .attr(
+          "viewBox",
+          `0 0 ${legendWidth} ${Math.ceil(categories.length / itemsPerRow) * 32}`,
+        )
+        .attr("role", "presentation");
 
-    const legendItems = legendSvg
-      .selectAll<SVGGElement, string>("g")
-      .data(categories)
-      .join("g")
-      .attr("transform", (_category, index) => {
-        const row = Math.floor(index / itemsPerRow);
-        const col = index % itemsPerRow;
-        return `translate(${col * (legendRectSize * 6)}, ${row * 32})`;
-      });
+      const legendItems = legendSvg
+        .selectAll<SVGGElement, string>("g")
+        .data(categories)
+        .join("g")
+        .attr("transform", (_category, index) => {
+          const row = Math.floor(index / itemsPerRow);
+          const col = index % itemsPerRow;
+          return `translate(${col * (legendRectSize * 6)}, ${row * 32})`;
+        });
 
-    legendItems
-      .append("rect")
-      .attr("class", "legend-item")
-      .attr("width", legendRectSize)
-      .attr("height", legendRectSize)
-      .attr("rx", 6)
-      .attr("ry", 6)
-      .attr("fill", (category) => color(category));
+      legendItems
+        .append("rect")
+        .attr("class", "legend-item")
+        .attr("width", legendRectSize)
+        .attr("height", legendRectSize)
+        .attr("rx", 6)
+        .attr("ry", 6)
+        .attr("fill", (category) => color(category));
 
-    legendItems
-      .append("text")
-      .attr("class", "legend-label")
-      .attr("x", legendRectSize + legendPadding)
-      .attr("y", legendRectSize - 4)
-      .text((category) => category);
+      legendItems
+        .append("text")
+        .attr("class", "legend-label")
+        .attr("x", legendRectSize + legendPadding)
+        .attr("y", legendRectSize - 4)
+        .text((category) => category);
+    } catch (error) {
+      console.error("Failed to load treemap data", error);
+      errorMessage.value = "Failed to load treemap data. Please try again.";
+    } finally {
+      isLoading.value = false;
+    }
 
     return () => {
       cleanupTestScript?.();
+      container.selectAll("*").remove();
     };
   });
 
@@ -310,6 +333,53 @@ export default component$(() => {
             dominant franchises within each category.
           </p>
         </header>
+
+        <section class="mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border, #1e293b)] bg-[var(--surface-glass-1, rgba(15,23,42,0.85))] p-6 text-center shadow-[0_18px_60px_rgba(15,23,42,0.45)]">
+          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3, #94a3b8)]">
+            Data Visualization Projects
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
+            Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
+            Visualization projects.
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
+            In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
+            Finish them all to earn your Data Visualization certification.
+          </p>
+        </section>
+
+        <div class="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2, #cbd5f5)]">
+          <button
+            type="button"
+            onClick$={handleRefresh}
+            class="inline-flex items-center gap-2 rounded-full border border-[var(--surface-border, #1e293b)] bg-[color-mix(in_srgb,var(--surface-glass-2, rgba(30,41,59,0.72))_95%,transparent)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text2, #cbd5f5)] shadow-[0_12px_36px_rgba(15,23,42,0.45)] transition-colors duration-300 hover:border-[var(--primary, #38bdf8)] hover:text-[var(--primary, #38bdf8)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] disabled:cursor-not-allowed disabled:opacity-70"
+            disabled={isLoading.value}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              class={`h-4 w-4 ${isLoading.value ? "animate-spin" : ""}`}
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+              />
+            </svg>
+            {isLoading.value ? "Refreshing" : "Refresh data"}
+          </button>
+          <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3, #94a3b8)]">
+            {isLoading.value && <span>Loading dataset…</span>}
+            {!isLoading.value && errorMessage.value && (
+              <span class="text-[var(--primary, #38bdf8)]">{errorMessage.value}</span>
+            )}
+          </div>
+        </div>
+
         <div class="case-study-layout">
           <div class="visual-wrapper">
             <section class="treemap-card">

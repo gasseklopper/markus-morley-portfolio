@@ -1,4 +1,10 @@
-import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStylesScoped$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import * as d3 from "d3";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -150,6 +156,15 @@ export default component$(() => {
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
   const cyclists = useSignal<CyclistDatum[]>([]);
+  const isLoading = useSignal(true);
+  const errorMessage = useSignal<string | null>(null);
+  const refreshCounter = useSignal(0);
+
+  const handleRefresh = $(() => {
+    isLoading.value = true;
+    errorMessage.value = null;
+    refreshCounter.value++;
+  });
 
   // Load FCC testing bundle for manual verification when available
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -173,12 +188,15 @@ export default component$(() => {
   });
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(async ({ track }) => {
+    track(() => refreshCounter.value);
+
     const svgElement = svgRef.value;
     const tooltipElement = tooltipRef.value;
     const wrapperElement = wrapperRef.value;
 
     if (!svgElement || !tooltipElement || !wrapperElement) {
+      isLoading.value = false;
       return;
     }
 
@@ -187,6 +205,8 @@ export default component$(() => {
     let cleanupResize: (() => void) | undefined;
 
     try {
+      isLoading.value = true;
+      errorMessage.value = null;
       const response = await fetch(DATA_URL);
       const payload: Array<{
         Name: string;
@@ -433,6 +453,9 @@ export default component$(() => {
       }
     } catch (error) {
       console.error("Failed to load cyclist data", error);
+      errorMessage.value = "Failed to load cyclist data. Please try again.";
+    } finally {
+      isLoading.value = false;
     }
 
     return () => {
@@ -452,6 +475,52 @@ export default component$(() => {
           A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
           racer to explore doping allegations, nationalities, and performance patterns.
         </p>
+      </div>
+
+      <div class="mx-auto mt-8 max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
+        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+          Data Visualization Projects
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+          Now that you learned how to work with D3, APIs, and AJAX technologies, put your skills to the test with these 5 Data
+          Visualization projects.
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+          In these projects, you&apos;ll need to fetch data and parse a dataset, then use D3 to create different data visualizations.
+          Finish them all to earn your Data Visualization certification.
+        </p>
+      </div>
+
+      <div class="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+        <button
+          type="button"
+          onClick$={handleRefresh}
+          class="inline-flex items-center gap-2 rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-2 text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-colors duration-300 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+          disabled={isLoading.value}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            class={`h-4 w-4 ${isLoading.value ? "animate-spin" : ""}`}
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+            />
+          </svg>
+          {isLoading.value ? "Refreshing" : "Refresh data"}
+        </button>
+        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+          {isLoading.value && <span>Loading dataset…</span>}
+          {!isLoading.value && errorMessage.value && (
+            <span class="text-[var(--primary)]">{errorMessage.value}</span>
+          )}
+        </div>
       </div>
 
       <div ref={wrapperRef} class="chart-wrapper chart-theme mt-12 flex w-full flex-col items-center px-2 sm:px-4">

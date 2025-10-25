@@ -72,6 +72,12 @@
     "description": "Dummy content for project 010."
   },
   {
+    "name": "Project 011",
+    "path": "/portfolio/project011",
+    "title": "Project 011 - Markus Morley personal portfolio",
+    "description": "Interactive D3 bar chart visualizing US GDP."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

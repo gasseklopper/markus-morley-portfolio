@@ -173,14 +173,14 @@ export default component$(() => {
     const width = 960;
     const height = 600;
 
-    const root = d3
+    const hierarchyRoot = d3
       .hierarchy<TreeMapNode>(data)
       .sum((d) => d.value)
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
     const treemap = d3.treemap<TreeMapNode>().size([width, height]).paddingInner(2).round(true);
 
-    treemap(root);
+    const root = treemap(hierarchyRoot);
 
     const leaves = root.leaves();
     const categories = Array.from(new Set(leaves.map((leaf) => leaf.data.category)));

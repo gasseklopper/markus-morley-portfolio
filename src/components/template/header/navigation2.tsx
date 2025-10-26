@@ -1,7 +1,7 @@
 import {
   $,
-  Signal,
   component$,
+  type Signal,
   useSignal,
   useStylesScoped$,
   useOnWindow,
@@ -14,6 +14,10 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
 import AccountPanel from "./account-panel";
+import {
+  HEADER_TOGGLE_EVENT,
+  type HeaderOverlayToggleId,
+} from "./overlay-scrim-handler";
 
 type NavItem = {
   name: string;
@@ -70,6 +74,11 @@ export default component$(() => {
   const isOpen = useSignal(false);
   const notificationsOpen = useSignal(false);
   const accountOpen = useSignal(false);
+  const overlaySignals = {
+    notifications: notificationsOpen,
+    preferences: isOpen,
+    account: accountOpen,
+  } as const;
   const unreadCount = useSignal(
     defaultNotifications.filter((item) => item.unread).length,
   );
@@ -133,6 +142,40 @@ export default component$(() => {
       }
     }),
   );
+  const toggleOverlay = $((toggleId: HeaderOverlayToggleId) => {
+    const next = !overlaySignals[toggleId].value;
+
+    (Object.keys(overlaySignals) as HeaderOverlayToggleId[]).forEach((key) => {
+      overlaySignals[key].value = key === toggleId ? next : false;
+    });
+  });
+
+  const toggleNotifications$ = $(() => {
+    void toggleOverlay("notifications");
+  });
+
+  const togglePreferences$ = $(() => {
+    void toggleOverlay("preferences");
+  });
+
+  const toggleAccount$ = $(() => {
+    void toggleOverlay("account");
+  });
+
+  useOnWindow(
+    HEADER_TOGGLE_EVENT,
+    $((event: Event) => {
+      const detail = (
+        event as CustomEvent<{ toggleId?: HeaderOverlayToggleId }>
+      ).detail;
+      if (!detail?.toggleId) {
+        return;
+      }
+
+      void toggleOverlay(detail.toggleId);
+    }),
+  );
+
   const overlayToggleButtonClass =
     "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
 
@@ -198,14 +241,7 @@ export default component$(() => {
               type="button"
               data-notifications-toggle
               aria-expanded={notificationsOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !notificationsOpen.value;
-                notificationsOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
+              onClick$={toggleNotifications$}
               class={[
                 overlayToggleButtonClass,
                 notificationsOpen.value
@@ -244,14 +280,7 @@ export default component$(() => {
             </button>
             <button
               data-preferences-toggle
-              onClick$={() => {
-                const next = !isOpen.value;
-                isOpen.value = next;
-                if (next) {
-                  notificationsOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
+              onClick$={togglePreferences$}
               type="button"
               class={[
                 overlayToggleButtonClass,
@@ -284,14 +313,7 @@ export default component$(() => {
               type="button"
               data-account-toggle
               aria-expanded={accountOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !accountOpen.value;
-                accountOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  notificationsOpen.value = false;
-                }
-              }}
+              onClick$={toggleAccount$}
               class={[
                 accountToggleButtonClass,
                 accountOpen.value

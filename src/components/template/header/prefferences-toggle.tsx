@@ -6,6 +6,7 @@ import {
   useOnWindow,
   type PropFunction,
 } from "@builder.io/qwik";
+import handleOverlayScrimPointerDown from "./overlay-scrim-handler";
 import {
   themeStorageKey,
   cursorAnimationKey,
@@ -155,6 +156,10 @@ export const PrefferencesToggle = component$<{
   useOnWindow(
     "pointerdown",
     $((event: PointerEvent) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
       const target = event.target as HTMLElement | null;
       if (
         panelRef.value &&
@@ -229,9 +234,12 @@ export const PrefferencesToggle = component$<{
     >
       <div
         class={[
-          "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           isAnimatingIn.value ? "opacity-100" : "opacity-0",
         ]}
+        onPointerDown$={$((event: PointerEvent) => {
+          handleOverlayScrimPointerDown(event, () => startClose$());
+        })}
       />
       <aside
         ref={panelRef}

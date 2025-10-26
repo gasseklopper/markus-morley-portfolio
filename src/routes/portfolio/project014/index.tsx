@@ -25,6 +25,27 @@ const styles = `
       radial-gradient(circle at bottom right, color-mix(in srgb, var(--tertiary) 12%, transparent) 0%, transparent 65%),
       var(--surface1);
     min-height: 100vh;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .choropleth-page .choropleth-content {
+    display: grid;
+    gap: clamp(2.25rem, 4vw, 3rem);
+    align-content: start;
+  }
+
+  .choropleth-page .choropleth-summary,
+  .choropleth-page .choropleth-actions {
+    margin: 0 auto;
+    width: min(1040px, 100%);
+  }
+
+  .choropleth-page .choropleth-summary {
+    text-align: center;
+  }
+
+  .choropleth-page .choropleth-actions {
+    text-align: center;
   }
 
   .choropleth-page .map-shell {
@@ -42,6 +63,7 @@ const styles = `
     border: 1px solid var(--surface-border);
     box-shadow: 0 30px 120px var(--surface-shadow);
     overflow: hidden;
+    height: clamp(520px, 70vh, 820px);
   }
 
   .choropleth-page .map-shell::after {
@@ -151,6 +173,46 @@ const styles = `
 
   .choropleth-page #tooltip strong {
     font-family: var(--font-semibold);
+  }
+
+  @media (min-width: 1200px) {
+    .choropleth-page {
+      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+      gap: clamp(2.5rem, 4vw, 4rem);
+      padding: clamp(2.5rem, 4vw, 5rem) clamp(3.5rem, 6vw, 7rem) clamp(3rem, 6vw, 4.5rem);
+    }
+
+    .choropleth-page .choropleth-content {
+      position: sticky;
+      top: clamp(2.5rem, 4vw, 5rem);
+      max-width: 420px;
+    }
+
+    .choropleth-page .choropleth-summary,
+    .choropleth-page .choropleth-actions {
+      margin: 0;
+      width: 100%;
+    }
+
+    .choropleth-page header {
+      text-align: left;
+    }
+
+    .choropleth-page .choropleth-summary {
+      text-align: left;
+    }
+
+    .choropleth-page .choropleth-actions {
+      align-items: flex-start;
+      text-align: left;
+      gap: 1.5rem;
+    }
+
+    .choropleth-page .map-shell {
+      width: 100%;
+      height: clamp(640px, calc(100vh - 6rem), 1040px);
+      margin: 0;
+    }
   }
 
   @media (max-width: 768px) {
@@ -314,11 +376,17 @@ export default component$(() => {
       const legendStops = [minEducation, ...colorScale.domain(), maxEducation];
 
       const renderChart = () => {
-        const measuredWidth = wrapperElement.clientWidth || 960;
-        const width = Math.min(960, Math.max(360, measuredWidth));
-        const height = width > 720 ? 640 : 600;
-        const margin = width > 720
-          ? { top: 60, right: 48, bottom: 90, left: 48 }
+        const { width: rawWidth, height: rawHeight } = wrapperElement.getBoundingClientRect();
+        const measuredWidth = rawWidth || wrapperElement.clientWidth || 960;
+        const measuredHeight = rawHeight || wrapperElement.clientHeight || measuredWidth * 0.65;
+        const width = Math.max(360, measuredWidth);
+        const height = Math.max(420, measuredHeight);
+        const margin = width > 1280
+          ? { top: 72, right: 64, bottom: 120, left: 64 }
+          : width > 960
+          ? { top: 64, right: 56, bottom: 110, left: 56 }
+          : width > 720
+          ? { top: 56, right: 40, bottom: 100, left: 40 }
           : { top: 48, right: 28, bottom: 110, left: 32 };
 
         svg.selectAll("*").remove();
@@ -330,8 +398,8 @@ export default component$(() => {
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
         const mapWidth = width - margin.left - margin.right;
-        const legendSpace = width > 720 ? 110 : 130;
-        const mapHeight = height - margin.top - margin.bottom - legendSpace;
+        const legendSpace = width > 960 ? 120 : width > 720 ? 110 : 130;
+        const mapHeight = Math.max(260, height - margin.top - margin.bottom - legendSpace);
         const projection = d3
           .geoIdentity()
           .fitSize([mapWidth, mapHeight], countyFeatures as unknown as GeoPermissibleObjects);
@@ -465,58 +533,60 @@ export default component$(() => {
 
   return (
     <div class="page choropleth-page">
-      <header>
-        <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Visualization Studio</p>
-        <h1 id="title">United States Education Attainment</h1>
-        <p id="description">
-          Choropleth view that explores the percentage of adults aged 25 and older with a bachelor&apos;s degree or above across
-          U.S. counties. Hover to reveal local insights and watch the legend adapt responsively to the canvas.
-        </p>
-      </header>
+      <div class="choropleth-content">
+        <header>
+          <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Visualization Studio</p>
+          <h1 id="title">United States Education Attainment</h1>
+          <p id="description">
+            Choropleth view that explores the percentage of adults aged 25 and older with a bachelor&apos;s degree or above across
+            U.S. counties. Hover to reveal local insights and watch the legend adapt responsively to the canvas.
+          </p>
+        </header>
 
-      <section class="mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
-          Data Visualization Projects
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          This choropleth pulls TopoJSON county shapes and education stats with parallel fetch calls, converts them with
-          topojson-client helpers, and renders the map through D3 geo paths, threshold color scales, and layered state meshes.
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Use the refresh-and-fetch button to fire both AJAX requests again, recompute the legend, and redraw the projection
-          so the map stays synced with the latest dataset.
-        </p>
-      </section>
+        <section class="choropleth-summary mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
+          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+            Data Visualization Projects
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            This choropleth pulls TopoJSON county shapes and education stats with parallel fetch calls, converts them with
+            topojson-client helpers, and renders the map through D3 geo paths, threshold color scales, and layered state meshes.
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            Use the refresh-and-fetch button to fire both AJAX requests again, recompute the legend, and redraw the projection
+            so the map stays synced with the latest dataset.
+          </p>
+        </section>
 
-      <div class="mx-auto mt-8 flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
-        <button
-          type="button"
-          onClick$={handleRefresh}
-          class="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface-glass-1)_70%,transparent)] px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.18em] text-[var(--text3)] shadow-sm transition-all duration-200 hover:border-[var(--primary)]/50 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
-          disabled={isLoading.value}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            class={`h-[0.65rem] w-[0.65rem] ${isLoading.value ? "animate-spin" : ""}`}
-            aria-hidden="true"
+        <div class="choropleth-actions mx-auto mt-8 flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+          <button
+            type="button"
+            onClick$={handleRefresh}
+            class="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface-glass-1)_70%,transparent)] px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.18em] text-[var(--text3)] shadow-sm transition-all duration-200 hover:border-[var(--primary)]/50 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+            disabled={isLoading.value}
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
-            />
-          </svg>
-          {isLoading.value ? "Refreshing" : "Refresh data"}
-        </button>
-        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
-          {isLoading.value && <span>Loading dataset…</span>}
-          {!isLoading.value && errorMessage.value && (
-            <span class="text-[var(--primary)]">{errorMessage.value}</span>
-          )}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              class={`h-[0.65rem] w-[0.65rem] ${isLoading.value ? "animate-spin" : ""}`}
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+              />
+            </svg>
+            {isLoading.value ? "Refreshing" : "Refresh data"}
+          </button>
+          <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+            {isLoading.value && <span>Loading dataset…</span>}
+            {!isLoading.value && errorMessage.value && (
+              <span class="text-[var(--primary)]">{errorMessage.value}</span>
+            )}
+          </div>
         </div>
       </div>
 

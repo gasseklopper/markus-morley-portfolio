@@ -5,7 +5,6 @@ import {
   useSignal,
   useStylesScoped$,
   useOnWindow,
-  useVisibleTask$,
 } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import headerData from "./data";
@@ -14,6 +13,7 @@ import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
 import PrefferencesToggle from "./prefferences-toggle";
 import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
 import AccountPanel from "./account-panel";
+import { useNotificationBadge } from "./use-notification-badge";
 
 type NavItem = {
   name: string;
@@ -36,10 +36,24 @@ const getFilteredNavItems = () =>
       (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
   );
 
-export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
-  ({ openSig }) => {
+const OVERLAY_BUTTON_BASE_CLASS =
+  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
+
+const ACCOUNT_BUTTON_BASE_CLASS =
+  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]";
+
+const ACTIVE_BUTTON_CLASS =
+  "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]";
+
+const composeButtonClass = (baseClass: string, isActive: boolean) =>
+  [baseClass, isActive ? ACTIVE_BUTTON_CLASS : ""].filter(Boolean).join(" ");
+
+export const MobileMenu = component$<{
+  openSig: Signal<boolean>;
+  navItems: ReadonlyArray<NavItem>;
+}>(
+  ({ openSig, navItems }) => {
     useStylesScoped$(styles);
-    const navItems = getFilteredNavItems();
     return (
       <div
         id="mobile-menu"
@@ -67,65 +81,21 @@ export const MobileMenu = component$<{ openSig: Signal<boolean> }>(
 export default component$(() => {
   useStylesScoped$(styles);
   const menuOpen = useSignal(false);
-  const isOpen = useSignal(false);
+  const preferencesOpen = useSignal(false);
   const notificationsOpen = useSignal(false);
   const accountOpen = useSignal(false);
-  const unreadCount = useSignal(
-    defaultNotifications.filter((item) => item.unread).length,
-  );
+
+  const unreadCount = useNotificationBadge(defaultNotifications);
   const navItems = getFilteredNavItems();
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    type StoredNotification = { unread?: boolean };
 
-    const readFromStorage = () => {
-      try {
-        const stored = localStorage.getItem("notifications-state");
-        if (!stored) {
-          unreadCount.value = defaultNotifications.filter(
-            (item) => item.unread,
-          ).length;
-          return;
-        }
-
-        const parsed = JSON.parse(stored) as StoredNotification[];
-        if (Array.isArray(parsed)) {
-          unreadCount.value = parsed.filter((item) => item?.unread).length;
-          return;
-        }
-      } catch (error) {
-        console.error(error);
-      }
-
-      unreadCount.value = defaultNotifications.filter((item) => item.unread).length;
-    };
-
-    const handleUpdate = (event: Event) => {
-      const custom = event as CustomEvent<StoredNotification[] | undefined>;
-      const detail = custom.detail;
-      if (Array.isArray(detail)) {
-        unreadCount.value = detail.filter((item) => item?.unread).length;
-        return;
-      }
-
-      readFromStorage();
-    };
-
-    readFromStorage();
-
-    window.addEventListener("notifications:update", handleUpdate);
-
-    return () => {
-      window.removeEventListener("notifications:update", handleUpdate);
-    };
-  });
   useOnWindow(
     "keydown",
     $((event: KeyboardEvent) => {
       if (event.key === "F10") {
         event.preventDefault();
-        const next = !isOpen.value;
-        isOpen.value = next;
+        const next = !preferencesOpen.value;
+        preferencesOpen.value = next;
+        menuOpen.value = false;
         if (next) {
           notificationsOpen.value = false;
           accountOpen.value = false;
@@ -133,19 +103,64 @@ export default component$(() => {
       }
     }),
   );
-  const overlayToggleButtonClass =
-    "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
 
-  const accountToggleButtonClass =
-    "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]";
+  const toggleNotifications$ = $(() => {
+    const next = !notificationsOpen.value;
+    notificationsOpen.value = next;
+    menuOpen.value = false;
+    if (next) {
+      preferencesOpen.value = false;
+      accountOpen.value = false;
+    }
+  });
+
+  const togglePreferences$ = $(() => {
+    menuOpen.value = false;
+    const next = !preferencesOpen.value;
+    preferencesOpen.value = next;
+    if (next) {
+      notificationsOpen.value = false;
+      accountOpen.value = false;
+    }
+  });
+
+  const toggleAccount$ = $(() => {
+    const next = !accountOpen.value;
+    accountOpen.value = next;
+    menuOpen.value = false;
+    if (next) {
+      notificationsOpen.value = false;
+      preferencesOpen.value = false;
+    }
+  });
+
+  const toggleMenu$ = $(() => {
+    const next = !menuOpen.value;
+    menuOpen.value = next;
+    if (next) {
+      notificationsOpen.value = false;
+      preferencesOpen.value = false;
+      accountOpen.value = false;
+    }
+  });
+
+  const closeNotifications$ = $(() => {
+    notificationsOpen.value = false;
+  });
+  const closePreferences$ = $(() => {
+    preferencesOpen.value = false;
+  });
+  const closeAccount$ = $(() => {
+    accountOpen.value = false;
+  });
+
+  const navClass = [
+    "layout-shell relative z-[2000] flex w-full flex-col rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_80%)] text-[var(--text1)] shadow-[0_24px_90px_var(--surface-shadow)] backdrop-blur-xl transition-colors duration-300",
+    preferencesOpen.value ? "overflow-visible" : "overflow-hidden",
+  ].join(" ");
 
   return (
-    <nav
-      class={[
-        "layout-shell relative z-[2000] flex w-full flex-col rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_80%)] text-[var(--text1)] shadow-[0_24px_90px_var(--surface-shadow)] backdrop-blur-xl transition-colors duration-300",
-        isOpen.value ? "overflow-visible" : "overflow-hidden",
-      ].join(" ")}
-    >
+    <nav class={navClass}>
       <div class="px-4 py-3 sm:px-6 lg:px-8">
         <div class="flex min-h-[4.5rem] items-center justify-between gap-6">
           <div class="flex items-center gap-4">
@@ -198,20 +213,11 @@ export default component$(() => {
               type="button"
               data-notifications-toggle
               aria-expanded={notificationsOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !notificationsOpen.value;
-                notificationsOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
-              class={[
-                overlayToggleButtonClass,
-                notificationsOpen.value
-                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
-                  : "",
-              ].join(" ")}
+              onClick$={toggleNotifications$}
+              class={composeButtonClass(
+                OVERLAY_BUTTON_BASE_CLASS,
+                notificationsOpen.value,
+              )}
             >
               {/* <span class="absolute -inset-2.5"></span> */}
               <span class="sr-only">View notifications</span>
@@ -244,26 +250,19 @@ export default component$(() => {
             </button>
             <button
               data-preferences-toggle
-              onClick$={() => {
-                const next = !isOpen.value;
-                isOpen.value = next;
-                if (next) {
-                  notificationsOpen.value = false;
-                  accountOpen.value = false;
-                }
-              }}
+              onClick$={togglePreferences$}
               type="button"
-              class={[
-                overlayToggleButtonClass,
-                isOpen.value
-                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
-                  : "",
-              ].join(" ")}
+              class={composeButtonClass(
+                OVERLAY_BUTTON_BASE_CLASS,
+                preferencesOpen.value,
+              )}
             >
               {/* <span class="absolute -inset-1.5"></span> */}
               <span class="sr-only">Open settings</span>
               <svg
-                stroke={isOpen.value ? "var(--primary)" : "var(--text2)"}
+                stroke={
+                  preferencesOpen.value ? "var(--primary)" : "var(--text2)"
+                }
                 fill="none"
                 stroke-width="1.5"
                 viewBox="0 0 24 24"
@@ -284,20 +283,11 @@ export default component$(() => {
               type="button"
               data-account-toggle
               aria-expanded={accountOpen.value ? "true" : "false"}
-              onClick$={() => {
-                const next = !accountOpen.value;
-                accountOpen.value = next;
-                if (next) {
-                  isOpen.value = false;
-                  notificationsOpen.value = false;
-                }
-              }}
-              class={[
-                accountToggleButtonClass,
-                accountOpen.value
-                  ? "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
-                  : "",
-              ].join(" ")}
+              onClick$={toggleAccount$}
+              class={composeButtonClass(
+                ACCOUNT_BUTTON_BASE_CLASS,
+                accountOpen.value,
+              )}
             >
               {/* <span class="absolute -inset-1.5"></span> */}
               <span class="sr-only">Open user menu</span>
@@ -350,7 +340,7 @@ export default component$(() => {
               class="inline-flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-2 text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
               aria-controls="mobile-menu"
               aria-expanded={menuOpen.value ? "true" : "false"}
-              onClick$={() => (menuOpen.value = !menuOpen.value)}
+              onClick$={toggleMenu$}
             >
               <span class="sr-only">Open main menu</span>
               {/* Hamburger icon */}
@@ -391,18 +381,16 @@ export default component$(() => {
         </div>
       </div>
       <div class="px-4 pb-4 sm:px-6 lg:px-8">
-        <MobileMenu openSig={menuOpen} />
+        <MobileMenu openSig={menuOpen} navItems={navItems} />
       </div>
       {notificationsOpen.value && (
-        <NotificationsPanel
-          onClose$={$(() => (notificationsOpen.value = false))}
-        />
+        <NotificationsPanel onClose$={closeNotifications$} />
       )}
-      {isOpen.value && (
-        <PrefferencesToggle onClose$={$(() => (isOpen.value = false))} />
+      {preferencesOpen.value && (
+        <PrefferencesToggle onClose$={closePreferences$} />
       )}
       {accountOpen.value && (
-        <AccountPanel onClose$={$(() => (accountOpen.value = false))} />
+        <AccountPanel onClose$={closeAccount$} />
       )}
     </nav>
   );

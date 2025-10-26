@@ -1,7 +1,7 @@
 import { component$, $, useSignal, useVisibleTask$, type PropFunction } from "@builder.io/qwik";
 import OverlayPanel from "./overlay-panel";
 
-type Notification = {
+export type Notification = {
   id: string;
   title: string;
   message: string;

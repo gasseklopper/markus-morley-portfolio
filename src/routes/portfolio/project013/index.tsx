@@ -11,10 +11,123 @@ import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/
 import { buildHead } from "~/utils/head";
 
 const styles = `
-  .chart-wrapper {
+  .heatmap-page {
+    display: grid;
+    gap: clamp(2.25rem, 5vw, 3rem);
+    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 8vw, 6rem);
+    color: var(--text1);
+    background:
+      radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 12%, transparent) 0%, transparent 60%),
+      radial-gradient(circle at bottom right, color-mix(in srgb, var(--secondary) 14%, transparent) 0%, transparent 65%),
+      var(--surface1);
+    min-height: 100vh;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heatmap-content {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    align-content: start;
+  }
+
+  .heatmap-content header {
+    display: grid;
+    gap: 1rem;
+    max-width: 720px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .heatmap-content #title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-family: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .heatmap-content #description {
+    font-size: clamp(0.95rem, 1vw + 0.5rem, 1.125rem);
+    color: var(--text2);
+    line-height: 1.65;
+    margin: 0 auto;
+    max-width: 60ch;
+  }
+
+  .heatmap-summary,
+  .heatmap-actions {
+    margin: 0 auto;
+    width: min(1040px, 100%);
+  }
+
+  .heatmap-summary {
+    border-radius: 2.25rem;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--surface-glass-1) 88%, transparent);
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    text-align: center;
+    box-shadow: 0 24px 100px var(--surface-shadow);
+  }
+
+  .heatmap-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+
+  .heatmap-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 60%, transparent);
+    background: color-mix(in srgb, var(--surface-glass-1) 76%, transparent);
+    padding: 0.55rem 1.5rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .heatmap-actions button:hover,
+  .heatmap-actions button:focus-visible {
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    color: var(--primary);
+    outline: none;
+  }
+
+  .chart-shell {
     position: relative;
     margin: 0 auto;
-    width: min(100%, 960px);
+    width: min(1120px, 100%);
+    border-radius: 2.25rem;
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--surface-glass-1) 88%, transparent) 0%,
+        color-mix(in srgb, var(--surface-glass-2) 82%, transparent) 100%
+      );
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 30px 120px var(--surface-shadow);
+    overflow: hidden;
+    height: clamp(520px, 72vh, 880px);
+  }
+
+  .chart-shell::after {
+    content: "";
+    position: absolute;
+    inset: 12% 18% auto auto;
+    width: clamp(160px, 24%, 220px);
+    height: clamp(160px, 24%, 220px);
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 26%, transparent) 0%, transparent 70%);
+    opacity: 0.25;
+    pointer-events: none;
+    filter: blur(8px);
   }
 
   .chart-theme {
@@ -32,6 +145,7 @@ const styles = `
 
   svg {
     width: 100%;
+    height: 100%;
     background: linear-gradient(
       135deg,
       color-mix(in srgb, var(--surface-glass-1) 78%, transparent) 0%,
@@ -133,7 +247,50 @@ const styles = `
     font-size: clamp(0.6rem, 0.58rem + 0.18vw, 0.72rem);
   }
 
+  .heatmap-empty-message {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text3);
+  }
+
+  @media (min-width: 1200px) {
+    .heatmap-page {
+      grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+      align-items: start;
+      padding: clamp(2.5rem, 5vw, 5rem) clamp(3.5rem, 6vw, 7rem) clamp(3rem, 6vw, 4.5rem);
+    }
+
+    .heatmap-content {
+      position: sticky;
+      top: clamp(2.5rem, 4vw, 5rem);
+      max-width: 440px;
+      text-align: left;
+      margin: 0;
+    }
+
+    .heatmap-content header,
+    .heatmap-summary,
+    .heatmap-actions {
+      margin: 0;
+      text-align: left;
+    }
+
+    .heatmap-actions {
+      align-items: flex-start;
+    }
+
+    .chart-shell {
+      margin: 0;
+      width: 100%;
+      height: clamp(640px, calc(100vh - 6rem), 1040px);
+    }
+  }
+
   @media (max-width: 768px) {
+    .chart-shell {
+      border-radius: 1.75rem;
+    }
+
     svg {
       border-radius: 1.25rem;
     }
@@ -297,10 +454,11 @@ export default component$(() => {
       const legendStops = [minTemp, ...colorScale.domain(), maxTemp];
 
       const renderChart = () => {
-        const measuredWidth = wrapperElement.clientWidth || 960;
-        const width = Math.min(960, Math.max(measuredWidth, 360));
+        const bounds = wrapperElement.getBoundingClientRect();
+        const width = bounds.width > 0 ? bounds.width : 960;
         const isCompact = width < 720;
-        const height = isCompact ? 620 : 560;
+        const fallbackHeight = isCompact ? 620 : 600;
+        const height = bounds.height > 0 ? bounds.height : fallbackHeight;
         const margin = isCompact
           ? { top: 36, right: 28, bottom: 180, left: 110 }
           : { top: 48, right: 32, bottom: 160, left: 140 };
@@ -512,75 +670,77 @@ export default component$(() => {
   });
 
   return (
-    <section class="layout-shell mt-12 text-[var(--text1)] md:mt-20">
-      <div class="mx-auto max-w-5xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
-        <h1 class="mt-4 text-4xl font-semibold leading-tight md:text-5xl" id="title">
-          Visualize Data with a Heat Map
-        </h1>
-        <p class="mt-4 text-base leading-relaxed text-[var(--text3)] md:text-lg" id="description">
-          A D3-powered heat map charting monthly global land-surface temperatures from 1753 to 2015. Hover or focus any
-          cell to inspect temperature variance against the historical baseline.
-        </p>
-      </div>
+    <div class="page heatmap-page">
+      <div class="heatmap-content">
+        <header>
+          <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Storytelling</p>
+          <h1 id="title">Visualize Data with a Heat Map</h1>
+          <p id="description">
+            A D3-powered heat map charting monthly global land-surface temperatures from 1753 to 2015. Hover or focus any
+            cell to inspect temperature variance against the historical baseline.
+          </p>
+        </header>
 
-      <div class="mx-auto mt-8 max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
-          Data Visualization Projects
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          The heat map ingests the NASA temperature dataset via fetch, then leans on D3 band scales and threshold color ramps
-          to position each month while encoding variance with an accessible tooltip and keyboard support.
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Trigger the refresh-and-fetch control to repeat the AJAX workflow, recompute the legend, and redraw the grid so the
-          visualization reflects the latest payload end-to-end.
-        </p>
-      </div>
+        <section class="heatmap-summary chart-theme">
+          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+            Data Visualization Projects
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            The heat map ingests the NASA temperature dataset via fetch, then leans on D3 band scales and threshold color
+            ramps to position each month while encoding variance with an accessible tooltip and keyboard support.
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            Trigger the refresh-and-fetch control to repeat the AJAX workflow, recompute the legend, and redraw the grid so
+            the visualization reflects the latest payload end-to-end.
+          </p>
+        </section>
 
-      <div class="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
-        <button
-          type="button"
-          onClick$={handleRefresh}
-          class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
-          disabled={isLoading.value}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
-            aria-hidden="true"
+        <div class="heatmap-actions">
+          <button
+            type="button"
+            onClick$={handleRefresh}
+            disabled={isLoading.value}
+            class={`focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] ${
+              isLoading.value ? "opacity-80" : ""
+            }`}
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
-            />
-          </svg>
-          {isLoading.value ? "Refreshing" : "Refresh data"}
-        </button>
-        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
-          {isLoading.value && <span>Loading dataset…</span>}
-          {!isLoading.value && errorMessage.value && (
-            <span class="text-[var(--primary)]">{errorMessage.value}</span>
-          )}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              class={`h-[0.75rem] w-[0.75rem] ${isLoading.value ? "animate-spin" : ""}`}
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+              />
+            </svg>
+            {isLoading.value ? "Refreshing" : "Refresh data"}
+          </button>
+          <div aria-live="polite" class="min-h-[1.5rem] text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+            {isLoading.value && <span>Loading dataset…</span>}
+            {!isLoading.value && errorMessage.value && (
+              <span class="text-[var(--primary)]">{errorMessage.value}</span>
+            )}
+          </div>
         </div>
       </div>
 
-      <div ref={wrapperRef} class="chart-wrapper chart-theme mt-12 flex w-full flex-col items-center px-2 sm:px-4">
+      <section ref={wrapperRef} class="chart-shell chart-theme">
         <svg ref={svgRef} role="img" aria-labelledby="title description" />
         <div ref={tooltipRef} id="tooltip" class="font-medium" aria-hidden="true" />
-      </div>
+      </section>
 
       {!isLoading.value && heatmapData.value.length === 0 && (
-        <p class="mx-auto mt-10 max-w-3xl text-center text-sm text-[var(--text3)]">
+        <p class="heatmap-empty-message mx-auto mt-10 max-w-3xl">
           Temperature records are unavailable right now. Try refreshing the dataset or checking your connection.
         </p>
       )}
-    </section>
+    </div>
   );
 });
 

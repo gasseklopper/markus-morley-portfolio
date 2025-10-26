@@ -11,10 +11,123 @@ import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/
 import { buildHead } from "~/utils/head";
 
 const styles = `
-  .chart-wrapper {
+  .scatterplot-page {
+    display: grid;
+    gap: clamp(2.25rem, 5vw, 3rem);
+    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 8vw, 6rem);
+    color: var(--text1);
+    background:
+      radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 14%, transparent) 0%, transparent 60%),
+      radial-gradient(circle at bottom right, color-mix(in srgb, var(--secondary) 12%, transparent) 0%, transparent 65%),
+      var(--surface1);
+    min-height: 100vh;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scatterplot-content {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+    align-content: start;
+  }
+
+  .scatterplot-content header {
+    display: grid;
+    gap: 1rem;
+    max-width: 720px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .scatterplot-content #title {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-family: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .scatterplot-content #description {
+    font-size: clamp(0.95rem, 1vw + 0.5rem, 1.125rem);
+    color: var(--text2);
+    line-height: 1.65;
+    margin: 0 auto;
+    max-width: 60ch;
+  }
+
+  .scatterplot-summary,
+  .scatterplot-actions {
+    margin: 0 auto;
+    width: min(1040px, 100%);
+  }
+
+  .scatterplot-summary {
+    border-radius: 2.25rem;
+    border: 1px solid var(--surface-border);
+    background: color-mix(in srgb, var(--surface-glass-1) 88%, transparent);
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    text-align: center;
+    box-shadow: 0 24px 100px var(--surface-shadow);
+  }
+
+  .scatterplot-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+
+  .scatterplot-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 60%, transparent);
+    background: color-mix(in srgb, var(--surface-glass-1) 76%, transparent);
+    padding: 0.55rem 1.5rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .scatterplot-actions button:hover,
+  .scatterplot-actions button:focus-visible {
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    color: var(--primary);
+    outline: none;
+  }
+
+  .chart-shell {
     position: relative;
     margin: 0 auto;
-    width: min(100%, 960px);
+    width: min(1120px, 100%);
+    border-radius: 2.25rem;
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--surface-glass-1) 88%, transparent) 0%,
+        color-mix(in srgb, var(--surface-glass-2) 82%, transparent) 100%
+      );
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 30px 120px var(--surface-shadow);
+    overflow: hidden;
+    height: clamp(520px, 72vh, 880px);
+  }
+
+  .chart-shell::after {
+    content: "";
+    position: absolute;
+    inset: 12% 18% auto auto;
+    width: clamp(160px, 24%, 220px);
+    height: clamp(160px, 24%, 220px);
+    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 24%, transparent) 0%, transparent 70%);
+    opacity: 0.25;
+    pointer-events: none;
+    filter: blur(8px);
   }
 
   .chart-theme {
@@ -28,6 +141,7 @@ const styles = `
 
   svg {
     width: 100%;
+    height: 100%;
     background: linear-gradient(135deg, var(--chart-bg-1) 0%, var(--chart-bg-2) 100%);
     border-radius: 1.5rem;
     border: 1px solid var(--surface-border);
@@ -57,7 +171,7 @@ const styles = `
     position: absolute;
     pointer-events: none;
     opacity: 0;
-    transform: translate(-50%, -100%) scale(0.98);
+    transform: translate(-50%, -100%) scale(0.96);
     transition: opacity 0.2s ease, transform 0.2s ease;
     min-width: 220px;
     max-width: min(320px, 80vw);
@@ -120,7 +234,48 @@ const styles = `
     font-family: var(--font-medium);
   }
 
+  .scatterplot-mobile-table {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 1200px) {
+    .scatterplot-page {
+      grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+      align-items: start;
+      padding: clamp(2.5rem, 5vw, 5rem) clamp(3.5rem, 6vw, 7rem) clamp(3rem, 6vw, 4.5rem);
+    }
+
+    .scatterplot-content {
+      position: sticky;
+      top: clamp(2.5rem, 4vw, 5rem);
+      max-width: 440px;
+      text-align: left;
+      margin: 0;
+    }
+
+    .scatterplot-content header,
+    .scatterplot-summary,
+    .scatterplot-actions {
+      margin: 0;
+      text-align: left;
+    }
+
+    .scatterplot-actions {
+      align-items: flex-start;
+    }
+
+    .chart-shell {
+      margin: 0;
+      width: 100%;
+      height: clamp(640px, calc(100vh - 6rem), 1040px);
+    }
+  }
+
   @media (max-width: 768px) {
+    .chart-shell {
+      border-radius: 1.75rem;
+    }
+
     svg {
       border-radius: 1.25rem;
     }
@@ -256,15 +411,16 @@ export default component$(() => {
       cyclists.value = dataset;
 
       const renderChart = () => {
-        const measuredWidth = wrapperElement.clientWidth || 960;
-        const width = Math.min(960, Math.max(measuredWidth, 320));
+        const bounds = wrapperElement.getBoundingClientRect();
+        const width = bounds.width > 0 ? bounds.width : 960;
         const isCompact = width < 720;
-        const height = isCompact ? 480 : 520;
+        const fallbackHeight = isCompact ? 480 : 540;
+        const height = bounds.height > 0 ? bounds.height : fallbackHeight;
         const margin = isCompact
           ? { top: 72, right: 40, bottom: 136, left: 68 }
           : { top: 84, right: 60, bottom: 124, left: 80 };
         const innerWidth = Math.max(width - margin.left - margin.right, 200);
-        const innerHeight = height - margin.top - margin.bottom;
+        const innerHeight = Math.max(height - margin.top - margin.bottom, 240);
 
         svg.selectAll("*").remove();
         svg
@@ -273,7 +429,7 @@ export default component$(() => {
           .attr("viewBox", `0 0 ${width} ${height}`)
           .attr("preserveAspectRatio", "xMidYMid meet");
 
-        tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.98)");
+        tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.96)");
 
         const xExtent = d3.extent(dataset, (d) => d.year) as [number, number];
         const yExtent = d3.extent(dataset, (d) => d.time) as [Date, Date];
@@ -488,76 +644,78 @@ export default component$(() => {
   });
 
   return (
-    <section class="layout-shell mt-12 text-[var(--text1)] md:mt-20">
-      <div class="mx-auto max-w-5xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
-        <h1 class="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-          Visualize Data with a Scatterplot Graph
-        </h1>
-        <p class="mt-4 text-base leading-relaxed text-[var(--text3)] md:text-lg">
-          A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
-          racer to explore doping allegations, nationalities, and performance patterns.
-        </p>
-      </div>
+    <div class="page scatterplot-page">
+      <div class="scatterplot-content">
+        <header>
+          <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Storytelling</p>
+          <h1 id="title">Visualize Data with a Scatterplot Graph</h1>
+          <p id="description">
+            A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
+            racer to explore doping allegations, nationalities, and performance patterns.
+          </p>
+        </header>
 
-      <div class="mx-auto mt-8 max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
-          Data Visualization Projects
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
-          scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
-          and interactions respond to the live dataset.
-        </p>
-      </div>
+        <section class="scatterplot-summary chart-theme">
+          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+            Data Visualization Projects
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
+            scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
+          </p>
+          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
+            and interactions respond to the live dataset.
+          </p>
+        </section>
 
-      <div class="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
-        <button
-          type="button"
-          onClick$={handleRefresh}
-          class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
-          disabled={isLoading.value}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
-            aria-hidden="true"
+        <div class="scatterplot-actions">
+          <button
+            type="button"
+            onClick$={handleRefresh}
+            disabled={isLoading.value}
+            class={`focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] ${
+              isLoading.value ? "opacity-80" : ""
+            }`}
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
-            />
-          </svg>
-          {isLoading.value ? "Refreshing" : "Refresh data"}
-        </button>
-        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
-          {isLoading.value && <span>Loading dataset…</span>}
-          {!isLoading.value && errorMessage.value && (
-            <span class="text-[var(--primary)]">{errorMessage.value}</span>
-          )}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              class={`h-[0.75rem] w-[0.75rem] ${isLoading.value ? "animate-spin" : ""}`}
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.023 9.348h4.992v-4.99m0 0L18.82 7.552A8.25 8.25 0 1 0 20.3 15.3"
+              />
+            </svg>
+            {isLoading.value ? "Refreshing" : "Refresh data"}
+          </button>
+          <div aria-live="polite" class="min-h-[1.5rem] text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+            {isLoading.value && <span>Loading dataset…</span>}
+            {!isLoading.value && errorMessage.value && (
+              <span class="text-[var(--primary)]">{errorMessage.value}</span>
+            )}
+          </div>
         </div>
       </div>
 
-      <div ref={wrapperRef} class="chart-wrapper chart-theme mt-12 flex w-full flex-col items-center px-2 sm:px-4">
-        <svg ref={svgRef} role="img" aria-labelledby="title" />
+      <section ref={wrapperRef} class="chart-shell chart-theme">
+        <svg ref={svgRef} role="img" aria-labelledby="title description" />
         <div
           ref={tooltipRef}
           id="tooltip"
           class="font-medium"
           aria-hidden="true"
         />
-      </div>
+      </section>
 
       {cyclists.value.length > 0 && (
-        <div class="mt-10 w-full md:hidden">
+        <div class="scatterplot-mobile-table mt-10 w-full md:hidden">
           <div class="chart-theme mx-auto max-w-5xl px-2 sm:px-4">
             <h2 class="text-left text-2xl font-semibold text-[var(--text1)]">Race leaderboard</h2>
             <p class="mt-2 text-sm leading-relaxed text-[var(--text3)]">
@@ -613,7 +771,7 @@ export default component$(() => {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 });
 

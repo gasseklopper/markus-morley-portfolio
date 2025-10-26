@@ -7,25 +7,31 @@ import { buildHead } from "~/utils/head";
 
 const caseStudyStyles = `
   .project-page {
-    gap: clamp(2rem, 4vw, 3rem);
-    padding-block: clamp(2.5rem, 5vw, 4rem) clamp(4rem, 8vw, 6rem);
+    display: grid;
+    gap: clamp(2.25rem, 5vw, 3rem);
+    padding: clamp(2.5rem, 5vw, 5rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 8vw, 6rem);
+    color: var(--text1, #f8fafc);
   }
 
   .case-study-content {
     display: grid;
     gap: clamp(2rem, 4vw, 3rem);
-    width: min(1080px, 100%);
+    align-content: start;
   }
 
   .case-study-intro {
     display: grid;
     gap: 1rem;
-    justify-items: center;
     text-align: center;
+    margin: 0 auto;
+    max-width: 720px;
   }
 
   .case-study-intro h1 {
     color: var(--text1, #f8fafc);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: clamp(2.5rem, 4vw, 3.75rem);
   }
 
   .case-study-meta {
@@ -43,13 +49,49 @@ const caseStudyStyles = `
     font-size: clamp(1rem, 0.9rem + 0.4vw, 1.15rem);
     line-height: 1.7;
     color: var(--text2, #e2e8f0);
-    max-width: 72ch;
+    max-width: 68ch;
+    margin: 0 auto;
   }
 
-  .case-study-layout {
-    display: grid;
-    gap: clamp(2rem, 5vw, 3rem);
-    grid-template-columns: minmax(0, 1fr);
+  .case-study-summary {
+    border-radius: 2.25rem;
+    border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 60%, transparent);
+    background: color-mix(in srgb, var(--surface-glass-1, rgba(15, 23, 42, 0.85)) 92%, transparent);
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    text-align: center;
+    box-shadow: 0 24px 100px rgba(15, 23, 42, 0.45);
+  }
+
+  .case-study-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text2, #e2e8f0);
+  }
+
+  .case-study-actions button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 55%, transparent);
+    background: color-mix(in srgb, var(--surface-glass-1, rgba(15, 23, 42, 0.85)) 80%, transparent);
+    padding: 0.6rem 1.6rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .case-study-actions button:hover,
+  .case-study-actions button:focus-visible {
+    border-color: color-mix(in srgb, var(--primary, #38bdf8) 45%, transparent);
+    color: var(--primary, #38bdf8);
+    outline: none;
   }
 
   .case-study-notes {
@@ -58,7 +100,7 @@ const caseStudyStyles = `
     padding: clamp(1.5rem, 3vw, 2.25rem);
     border-radius: 1.5rem;
     border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 55%, transparent);
-    background: color-mix(in srgb, var(--surface-glass-1, #1e293b) 90%, transparent);
+    background: color-mix(in srgb, var(--surface-glass-1, rgba(15, 23, 42, 0.85)) 92%, transparent);
     box-shadow: 0 24px 90px rgba(15, 23, 42, 0.35);
   }
 
@@ -99,9 +141,70 @@ const caseStudyStyles = `
     box-shadow: 0 24px 80px color-mix(in srgb, var(--primary, #38bdf8) 55%, transparent);
   }
 
-  .visual-wrapper {
-    justify-self: center;
-    width: 100%;
+  .visual-stage {
+    position: relative;
+    margin: 0 auto;
+    width: min(1120px, 100%);
+    border-radius: 2.25rem;
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--surface-glass-1, rgba(15, 23, 42, 0.85)) 88%, transparent) 0%,
+      color-mix(in srgb, var(--surface-glass-2, rgba(15, 23, 42, 0.75)) 82%, transparent) 100%
+    );
+    border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 55%, transparent);
+    box-shadow: 0 30px 120px rgba(15, 23, 42, 0.45);
+    overflow: hidden;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: clamp(640px, calc(100vh - 6rem), 1080px);
+  }
+
+  @media (min-width: 1200px) {
+    .project-page {
+      grid-template-columns: minmax(320px, 440px) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .case-study-content {
+      position: sticky;
+      top: clamp(2.5rem, 4vw, 5rem);
+      max-width: 420px;
+      text-align: left;
+      margin: 0;
+    }
+
+    .case-study-intro,
+    .case-study-summary,
+    .case-study-actions {
+      text-align: left;
+      margin: 0;
+    }
+
+    .case-study-meta {
+      justify-content: flex-start;
+    }
+
+    .case-study-description {
+      margin: 0;
+    }
+
+    .case-study-actions {
+      align-items: flex-start;
+    }
+
+    .visual-stage {
+      margin: 0;
+      width: 100%;
+      height: clamp(720px, calc(100vh - 6rem), 1120px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .visual-stage {
+      border-radius: 1.75rem;
+    }
   }
 `;
 
@@ -207,8 +310,14 @@ export default component$(() => {
 
       const data = (await response.json()) as TreeMapNode;
 
-      const width = 960;
-      const height = 600;
+      const containerElement = container.node();
+      if (!containerElement) {
+        throw new Error("Treemap container not found");
+      }
+
+      const bounds = containerElement.getBoundingClientRect();
+      const width = bounds.width > 0 ? bounds.width : 960;
+      const height = bounds.height > 0 ? bounds.height : 640;
 
       const hierarchyRoot = d3
         .hierarchy<TreeMapNode>(data)
@@ -283,7 +392,7 @@ export default component$(() => {
       const legendRoot = d3.select<HTMLElement, unknown>("#legend");
       legendRoot.selectAll("*").remove();
 
-      const legendWidth = 720;
+      const legendWidth = Math.min(width, 720);
       const legendRectSize = 18;
       const legendPadding = 12;
       const itemsPerRow = Math.max(1, Math.floor(legendWidth / 180));
@@ -352,7 +461,7 @@ export default component$(() => {
           </p>
         </header>
 
-        <section class="mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border, #1e293b)] bg-[var(--surface-glass-1, rgba(15,23,42,0.85))] p-6 text-center shadow-[0_18px_60px_rgba(15,23,42,0.45)]">
+        <section class="case-study-summary">
           <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3, #94a3b8)]">
             Data Visualization Projects
           </p>
@@ -366,12 +475,14 @@ export default component$(() => {
           </p>
         </section>
 
-        <div class="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2, #cbd5f5)]">
+        <div class="case-study-actions">
           <button
             type="button"
             onClick$={handleRefresh}
-            class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3, #94a3b8)] transition-colors duration-200 hover:text-[var(--primary, #38bdf8)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isLoading.value}
+            class={`focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] ${
+              isLoading.value ? "opacity-80" : ""
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -379,7 +490,7 @@ export default component$(() => {
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
-              class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
+              class={`h-[0.75rem] w-[0.75rem] ${isLoading.value ? "animate-spin" : ""}`}
               aria-hidden="true"
             >
               <path
@@ -390,7 +501,7 @@ export default component$(() => {
             </svg>
             {isLoading.value ? "Refreshing" : "Refresh data"}
           </button>
-          <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3, #94a3b8)]">
+          <div aria-live="polite" class="min-h-[1.5rem] text-xs uppercase tracking-[0.28em] text-[var(--text3, #94a3b8)]">
             {isLoading.value && <span>Loading dataset…</span>}
             {!isLoading.value && errorMessage.value && (
               <span class="text-[var(--primary, #38bdf8)]">{errorMessage.value}</span>
@@ -398,41 +509,40 @@ export default component$(() => {
           </div>
         </div>
 
-        <div class="case-study-layout">
-          <div class="visual-wrapper">
-            <section class="treemap-card">
-              <div id="treemap-container" aria-live="polite" />
-            </section>
-            <section class="legend-card">
-              <h2 class="sr-only">Legend</h2>
-              <div id="legend" />
-            </section>
-          </div>
-          <aside class="case-study-notes">
-            <h2>Process Notes</h2>
-            <p>
-              The treemap is rendered with D3&apos;s hierarchy utilities, translating raw category totals into proportional
-              rectangles. Hover states reveal individual titles via an accessible tooltip that mirrors the FreeCodeCamp
-              test requirements.
-            </p>
-            <p>
-              Color groupings are generated dynamically from the data set, ensuring each genre maintains a distinctive
-              hue in both the legend and tile grid. Layout spacing and radius are tuned for readability within the
-              portfolio aesthetic.
-            </p>
-            <a class="open-demo-link" href="#treemap-container">
-              Jump to treemap
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="16" height="16">
-                <path
-                  fill-rule="evenodd"
-                  d="M5.22 14.78a.75.75 0 0 1 0-1.06L10.94 8l-5.72-5.72a.75.75 0 0 1 1.06-1.06l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </a>
-          </aside>
-        </div>
+        <aside class="case-study-notes">
+          <h2>Process Notes</h2>
+          <p>
+            The treemap is rendered with D3&apos;s hierarchy utilities, translating raw category totals into proportional
+            rectangles. Hover states reveal individual titles via an accessible tooltip that mirrors the FreeCodeCamp
+            test requirements.
+          </p>
+          <p>
+            Color groupings are generated dynamically from the data set, ensuring each genre maintains a distinctive
+            hue in both the legend and tile grid. Layout spacing and radius are tuned for readability within the
+            portfolio aesthetic.
+          </p>
+          <a class="open-demo-link" href="#treemap-container">
+            Jump to treemap
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="16" height="16">
+              <path
+                fill-rule="evenodd"
+                d="M5.22 14.78a.75.75 0 0 1 0-1.06L10.94 8l-5.72-5.72a.75.75 0 0 1 1.06-1.06l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </a>
+        </aside>
       </article>
+
+      <div class="visual-stage">
+        <section class="treemap-card">
+          <div id="treemap-container" aria-live="polite" />
+        </section>
+        <section class="legend-card">
+          <h2 class="sr-only">Legend</h2>
+          <div id="legend" />
+        </section>
+      </div>
       <div id="tooltip" role="tooltip" aria-hidden="true" />
     </div>
   );

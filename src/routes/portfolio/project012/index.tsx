@@ -7,6 +7,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import siteConfig from "~/config/siteConfig.json";
+import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
 
 const styles = `
@@ -131,9 +132,6 @@ const styles = `
 `;
 
 const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
-const FCC_TEST_SCRIPT_ID = "fcc-testable-projects";
-const FCC_TEST_SCRIPT_SRC = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
-
 const triggerDomContentLoaded = () => {
   if (document.readyState !== "loading") {
     document.dispatchEvent(new Event("DOMContentLoaded"));
@@ -169,6 +167,8 @@ export default component$(() => {
   // Load FCC testing bundle for manual verification when available
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    resetFccTestSuiteUI();
+
     const existingScript = document.getElementById(
       FCC_TEST_SCRIPT_ID,
     ) as HTMLScriptElement | null;
@@ -177,6 +177,7 @@ export default component$(() => {
     };
 
     const script = existingScript ?? document.createElement("script");
+    const createdScript = existingScript === null;
 
     if (existingScript) {
       triggerDomContentLoaded();
@@ -189,8 +190,13 @@ export default component$(() => {
     }
 
     return () => {
-      script.removeEventListener("load", handleLoad);
-      script.remove();
+      if (createdScript) {
+        script.removeEventListener("load", handleLoad);
+      }
+      if (script.isConnected) {
+        script.remove();
+      }
+      resetFccTestSuiteUI();
     };
   });
 

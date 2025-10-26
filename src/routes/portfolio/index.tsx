@@ -165,7 +165,7 @@ export default component$(() => {
   return (
     <>
       <section class="layout-shell relative mt-10 text-[var(--text1)] md:mt-16">
-        <div class="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_color-mix(in_srgb,var(--surface2)_92%,transparent)_0%,_var(--surface1)_68%,_color-mix(in_srgb,var(--surface3)_88%,transparent)_100%)] px-6 py-12 shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
+        <div class="relative w-full overflow-hidden rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_color-mix(in_srgb,var(--surface2)_92%,transparent)_0%,_var(--surface1)_68%,_color-mix(in_srgb,var(--surface3)_88%,transparent)_100%)] px-6 py-12 shadow-[0_32px_120px_var(--surface-shadow)] transition-colors duration-300 md:px-12">
           <div
             aria-hidden="true"
             class="pointer-events-none absolute -left-24 -top-32 h-64 w-64 rounded-full bg-[radial-gradient(circle,_color-mix(in_srgb,var(--primary)_40%,transparent)_0%,_transparent_70%)] opacity-70 blur-3xl md:-left-28 md:-top-40 md:h-80 md:w-80"
@@ -282,7 +282,7 @@ export default component$(() => {
       </section>
 
       <section class="layout-shell relative mt-16 pb-12 text-[var(--text1)] md:mt-24">
-        <div class="mx-auto max-w-6xl">
+        <div class="w-full">
           <header class="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">

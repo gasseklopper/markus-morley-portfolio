@@ -2,6 +2,7 @@ import { $, component$, useSignal, useVisibleTask$, useStylesScoped$ } from "@bu
 import * as d3 from "d3";
 import treemapStyles from "./treemap.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
+import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
 
 const caseStudyStyles = `
@@ -114,9 +115,6 @@ interface TreeMapNode {
 const DATASET_URL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json";
 
-const FCC_TEST_SCRIPT_ID = "fcc-testable-projects";
-const FCC_TEST_SCRIPT_SRC = "https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js";
-
 const triggerDomContentLoaded = () => {
   if (document.readyState !== "loading") {
     document.dispatchEvent(new Event("DOMContentLoaded"));
@@ -161,28 +159,37 @@ export default component$(() => {
       return;
     }
 
-    let cleanupTestScript: (() => void) | undefined;
-    const existingScript = document.getElementById(FCC_TEST_SCRIPT_ID);
+    resetFccTestSuiteUI();
+
+    const existingScript = document.getElementById(
+      FCC_TEST_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    const handleLoad = () => {
+      triggerDomContentLoaded();
+    };
+
+    const script = existingScript ?? document.createElement("script");
+    const createdScript = existingScript === null;
+
     if (existingScript) {
       triggerDomContentLoaded();
     } else {
-      const script = document.createElement("script");
-      const handleLoad = () => {
-        script.removeEventListener("load", handleLoad);
-        triggerDomContentLoaded();
-      };
-
       script.id = FCC_TEST_SCRIPT_ID;
       script.src = FCC_TEST_SCRIPT_SRC;
       script.async = true;
       script.addEventListener("load", handleLoad);
       document.body.append(script);
-
-      cleanupTestScript = () => {
-        script.removeEventListener("load", handleLoad);
-        script.remove();
-      };
     }
+
+    const cleanupTestScript = () => {
+      if (createdScript) {
+        script.removeEventListener("load", handleLoad);
+      }
+      if (script.isConnected) {
+        script.remove();
+      }
+      resetFccTestSuiteUI();
+    };
 
     try {
       isLoading.value = true;
@@ -323,7 +330,7 @@ export default component$(() => {
     }
 
     return () => {
-      cleanupTestScript?.();
+      cleanupTestScript();
       container.selectAll("*").remove();
     };
   });

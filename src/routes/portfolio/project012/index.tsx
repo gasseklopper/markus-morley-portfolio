@@ -11,10 +11,139 @@ import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/
 import { buildHead } from "~/utils/head";
 
 const styles = `
+  .project012-shell {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 5vw, 4rem);
+  }
+
+  .project012-intro {
+    display: grid;
+    width: 100%;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project012-hero {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 2vw, 2.5rem);
+    align-items: center;
+    text-align: center;
+  }
+
+  .project012-hero p {
+    max-width: 48rem;
+  }
+
+  .project012-aside {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .project012-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .project012-hero {
+    margin-inline: auto;
+    width: min(100%, 60rem);
+  }
+
+  .project012-aside {
+    margin-inline: auto;
+    width: min(100%, 40rem);
+  }
+
+  .project012-controls {
+    margin-inline: auto;
+    width: min(100%, 36rem);
+  }
+
+  .project012-summary {
+    width: 100%;
+    border-radius: 1.75rem;
+    text-align: center;
+  }
+
   .chart-wrapper {
     position: relative;
     margin: 0 auto;
-    width: min(100%, 960px);
+    width: 100%;
+    max-width: min(100%, 72rem);
+  }
+
+  @media (min-width: 1024px) {
+    .chart-wrapper {
+      max-width: 84rem;
+    }
+
+    .project012-controls {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  :global(:root[data-layout="full"]) .project012-shell {
+    max-width: min(100%, 100rem);
+    padding-left: clamp(1.5rem, 5vw, 4rem);
+    padding-right: clamp(1.5rem, 5vw, 4rem);
+  }
+
+  :global(:root[data-layout="full"]) .chart-wrapper {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: min(100%, 105rem);
+  }
+
+  @media (min-width: 1024px) {
+    :global(:root[data-layout="full"]) .project012-intro {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      align-items: start;
+    }
+
+    :global(:root[data-layout="full"]) .project012-hero {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    :global(:root[data-layout="full"]) .project012-aside {
+      align-items: stretch;
+    }
+  }
+
+  :global(:root[data-layout="box"]) .project012-intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :global(:root[data-layout="full"]) .project012-hero {
+    width: min(100%, 72rem);
+  }
+
+  :global(:root[data-layout="full"]) .project012-aside {
+    width: min(100%, 44rem);
+  }
+
+  :global(:root[data-layout="full"]) .project012-controls {
+    width: min(100%, 40rem);
+  }
+
+  :global(:root[data-layout="full"]) .project012-summary {
+    text-align: left;
+    border-radius: 2rem;
+  }
+
+  @media (max-width: 1023px) {
+    .project012-hero {
+      align-items: center;
+      text-align: center;
+    }
   }
 
   .chart-theme {
@@ -257,12 +386,19 @@ export default component$(() => {
 
       const renderChart = () => {
         const measuredWidth = wrapperElement.clientWidth || 960;
-        const width = Math.min(960, Math.max(measuredWidth, 320));
+        const width = Math.max(Math.min(measuredWidth, 1440), 320);
         const isCompact = width < 720;
-        const height = isCompact ? 480 : 520;
+        const isWide = width > 1100;
+        const height = isWide
+          ? Math.min(Math.round(width * 0.48), 720)
+          : isCompact
+            ? 480
+            : 560;
         const margin = isCompact
           ? { top: 72, right: 40, bottom: 136, left: 68 }
-          : { top: 84, right: 60, bottom: 124, left: 80 };
+          : isWide
+            ? { top: 96, right: 80, bottom: 132, left: 96 }
+            : { top: 84, right: 60, bottom: 124, left: 80 };
         const innerWidth = Math.max(width - margin.left - margin.right, 200);
         const innerHeight = height - margin.top - margin.bottom;
 
@@ -288,13 +424,19 @@ export default component$(() => {
         const xAxis = d3
           .axisBottom<number>(xScale)
           .tickFormat(d3.format("d"))
-          .ticks(isCompact ? Math.max(5, Math.floor(innerWidth / 80)) : 10);
+          .ticks(
+            isWide
+              ? Math.max(12, Math.floor(innerWidth / 90))
+              : isCompact
+                ? Math.max(5, Math.floor(innerWidth / 80))
+                : 10,
+          );
 
         const timeFormatter = d3.timeFormat("%M:%S");
         const yAxis = d3
           .axisLeft<Date | d3.NumberValue>(yScale)
           .tickFormat((value) => timeFormatter(value as Date))
-          .ticks(isCompact ? 6 : 8);
+          .ticks(isWide ? 10 : isCompact ? 6 : 8);
 
         chartGroup
           .append("g")
@@ -309,8 +451,8 @@ export default component$(() => {
           .attr("class", "axis")
           .call(yAxis);
 
-        const dotRadius = isCompact ? 5 : 6;
-        const tooltipOffset = isCompact ? 40 : 32;
+        const dotRadius = isCompact ? 5 : isWide ? 7 : 6;
+        const tooltipOffset = isCompact ? 40 : isWide ? 36 : 32;
 
         const points = chartGroup
           .selectAll<SVGCircleElement, CyclistDatum>(".dot")
@@ -488,33 +630,37 @@ export default component$(() => {
   });
 
   return (
-    <section class="layout-shell mt-12 text-[var(--text1)] md:mt-20">
-      <div class="mx-auto max-w-5xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
-        <h1 class="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-          Visualize Data with a Scatterplot Graph
-        </h1>
-        <p class="mt-4 text-base leading-relaxed text-[var(--text3)] md:text-lg">
-          A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
-          racer to explore doping allegations, nationalities, and performance patterns.
-        </p>
+    <section class="layout-shell project012-shell mt-12 text-[var(--text1)] md:mt-20">
+      <div class="project012-intro">
+        <div class="project012-hero">
+          <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
+          <h1 class="text-4xl font-semibold leading-tight md:text-5xl">
+            Visualize Data with a Scatterplot Graph
+          </h1>
+          <p class="text-base leading-relaxed text-[var(--text3)] md:text-lg">
+            A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
+            racer to explore doping allegations, nationalities, and performance patterns.
+          </p>
+        </div>
+
+        <div class="project012-aside">
+          <div class="project012-summary border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_18px_60px_var(--surface-shadow)]">
+            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+              Data Visualization Projects
+            </p>
+            <p class="mt-3 text-sm leading-relaxed">
+              Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
+              scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
+            </p>
+            <p class="mt-3 text-sm leading-relaxed">
+              Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
+              and interactions respond to the live dataset.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div class="mx-auto mt-8 max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
-          Data Visualization Projects
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
-          scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
-        </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-          Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
-          and interactions respond to the live dataset.
-        </p>
-      </div>
-
-      <div class="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+      <div class="project012-controls text-sm text-[var(--text2)]">
         <button
           type="button"
           onClick$={handleRefresh}
@@ -538,7 +684,7 @@ export default component$(() => {
           </svg>
           {isLoading.value ? "Refreshing" : "Refresh data"}
         </button>
-        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+        <div aria-live="polite" class="min-h-[1.5rem] text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
           {isLoading.value && <span>Loading dataset…</span>}
           {!isLoading.value && errorMessage.value && (
             <span class="text-[var(--primary)]">{errorMessage.value}</span>

@@ -205,20 +205,27 @@ export default component$(() => {
   // Load FCC testing bundle for manual verification when available
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const existingScript = document.getElementById(FCC_TEST_SCRIPT_ID);
+    const existingScript = document.getElementById(
+      FCC_TEST_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    const handleLoad = () => {
+      triggerDomContentLoaded();
+    };
+
+    const script = existingScript ?? document.createElement("script");
+
     if (existingScript) {
       triggerDomContentLoaded();
-      return;
+    } else {
+      script.id = FCC_TEST_SCRIPT_ID;
+      script.src = FCC_TEST_SCRIPT_SRC;
+      script.async = true;
+      script.addEventListener("load", handleLoad);
+      document.body.appendChild(script);
     }
 
-    const script = document.createElement("script");
-    script.id = FCC_TEST_SCRIPT_ID;
-    script.src = FCC_TEST_SCRIPT_SRC;
-    script.async = true;
-    script.addEventListener("load", triggerDomContentLoaded);
-    document.body.appendChild(script);
-
     return () => {
+      script.removeEventListener("load", handleLoad);
       script.remove();
     };
   });

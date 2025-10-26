@@ -161,28 +161,29 @@ export default component$(() => {
       return;
     }
 
-    let cleanupTestScript: (() => void) | undefined;
-    const existingScript = document.getElementById(FCC_TEST_SCRIPT_ID);
+    const existingScript = document.getElementById(
+      FCC_TEST_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    const handleLoad = () => {
+      triggerDomContentLoaded();
+    };
+
+    const script = existingScript ?? document.createElement("script");
+
     if (existingScript) {
       triggerDomContentLoaded();
     } else {
-      const script = document.createElement("script");
-      const handleLoad = () => {
-        script.removeEventListener("load", handleLoad);
-        triggerDomContentLoaded();
-      };
-
       script.id = FCC_TEST_SCRIPT_ID;
       script.src = FCC_TEST_SCRIPT_SRC;
       script.async = true;
       script.addEventListener("load", handleLoad);
       document.body.append(script);
-
-      cleanupTestScript = () => {
-        script.removeEventListener("load", handleLoad);
-        script.remove();
-      };
     }
+
+    const cleanupTestScript = () => {
+      script.removeEventListener("load", handleLoad);
+      script.remove();
+    };
 
     try {
       isLoading.value = true;
@@ -323,7 +324,7 @@ export default component$(() => {
     }
 
     return () => {
-      cleanupTestScript?.();
+      cleanupTestScript();
       container.selectAll("*").remove();
     };
   });

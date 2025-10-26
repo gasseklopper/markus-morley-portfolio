@@ -213,20 +213,27 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const existing = document.getElementById(FCC_TEST_SCRIPT_ID);
-    if (existing) {
+    const existingScript = document.getElementById(
+      FCC_TEST_SCRIPT_ID,
+    ) as HTMLScriptElement | null;
+    const handleLoad = () => {
       triggerDomContentLoaded();
-      return;
+    };
+
+    const script = existingScript ?? document.createElement("script");
+
+    if (existingScript) {
+      triggerDomContentLoaded();
+    } else {
+      script.id = FCC_TEST_SCRIPT_ID;
+      script.src = FCC_TEST_SCRIPT_SRC;
+      script.async = true;
+      script.addEventListener("load", handleLoad);
+      document.body.appendChild(script);
     }
 
-    const script = document.createElement("script");
-    script.id = FCC_TEST_SCRIPT_ID;
-    script.src = FCC_TEST_SCRIPT_SRC;
-    script.async = true;
-    script.addEventListener("load", triggerDomContentLoaded);
-    document.body.appendChild(script);
-
     return () => {
+      script.removeEventListener("load", handleLoad);
       script.remove();
     };
   });

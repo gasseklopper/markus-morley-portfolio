@@ -42,30 +42,33 @@ type ProjectMedia = {
 
 const projectLayoutMap: Record<string, { card: string; media?: string }> = {
   "/portfolio/color-theme": {
-    card: "md:col-span-2 md:row-span-2 lg:col-span-2",
+    card:
+      "md:col-span-2 md:row-span-2 lg:col-span-2 portfolio-card--span-3 portfolio-card--row-span-2",
     media: "md:aspect-auto md:h-full",
   },
   "/portfolio/farbkasten": {
-    card: "md:row-span-2",
+    card: "md:row-span-2 portfolio-card--row-span-2",
     media: "md:aspect-auto md:h-full",
   },
   "/portfolio/project002": {
-    card: "md:col-span-2",
+    card: "md:col-span-2 portfolio-card--span-3",
     media: "md:aspect-[16/9]",
   },
   "/portfolio/project006": {
-    card: "md:col-span-2 lg:col-span-1",
+    card: "md:col-span-2 lg:col-span-1 portfolio-card--span-1",
   },
   "/portfolio/project010": {
-    card: "md:col-span-2",
+    card: "md:col-span-2 portfolio-card--span-3",
     media: "md:aspect-[16/9]",
   },
   "/portfolio/project011": {
-    card: "md:col-span-2 md:row-span-2",
+    card:
+      "md:col-span-2 md:row-span-2 portfolio-card--span-3 portfolio-card--row-span-2",
     media: "md:aspect-auto md:h-full",
   },
   "/portfolio/generative-art": {
-    card: "md:col-span-2 md:row-span-2",
+    card:
+      "md:col-span-2 md:row-span-2 portfolio-card--span-3 portfolio-card--row-span-2",
     media: "md:aspect-auto md:h-full",
   },
 };
@@ -74,7 +77,7 @@ const defaultLayout = { card: "", media: "" };
 
 const getCardLayout = (page: PortfolioPage) => ({
   ...defaultLayout,
-  ...projectLayoutMap[page.path],
+  ...(projectLayoutMap[page.path] ?? {}),
 });
 
 const getProjectMedia = (page: PortfolioPage): ProjectMedia => {
@@ -294,7 +297,7 @@ export default component$(() => {
               Explore how modular systems, inclusive design, and generative aesthetics translate into real-world launches. Each project card opens a deep dive with process notes, component inventories, and outcomes.
             </p>
           </header>
-          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[minmax(280px,_1fr)]">
+          <div class="portfolio-grid grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[minmax(280px,_1fr)]">
             {portfolioPages.map((p) => {
               const { card: cardLayout, media: mediaLayout } = getCardLayout(p);
               const { component: MediaComponent, alt, overlayClass } = getProjectMedia(p);
@@ -304,7 +307,7 @@ export default component$(() => {
                   href={p.path}
                   key={p.path}
                   aria-label={`Open portfolio project ${p.name}`}
-                  class={`group relative flex h-full flex-col gap-6 overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_24px_80px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_32px_110px_var(--surface-shadow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] ${cardLayout}`}
+                  class={`portfolio-card group relative flex h-full flex-col gap-6 overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-[var(--text2)] shadow-[0_24px_80px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--primary)] hover:shadow-[0_32px_110px_var(--surface-shadow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] ${cardLayout}`}
                 >
                   <div
                     class={`project-card-media relative overflow-hidden rounded-[1.5rem] border border-[color-mix(in_srgb,var(--surface-border)_60%,transparent)] bg-[var(--surface-glass-2)] shadow-[0_20px_60px_var(--surface-shadow)] ${mediaLayout}`}

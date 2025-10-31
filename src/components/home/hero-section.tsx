@@ -7,9 +7,40 @@ interface Fragment {
   collapse: () => void;
 }
 
+interface TrailConfig {
+  imageCount: number;
+  imageLifespan: number;
+  removalDelay: number;
+  mouseThreshold: number;
+  scrollThreshold: number;
+  inDuration: number;
+  outDuration: number;
+  inEasing: string;
+  outEasing: string;
+  touchImageInterval: number;
+  minMovementForImage: number;
+  baseImageSize: number;
+  minImageSize: number;
+  maxImageSize: number;
+  baseRotation: number;
+  maxRotationFactor: number;
+  speedSmoothingFactor: number;
+  showSpeedIndicator: boolean;
+  staggerRange: number;
+  easing: {
+    scale: string;
+    reveal: string;
+  };
+}
+
 interface Pattern {
   name: string;
-  create: (container: HTMLElement, imageSrc: string, size: number) => Fragment[];
+  create: (
+    container: HTMLElement,
+    imageSrc: string,
+    size: number,
+    config: TrailConfig,
+  ) => Fragment[];
   revealTiming: (index: number, total: number) => number;
   collapseTiming: (index: number, total: number) => number;
 }
@@ -32,208 +63,68 @@ const IMAGES = [
 ] as const;
 
 const PATTERNS: Record<string, Pattern> = {
-  flame: {
-    name: "Flame Trail",
-    create: (_container, imageSrc) => {
-      const img = document.createElement("img");
-      img.className = "trail-img";
-      img.src = imageSrc;
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.left = "0";
-      img.style.top = "0";
-      return [
-        {
-          element: img,
-          index: 0,
-          reveal: () => undefined,
-          collapse: () => undefined,
-        },
-      ];
-    },
-    revealTiming: () => 0,
-    collapseTiming: () => 0,
-  },
-  venetian: {
-    name: "Venetian Blinds",
-    create: (_container, imageSrc, size) => {
-      const fragments: Fragment[] = [];
-      const rows = 5;
-
-      for (let i = 0; i < rows; i++) {
-        const fragment = document.createElement("div");
-        fragment.className = "image-fragment";
-        fragment.style.width = `${size}px`;
-        fragment.style.height = `${size / rows}px`;
-        fragment.style.top = `${(size / rows) * i}px`;
-        fragment.style.left = "0";
-
-        const fragmentBg = document.createElement("div");
-        fragmentBg.className = "fragment-bg";
-        fragmentBg.style.backgroundImage = `url(${imageSrc})`;
-        fragmentBg.style.backgroundSize = `${size}px`;
-        fragmentBg.style.backgroundPosition = `0 -${(size / rows) * i}px`;
-        fragment.appendChild(fragmentBg);
-
-        fragments.push({
-          element: fragment,
-          index: i,
-          reveal: () => undefined,
-          collapse: () => undefined,
-        });
-      }
-
-      return fragments;
-    },
-    revealTiming: (index, total) => index * (300 / total),
-    collapseTiming: (index, total) => index * (250 / total),
-  },
-  curtain: {
-    name: "Curtain Reveal",
-    create: (_container, imageSrc, size) => {
-      const fragments: Fragment[] = [];
-      const cols = 5;
-
-      for (let i = 0; i < cols; i++) {
-        const fragment = document.createElement("div");
-        fragment.className = "image-fragment";
-        fragment.style.width = `${size / cols}px`;
-        fragment.style.height = `${size}px`;
-        fragment.style.left = `${(size / cols) * i}px`;
-        fragment.style.top = "0";
-
-        const fragmentBg = document.createElement("div");
-        fragmentBg.className = "fragment-bg";
-        fragmentBg.style.backgroundImage = `url(${imageSrc})`;
-        fragmentBg.style.backgroundSize = `${size}px`;
-        fragmentBg.style.backgroundPosition = `-${(size / cols) * i}px 0`;
-        fragment.appendChild(fragmentBg);
-
-        fragments.push({
-          element: fragment,
-          index: i,
-          reveal: () => undefined,
-          collapse: () => undefined,
-        });
-      }
-
-      return fragments;
-    },
-    revealTiming: (index, total) => index * (350 / total),
-    collapseTiming: (index, total) => index * (300 / total),
-  },
-  hexagon: {
-    name: "Hexagon Tiles",
-    create: (container, imageSrc, size) => {
-      const fragments: Fragment[] = [];
-      const rows = 4;
-      const cols = 4;
-      const fragmentWidth = size / cols;
-      const fragmentHeight = size / rows;
-
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          const fragment = document.createElement("div");
-          fragment.className = "image-fragment";
-          fragment.style.width = `${fragmentWidth}px`;
-          fragment.style.height = `${fragmentHeight}px`;
-          fragment.style.left = `${fragmentWidth * col}px`;
-          fragment.style.top = `${fragmentHeight * row}px`;
-
-          const fragmentBg = document.createElement("div");
-          fragmentBg.className = "fragment-bg";
-          fragmentBg.style.backgroundImage = `url(${imageSrc})`;
-          fragmentBg.style.backgroundSize = `${size}px`;
-          fragmentBg.style.backgroundPosition = `-${fragmentWidth * col}px -${fragmentHeight * row}px`;
-          fragment.appendChild(fragmentBg);
-
-          container.appendChild(fragment);
-
-          fragments.push({
-            element: fragment,
-            index: row * cols + col,
-            reveal: () => undefined,
-            collapse: () => undefined,
-          });
-        }
-      }
-
-      return fragments;
-    },
-    revealTiming: (index, total) => Math.sin((index / total) * Math.PI) * 400,
-    collapseTiming: (index, total) => Math.sin((index / total) * Math.PI) * 350,
-  },
-  liquid: {
-    name: "Liquid Distortion",
-    create: (_container, imageSrc, size) => {
-      const fragments: Fragment[] = [];
-      const rows = 3;
-      const cols = 3;
-
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          const fragment = document.createElement("div");
-          fragment.className = "image-fragment";
-          fragment.style.width = `${size / cols}px`;
-          fragment.style.height = `${size / rows}px`;
-          fragment.style.left = `${(size / cols) * col}px`;
-          fragment.style.top = `${(size / rows) * row}px`;
-          fragment.style.borderRadius = "50%";
-
-          const fragmentBg = document.createElement("div");
-          fragmentBg.className = "fragment-bg";
-          fragmentBg.style.backgroundImage = `url(${imageSrc})`;
-          fragmentBg.style.backgroundSize = `${size}px`;
-          fragmentBg.style.backgroundPosition = `-${(size / cols) * col}px -${(size / rows) * row}px`;
-          fragment.appendChild(fragmentBg);
-
-          fragments.push({
-            element: fragment,
-            index: row * cols + col,
-            reveal: () => undefined,
-            collapse: () => undefined,
-          });
-        }
-      }
-
-      return fragments;
-    },
-    revealTiming: (index, total) => (index / total) * 400,
-    collapseTiming: (index, total) => (1 - index / total) * 350,
-  },
   zoomsplit: {
     name: "Zoom Split",
-    create: (_container, imageSrc, size) => {
+    create: (_container, imageSrc, size, config) => {
       const fragments: Fragment[] = [];
-      const halves = 2;
+      const gridSize = 3;
 
-      for (let i = 0; i < halves; i++) {
-        const fragment = document.createElement("div");
-        fragment.className = "image-fragment";
-        fragment.style.width = `${size}px`;
-        fragment.style.height = `${size / halves}px`;
-        fragment.style.top = `${(size / halves) * i}px`;
-        fragment.style.left = "0";
+      for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+          const fragment = document.createElement("div");
+          fragment.className = "image-fragment";
+          const bg = document.createElement("div");
+          bg.className = "fragment-bg";
+          bg.style.backgroundImage = `url(${imageSrc})`;
+          bg.style.backgroundSize = "100% 100%";
+          const x = (col / gridSize) * 100;
+          const y = (row / gridSize) * 100;
+          const w = 100 / gridSize;
+          const h = 100 / gridSize;
+          const collapsedClip = `polygon(${x + w / 2}% ${y + h / 2}%, ${x + w / 2}% ${y + h / 2}%, ${x + w / 2}% ${y + h / 2}%, ${x + w / 2}% ${y + h / 2}%)`;
+          fragment.style.top = "0";
+          fragment.style.left = "0";
+          fragment.style.width = "100%";
+          fragment.style.height = "100%";
+          fragment.style.clipPath = collapsedClip;
+          fragment.style.transition = `clip-path ${config.inDuration}ms ${config.easing.scale}`;
+          fragment.appendChild(bg);
 
-        const fragmentBg = document.createElement("div");
-        fragmentBg.className = "fragment-bg";
-        fragmentBg.style.backgroundImage = `url(${imageSrc})`;
-        fragmentBg.style.backgroundSize = `${size}px`;
-        fragmentBg.style.backgroundPosition = `0 -${(size / halves) * i}px`;
-        fragment.appendChild(fragmentBg);
-
-        fragments.push({
-          element: fragment,
-          index: i,
-          reveal: () => undefined,
-          collapse: () => undefined,
-        });
+          fragments.push({
+            element: fragment,
+            index: row * gridSize + col,
+            reveal: () => {
+              fragment.style.transition = `clip-path ${config.inDuration}ms ${config.easing.scale}`;
+              fragment.style.clipPath = `polygon(${x}% ${y}%, ${x + w}% ${y}%, ${x + w}% ${y + h}%, ${x}% ${y + h}%)`;
+            },
+            collapse: () => {
+              fragment.style.transition = `clip-path ${config.outDuration}ms ${config.outEasing}`;
+              fragment.style.clipPath = collapsedClip;
+            },
+          });
+        }
       }
 
       return fragments;
     },
-    revealTiming: (index, total) => index * (250 / total),
-    collapseTiming: (index, total) => index * (220 / total),
+    revealTiming: (index, total) => {
+      const gridSize = Math.sqrt(total);
+      const row = Math.floor(index / gridSize);
+      const col = index % gridSize;
+      const centerX = (gridSize - 1) / 2;
+      const centerY = (gridSize - 1) / 2;
+      const distance = Math.hypot(col - centerX, row - centerY);
+      return distance * 150;
+    },
+    collapseTiming: (index, total) => {
+      const gridSize = Math.sqrt(total);
+      const row = Math.floor(index / gridSize);
+      const col = index % gridSize;
+      const centerX = (gridSize - 1) / 2;
+      const centerY = (gridSize - 1) / 2;
+      const distance = Math.hypot(col - centerX, row - centerY);
+      return distance * 80;
+    },
   },
 };
 
@@ -279,7 +170,7 @@ export const HeroSection = component$(() => {
       const isMobile =
         /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
-      const config = {
+      const config: TrailConfig = {
         imageCount: 14,
         imageLifespan: 600,
         removalDelay: 16,
@@ -303,7 +194,7 @@ export const HeroSection = component$(() => {
           scale: "cubic-bezier(0.34, 1.56, 0.64, 1)",
           reveal: "cubic-bezier(0.87, 0, 0.13, 1)",
         },
-      } as const;
+      };
 
       const data: {
         trails: HTMLElement[];
@@ -318,23 +209,11 @@ export const HeroSection = component$(() => {
         trails: [],
         mouse: { x: 0, y: 0 },
         isPointerDown: false,
-        currentPattern: PATTERNS.flame,
+        currentPattern: PATTERNS.zoomsplit,
         lastImage: 0,
         lastTouchTime: 0,
         speed: 0,
         lastMousePos: null,
-      };
-
-      const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".hero-effects a"));
-      const navLinkHandlers: Array<{ element: HTMLAnchorElement; handler: (event: MouseEvent) => void }> = [];
-
-      const setPattern = (patternName: string) => {
-        const pattern = PATTERNS[patternName];
-        if (!pattern) return;
-        data.currentPattern = pattern;
-        navLinks.forEach((link) => {
-          link.classList.toggle("active", link.dataset.effect === patternName);
-        });
       };
 
       const updateSpeedIndicator = (speed: number) => {
@@ -381,7 +260,7 @@ export const HeroSection = component$(() => {
         trail.style.top = `${y - size / 2}px`;
         trail.style.transform = `rotate(${(Math.random() - 0.5) * config.baseRotation * config.maxRotationFactor}deg)`;
 
-        const fragments = data.currentPattern.create(trail, image, size);
+        const fragments = data.currentPattern.create(trail, image, size, config);
         fragments.forEach((fragment) => trail.appendChild(fragment.element));
 
         heroSection.appendChild(trail);
@@ -403,31 +282,15 @@ export const HeroSection = component$(() => {
 
         fragments.forEach((fragment, index) => {
           const total = fragments.length;
-          gsap.fromTo(
-            fragment.element,
-            {
-              clipPath: "inset(0 100% 0 0)",
-            },
-            {
-              clipPath: "inset(0 0% 0 0)",
-              duration: config.inDuration / 1000,
-              ease: config.easing.reveal,
-              delay: data.currentPattern.revealTiming(index, total) / 1000,
-            },
-          );
+          const revealDelay = data.currentPattern.revealTiming(index, total) / 1000;
+          const collapseDelay =
+            config.imageLifespan / 1000 + data.currentPattern.collapseTiming(index, total) / 1000;
+
+          gsap.delayedCall(revealDelay, fragment.reveal);
+          gsap.delayedCall(collapseDelay, fragment.collapse);
         });
 
-        window.setTimeout(() => {
-          fragments.forEach((fragment, index) => {
-            const total = fragments.length;
-            gsap.to(fragment.element, {
-              clipPath: "inset(0 100% 0 0)",
-              duration: config.outDuration / 1000,
-              ease: config.outEasing,
-              delay: data.currentPattern.collapseTiming(index, total) / 1000,
-            });
-          });
-
+        gsap.delayedCall(config.imageLifespan / 1000, () => {
           gsap.to(trail, {
             opacity: 0,
             scale: 0.8,
@@ -438,7 +301,7 @@ export const HeroSection = component$(() => {
               data.trails = data.trails.filter((t) => t !== trail);
             },
           });
-        }, config.imageLifespan);
+        });
 
         data.lastMousePos = { x, y };
       };
@@ -482,18 +345,6 @@ export const HeroSection = component$(() => {
         requestAnimationFrame(updateTrailSpeed);
       };
 
-      navLinks.forEach((link) => {
-        const handler = (event: MouseEvent) => {
-          event.preventDefault();
-          const effect = link.dataset.effect;
-          if (effect) {
-            setPattern(effect);
-          }
-        };
-        link.addEventListener("click", handler);
-        navLinkHandlers.push({ element: link, handler });
-      });
-
       heroSection.addEventListener("pointermove", pointerMoveHandler);
       heroSection.addEventListener("pointerdown", pointerDownHandler);
       window.addEventListener("pointerup", pointerUpHandler);
@@ -503,7 +354,6 @@ export const HeroSection = component$(() => {
 
       const cleanupFn = () => {
         window.clearTimeout(timeoutId);
-        navLinkHandlers.forEach(({ element, handler }) => element.removeEventListener("click", handler));
         heroSection.removeEventListener("pointermove", pointerMoveHandler);
         heroSection.removeEventListener("pointerdown", pointerDownHandler);
         window.removeEventListener("pointerup", pointerUpHandler);
@@ -540,32 +390,7 @@ export const HeroSection = component$(() => {
           <nav class="hero-effects" aria-label="Trail effects">
             <ul>
               <li>
-                <a href="#" data-effect="flame" class="active">
-                  Flame
-                </a>
-              </li>
-              <li>
-                <a href="#" data-effect="venetian">
-                  Venetian
-                </a>
-              </li>
-              <li>
-                <a href="#" data-effect="curtain">
-                  Curtain
-                </a>
-              </li>
-              <li>
-                <a href="#" data-effect="hexagon">
-                  Hexagon
-                </a>
-              </li>
-              <li>
-                <a href="#" data-effect="liquid">
-                  Liquid
-                </a>
-              </li>
-              <li>
-                <a href="#" data-effect="zoomsplit">
+                <a href="#" data-effect="zoomsplit" class="active">
                   Zoom Split
                 </a>
               </li>

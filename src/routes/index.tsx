@@ -41,8 +41,8 @@ type Fragment = {
 type Pattern = {
   name: string;
   create: (container: HTMLElement, imageSrc: string, size: number) => Fragment[];
-  revealTiming: (index: number, total: number, fragment: Fragment) => number;
-  collapseTiming: (index: number, total: number, fragment: Fragment) => number;
+  revealTiming: (index: number, total: number) => number;
+  collapseTiming: (index: number, total: number) => number;
 };
 
 export default component$(() => {
@@ -423,9 +423,9 @@ export default component$(() => {
       let currentEffect: PatternKey = "flame";
       let imageIndex = 0;
       const imagePool: HTMLElement[] = [];
-      let speedTimeout: ReturnType<typeof setTimeout> | undefined;
-      let moveTimeout: ReturnType<typeof setTimeout> | undefined;
-      let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
+      let speedTimeout: number | undefined;
+      let moveTimeout: number | undefined;
+      let scrollTimeout: number | undefined;
       let animationFrameId = 0;
 
       const isInContainer = (x: number, y: number) => {
@@ -460,7 +460,7 @@ export default component$(() => {
           const effectName = PATTERNS[currentEffect].name;
           speedIndicator.textContent = `${effectName} Intensity: ${(smoothedSpeed * 100).toFixed(0)}%`;
           speedIndicator.style.opacity = "1";
-          if (speedTimeout) window.clearTimeout(speedTimeout);
+          if (speedTimeout !== undefined) window.clearTimeout(speedTimeout);
           speedTimeout = window.setTimeout(() => {
             speedIndicator.style.opacity = "0";
           }, 1500);
@@ -550,7 +550,7 @@ export default component$(() => {
           requestAnimationFrame(() => {
             imageContainer.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
             fragments.forEach((fragment) => {
-              const revealTime = pattern.revealTiming(fragment.index, fragments.length, fragment);
+              const revealTime = pattern.revealTiming(fragment.index, fragments.length);
               const delay = revealTime * config.staggerRange;
               window.setTimeout(() => {
                 fragment.reveal();
@@ -618,7 +618,7 @@ export default component$(() => {
             if (imagePattern && fragments) {
               const pattern = PATTERNS[imagePattern];
               fragments.forEach((fragment) => {
-                const collapseTime = pattern.collapseTiming(fragment.index, fragments.length, fragment);
+                const collapseTime = pattern.collapseTiming(fragment.index, fragments.length);
                 const delay = collapseTime * config.staggerRange;
                 window.setTimeout(() => {
                   fragment.collapse();
@@ -669,7 +669,7 @@ export default component$(() => {
         isCursorInContainer = isInContainer(mouseX, mouseY);
         if (isCursorInContainer && hasMovedAtAll()) {
           isMoving = true;
-          if (moveTimeout) window.clearTimeout(moveTimeout);
+          if (moveTimeout !== undefined) window.clearTimeout(moveTimeout);
           moveTimeout = window.setTimeout(() => {
             isMoving = false;
           }, 100);
@@ -728,7 +728,7 @@ export default component$(() => {
         isCursorInContainer = isInContainer(mouseX, mouseY);
         if (isCursorInContainer) {
           isScrolling = true;
-          if (scrollTimeout) window.clearTimeout(scrollTimeout);
+          if (scrollTimeout !== undefined) window.clearTimeout(scrollTimeout);
           scrollTimeout = window.setTimeout(() => {
             isScrolling = false;
           }, 100);
@@ -761,9 +761,9 @@ export default component$(() => {
 
       cleanup(() => {
         window.clearTimeout(timeoutId);
-        if (speedTimeout) window.clearTimeout(speedTimeout);
-        if (moveTimeout) window.clearTimeout(moveTimeout);
-        if (scrollTimeout) window.clearTimeout(scrollTimeout);
+        if (speedTimeout !== undefined) window.clearTimeout(speedTimeout);
+        if (moveTimeout !== undefined) window.clearTimeout(moveTimeout);
+        if (scrollTimeout !== undefined) window.clearTimeout(scrollTimeout);
         window.cancelAnimationFrame(animationFrameId);
         effectLinks.forEach((link) => link.removeEventListener("click", onEffectClick));
         document.removeEventListener("mouseover", onMouseOver);

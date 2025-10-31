@@ -73,14 +73,8 @@ const styles = `
     border-radius: clamp(1.75rem, 4vw, 2.75rem);
     border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 65%, transparent);
     overflow: hidden;
-    --crayon-canvas-bg: color-mix(in srgb, var(--surface2, #1f2937) 82%, var(--brand-core, #7dd3fc) 18%);
-    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary, #38bdf8) 58%, var(--surface5, #1e293b) 42%);
-    --crayon-polygon-hatch: color-mix(in srgb, var(--brand, #f472b6) 48%, var(--surface3, #334155) 52%);
-    --crayon-trail-stroke: color-mix(in srgb, var(--primary, #38bdf8) 64%, var(--surface7, #1e293b) 36%);
-    --crayon-highlight-stroke: color-mix(in srgb, var(--quaternary, #f97316) 70%, var(--surface1, #0f172a) 30%);
-    --crayon-highlight-hatch: color-mix(in srgb, var(--tertiary, #a855f7) 58%, var(--surface4, #1e293b) 42%);
     box-shadow: 0 32px 140px color-mix(in srgb, var(--surface-shadow, rgba(15, 23, 42, 0.55)) 90%, transparent);
-    background: color-mix(in srgb, var(--crayon-canvas-bg) 92%, transparent);
+    background: transparent;
     backdrop-filter: blur(16px);
     transition: background 0.45s ease, box-shadow 0.45s ease, border-color 0.45s ease;
   }
@@ -88,33 +82,6 @@ const styles = `
   #canvas-container {
     position: absolute;
     inset: 0;
-  }
-
-  :global([data-theme="light"]) .canvas-shell {
-    --crayon-canvas-bg: color-mix(in srgb, var(--surface2) 68%, var(--brand-core) 32%);
-    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 48%, var(--surface6) 52%);
-    --crayon-polygon-hatch: color-mix(in srgb, var(--brand) 52%, var(--surface3) 48%);
-    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 56%, var(--surface7) 44%);
-    --crayon-highlight-stroke: color-mix(in srgb, var(--tertiary) 54%, var(--surface2) 46%);
-    --crayon-highlight-hatch: color-mix(in srgb, var(--quaternary) 52%, var(--surface2) 48%);
-  }
-
-  :global([data-theme="neon"]) .canvas-shell {
-    --crayon-canvas-bg: color-mix(in srgb, var(--surface3) 45%, var(--brand-core) 55%);
-    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 70%, var(--brand-glow) 30%);
-    --crayon-polygon-hatch: color-mix(in srgb, var(--tertiary) 65%, var(--surface6) 35%);
-    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 74%, var(--secondary) 26%);
-    --crayon-highlight-stroke: color-mix(in srgb, var(--quaternary) 82%, var(--text1) 18%);
-    --crayon-highlight-hatch: color-mix(in srgb, var(--secondary) 72%, var(--quaternary) 28%);
-  }
-
-  :global([data-theme="pastell"]) .canvas-shell {
-    --crayon-canvas-bg: color-mix(in srgb, var(--surface3) 74%, var(--brand-core) 26%);
-    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 58%, var(--surface6) 42%);
-    --crayon-polygon-hatch: color-mix(in srgb, var(--brand) 60%, var(--surface4) 40%);
-    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 62%, var(--surface7) 38%);
-    --crayon-highlight-stroke: color-mix(in srgb, var(--tertiary) 58%, var(--surface2) 42%);
-    --crayon-highlight-hatch: color-mix(in srgb, var(--quaternary) 56%, var(--surface3) 44%);
   }
 
   .canvas-fallback {
@@ -151,12 +118,12 @@ type PolygonPoint = {
 };
 
 type CanvasPalette = {
-  background: string;
   polygonStroke: string;
   polygonHatch: string;
   trailStroke: string;
   highlightStroke: string;
   highlightHatch: string;
+  background: string;
 };
 
 class CanvasManager {
@@ -177,12 +144,12 @@ class CanvasManager {
   private animationFrame?: number;
   private mouseupTO?: ReturnType<typeof setTimeout>;
   private palette: CanvasPalette = {
-    background: "#FC0E49",
     polygonStroke: "#7A200C",
     polygonHatch: "#7A200C",
     trailStroke: "#FF7EBE",
     highlightStroke: "#FF7EBE",
     highlightHatch: "#FFAABF",
+    background: "transparent",
   };
   private themeObserver?: MutationObserver;
 
@@ -251,8 +218,16 @@ class CanvasManager {
       } = this.palette;
 
       p.frameRate(30);
+      const shouldClear =
+        !background ||
+        background === "transparent" ||
+        /^rgba?\(\s*0\s*,\s*0\s*,\s*0\s*(?:,\s*0\s*)?\)$/i.test(background);
+      if (shouldClear) {
+        p.clear();
+      } else {
+        p.background(background);
+      }
       p.translate(-this.width / 2, -this.height / 2);
-      p.background(background);
 
       this.brush.stroke(polygonStroke);
       this.brush.strokeWeight(1);
@@ -391,21 +366,80 @@ class CanvasManager {
   }
 
   private updatePalette = () => {
-    const styles = getComputedStyle(this.el);
+    const rootStyles = getComputedStyle(document.documentElement);
     const readColor = (variable: string, fallback: string) => {
-      const value = styles.getPropertyValue(variable).trim();
+      const value = rootStyles.getPropertyValue(variable).trim();
       return value || fallback;
     };
 
+    const surface2 = readColor("--surface2", "#0f172a");
+    const surface3 = readColor("--surface3", "#111827");
+    const surface5 = readColor("--surface5", "#1f2937");
+    const surface6 = readColor("--surface6", "#334155");
+    const surface7 = readColor("--surface7", "#64748b");
+    const brandCore = readColor("--brand-core", this.palette.polygonHatch);
+    const primary = readColor("--primary", this.palette.trailStroke);
+    const secondary = readColor("--secondary", this.palette.polygonStroke);
+    const tertiary = readColor("--tertiary", this.palette.highlightHatch);
+    const quaternary = readColor("--quaternary", this.palette.highlightStroke);
+
     this.palette = {
-      background: readColor("--crayon-canvas-bg", this.palette.background),
-      polygonStroke: readColor("--crayon-polygon-stroke", this.palette.polygonStroke),
-      polygonHatch: readColor("--crayon-polygon-hatch", this.palette.polygonHatch),
-      trailStroke: readColor("--crayon-trail-stroke", this.palette.trailStroke),
-      highlightStroke: readColor("--crayon-highlight-stroke", this.palette.highlightStroke),
-      highlightHatch: readColor("--crayon-highlight-hatch", this.palette.highlightHatch),
+      polygonStroke: this.mixColors(secondary, surface6, 0.72),
+      polygonHatch: this.mixColors(brandCore, surface5, 0.6),
+      trailStroke: this.mixColors(primary, surface7, 0.75),
+      highlightStroke: this.mixColors(quaternary, surface3, 0.68),
+      highlightHatch: this.mixColors(tertiary, surface2, 0.64),
+      background: "transparent",
     };
   };
+
+  private mixColors(colorA: string, colorB: string, weightA: number) {
+    const parsedA = this.parseColor(colorA);
+    const parsedB = this.parseColor(colorB);
+    if (!parsedA || !parsedB) {
+      return colorA || colorB;
+    }
+
+    const clamped = Math.min(Math.max(weightA, 0), 1);
+    const mix = parsedA.map((component, index) =>
+      Math.round(component * clamped + parsedB[index] * (1 - clamped)),
+    ) as [number, number, number];
+
+    return `rgb(${mix[0]}, ${mix[1]}, ${mix[2]})`;
+  }
+
+  private parseColor(color: string): [number, number, number] | null {
+    if (!color) return null;
+    const trimmed = color.trim();
+
+    if (trimmed.startsWith("#")) {
+      let hex = trimmed.slice(1);
+      if (hex.length === 3) {
+        hex = hex
+          .split("")
+          .map((char) => char + char)
+          .join("");
+      }
+      if (hex.length >= 6) {
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        if ([r, g, b].every((value) => Number.isFinite(value))) {
+          return [r, g, b];
+        }
+      }
+      return null;
+    }
+
+    const rgbMatch = trimmed.match(
+      /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*[\d.]+)?\s*\)/i,
+    );
+    if (rgbMatch) {
+      return [Number(rgbMatch[1]), Number(rgbMatch[2]), Number(rgbMatch[3])];
+    }
+
+    return null;
+  }
 
   private observeTheme = () => {
     const root = document.documentElement;

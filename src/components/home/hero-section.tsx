@@ -38,7 +38,10 @@ const PATTERNS: Record<string, Pattern> = {
       const img = document.createElement("img");
       img.className = "trail-img";
       img.src = imageSrc;
-      img.width = img.height = 0;
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.left = "0";
+      img.style.top = "0";
       return [
         {
           element: img,

@@ -925,74 +925,21 @@ export default component$(() => {
           </div>
 
           <svg
-            class="hero-svg letter-m"
-            viewBox="0 0 160 120"
+            class="hero-svg hero-wordmark"
+            viewBox="0 0 1200 320"
             preserveAspectRatio="xMidYMid meet"
             xmlns="http://www.w3.org/2000/svg"
             aria-hidden="true"
           >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              M
-            </text>
-          </svg>
-
-          <svg
-            class="hero-svg letter-o"
-            viewBox="0 0 160 120"
-            preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              O
-            </text>
-          </svg>
-
-          <svg
-            class="hero-svg letter-r"
-            viewBox="0 0 160 120"
-            preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              R
-            </text>
-          </svg>
-
-          <svg
-            class="hero-svg letter-l"
-            viewBox="0 0 160 120"
-            preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              L
-            </text>
-          </svg>
-
-          <svg
-            class="hero-svg letter-e"
-            viewBox="0 0 160 120"
-            preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              E
-            </text>
-          </svg>
-
-          <svg
-            class="hero-svg letter-y"
-            viewBox="0 0 160 120"
-            preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle">
-              Y
+            <text
+              x="50%"
+              y="52%"
+              dominant-baseline="middle"
+              text-anchor="middle"
+              textLength="88%"
+              lengthAdjust="spacingAndGlyphs"
+            >
+              MORLEY
             </text>
           </svg>
 

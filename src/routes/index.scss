@@ -355,36 +355,15 @@
   color: var(--hero-foreground-strong);
 }
 
+.hero-wordmark {
+  z-index: 12;
+}
+
 .hero-svg text {
   font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: 96px;
-  letter-spacing: -0.08em;
+  font-weight: 900;
+  font-size: clamp(96px, 20vw, 320px);
   fill: currentColor;
-}
-
-.letter-m {
-  z-index: 13;
-}
-
-.letter-o {
-  z-index: 11;
-}
-
-.letter-r {
-  z-index: 13;
-}
-
-.letter-l {
-  z-index: 11;
-}
-
-.letter-e {
-  z-index: 13;
-}
-
-.letter-y {
-  z-index: 11;
 }
 
 .trail-img {

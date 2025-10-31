@@ -151,8 +151,9 @@ class CanvasManager {
   }
 
   private resize = () => {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
+    const rect = this.el.getBoundingClientRect();
+    this.width = rect.width || window.innerWidth;
+    this.height = rect.height || window.innerHeight;
     this.updateViewportUnits();
     this.polygon = this.initPolygon();
     if (this.app) {
@@ -291,8 +292,11 @@ class CanvasManager {
   };
 
   private mousemove = (event: MouseEvent) => {
+    const rect = this.el.getBoundingClientRect();
+    const relativeX = event.clientX - rect.left;
+    const relativeY = event.clientY - rect.top;
     const polygonPoints = this.polygon.map((point) => [point.x.c, point.y.c]);
-    const isHover = this.inPolygon(event.clientX, event.clientY, polygonPoints);
+    const isHover = this.inPolygon(relativeX, relativeY, polygonPoints);
     this.polygon.forEach((point) => {
       if (isHover) {
         point.x.t = point.x.hover;
@@ -303,8 +307,8 @@ class CanvasManager {
       }
     });
     this.polygonHover.t = isHover ? 1 : 0;
-    this.mouse.x.t = event.clientX;
-    this.mouse.y.t = event.clientY;
+    this.mouse.x.t = relativeX;
+    this.mouse.y.t = relativeY;
   };
 
   private inPolygon(x: number, y: number, polygon: number[][]) {

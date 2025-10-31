@@ -35,8 +35,9 @@ const styles = `
     border-radius: clamp(1.75rem, 4vw, 2.75rem);
     border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 65%, transparent);
     background: color-mix(in srgb, var(--surface-glass-1, rgba(15, 23, 42, 0.85)) 90%, transparent);
-    box-shadow: 0 28px 120px rgba(15, 23, 42, 0.45);
+    box-shadow: 0 28px 120px color-mix(in srgb, var(--surface-shadow, rgba(15, 23, 42, 0.45)) 85%, transparent);
     text-align: left;
+    transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
   }
 
   .crayon-copy h1 {
@@ -72,14 +73,48 @@ const styles = `
     border-radius: clamp(1.75rem, 4vw, 2.75rem);
     border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 65%, transparent);
     overflow: hidden;
-    box-shadow: 0 32px 140px rgba(15, 23, 42, 0.55);
-    background: color-mix(in srgb, var(--surface-glass-2, rgba(15, 23, 42, 0.7)) 92%, transparent);
+    --crayon-canvas-bg: color-mix(in srgb, var(--surface2, #1f2937) 82%, var(--brand-core, #7dd3fc) 18%);
+    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary, #38bdf8) 58%, var(--surface5, #1e293b) 42%);
+    --crayon-polygon-hatch: color-mix(in srgb, var(--brand, #f472b6) 48%, var(--surface3, #334155) 52%);
+    --crayon-trail-stroke: color-mix(in srgb, var(--primary, #38bdf8) 64%, var(--surface7, #1e293b) 36%);
+    --crayon-highlight-stroke: color-mix(in srgb, var(--quaternary, #f97316) 70%, var(--surface1, #0f172a) 30%);
+    --crayon-highlight-hatch: color-mix(in srgb, var(--tertiary, #a855f7) 58%, var(--surface4, #1e293b) 42%);
+    box-shadow: 0 32px 140px color-mix(in srgb, var(--surface-shadow, rgba(15, 23, 42, 0.55)) 90%, transparent);
+    background: color-mix(in srgb, var(--crayon-canvas-bg) 92%, transparent);
     backdrop-filter: blur(16px);
+    transition: background 0.45s ease, box-shadow 0.45s ease, border-color 0.45s ease;
   }
 
   #canvas-container {
     position: absolute;
     inset: 0;
+  }
+
+  :global([data-theme="light"]) .canvas-shell {
+    --crayon-canvas-bg: color-mix(in srgb, var(--surface2) 68%, var(--brand-core) 32%);
+    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 48%, var(--surface6) 52%);
+    --crayon-polygon-hatch: color-mix(in srgb, var(--brand) 52%, var(--surface3) 48%);
+    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 56%, var(--surface7) 44%);
+    --crayon-highlight-stroke: color-mix(in srgb, var(--tertiary) 54%, var(--surface2) 46%);
+    --crayon-highlight-hatch: color-mix(in srgb, var(--quaternary) 52%, var(--surface2) 48%);
+  }
+
+  :global([data-theme="neon"]) .canvas-shell {
+    --crayon-canvas-bg: color-mix(in srgb, var(--surface3) 45%, var(--brand-core) 55%);
+    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 70%, var(--brand-glow) 30%);
+    --crayon-polygon-hatch: color-mix(in srgb, var(--tertiary) 65%, var(--surface6) 35%);
+    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 74%, var(--secondary) 26%);
+    --crayon-highlight-stroke: color-mix(in srgb, var(--quaternary) 82%, var(--text1) 18%);
+    --crayon-highlight-hatch: color-mix(in srgb, var(--secondary) 72%, var(--quaternary) 28%);
+  }
+
+  :global([data-theme="pastell"]) .canvas-shell {
+    --crayon-canvas-bg: color-mix(in srgb, var(--surface3) 74%, var(--brand-core) 26%);
+    --crayon-polygon-stroke: color-mix(in srgb, var(--secondary) 58%, var(--surface6) 42%);
+    --crayon-polygon-hatch: color-mix(in srgb, var(--brand) 60%, var(--surface4) 40%);
+    --crayon-trail-stroke: color-mix(in srgb, var(--primary) 62%, var(--surface7) 38%);
+    --crayon-highlight-stroke: color-mix(in srgb, var(--tertiary) 58%, var(--surface2) 42%);
+    --crayon-highlight-hatch: color-mix(in srgb, var(--quaternary) 56%, var(--surface3) 44%);
   }
 
   .canvas-fallback {
@@ -115,6 +150,15 @@ type PolygonPoint = {
   y: { c: number; t: number; rest: number; hover: number };
 };
 
+type CanvasPalette = {
+  background: string;
+  polygonStroke: string;
+  polygonHatch: string;
+  trailStroke: string;
+  highlightStroke: string;
+  highlightHatch: string;
+};
+
 class CanvasManager {
   private width = window.innerWidth;
   private height = window.innerHeight;
@@ -132,6 +176,15 @@ class CanvasManager {
   private app?: p5Type;
   private animationFrame?: number;
   private mouseupTO?: ReturnType<typeof setTimeout>;
+  private palette: CanvasPalette = {
+    background: "#FC0E49",
+    polygonStroke: "#7A200C",
+    polygonHatch: "#7A200C",
+    trailStroke: "#FF7EBE",
+    highlightStroke: "#FF7EBE",
+    highlightHatch: "#FFAABF",
+  };
+  private themeObserver?: MutationObserver;
 
   constructor(
     private readonly P5Ctor: typeof p5Type,
@@ -146,6 +199,8 @@ class CanvasManager {
     document.addEventListener("mousemove", this.mousemove);
     document.addEventListener("mouseup", this.mouseup);
 
+    this.updatePalette();
+    this.observeTheme();
     this.resize();
     this.initCanvas();
   }
@@ -155,6 +210,7 @@ class CanvasManager {
     this.width = rect.width || window.innerWidth;
     this.height = rect.height || window.innerHeight;
     this.updateViewportUnits();
+    this.updatePalette();
     this.polygon = this.initPolygon();
     if (this.app) {
       this.app.resizeCanvas(this.width, this.height, true);
@@ -185,14 +241,23 @@ class CanvasManager {
   private sketch(p: p5Type) {
     this.initBrush(p);
     p.draw = () => {
+      const {
+        background,
+        polygonStroke,
+        polygonHatch,
+        trailStroke,
+        highlightStroke,
+        highlightHatch,
+      } = this.palette;
+
       p.frameRate(30);
       p.translate(-this.width / 2, -this.height / 2);
-      p.background("#FC0E49");
+      p.background(background);
 
-      this.brush.stroke("#7A200C");
+      this.brush.stroke(polygonStroke);
       this.brush.strokeWeight(1);
       this.brush.noFill();
-      this.brush.setHatch("HB", "#7A200C", 1);
+      this.brush.setHatch("HB", polygonHatch, 1);
       this.brush.hatch(15, 45);
       const time = this.t * 0.01;
       this.brush.polygon(
@@ -202,6 +267,7 @@ class CanvasManager {
         ]),
       );
 
+      this.brush.stroke(trailStroke);
       this.brush.strokeWeight(1 + 0.005 * this.mouse.delta.c);
       this.trails.forEach((trail) => {
         if (trail.length > 0) {
@@ -213,8 +279,8 @@ class CanvasManager {
       });
 
       this.brush.noFill();
-      this.brush.stroke("#FF7EBE");
-      this.brush.setHatch("HB", "#FFAABF", 1);
+      this.brush.stroke(highlightStroke);
+      this.brush.setHatch("HB", highlightHatch, 1);
       this.brush.hatch(5, 30, { rand: 0.1, continuous: true, gradient: 0.3 });
       const r =
         5 +
@@ -324,11 +390,38 @@ class CanvasManager {
     return inside;
   }
 
+  private updatePalette = () => {
+    const styles = getComputedStyle(this.el);
+    const readColor = (variable: string, fallback: string) => {
+      const value = styles.getPropertyValue(variable).trim();
+      return value || fallback;
+    };
+
+    this.palette = {
+      background: readColor("--crayon-canvas-bg", this.palette.background),
+      polygonStroke: readColor("--crayon-polygon-stroke", this.palette.polygonStroke),
+      polygonHatch: readColor("--crayon-polygon-hatch", this.palette.polygonHatch),
+      trailStroke: readColor("--crayon-trail-stroke", this.palette.trailStroke),
+      highlightStroke: readColor("--crayon-highlight-stroke", this.palette.highlightStroke),
+      highlightHatch: readColor("--crayon-highlight-hatch", this.palette.highlightHatch),
+    };
+  };
+
+  private observeTheme = () => {
+    const root = document.documentElement;
+    this.themeObserver?.disconnect();
+    this.themeObserver = new MutationObserver(() => {
+      this.updatePalette();
+    });
+    this.themeObserver.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  };
+
   destroy() {
     window.removeEventListener("resize", this.resize);
     document.removeEventListener("mousedown", this.mousedown);
     document.removeEventListener("mousemove", this.mousemove);
     document.removeEventListener("mouseup", this.mouseup);
+    this.themeObserver?.disconnect();
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
     if (this.app) {
       this.app.remove();

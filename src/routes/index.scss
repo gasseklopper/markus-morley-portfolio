@@ -352,9 +352,26 @@
   user-select: none;
   position: absolute;
   inset: 0;
+  color: var(--hero-foreground-strong);
 }
 
-.letter-f {
+.hero-svg text {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 96px;
+  letter-spacing: -0.08em;
+  fill: currentColor;
+}
+
+.letter-m {
+  z-index: 13;
+}
+
+.letter-o {
+  z-index: 11;
+}
+
+.letter-r {
   z-index: 13;
 }
 
@@ -362,16 +379,12 @@
   z-index: 11;
 }
 
-.letter-a {
-  z-index: 13;
-}
-
-.letter-m {
-  z-index: 11;
-}
-
 .letter-e {
   z-index: 13;
+}
+
+.letter-y {
+  z-index: 11;
 }
 
 .trail-img {

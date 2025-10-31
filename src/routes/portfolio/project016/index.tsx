@@ -131,30 +131,37 @@ export default component$(() => {
       end: "+200vh top",
     });
 
-    const getImageInitialPosition = (index: number, imageIndex: number) => {
-      const positions: Record<number, Record<number, Record<string, string>>> = {
+    type ImageInitialPosition = {
+      scale?: number;
+      y?: string;
+      rotateZ?: string;
+      zIndex?: number;
+    };
+
+    const getImageInitialPosition = (index: number, imageIndex: number): ImageInitialPosition => {
+      const positions: Record<number, ImageInitialPosition> = {
         0: {
-          scale: "0.8",
+          scale: 0.8,
           y: index % 2 === 0 ? "175vh" : "-120vh",
           rotateZ: index % 2 === 0 ? "-5deg" : "5deg",
-          zIndex: index % 2 === 0 ? "3" : "1",
+          zIndex: index % 2 === 0 ? 3 : 1,
         },
         1: {
-          scale: "0.8",
+          scale: 0.8,
           y: index % 2 === 0 ? "-225vh" : "300vh",
-          zIndex: index % 2 === 0 ? "1" : "3",
+          zIndex: index % 2 === 0 ? 1 : 3,
           rotateZ: index % 2 === 0 ? "5deg" : "-5deg",
         },
         2: {
-          scale: "0.8",
+          scale: 0.8,
           y: index % 2 === 0 ? "300vh" : "-120vh",
-          zIndex: "3",
+          zIndex: 3,
           rotateZ: "5deg",
         },
         3: {
-          scale: "0.8",
+          scale: 0.8,
           y: index % 2 === 0 ? "-100vh" : "175vh",
-          zIndex: "1",
+          zIndex: 1,
           rotateZ: "-5deg",
         },
       };
@@ -346,7 +353,7 @@ export default component$(() => {
                 sizes="100vw"
                 width={4140}
                 height={2760}
-                srcSet="https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-500.jpeg 500w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-800.jpeg 800w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1080.jpeg 1080w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1600.jpeg 1600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2000.jpeg 2000w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2600.jpeg 2600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO.jpeg 4140w"
+                srcset="https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-500.jpeg 500w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-800.jpeg 800w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1080.jpeg 1080w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1600.jpeg 1600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2000.jpeg 2000w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2600.jpeg 2600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO.jpeg 4140w"
                 alt="Ambient lighting across fabric backdrop"
                 class="hero_image"
               />

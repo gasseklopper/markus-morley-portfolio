@@ -120,6 +120,12 @@
     "description": "Extract and sort colors from images using p5.js."
   },
   {
+    "name": "Crayon — the Qwik.js way",
+    "path": "/portfolio/generative-art/crayon",
+    "title": "Crayon — the Qwik.js way - Markus Morley personal portfolio",
+    "description": "Interactive p5.brush sketch that responds to motion and gesture."
+  },
+  {
     "name": "Connected Agents",
     "path": "/portfolio/generative-art/connected-agents",
     "title": "Connected Agents - Markus Morley personal portfolio",

@@ -102,6 +102,12 @@
     "description": "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips."
   },
   {
+    "name": "Project 016",
+    "path": "/portfolio/project016",
+    "title": "Project 016 - Markus Morley personal portfolio",
+    "description": "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

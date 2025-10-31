@@ -435,10 +435,8 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ cleanup }) => {
-    const [{ default: P5 }, brushModule] = await Promise.all([
-      import("p5"),
-      import("p5.brush"),
-    ]);
+    const { default: P5 } = await import("p5");
+    const brushModule = await import("p5.brush");
 
     const brush = (
       (brushModule as { default?: BrushModule }).default ?? brushModule

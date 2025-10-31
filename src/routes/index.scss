@@ -26,30 +26,30 @@
   min-height: 100vh;
   --font-sans: "GT Standard", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: "PPSupplyMono", "Courier New", monospace;
-  --color-bg: #ff3300;
-  --color-text: #ffffff;
-  --color-accent: #000000;
-  --color-text-dark: #888888;
-  --color-text-darker: #666666;
-  --color-text-light: #5a5a5a;
-  --color-gradient-1: #3a3a3a;
-  --color-gradient-2: #3f3f3f;
-  --color-gradient-3: #444444;
-  --color-gradient-4: #494949;
-  --color-gradient-5: #4e4e4e;
-  --color-gradient-6: #535353;
-  --color-gradient-7: #585858;
-  --color-gradient-8: #5d5d5d;
-  --color-gradient-9: #626262;
-  --color-gradient-10: #676767;
-  --color-gradient-11: #6c6c6c;
-  --color-gradient-12: #717171;
-  --color-gradient-13: #767676;
-  --color-gradient-14: #7b7b7b;
-  --color-gradient-15: #808080;
+  --hero-foreground: var(--text1);
+  --hero-foreground-strong: color-mix(in srgb, var(--text1) 88%, var(--brand));
+  --hero-muted: var(--text3);
+  --hero-accent: var(--brand-core);
+  --hero-border: color-mix(in srgb, var(--surface-border) 65%, transparent);
+  --hero-surface: color-mix(in srgb, var(--surface-glass-1) 85%, transparent);
+  --color-gradient-1: color-mix(in srgb, var(--hero-foreground) 18%, var(--hero-muted));
+  --color-gradient-2: color-mix(in srgb, var(--hero-foreground) 24%, var(--hero-muted));
+  --color-gradient-3: color-mix(in srgb, var(--hero-foreground) 30%, var(--hero-muted));
+  --color-gradient-4: color-mix(in srgb, var(--hero-foreground) 36%, var(--hero-muted));
+  --color-gradient-5: color-mix(in srgb, var(--hero-foreground) 42%, var(--hero-muted));
+  --color-gradient-6: color-mix(in srgb, var(--hero-foreground) 48%, var(--hero-muted));
+  --color-gradient-7: color-mix(in srgb, var(--hero-foreground) 54%, var(--hero-muted));
+  --color-gradient-8: color-mix(in srgb, var(--hero-foreground) 60%, var(--hero-muted));
+  --color-gradient-9: color-mix(in srgb, var(--hero-foreground) 66%, var(--hero-muted));
+  --color-gradient-10: color-mix(in srgb, var(--hero-foreground) 72%, var(--hero-muted));
+  --color-gradient-11: color-mix(in srgb, var(--hero-foreground) 78%, var(--hero-muted));
+  --color-gradient-12: color-mix(in srgb, var(--hero-foreground) 84%, var(--hero-muted));
+  --color-gradient-13: color-mix(in srgb, var(--hero-foreground) 88%, var(--hero-muted));
+  --color-gradient-14: color-mix(in srgb, var(--hero-foreground) 92%, var(--hero-muted));
+  --color-gradient-15: color-mix(in srgb, var(--hero-foreground) 96%, var(--hero-muted));
   font-family: var(--font-sans);
-  background: #000;
-  color: var(--color-text);
+  background: transparent;
+  color: var(--hero-foreground);
 }
 
 .home-hero::after {
@@ -68,7 +68,7 @@
 .hero-viewport {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  background: transparent;
   overflow: hidden;
 }
 
@@ -106,7 +106,7 @@
   transition: transform 0.3s ease;
   width: 1.4rem;
   height: 1.4rem;
-  background-color: var(--color-text);
+  background-color: var(--hero-foreground);
   top: 50%;
 }
 
@@ -140,7 +140,7 @@
 .hero-social a {
   position: relative;
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--hero-foreground);
   padding: 0;
   display: inline-block;
   z-index: 1;
@@ -159,7 +159,7 @@
   inset: 0 auto 0 0;
   width: 0;
   height: 100%;
-  background-color: var(--color-text);
+  background-color: var(--hero-accent);
   z-index: -1;
   transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -173,8 +173,8 @@
 .hero-effects a:hover,
 .hero-social a:hover,
 .hero-effects a.active {
-  color: #222220;
-  mix-blend-mode: difference;
+  color: var(--brand-inverted);
+  mix-blend-mode: normal;
   opacity: 1;
 }
 
@@ -206,9 +206,9 @@
   max-width: min(560px, 90vw);
   text-align: center;
   padding: 2rem 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--hero-border);
   border-radius: 1.5rem;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--hero-surface);
   backdrop-filter: blur(12px);
 }
 
@@ -218,12 +218,13 @@
   text-transform: uppercase;
   letter-spacing: -0.04em;
   line-height: 1.05;
+  color: var(--hero-foreground-strong);
 }
 
 .hero-core p {
   margin-top: 1rem;
   font-size: clamp(0.85rem, 1vw + 0.6rem, 1rem);
-  color: var(--color-text-dark);
+  color: var(--hero-muted);
   text-transform: uppercase;
   letter-spacing: 0.3em;
 }
@@ -332,7 +333,7 @@
 }
 
 .rotated-item {
-  color: var(--color-text-dark);
+  color: var(--hero-muted);
   font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 700;
@@ -351,26 +352,18 @@
   user-select: none;
   position: absolute;
   inset: 0;
+  color: var(--hero-foreground-strong);
 }
 
-.letter-f {
-  z-index: 13;
+.hero-wordmark {
+  z-index: 12;
 }
 
-.letter-l {
-  z-index: 11;
-}
-
-.letter-a {
-  z-index: 13;
-}
-
-.letter-m {
-  z-index: 11;
-}
-
-.letter-e {
-  z-index: 13;
+.hero-svg text {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: clamp(96px, 20vw, 320px);
+  fill: currentColor;
 }
 
 .trail-img {

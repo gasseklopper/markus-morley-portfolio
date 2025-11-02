@@ -72,6 +72,42 @@
     "description": "Dummy content for project 010."
   },
   {
+    "name": "Project 011",
+    "path": "/portfolio/project011",
+    "title": "Project 011 - Markus Morley personal portfolio",
+    "description": "Interactive D3 bar chart visualizing US GDP."
+  },
+  {
+    "name": "Project 012",
+    "path": "/portfolio/project012",
+    "title": "Project 012 - Markus Morley personal portfolio",
+    "description": "Interactive D3 scatterplot visualizing professional cycling times."
+  },
+  {
+    "name": "Project 013",
+    "path": "/portfolio/project013",
+    "title": "Project 013 - Markus Morley personal portfolio",
+    "description": "Interactive D3 heat map visualizing global temperature variance."
+  },
+  {
+    "name": "Project 014",
+    "path": "/portfolio/project014",
+    "title": "Project 014 - Markus Morley personal portfolio",
+    "description": "Interactive D3 choropleth highlighting education attainment across U.S. counties."
+  },
+  {
+    "name": "Project 015",
+    "path": "/portfolio/project015",
+    "title": "Project 015 - Markus Morley personal portfolio",
+    "description": "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips."
+  },
+  {
+    "name": "Project 016",
+    "path": "/portfolio/project016",
+    "title": "Project 016 - Markus Morley personal portfolio",
+    "description": "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",
@@ -88,6 +124,12 @@
     "path": "/portfolio/generative-art/color-palette",
     "title": "Color Palette - Markus Morley personal portfolio",
     "description": "Extract and sort colors from images using p5.js."
+  },
+  {
+    "name": "Crayon — the Qwik.js way",
+    "path": "/portfolio/generative-art/crayon",
+    "title": "Crayon — the Qwik.js way - Markus Morley personal portfolio",
+    "description": "Interactive p5.brush sketch that responds to motion and gesture."
   },
   {
     "name": "Connected Agents",

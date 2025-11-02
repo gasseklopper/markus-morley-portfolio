@@ -1,0 +1,125 @@
+:root {
+  color-scheme: light dark;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(1.5rem, 3vw, 3rem);
+  background: radial-gradient(circle at top left, rgba(255, 99, 132, 0.08), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(54, 162, 235, 0.12), transparent 60%),
+    var(--surface1, #0f172a);
+  color: var(--text1, #e2e8f0);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.page h1 {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: var(--text1, #f8fafc);
+}
+
+.page p {
+  max-width: 780px;
+  text-align: center;
+  line-height: 1.6;
+  color: var(--text2, #cbd5e1);
+}
+
+.visual-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem;
+  width: min(1100px, 100%);
+}
+
+.treemap-card,
+.legend-card {
+  background: color-mix(in srgb, var(--surface2, #1e293b) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 60%, transparent);
+  border-radius: 1.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  box-shadow: 0 30px 120px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(12px);
+}
+
+#treemap-container {
+  overflow-x: auto;
+}
+
+svg.treemap-svg {
+  width: 960px;
+  height: 600px;
+  border-radius: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.tile {
+  stroke: color-mix(in srgb, var(--brand-inverted, #0f172a) 45%, transparent);
+  stroke-width: 1px;
+  rx: 8px;
+  ry: 8px;
+}
+
+.tile-label {
+  pointer-events: none;
+  font-size: 10px;
+  fill: var(--brand-inverted, #0f172a);
+  font-weight: 600;
+}
+
+#legend svg {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+}
+
+.legend-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  fill: var(--text2, #e2e8f0);
+}
+
+#tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--surface2, #0f172a) 94%, transparent);
+  color: var(--text1, #f8fafc);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.85rem;
+  box-shadow: 0 15px 45px rgba(15, 23, 42, 0.4);
+  border: 1px solid color-mix(in srgb, var(--surface-border, #1e293b) 75%, transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translate3d(-50%, -12px, 0);
+  z-index: 50;
+}
+
+#tooltip.visible {
+  opacity: 1;
+}
+
+@media (max-width: 1024px) {
+  svg.treemap-svg {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    gap: 1.5rem;
+  }
+
+  .visual-wrapper {
+    gap: 1.5rem;
+  }
+}

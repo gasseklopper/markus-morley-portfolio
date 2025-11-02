@@ -11,24 +11,24 @@ import ImgHero from "~/media/assets/images/heros/image.png?jsx";
 
 const expertiseItems: ExpertiseItem[] = [
   {
-    title: "Engineering at Scale",
+    title: "Design",
     description:
-      "Delivering large-scale, performant frontend architectures for SaaS, fintech, and enterprise products.",
+      "I have a deep love for design. Whether it’s creating visually stunning layouts or ensuring seamless user experiences, I strive to merge creativity with functionality in every project. My design philosophy is rooted in understanding user needs and crafting intuitive, engaging interfaces.",
   },
   {
-    title: "Design-Engineering Bridge",
+    title: "Prototyping",
     description:
-      "Turning prototypes into production code with pixel-perfect fidelity.",
+      "Building UX prototypes is a core part of my work. I transform ideas into interactive prototypes that allow for early user testing and feedback. This iterative process helps refine the user experience and ensures that the final product meets user expectations.",
   },
   {
-    title: "Leadership & Mentorship",
+    title: "Large-Scale Digital Projects",
     description:
-      "Setting coding standards, mentoring juniors, driving cross-functional collaboration.",
+      "I develop and manage large-scale digital projects, leveraging modern technologies to create high-performance applications. My expertise spans from initial concept to final deployment, ensuring each project is executed with precision and meets the highest standards of quality.",
   },
   {
-    title: "Impact & Performance",
+    title: "Development",
     description:
-      "Optimizing applications for speed, scalability, and long-term maintainability.",
+      "Specializing in frontend development, I create robust components using atomic design principles. This methodology allows for the development of scalable and maintainable user interfaces by breaking down designs into their simplest, reusable parts.",
   },
   {
     title: "My Mission",
@@ -42,109 +42,76 @@ const expertiseItems: ExpertiseItem[] = [
   },
 ];
 
-const rawToolStackCore = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "GraphQL",
-  "Tailwind CSS",
-  "Node.js",
-  "Web Components",
-];
-
-const rawToolStackAlso = [
-  "Figma",
-  "Adobe Creative Suite",
-  "Sketch",
-];
-
-const rawToolStackSupporting = [
-  "Jira",
-  "Scrum",
-  "GitHub",
-  "Storybook",
-  "Jest",
-  "Cypress",
-];
-
-const rawToolStackCMS = [
-  "Astro",
-  "Contentful",
+const rawToolStack = [
+  "Adobe CC",
   "Adobe Experience Manager",
-  "TanStack Query/Table",
+  "Airbnb CSS / Sass Styleguide",
+  "Airbnb's ESLint config",
+  "Anime.js",
+  "Atom",
+  "Atomic Design",
+  "Babel",
+  "BasicLightbox",
+  "basicGrid",
+  "BEM",
+  "Brackets",
+  "Browserify",
+  "BrowserStack",
+  "Browsersync",
+  "caniuse.com",
+  "Chrome Developer Tools",
+  "CodePen",
+  "Color Profiles",
+  "CSS Tricks Almanac",
+  "CSS3",
+  "ECMA",
+  "Edge",
+  "Emmet",
+  "eslint",
+  "EZ",
+  "Firefox",
+  "Flaticon",
+  "Foundation",
+  "GitHub Desktop",
+  "GitHub",
+  "Google Chrome",
+  "Google Fonts",
+  "GreenSock-JS",
+  "Gulp",
+  "Handlebars",
+  "HTML5",
+  "InVision",
+  "jsfiddle.net",
+  "Mac",
+  "Malvid",
+  "Modernizr",
+  "Muzli",
+  "NPM",
+  "Nunjucks",
+  "Placeholder",
+  "Prepros",
+  "prettier",
+  "React",
+  "Rest API",
+  "Safari",
+  "Sass/SCSS",
+  "Sketch",
+  "Skeleton",
+  "SMACSS",
+  "Spectre.css",
+  "Semantic UI",
+  "Storybook",
+  "stylelint",
+  "Typo3",
+  "TypeKit",
+  "Unsplash",
+  "Visual Studio Code",
+  "webpack",
+  "Windows",
+  "YARN",
 ];
 
-// const rawToolStack2 = [
-//   "Adobe CC",
-//   "Adobe Experience Manager",
-//   "Airbnb CSS / Sass Styleguide",
-//   "Airbnb's ESLint config",
-//   "Anime.js",
-//   "Atom",
-//   "Atomic Design",
-//   "Babel",
-//   "BasicLightbox",
-//   "basicGrid",
-//   "BEM",
-//   "Brackets",
-//   "Browserify",
-//   "BrowserStack",
-//   "Browsersync",
-//   "caniuse.com",
-//   "Chrome Developer Tools",
-//   "CodePen",
-//   "Color Profiles",
-//   "CSS Tricks Almanac",
-//   "CSS3",
-//   "ECMA",
-//   "Edge",
-//   "Emmet",
-//   "eslint",
-//   "EZ",
-//   "Firefox",
-//   "Flaticon",
-//   "Foundation",
-//   "GitHub Desktop",
-//   "GitHub",
-//   "Google Chrome",
-//   "Google Fonts",
-//   "GreenSock-JS",
-//   "Gulp",
-//   "Handlebars",
-//   "HTML5",
-//   "InVision",
-//   "jsfiddle.net",
-//   "Mac",
-//   "Malvid",
-//   "Modernizr",
-//   "Muzli",
-//   "NPM",
-//   "Nunjucks",
-//   "Placeholder",
-//   "Prepros",
-//   "prettier",
-//   "React",
-//   "Rest API",
-//   "Safari",
-//   "Sass/SCSS",
-//   "Sketch",
-//   "Skeleton",
-//   "SMACSS",
-//   "Spectre.css",
-//   "Semantic UI",
-//   "Storybook",
-//   "stylelint",
-//   "Typo3",
-//   "TypeKit",
-//   "Unsplash",
-//   "Visual Studio Code",
-//   "webpack",
-//   "Windows",
-//   "YARN",
-// ];
-// console.log(rawToolStack2);
-
-const toolStack = Array.from(new Set(rawToolStackCore)).sort((a, b) =>
+const toolStack = Array.from(new Set(rawToolStack)).sort((a, b) =>
   a.localeCompare(b, undefined, { sensitivity: "base" })
 );
 
@@ -171,7 +138,9 @@ export default component$(() => {
               Brutalist design & code for fearless brands.
             </h1>
             <p class="mt-6 max-w-xl text-base text-[var(--text2)] md:text-lg">
-              Senior Frontend Engineer with 10+ years experience building scalable digital products.
+              I'm Markus Morley, a hybrid designer and front-end engineer crafting
+              digital experiences with unapologetic personality and pixel-perfect
+              execution.
             </p>
           </div>
           <div class="flex flex-col items-start gap-6 md:items-end">
@@ -211,66 +180,15 @@ export default component$(() => {
           description="My approach blends research-led design exploration with code that ships. Each engagement flexes between discovery, prototyping, and resilient delivery so brands feel fearless across every touchpoint."
         />
 
-        {/* Tool Core */}
+        {/* Tool Stack */}
         <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">Core Skills</h2>
-          {/* <p class="mt-4 text-[var(--text2)]">
+          <h2 class="text-3xl font-bold text-[var(--text1)]">Tool Stack</h2>
+          <p class="mt-4 text-[var(--text2)]">
             A curated set of tools, frameworks, and platforms I rely on to
             design, build, and refine digital products.
-          </p> */}
+          </p>
           <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
             {toolStack.map((tool) => (
-              <li key={tool}>
-                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
-                  {tool}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Also Experienced With  */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">Design & Prototyping</h2>
-          {/* <p class="mt-4 text-[var(--text2)]">
-            A curated set of tools, frameworks, and platforms I have experience with.
-          </p> */}
-          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
-            {rawToolStackAlso.map((tool) => (
-              <li key={tool}>
-                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
-                  {tool}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* Supporting Tools */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">Supporting Tools</h2>
-          {/* <p class="mt-4 text-[var(--text2)]">
-            A curated set of tools, frameworks, and platforms I have experience with.
-          </p> */}
-          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
-            {rawToolStackSupporting.map((tool) => (
-              <li key={tool}>
-                <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
-                  {tool}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        { /* CMS & Platforms */}
-        <section class="mt-16">
-          <h2 class="text-3xl font-bold text-[var(--text1)]">CMS & Platforms</h2>
-          {/* <p class="mt-4 text-[var(--text2)]">
-            A curated set of tools, frameworks, and platforms I have experience with.
-          </p> */}
-          <ul class="mt-8 flex list-none flex-wrap gap-3 p-0" aria-label="Tool stack">
-            {rawToolStackCMS.map((tool) => (
               <li key={tool}>
                 <span class="inline-flex rounded-full border border-[var(--surface3)] bg-[var(--surface2)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-sm transition hover:border-[var(--surface4)] hover:bg-[var(--surface3)] hover:text-[var(--text1)]">
                   {tool}

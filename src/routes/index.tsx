@@ -794,13 +794,6 @@ export default component$(() => {
       <div class="hero-viewport">
         <header class="hero-header">
           <div class="hero-header__container">
-            <div class="hero-logo" aria-label="Markus Morley logo">
-              <div class="hero-logo__circles">
-                <div class="hero-logo__circle hero-logo__circle--left" />
-                <div class="hero-logo__circle hero-logo__circle--right" />
-              </div>
-            </div>
-
             <nav class="hero-effects" aria-label="Trail effects">
               <ul>
                 <li>
@@ -831,26 +824,6 @@ export default component$(() => {
                 <li>
                   <a href="#" data-effect="zoomsplit">
                     Zoom Split
-                  </a>
-                </li>
-              </ul>
-            </nav>
-
-            <nav class="hero-social" aria-label="Social links">
-              <ul>
-                <li>
-                  <a href="https://instagram.com/filipz__" target="_blank" rel="noreferrer">
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a href="https://x.com/filipz" target="_blank" rel="noreferrer">
-                    X / Twitter
-                  </a>
-                </li>
-                <li>
-                  <a href="https://linkedin.com/in/filipzrnzevic" target="_blank" rel="noreferrer">
-                    LinkedIn
                   </a>
                 </li>
               </ul>
@@ -950,10 +923,7 @@ export default component$(() => {
             </text>
           </svg>
 
-          <div class="touch-instruction">Swipe your finger to see the magic unfold</div>
-          <div class="cursor-hint">
-            Move your cursor to create dynamic trails | Click the nav to switch trail effects
-          </div>
+
           <div class="speed-indicator" />
         </section>
       </div>

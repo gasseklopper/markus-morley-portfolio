@@ -13,26 +13,13 @@ import { buildHead } from "~/utils/head";
 const STORAGE_KEY = "mm-shopping-ledger-v1";
 const LEDGER_LIMIT = 320;
 
-const createId = () =>
-  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-
-const formatDateTag = (isoDate: string) => {
-  try {
-    const date = new Date(isoDate);
-    return new Intl.DateTimeFormat(undefined, {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    }).format(date);
-  } catch {
-    return isoDate;
-  }
-};
+type ItemState = "idle" | "complete" | "skip";
 
 type ShoppingItem = {
   id: string;
   label: string;
   addedAt: string;
+  state: ItemState;
 };
 
 type ShoppingList = {
@@ -58,6 +45,51 @@ type StorageSnapshot = {
   activeListId: string | null;
 };
 
+const ITEM_STATE_SEQUENCE: ItemState[] = ["idle", "complete", "skip"];
+const ITEM_STATE_ICON: Record<ItemState, string> = {
+  idle: "☐",
+  complete: "✔",
+  skip: "✖",
+};
+const ITEM_STATE_LABEL: Record<ItemState, string> = {
+  idle: "Mark item as collected",
+  complete: "Mark item as missing",
+  skip: "Reset item status",
+};
+
+const getNextItemState = (current: ItemState) => {
+  const index = ITEM_STATE_SEQUENCE.indexOf(current);
+  if (index === -1 || index === ITEM_STATE_SEQUENCE.length - 1) {
+    return ITEM_STATE_SEQUENCE[0];
+  }
+  return ITEM_STATE_SEQUENCE[index + 1];
+};
+
+const normalizeListCollection = (lists: ShoppingList[]): ShoppingList[] =>
+  lists.map((list) => ({
+    ...list,
+    items: list.items.map((item) => {
+      const normalizedState = (item as ShoppingItem & { state?: ItemState }).state ?? "idle";
+      return { ...item, state: normalizedState };
+    }),
+  }));
+
+const createId = () =>
+  `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
+const formatDateTag = (isoDate: string) => {
+  try {
+    const date = new Date(isoDate);
+    return new Intl.DateTimeFormat(undefined, {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }).format(date);
+  } catch {
+    return isoDate;
+  }
+};
+
 const seedSnapshot: StorageSnapshot = {
   version: 1,
   lists: [
@@ -66,9 +98,24 @@ const seedSnapshot: StorageSnapshot = {
       name: "Neo Market Ritual",
       createdAt: new Date().toISOString(),
       items: [
-        { id: createId(), label: "Chromatic citrus", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Midnight oat milk", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Umami ramen kit", addedAt: new Date().toISOString() },
+        {
+          id: createId(),
+          label: "Chromatic citrus",
+          addedAt: new Date().toISOString(),
+          state: "idle",
+        },
+        {
+          id: createId(),
+          label: "Midnight oat milk",
+          addedAt: new Date().toISOString(),
+          state: "idle",
+        },
+        {
+          id: createId(),
+          label: "Umami ramen kit",
+          addedAt: new Date().toISOString(),
+          state: "idle",
+        },
       ],
     },
     {
@@ -76,8 +123,18 @@ const seedSnapshot: StorageSnapshot = {
       name: "Studio Snack Arsenal",
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
       items: [
-        { id: createId(), label: "Neon trail mix", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Sparkling yuzu", addedAt: new Date().toISOString() },
+        {
+          id: createId(),
+          label: "Neon trail mix",
+          addedAt: new Date().toISOString(),
+          state: "idle",
+        },
+        {
+          id: createId(),
+          label: "Sparkling yuzu",
+          addedAt: new Date().toISOString(),
+          state: "idle",
+        },
       ],
     },
   ],
@@ -101,7 +158,7 @@ const seedSnapshot: StorageSnapshot = {
 export default component$(() => {
   useStylesScoped$(styles);
 
-  const lists = useSignal<ShoppingList[]>(seedSnapshot.lists);
+  const lists = useSignal<ShoppingList[]>(normalizeListCollection(seedSnapshot.lists));
   const ledger = useSignal<LedgerEntry[]>(seedSnapshot.ledger);
   const activeListId = useSignal<string | null>(seedSnapshot.lists[0]?.id ?? null);
   const newListName = useSignal("");
@@ -150,6 +207,7 @@ export default component$(() => {
             id: createId(),
             label: trimmed,
             addedAt: timestamp,
+            state: "idle",
           },
         ],
       };
@@ -178,9 +236,14 @@ export default component$(() => {
     try {
       const parsed = JSON.parse(stored) as StorageSnapshot;
       if (parsed && parsed.version === 1) {
-        lists.value = parsed.lists ?? [];
+        const normalizedLists = normalizeListCollection(parsed.lists ?? []);
+        lists.value = normalizedLists;
         ledger.value = parsed.ledger ?? [];
-        activeListId.value = parsed.activeListId ?? parsed.lists?.[0]?.id ?? null;
+        const fallbackActiveId = normalizedLists[0]?.id ?? null;
+        activeListId.value =
+          parsed.activeListId && normalizedLists.some((list) => list.id === parsed.activeListId)
+            ? parsed.activeListId
+            : fallbackActiveId;
         timeWindowDays.value = parsed.settings?.windowDays ?? seedSnapshot.settings.windowDays;
       }
     } catch (error) {
@@ -300,6 +363,27 @@ export default component$(() => {
 
     ledger.value = filtered;
     await showFlash(`Cleared history for ${label}`);
+  });
+
+  const handleToggleItemState = $((itemId: string) => {
+    const targetId = activeListId.value;
+    if (!targetId) return;
+
+    lists.value = lists.value.map((list) => {
+      if (list.id !== targetId) return list;
+
+      return {
+        ...list,
+        items: list.items.map((item) => {
+          if (item.id !== itemId) return item;
+
+          return {
+            ...item,
+            state: getNextItemState(item.state ?? "idle"),
+          };
+        }),
+      };
+    });
   });
 
   const handleRemoveItem = $(async (itemId: string) => {
@@ -477,8 +561,16 @@ export default component$(() => {
                       ) : (
                         <ul class="lab-items">
                           {currentList.value.items.map((item) => (
-                            <li key={item.id} class="lab-item">
-                              <span>{item.label}</span>
+                            <li key={item.id} class="lab-item" data-state={item.state}>
+                              <button
+                                type="button"
+                                class="lab-item__toggle"
+                                aria-label={`${ITEM_STATE_LABEL[item.state]} for ${item.label}`}
+                                onClick$={() => handleToggleItemState(item.id)}
+                              >
+                                <span aria-hidden="true">{ITEM_STATE_ICON[item.state]}</span>
+                              </button>
+                              <span class="lab-item__label">{item.label}</span>
                               <span class="lab-item__meta">
                                 <span>{formatDateTag(item.addedAt)}</span>
                                 <button

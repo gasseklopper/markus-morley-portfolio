@@ -17,9 +17,30 @@ type PasswordOptions = {
   includeSymbols: boolean;
 };
 
+const MAX_UINT32_EXCLUSIVE = 0x100000000;
+
+const secureRandomInt = (upperBound: number) => {
+  if (upperBound <= 0) return 0;
+  const cryptoApi = globalThis.crypto;
+  if (!cryptoApi || !cryptoApi.getRandomValues) {
+    throw new Error("Secure random generator unavailable");
+  }
+
+  const rangeLimit = Math.floor(MAX_UINT32_EXCLUSIVE / upperBound) * upperBound;
+  const buffer = new Uint32Array(1);
+
+  let randomValue = 0;
+  do {
+    cryptoApi.getRandomValues(buffer);
+    randomValue = buffer[0] ?? 0;
+  } while (randomValue >= rangeLimit);
+
+  return randomValue % upperBound;
+};
+
 const shuffleCharacters = (chars: string[]) => {
   for (let index = chars.length - 1; index > 0; index--) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
+    const randomIndex = secureRandomInt(index + 1);
     [chars[index], chars[randomIndex]] = [chars[randomIndex], chars[index]];
   }
   return chars.join("");
@@ -41,7 +62,7 @@ const createPassword = ({
 
   const setsToUse = activeSets.length > 0 ? activeSets : [ASCII_UPPER, ASCII_DIGITS];
   const guaranteedCharacters: string[] = setsToUse.map((set) => {
-    const randomIndex = Math.floor(Math.random() * set.length);
+    const randomIndex = secureRandomInt(set.length);
     return set[randomIndex] ?? "";
   });
 
@@ -50,7 +71,7 @@ const createPassword = ({
   const targetLength = Math.max(MIN_LENGTH, length);
 
   for (let index = guaranteedCharacters.length; index < targetLength; index++) {
-    const randomIndex = Math.floor(Math.random() * pool.length);
+    const randomIndex = secureRandomInt(pool.length);
     remainingCharacters.push(pool[randomIndex] ?? "");
   }
 
@@ -247,9 +268,18 @@ export default component$(() => {
             <span class="password-display__value" aria-label="Generated password">
               {password.value}
             </span>
-            <button type="button" class="password-display__copy" onClick$={handleCopy}>
-              Copy
-            </button>
+            <div class="password-display__actions">
+              <button type="button" class="password-display__copy" onClick$={handleCopy}>
+                Copy
+              </button>
+              <span class={`copy-state copy-state--${copyState.value}`} aria-live="assertive">
+                {copyState.value === "copied"
+                  ? "Copied to clipboard."
+                  : copyState.value === "error"
+                    ? "Clipboard blocked — copy manually."
+                    : ""}
+              </span>
+            </div>
           </div>
           <div class="generator__controls">
             <label class="control control--range">
@@ -312,13 +342,6 @@ export default component$(() => {
             <button type="button" class="button button--primary" onClick$={regenerate}>
               Forge another password
             </button>
-            <span class={`copy-state copy-state--${copyState.value}`} aria-live="assertive">
-              {copyState.value === "copied"
-                ? "Copied to clipboard."
-                : copyState.value === "error"
-                  ? "Clipboard blocked — copy manually."
-                  : ""}
-            </span>
           </div>
         </div>
       </section>

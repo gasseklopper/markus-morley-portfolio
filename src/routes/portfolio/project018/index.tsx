@@ -88,6 +88,14 @@ const normalizeListCollection = (lists: StoredShoppingList[]): ShoppingList[] =>
     })),
   }));
 
+const serializeListCollection = (lists: ShoppingList[]): StoredShoppingList[] =>
+  lists.map((list) => ({
+    ...list,
+    items: list.items.map((item) => ({
+      ...item,
+    })),
+  }));
+
 const createId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -205,38 +213,38 @@ export default component$(() => {
       const trimmed = label.trim();
       if (!trimmed) return false;
 
-    const timestamp = new Date().toISOString();
-    let updated = false;
+      const timestamp = new Date().toISOString();
+      let updated = false;
 
-    const updatedLists = lists.value.map((list) => {
-      if (list.id !== targetId) {
-        return list;
-      }
-      updated = true;
-      return {
-        ...list,
-        items: [
-          ...list.items,
-          {
-            id: createId(),
-            label: trimmed,
-            addedAt: timestamp,
-            state: "idle",
-          },
-        ],
-      };
-    });
+      const updatedLists = lists.value.map((list) => {
+        if (list.id !== targetId) {
+          return list;
+        }
+        updated = true;
+        return {
+          ...list,
+          items: [
+            ...list.items,
+            {
+              id: createId(),
+              label: trimmed,
+              addedAt: timestamp,
+              state: "idle",
+            },
+          ],
+        };
+      });
 
-    if (!updated) return false;
+      if (!updated) return false;
 
-    lists.value = updatedLists;
-    ledger.value = [
-      { id: createId(), label: trimmed, timestamp },
-      ...ledger.value,
-    ].slice(0, LEDGER_LIMIT);
+      lists.value = updatedLists;
+      ledger.value = [
+        { id: createId(), label: trimmed, timestamp },
+        ...ledger.value,
+      ].slice(0, LEDGER_LIMIT);
 
-    return true;
-  },
+      return true;
+    },
   );
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -275,7 +283,7 @@ export default component$(() => {
 
     const snapshot: StorageSnapshot = {
       version: 1,
-      lists: lists.value,
+      lists: serializeListCollection(lists.value),
       ledger: ledger.value,
       settings: {
         windowDays: timeWindowDays.value,

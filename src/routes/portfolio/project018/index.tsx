@@ -289,6 +289,19 @@ export default component$(() => {
     }
   });
 
+  const handleRemoveFrequentItem = $(async (label: string) => {
+    const currentLedger = ledger.value;
+    const filtered = currentLedger.filter((entry) => entry.label !== label);
+
+    if (filtered.length === currentLedger.length) {
+      await showFlash("No matching history to clear");
+      return;
+    }
+
+    ledger.value = filtered;
+    await showFlash(`Cleared history for ${label}`);
+  });
+
   const handleRemoveItem = $(async (itemId: string) => {
     const targetId = activeListId.value;
     if (!targetId) return;
@@ -523,15 +536,24 @@ export default component$(() => {
                         ) : (
                           <div class="lab-frequency">
                             {frequentItems.value.map((entry) => (
-                              <button
-                                key={entry.label}
-                                type="button"
-                                class="lab-chip"
-                                onClick$={() => handleChipAdd(entry.label)}
-                              >
-                                <strong>{entry.label}</strong>
-                                <span>{`×${entry.count}`}</span>
-                              </button>
+                              <div class="lab-chip" key={entry.label}>
+                                <button
+                                  type="button"
+                                  class="lab-chip__action"
+                                  onClick$={() => handleChipAdd(entry.label)}
+                                >
+                                  <strong>{entry.label}</strong>
+                                  <span>{`×${entry.count}`}</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  class="lab-chip__remove"
+                                  aria-label={`Remove ${entry.label} from most used`}
+                                  onClick$={() => handleRemoveFrequentItem(entry.label)}
+                                >
+                                  Remove
+                                </button>
+                              </div>
                             ))}
                           </div>
                         )}

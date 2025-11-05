@@ -114,6 +114,12 @@
     "description": "Brutalist password generator featuring ASCII-safe defaults, clipboard copy, and configurable strength controls."
   },
   {
+    "name": "Project 018",
+    "path": "/portfolio/project018",
+    "title": "Project 018 - Markus Morley personal portfolio",
+    "description": "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

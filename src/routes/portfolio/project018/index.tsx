@@ -29,6 +29,9 @@ type ShoppingList = {
   items: ShoppingItem[];
 };
 
+type StoredShoppingItem = Omit<ShoppingItem, "state"> & { state?: unknown };
+type StoredShoppingList = Omit<ShoppingList, "items"> & { items?: StoredShoppingItem[] };
+
 type LedgerEntry = {
   id: string;
   label: string;
@@ -37,7 +40,7 @@ type LedgerEntry = {
 
 type StorageSnapshot = {
   version: number;
-  lists: ShoppingList[];
+  lists: StoredShoppingList[];
   ledger: LedgerEntry[];
   settings: {
     windowDays: number;
@@ -65,13 +68,24 @@ const getNextItemState = (current: ItemState) => {
   return ITEM_STATE_SEQUENCE[index + 1];
 };
 
-const normalizeListCollection = (lists: ShoppingList[]): ShoppingList[] =>
+const coerceItemState = (value: unknown): ItemState => {
+  switch (value) {
+    case "complete":
+    case "skip":
+    case "idle":
+      return value;
+    default:
+      return "idle";
+  }
+};
+
+const normalizeListCollection = (lists: StoredShoppingList[]): ShoppingList[] =>
   lists.map((list) => ({
     ...list,
-    items: list.items.map((item) => {
-      const normalizedState = (item as ShoppingItem & { state?: ItemState }).state ?? "idle";
-      return { ...item, state: normalizedState };
-    }),
+    items: (list.items ?? []).map((item) => ({
+      ...item,
+      state: coerceItemState(item.state),
+    })),
   }));
 
 const createId = () =>
@@ -379,7 +393,7 @@ export default component$(() => {
 
           return {
             ...item,
-            state: getNextItemState(item.state ?? "idle"),
+            state: getNextItemState(item.state),
           };
         }),
       };

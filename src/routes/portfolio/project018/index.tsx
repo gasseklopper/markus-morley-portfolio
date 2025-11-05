@@ -308,6 +308,23 @@ export default component$(() => {
     }
   });
 
+  const handleRemoveList = $(async (listId: string) => {
+    const existingLists = lists.value;
+    const filtered = existingLists.filter((list) => list.id !== listId);
+
+    if (filtered.length === existingLists.length) {
+      return;
+    }
+
+    lists.value = filtered;
+
+    if (activeListId.value === listId) {
+      activeListId.value = filtered[0]?.id ?? null;
+    }
+
+    await showFlash("List removed");
+  });
+
   const handleWindowChange = $((event: Event) => {
     const input = event.target as HTMLInputElement | null;
     if (!input) return;
@@ -393,19 +410,30 @@ export default component$(() => {
                   <p class="lab-canvas__empty">No lists yet — name one to begin.</p>
                 ) : (
                   lists.value.map((list) => (
-                    <button
+                    <div
                       key={list.id}
-                      type="button"
                       class="lab-list__item"
                       data-active={(list.id === activeListId.value).toString()}
-                      onClick$={() => handleSelectList(list.id)}
                     >
-                      <span class="lab-list__title">{list.name}</span>
-                      <span class="lab-list__meta">
-                        <span class="lab-tag">{formatDateTag(list.createdAt)}</span>
-                        <span>{`${list.items.length} topics`}</span>
-                      </span>
-                    </button>
+                      <button
+                        type="button"
+                        class="lab-list__select"
+                        onClick$={() => handleSelectList(list.id)}
+                      >
+                        <span class="lab-list__title">{list.name}</span>
+                        <span class="lab-list__meta">
+                          <span class="lab-tag">{formatDateTag(list.createdAt)}</span>
+                          <span>{`${list.items.length} topics`}</span>
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        class="lab-list__remove"
+                        onClick$={() => handleRemoveList(list.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   ))
                 )}
               </div>

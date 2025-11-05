@@ -108,6 +108,12 @@
     "description": "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero."
   },
   {
+    "name": "Project 017",
+    "path": "/portfolio/project017",
+    "title": "Project 017 - Markus Morley personal portfolio",
+    "description": "Brutalist password generator featuring ASCII-safe defaults, clipboard copy, and configurable strength controls."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

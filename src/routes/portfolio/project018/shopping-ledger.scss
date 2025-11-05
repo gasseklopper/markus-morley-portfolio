@@ -257,16 +257,58 @@
 
 .lab-list__item {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.85rem 1rem;
   border-radius: var(--lab-radius-sm);
   border: 1px solid transparent;
   background: color-mix(in srgb, var(--surface2) 92%, transparent);
   color: inherit;
   text-decoration: none;
-  cursor: pointer;
   transition: transform 150ms ease, border 150ms ease, background 150ms ease;
+}
+
+.lab-list__select {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.lab-list__select:focus-visible {
+  outline: none;
+}
+
+.lab-list__remove {
+  appearance: none;
+  border: 1px solid color-mix(in srgb, var(--lab-card-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface3) 40%, transparent);
+  color: color-mix(in srgb, var(--lab-text-muted) 80%, transparent);
+  font-family: var(--font-semibold, "Barlow semibold"), var(--font-base);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.lab-list__remove:hover,
+.lab-list__remove:focus-visible {
+  outline: none;
+  color: color-mix(in srgb, var(--lab-highlight) 85%, transparent);
+  border-color: color-mix(in srgb, var(--lab-highlight) 70%, transparent);
+  background: color-mix(in srgb, var(--lab-highlight-soft) 35%, transparent);
 }
 
 .lab-list__item[data-active="true"] {

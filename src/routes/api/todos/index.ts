@@ -21,6 +21,46 @@ const getStore = (): TodoStore => {
 const sortTodos = (todos: Iterable<TodoItem>) =>
   [...todos].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const isPostPayload = (body: unknown): body is { title: string } => {
+  if (!isPlainObject(body)) {
+    return false;
+  }
+
+  const record = body as Record<string, unknown>;
+  return typeof record.title === "string";
+};
+
+type PatchPayload = {
+  id: string;
+  title?: string;
+  completed?: boolean;
+};
+
+const isPatchPayload = (body: unknown): body is PatchPayload => {
+  if (!isPlainObject(body)) {
+    return false;
+  }
+
+  const record = body as Record<string, unknown>;
+
+  if (typeof record.id !== "string") {
+    return false;
+  }
+
+  if ("title" in record && typeof record.title !== "string") {
+    return false;
+  }
+
+  if ("completed" in record && typeof record.completed !== "boolean") {
+    return false;
+  }
+
+  return true;
+};
+
 export const onGet: RequestHandler = ({ json }) => {
   const store = getStore();
   json(200, sortTodos(store.values()));
@@ -37,7 +77,12 @@ export const onPost: RequestHandler = async ({ request, json, send }) => {
     return;
   }
 
-  const title = typeof (body as { title?: unknown })?.title === "string" ? body.title.trim() : "";
+  if (!isPostPayload(body)) {
+    send(400, { message: "A non-empty title is required" });
+    return;
+  }
+
+  const title = body.title.trim();
 
   if (!title) {
     send(400, { message: "A non-empty title is required" });
@@ -68,7 +113,12 @@ export const onPatch: RequestHandler = async ({ request, json, send }) => {
     return;
   }
 
-  const { id, title, completed } = body as Partial<TodoItem> & { id?: string };
+  if (!isPatchPayload(body)) {
+    send(400, { message: "An id is required" });
+    return;
+  }
+
+  const id = body.id.trim();
 
   if (!id) {
     send(400, { message: "An id is required" });
@@ -83,7 +133,7 @@ export const onPatch: RequestHandler = async ({ request, json, send }) => {
     return;
   }
 
-  const nextTitle = typeof title === "string" ? title.trim() : undefined;
+  const nextTitle = body.title?.trim();
 
   if (nextTitle !== undefined && !nextTitle) {
     send(400, { message: "Updated title cannot be empty" });
@@ -94,8 +144,8 @@ export const onPatch: RequestHandler = async ({ request, json, send }) => {
     todo.title = nextTitle;
   }
 
-  if (typeof completed === "boolean") {
-    todo.completed = completed;
+  if (typeof body.completed === "boolean") {
+    todo.completed = body.completed;
   }
 
   store.set(id, todo);

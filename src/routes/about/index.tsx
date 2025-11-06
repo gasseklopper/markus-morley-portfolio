@@ -7,7 +7,6 @@ import {
   AboutExpertise,
   type ExpertiseItem,
 } from "~/components/about/about-expertise";
-import ImgHero from "~/media/assets/images/heros/image.png?jsx";
 
 const expertiseItems: ExpertiseItem[] = [
   {
@@ -115,6 +114,61 @@ const toolStack = Array.from(new Set(rawToolStack)).sort((a, b) =>
   a.localeCompare(b, undefined, { sensitivity: "base" })
 );
 
+type ResumeHighlight = {
+  period: string;
+  role: string;
+  company: string;
+  description: string;
+};
+
+type ContactDetail = {
+  label: string;
+  value: string;
+};
+
+const contactDetails: ContactDetail[] = [
+  {
+    label: "Adresse",
+    value: "Lonsserstr. 1 · 60433 Frankfurt am Main",
+  },
+  {
+    label: "E-Mail",
+    value: "info@markusmorley.de",
+  },
+  {
+    label: "Telefon",
+    value: "+49 177 231 9774",
+  },
+  {
+    label: "Geboren",
+    value: "18.09.1981 · Flörsheim am Main",
+  },
+];
+
+const resumeHighlights: ResumeHighlight[] = [
+  {
+    period: "07/2021 – 06/2023",
+    role: "Senior Product Engineer · IT-Consultant",
+    company: "Accenture, Frankfurt am Main",
+    description:
+      "Entwicklung von Frontend-Lösungen mit TypeScript, Next.js und D3.js sowie Zusammenarbeit in interdisziplinären Teams.",
+  },
+  {
+    period: "07/2021 – 01/2022",
+    role: "Product Engineer · Frontend-Developer",
+    company: "Sinner Schrader, Frankfurt am Main",
+    description:
+      "Implementierung und Integration moderner Webanwendungen mit TypeScript, React und Web Components.",
+  },
+  {
+    period: "01/2021 – 06/2021",
+    role: "Creative Developer · Frontend-Developer",
+    company: "hauserlacour, Frankfurt am Main",
+    description:
+      "Konzeption und Umsetzung von Webauftritten mit Fokus auf Designsysteme, UX und performante Interfaces.",
+  },
+];
+
 export default component$(() => {
   useStyles$(styles);
   return (
@@ -126,42 +180,78 @@ export default component$(() => {
           aria-hidden="true"
         />
         <div class="layout-shell relative px-6 py-20 sm:px-8 md:px-12 lg:px-16">
-          <div class="relative grid items-end gap-12 rounded-[2.5rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface1)_86%,transparent)] px-6 py-12 shadow-[0_28px_120px_-50px_var(--surface-shadow)] backdrop-blur-sm transition-colors duration-300 sm:px-10 sm:py-16 md:grid-cols-[minmax(0,1fr)_minmax(220px,280px)] md:gap-16">
-            <div class="space-y-8">
-              <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_75%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_70%,transparent)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
+          <div class="relative grid items-start gap-12 rounded-[2.5rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface1)_88%,transparent)] px-6 py-12 shadow-[0_28px_120px_-52px_var(--surface-shadow)] backdrop-blur-sm transition-colors duration-300 sm:px-10 sm:py-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,1fr)] lg:gap-20">
+            <div class="space-y-10">
+              <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_72%,transparent)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
                 <span class="h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-                Statement
+                Profil
               </span>
               <div class="space-y-6">
-                <h1 class="max-w-3xl text-4xl font-extrabold uppercase tracking-tight text-[var(--text1)] sm:text-5xl md:text-6xl md:leading-[1.05]">
-                  Brutalist design & code for fearless brands.
+                <h1 class="max-w-3xl text-4xl font-extrabold uppercase tracking-tight text-[var(--text1)] sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+                  Senior Frontend Engineer & Designer mit Fokus auf menschenzentrierte Produkte.
                 </h1>
                 <p class="max-w-2xl text-base leading-relaxed text-[var(--text2)] sm:text-lg">
-                  I'm Markus Morley, a hybrid designer and front-end engineer crafting digital experiences with unapologetic personality and pixel-perfect execution.
+                  Ich verbinde Design, Prototyping und performante Frontend-Entwicklung, um erlebnisstarke Markenerlebnisse zu schaffen. Mein Ansatz basiert auf präziser Gestaltung, technischer Exzellenz und enger Zusammenarbeit mit Stakeholdern.
                 </p>
               </div>
               <div class="flex flex-col gap-4 text-[11px] uppercase tracking-[0.35em] text-[var(--text3)] sm:flex-row sm:items-center sm:gap-6">
-                <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_75%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_78%,transparent)] px-4 py-3 font-semibold text-[var(--text2)]">
+                <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_72%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_80%,transparent)] px-4 py-3 font-semibold text-[var(--text2)]">
                   <span class="h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]" aria-hidden="true" />
                   Available for collaborations
                 </span>
                 <span class="text-[var(--text3)]">
-                  Based in Frankfurt · Working with global teams
+                  Frankfurt am Main · Remote-friendly
                 </span>
               </div>
             </div>
-            <div class="relative flex justify-center md:justify-end">
-              <div
-                class="pointer-events-none absolute -left-10 top-6 hidden h-24 w-24 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[radial-gradient(circle,var(--primary)_0%,transparent_65%)] opacity-30 blur-md md:block"
-                aria-hidden="true"
-              />
-              <div class="relative overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface2)_85%,transparent)] shadow-[0_26px_80px_-40px_var(--surface-shadow)] transition-transform duration-300 hover:-translate-y-1">
-                <ImgHero alt="Markus Morley portrait" class="h-64 w-52 object-cover sm:h-72 sm:w-56 md:h-80 md:w-64" />
-                <div class="absolute inset-x-0 bottom-0 bg-[color-mix(in_srgb,var(--surface1)_92%,transparent)]/95 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.4em] text-[var(--text2)]">
-                  About
+            <aside class="flex h-full flex-col justify-between gap-8 rounded-[2rem] border border-[color-mix(in_srgb,var(--surface-border)_75%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_78%,transparent)]/90 p-6 shadow-[0_26px_90px_-55px_var(--surface-shadow)] transition-transform duration-300 hover:-translate-y-1 sm:p-8">
+              <header class="space-y-4">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--text3)]">Lebenslauf</p>
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[var(--text1)] sm:text-3xl">Markus Morley</h2>
+                    <p class="mt-1 text-sm font-medium uppercase tracking-[0.24em] text-[var(--text3)]">
+                      Senior Product Engineer · Frontend-Entwickler
+                    </p>
+                  </div>
+                  <span class="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_92%,transparent)] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--text2)]">
+                    Fokus
+                  </span>
                 </div>
+                <dl class="grid gap-2 text-sm text-[var(--text2)]">
+                  {contactDetails.map((detail) => (
+                    <div key={detail.label} class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+                        {detail.label}
+                      </dt>
+                      <dd class="text-right text-sm text-[var(--text2)] sm:text-base">
+                        {detail.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </header>
+              <div class="space-y-4">
+                {resumeHighlights.map((item) => (
+                  <article
+                    key={`${item.period}-${item.company}`}
+                    class="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--surface-border)_68%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_96%,transparent)]/95 p-5 shadow-[0_18px_70px_-60px_var(--surface-shadow)]"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
+                      {item.period}
+                    </p>
+                    <h3 class="mt-2 text-base font-semibold tracking-tight text-[var(--text1)] sm:text-lg">
+                      {item.role}
+                    </h3>
+                    <p class="mt-1 text-sm font-medium text-[var(--text2)]">{item.company}</p>
+                    <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">{item.description}</p>
+                  </article>
+                ))}
               </div>
-            </div>
+              <p class="text-xs uppercase tracking-[0.32em] text-[var(--text3)]">
+                Auszug aus dem vollständigen Lebenslauf
+              </p>
+            </aside>
           </div>
         </div>
       </section>

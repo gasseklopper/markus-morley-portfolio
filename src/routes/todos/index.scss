@@ -1,0 +1,127 @@
+.todo-app {
+  padding-block: clamp(2rem, 6vw, 4rem);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.todo-app h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.todo-description {
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+.todo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.todo-form input[type="text"] {
+  flex: 1 1 16rem;
+  min-width: 12rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  padding: 0.75rem 1rem;
+  font: inherit;
+  color: inherit;
+}
+
+.todo-form button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.5rem;
+  background: var(--qwik-default-primary, #2563eb);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 150ms ease;
+}
+
+.todo-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.todo-form button:not(:disabled):hover,
+.todo-form button:not(:disabled):focus-visible {
+  filter: brightness(1.05);
+}
+
+.todo-error {
+  color: #f97316;
+}
+
+.todo-list {
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.todo-item label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1 1 auto;
+  cursor: pointer;
+}
+
+.todo-item input[type="checkbox"] {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.todo-title {
+  font-weight: 600;
+}
+
+.todo-title.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.todo-meta {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.todo-actions button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  color: inherit;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.todo-actions button:hover,
+.todo-actions button:focus-visible {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.todo-empty {
+  opacity: 0.7;
+}

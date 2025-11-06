@@ -190,6 +190,10 @@
       "path": "/portfolio"
     },
     {
+      "name": "Todos",
+      "path": "/todos"
+    },
+    {
       "name": "Impressum",
       "path": "/impressum"
     },

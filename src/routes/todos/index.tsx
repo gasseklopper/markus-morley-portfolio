@@ -1,5 +1,5 @@
 import { $, Resource, component$, useResource$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
-import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
+import { useLocation, useRequestEvent, type DocumentHead } from "@builder.io/qwik-city";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 import type { TodoItem } from "~/utils/todo-types";
@@ -15,6 +15,7 @@ export default component$(() => {
   useStylesScoped$(styles);
 
   const location = useLocation();
+  const requestEvent = useRequestEvent();
   const refreshSignal = useSignal(0);
   const newTodo = useSignal("");
   const isSubmitting = useSignal(false);
@@ -26,7 +27,15 @@ export default component$(() => {
     const todosEndpoint = import.meta.env.SSR
       ? new URL("/api/todos", location.url).toString()
       : "/api/todos";
-    const response = await fetch(todosEndpoint);
+    const cookieHeader =
+      import.meta.env.SSR && requestEvent
+        ? requestEvent.request.headers.get("cookie") ?? undefined
+        : undefined;
+
+    const response = await fetch(todosEndpoint, {
+      credentials: "include",
+      ...(cookieHeader ? { headers: { Cookie: cookieHeader } } : {}),
+    });
 
     if (!response.ok) {
       throw new Error("Failed to load todos");
@@ -56,6 +65,7 @@ export default component$(() => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ title }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -85,6 +95,7 @@ export default component$(() => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id: todo.id, completed: !todo.completed }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -106,6 +117,7 @@ export default component$(() => {
         : `/api/todos?id=${encodeURIComponent(id)}`;
       const response = await fetch(deleteEndpoint, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -128,6 +140,10 @@ export default component$(() => {
           A lightweight backlog backed by Qwik City server endpoints. Track tasks
           for the team, mark them complete, or clear them entirely—perfect for
           showcasing how a Netlify-hosted backend can power UI interactions.
+        </p>
+        <p class="todo-description">
+          Todos live in a secure, per-browser cookie, so your list survives new
+          deployments while remaining private to this device.
         </p>
       </header>
 

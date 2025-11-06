@@ -1,5 +1,5 @@
 import { $, Resource, component$, useResource$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 import type { TodoItem } from "~/utils/todo-types";
@@ -14,6 +14,7 @@ const formatTimestamp = (timestamp: string) =>
 export default component$(() => {
   useStylesScoped$(styles);
 
+  const location = useLocation();
   const refreshSignal = useSignal(0);
   const newTodo = useSignal("");
   const isSubmitting = useSignal(false);
@@ -22,7 +23,10 @@ export default component$(() => {
   const todosResource = useResource$<TodoItem[]>(async ({ track }) => {
     track(() => refreshSignal.value);
 
-    const response = await fetch("/api/todos");
+    const todosEndpoint = import.meta.env.SSR
+      ? new URL("/api/todos", location.url).toString()
+      : "/api/todos";
+    const response = await fetch(todosEndpoint);
 
     if (!response.ok) {
       throw new Error("Failed to load todos");
@@ -43,7 +47,10 @@ export default component$(() => {
     isSubmitting.value = true;
 
     try {
-      const response = await fetch("/api/todos", {
+      const todosEndpoint = import.meta.env.SSR
+        ? new URL("/api/todos", location.url).toString()
+        : "/api/todos";
+      const response = await fetch(todosEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +76,10 @@ export default component$(() => {
 
   const toggleCompletion = $(async (todo: TodoItem) => {
     try {
-      const response = await fetch("/api/todos", {
+      const todosEndpoint = import.meta.env.SSR
+        ? new URL("/api/todos", location.url).toString()
+        : "/api/todos";
+      const response = await fetch(todosEndpoint, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +101,10 @@ export default component$(() => {
 
   const removeTodo = $(async (id: string) => {
     try {
-      const response = await fetch(`/api/todos?id=${encodeURIComponent(id)}`, {
+      const deleteEndpoint = import.meta.env.SSR
+        ? new URL(`/api/todos?id=${encodeURIComponent(id)}`, location.url).toString()
+        : `/api/todos?id=${encodeURIComponent(id)}`;
+      const response = await fetch(deleteEndpoint, {
         method: "DELETE",
       });
 

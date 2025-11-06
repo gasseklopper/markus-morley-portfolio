@@ -82,7 +82,7 @@ const coerceItemState = (value: unknown): ItemState => {
 const normalizeListCollection = (lists: StoredShoppingList[]): ShoppingList[] =>
   lists.map((list) => ({
     ...list,
-    items: (list.items ?? []).map((item) => ({
+    items: (list.items ?? []).map((item): ShoppingItem => ({
       ...item,
       state: coerceItemState(item.state),
     })),
@@ -124,19 +124,19 @@ const seedSnapshot: StorageSnapshot = {
           id: createId(),
           label: "Chromatic citrus",
           addedAt: new Date().toISOString(),
-          state: "idle",
+          state: "idle" as ItemState,
         },
         {
           id: createId(),
           label: "Midnight oat milk",
           addedAt: new Date().toISOString(),
-          state: "idle",
+          state: "idle" as ItemState,
         },
         {
           id: createId(),
           label: "Umami ramen kit",
           addedAt: new Date().toISOString(),
-          state: "idle",
+          state: "idle" as ItemState,
         },
       ],
     },
@@ -149,13 +149,13 @@ const seedSnapshot: StorageSnapshot = {
           id: createId(),
           label: "Neon trail mix",
           addedAt: new Date().toISOString(),
-          state: "idle",
+          state: "idle" as ItemState,
         },
         {
           id: createId(),
           label: "Sparkling yuzu",
           addedAt: new Date().toISOString(),
-          state: "idle",
+          state: "idle" as ItemState,
         },
       ],
     },
@@ -229,7 +229,7 @@ export default component$(() => {
               id: createId(),
               label: trimmed,
               addedAt: timestamp,
-              state: "idle",
+              state: "idle" as ItemState,
             },
           ],
         };

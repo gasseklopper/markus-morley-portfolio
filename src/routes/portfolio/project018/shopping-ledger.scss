@@ -12,6 +12,8 @@
   --lab-text-strong: var(--text1);
   --lab-text-muted: var(--text3);
   --lab-text-soft: var(--text4);
+  --lab-positive: color-mix(in srgb, #3dd68c 82%, transparent);
+  --lab-negative: color-mix(in srgb, #ff5a7c 82%, transparent);
   --lab-radius-lg: clamp(1.5rem, 3vw, 2.5rem);
   --lab-radius-md: clamp(1rem, 2.5vw, 1.75rem);
   --lab-radius-sm: clamp(0.75rem, 1.4vw, 1rem);
@@ -425,10 +427,10 @@
 }
 
 .lab-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  gap: 1rem;
   padding: 0.9rem 1rem;
   border-radius: var(--lab-radius-sm);
   border: 1px solid color-mix(in srgb, var(--lab-card-border) 65%, transparent);
@@ -438,10 +440,62 @@
   font-size: 0.88rem;
 }
 
+.lab-item__label {
+  justify-self: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lab-item__toggle {
+  appearance: none;
+  border: 1.5px solid color-mix(in srgb, var(--lab-card-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface1) 75%, transparent);
+  color: color-mix(in srgb, var(--lab-text-soft) 70%, transparent);
+  border-radius: var(--lab-radius-sm);
+  width: clamp(2rem, 1.8rem + 0.3vw, 2.3rem);
+  height: clamp(2rem, 1.8rem + 0.3vw, 2.3rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.lab-item__toggle span {
+  line-height: 1;
+}
+
+.lab-item__toggle:hover,
+.lab-item__toggle:focus-visible {
+  transform: translateY(-1px);
+  outline: none;
+  border-color: color-mix(in srgb, var(--lab-highlight) 60%, transparent);
+}
+
+.lab-item[data-state="idle"] .lab-item__toggle {
+  color: color-mix(in srgb, var(--lab-text-muted) 80%, transparent);
+}
+
+.lab-item[data-state="complete"] .lab-item__toggle {
+  border-color: color-mix(in srgb, var(--lab-positive) 85%, transparent);
+  background: color-mix(in srgb, var(--lab-positive) 25%, transparent);
+  color: color-mix(in srgb, var(--lab-positive) 92%, var(--lab-text-strong) 8%);
+}
+
+.lab-item[data-state="skip"] .lab-item__toggle {
+  border-color: color-mix(in srgb, var(--lab-negative) 85%, transparent);
+  background: color-mix(in srgb, var(--lab-negative) 25%, transparent);
+  color: color-mix(in srgb, var(--lab-negative) 92%, var(--lab-text-strong) 8%);
+}
+
 .lab-item__meta {
   display: flex;
   align-items: center;
   gap: 0.7rem;
+  justify-self: end;
   color: var(--lab-text-soft);
   font-size: 0.7rem;
   letter-spacing: 0.18em;

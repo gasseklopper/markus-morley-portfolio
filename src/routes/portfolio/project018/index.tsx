@@ -13,6 +13,89 @@ import { buildHead } from "~/utils/head";
 const STORAGE_KEY = "mm-shopping-ledger-v1";
 const LEDGER_LIMIT = 320;
 
+type ItemState = "idle" | "complete" | "skip";
+
+type ShoppingItem = {
+  id: string;
+  label: string;
+  addedAt: string;
+  state: ItemState;
+};
+
+type ShoppingList = {
+  id: string;
+  name: string;
+  createdAt: string;
+  items: ShoppingItem[];
+};
+
+type StoredShoppingItem = Omit<ShoppingItem, "state"> & { state?: unknown };
+type StoredShoppingList = Omit<ShoppingList, "items"> & { items?: StoredShoppingItem[] };
+
+type LedgerEntry = {
+  id: string;
+  label: string;
+  timestamp: string;
+};
+
+type StorageSnapshot = {
+  version: number;
+  lists: StoredShoppingList[];
+  ledger: LedgerEntry[];
+  settings: {
+    windowDays: number;
+  };
+  activeListId: string | null;
+};
+
+const ITEM_STATE_SEQUENCE: ItemState[] = ["idle", "complete", "skip"];
+const ITEM_STATE_ICON: Record<ItemState, string> = {
+  idle: "☐",
+  complete: "✔",
+  skip: "✖",
+};
+const ITEM_STATE_LABEL: Record<ItemState, string> = {
+  idle: "Mark item as collected",
+  complete: "Mark item as missing",
+  skip: "Reset item status",
+};
+
+const getNextItemState = (current: ItemState) => {
+  const index = ITEM_STATE_SEQUENCE.indexOf(current);
+  if (index === -1 || index === ITEM_STATE_SEQUENCE.length - 1) {
+    return ITEM_STATE_SEQUENCE[0];
+  }
+  return ITEM_STATE_SEQUENCE[index + 1];
+};
+
+const coerceItemState = (value: unknown): ItemState => {
+  switch (value) {
+    case "complete":
+    case "skip":
+    case "idle":
+      return value;
+    default:
+      return "idle";
+  }
+};
+
+const normalizeListCollection = (lists: StoredShoppingList[]): ShoppingList[] =>
+  lists.map((list) => ({
+    ...list,
+    items: (list.items ?? []).map((item): ShoppingItem => ({
+      ...item,
+      state: coerceItemState(item.state),
+    })),
+  }));
+
+const serializeListCollection = (lists: ShoppingList[]): StoredShoppingList[] =>
+  lists.map((list) => ({
+    ...list,
+    items: list.items.map((item) => ({
+      ...item,
+    })),
+  }));
+
 const createId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -29,35 +112,6 @@ const formatDateTag = (isoDate: string) => {
   }
 };
 
-type ShoppingItem = {
-  id: string;
-  label: string;
-  addedAt: string;
-};
-
-type ShoppingList = {
-  id: string;
-  name: string;
-  createdAt: string;
-  items: ShoppingItem[];
-};
-
-type LedgerEntry = {
-  id: string;
-  label: string;
-  timestamp: string;
-};
-
-type StorageSnapshot = {
-  version: number;
-  lists: ShoppingList[];
-  ledger: LedgerEntry[];
-  settings: {
-    windowDays: number;
-  };
-  activeListId: string | null;
-};
-
 const seedSnapshot: StorageSnapshot = {
   version: 1,
   lists: [
@@ -66,9 +120,24 @@ const seedSnapshot: StorageSnapshot = {
       name: "Neo Market Ritual",
       createdAt: new Date().toISOString(),
       items: [
-        { id: createId(), label: "Chromatic citrus", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Midnight oat milk", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Umami ramen kit", addedAt: new Date().toISOString() },
+        {
+          id: createId(),
+          label: "Chromatic citrus",
+          addedAt: new Date().toISOString(),
+          state: "idle" as ItemState,
+        },
+        {
+          id: createId(),
+          label: "Midnight oat milk",
+          addedAt: new Date().toISOString(),
+          state: "idle" as ItemState,
+        },
+        {
+          id: createId(),
+          label: "Umami ramen kit",
+          addedAt: new Date().toISOString(),
+          state: "idle" as ItemState,
+        },
       ],
     },
     {
@@ -76,8 +145,18 @@ const seedSnapshot: StorageSnapshot = {
       name: "Studio Snack Arsenal",
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
       items: [
-        { id: createId(), label: "Neon trail mix", addedAt: new Date().toISOString() },
-        { id: createId(), label: "Sparkling yuzu", addedAt: new Date().toISOString() },
+        {
+          id: createId(),
+          label: "Neon trail mix",
+          addedAt: new Date().toISOString(),
+          state: "idle" as ItemState,
+        },
+        {
+          id: createId(),
+          label: "Sparkling yuzu",
+          addedAt: new Date().toISOString(),
+          state: "idle" as ItemState,
+        },
       ],
     },
   ],
@@ -101,7 +180,7 @@ const seedSnapshot: StorageSnapshot = {
 export default component$(() => {
   useStylesScoped$(styles);
 
-  const lists = useSignal<ShoppingList[]>(seedSnapshot.lists);
+  const lists = useSignal<ShoppingList[]>(normalizeListCollection(seedSnapshot.lists));
   const ledger = useSignal<LedgerEntry[]>(seedSnapshot.ledger);
   const activeListId = useSignal<string | null>(seedSnapshot.lists[0]?.id ?? null);
   const newListName = useSignal("");
@@ -134,37 +213,38 @@ export default component$(() => {
       const trimmed = label.trim();
       if (!trimmed) return false;
 
-    const timestamp = new Date().toISOString();
-    let updated = false;
+      const timestamp = new Date().toISOString();
+      let updated = false;
 
-    const updatedLists = lists.value.map((list) => {
-      if (list.id !== targetId) {
-        return list;
-      }
-      updated = true;
-      return {
-        ...list,
-        items: [
-          ...list.items,
-          {
-            id: createId(),
-            label: trimmed,
-            addedAt: timestamp,
-          },
-        ],
-      };
-    });
+      const updatedLists = lists.value.map((list) => {
+        if (list.id !== targetId) {
+          return list;
+        }
+        updated = true;
+        return {
+          ...list,
+          items: [
+            ...list.items,
+            {
+              id: createId(),
+              label: trimmed,
+              addedAt: timestamp,
+              state: "idle" as ItemState,
+            },
+          ],
+        };
+      });
 
-    if (!updated) return false;
+      if (!updated) return false;
 
-    lists.value = updatedLists;
-    ledger.value = [
-      { id: createId(), label: trimmed, timestamp },
-      ...ledger.value,
-    ].slice(0, LEDGER_LIMIT);
+      lists.value = updatedLists;
+      ledger.value = [
+        { id: createId(), label: trimmed, timestamp },
+        ...ledger.value,
+      ].slice(0, LEDGER_LIMIT);
 
-    return true;
-  },
+      return true;
+    },
   );
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -178,9 +258,14 @@ export default component$(() => {
     try {
       const parsed = JSON.parse(stored) as StorageSnapshot;
       if (parsed && parsed.version === 1) {
-        lists.value = parsed.lists ?? [];
+        const normalizedLists = normalizeListCollection(parsed.lists ?? []);
+        lists.value = normalizedLists;
         ledger.value = parsed.ledger ?? [];
-        activeListId.value = parsed.activeListId ?? parsed.lists?.[0]?.id ?? null;
+        const fallbackActiveId = normalizedLists[0]?.id ?? null;
+        activeListId.value =
+          parsed.activeListId && normalizedLists.some((list) => list.id === parsed.activeListId)
+            ? parsed.activeListId
+            : fallbackActiveId;
         timeWindowDays.value = parsed.settings?.windowDays ?? seedSnapshot.settings.windowDays;
       }
     } catch (error) {
@@ -198,7 +283,7 @@ export default component$(() => {
 
     const snapshot: StorageSnapshot = {
       version: 1,
-      lists: lists.value,
+      lists: serializeListCollection(lists.value),
       ledger: ledger.value,
       settings: {
         windowDays: timeWindowDays.value,
@@ -300,6 +385,27 @@ export default component$(() => {
 
     ledger.value = filtered;
     await showFlash(`Cleared history for ${label}`);
+  });
+
+  const handleToggleItemState = $((itemId: string) => {
+    const targetId = activeListId.value;
+    if (!targetId) return;
+
+    lists.value = lists.value.map((list) => {
+      if (list.id !== targetId) return list;
+
+      return {
+        ...list,
+        items: list.items.map((item) => {
+          if (item.id !== itemId) return item;
+
+          return {
+            ...item,
+            state: getNextItemState(item.state),
+          };
+        }),
+      };
+    });
   });
 
   const handleRemoveItem = $(async (itemId: string) => {
@@ -477,8 +583,16 @@ export default component$(() => {
                       ) : (
                         <ul class="lab-items">
                           {currentList.value.items.map((item) => (
-                            <li key={item.id} class="lab-item">
-                              <span>{item.label}</span>
+                            <li key={item.id} class="lab-item" data-state={item.state}>
+                              <button
+                                type="button"
+                                class="lab-item__toggle"
+                                aria-label={`${ITEM_STATE_LABEL[item.state]} for ${item.label}`}
+                                onClick$={() => handleToggleItemState(item.id)}
+                              >
+                                <span aria-hidden="true">{ITEM_STATE_ICON[item.state]}</span>
+                              </button>
+                              <span class="lab-item__label">{item.label}</span>
                               <span class="lab-item__meta">
                                 <span>{formatDateTag(item.addedAt)}</span>
                                 <button

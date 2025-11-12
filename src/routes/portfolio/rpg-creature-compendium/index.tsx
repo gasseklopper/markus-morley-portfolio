@@ -115,11 +115,16 @@ const formatSpeed = (speed: RawCreature["speed"]): string => {
   return entries.length > 0 ? entries.join(", ") : "—";
 };
 
+type ImmunityEntry = string | { name?: string };
+
 const formatSpecialDefense = (creature: RawCreature): string => {
   const sections: string[] = [];
-  const pushSection = (label: string, value?: string | string[] | null) => {
+  const pushSection = (
+    label: string,
+    value?: string | ImmunityEntry[] | null,
+  ) => {
     if (!value) return;
-    const items = Array.isArray(value) ? value : [value];
+    const items: ImmunityEntry[] = Array.isArray(value) ? value : [value];
     const clean = items
       .map((item) => {
         if (!item) return "";
@@ -214,13 +219,30 @@ const normalizeCreature = (creature: RawCreature): NormalizedCreature => {
   };
 };
 
-const attemptJson = async (response: Response) => {
+const attemptJson = async (response: Response): Promise<unknown> => {
   try {
     return await response.json();
   } catch (error) {
     console.error("Failed to parse JSON", error);
     return null;
   }
+};
+
+const extractSummaries = (payload: unknown): CreatureSummary[] | null => {
+  if (!payload) return null;
+  if (Array.isArray(payload)) {
+    return payload.filter((item): item is CreatureSummary =>
+      item != null && typeof item === "object",
+    );
+  }
+  if (typeof payload !== "object") return null;
+  const record = payload as Record<string, unknown>;
+  if (Array.isArray(record.results)) {
+    return record.results.filter((item): item is CreatureSummary =>
+      item != null && typeof item === "object",
+    );
+  }
+  return null;
 };
 
 const unwrapCreature = (payload: unknown): RawCreature | null => {
@@ -262,9 +284,8 @@ export default component$(() => {
         const response = await fetch(`${root}/creatures`);
         if (!response.ok) continue;
         const json = await attemptJson(response);
-        if (!json) continue;
-        const list = Array.isArray(json) ? json : (json as { results?: CreatureSummary[] }).results;
-        if (list && Array.isArray(list)) {
+        const list = extractSummaries(json);
+        if (list) {
           summaries.value = list;
           return;
         }
@@ -514,10 +535,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  {
-    title: "RPG Creature Compendium - Markus Morley personal portfolio",
-    description:
-      "Search the freeCodeCamp RPG Creature API for monsters by name or identifier and instantly review their core statistics.",
-  },
-  siteConfig,
+  `RPG Creature Compendium - ${siteConfig.metadata.title}`,
+  "Search the freeCodeCamp RPG Creature API for monsters by name or identifier and instantly review their core statistics.",
 );

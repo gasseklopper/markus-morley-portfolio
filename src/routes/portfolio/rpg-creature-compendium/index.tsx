@@ -254,7 +254,7 @@ export default component$(() => {
   const creature = useSignal<NormalizedCreature | null>(null);
   const summaries = useSignal<CreatureSummary[] | null>(null);
 
-  const loadSummaries = $(async () => {
+  const loadSummaries = async () => {
     if (summaries.value) return;
 
     for (const root of API_ROOTS) {
@@ -272,10 +272,12 @@ export default component$(() => {
         console.error("Failed to load creature list", error);
       }
     }
-  });
+  };
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(loadSummaries);
+  useVisibleTask$(() => {
+    void loadSummaries();
+  });
 
   const resolveIdentifier = $(async (input: string) => {
     const trimmed = input.trim();

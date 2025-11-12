@@ -120,6 +120,12 @@
     "description": "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions."
   },
   {
+    "name": "Roman Numeral Converter",
+    "path": "/portfolio/roman-numeral-converter",
+    "title": "Roman Numeral Converter - Markus Morley personal portfolio",
+    "description": "Roman numeral converter with live validation, history log, and subtractive pair legend."
+  },
+  {
     "name": "Generative Art",
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",

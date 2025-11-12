@@ -1,0 +1,295 @@
+:host {
+  display: block;
+}
+
+.converter-page {
+  display: grid;
+  gap: clamp(2.5rem, 4vw, 4rem);
+  padding-block: clamp(3rem, 6vw, 6rem);
+  color: var(--text1);
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2.5rem;
+  border: 1px solid var(--surface-border);
+  background: radial-gradient(
+      circle at top,
+      color-mix(in srgb, var(--surface3) 24%, transparent) 0%,
+      transparent 65%
+    ),
+    var(--surface-glass-1);
+  padding: clamp(2rem, 5vw, 3rem);
+  box-shadow: 0 32px 120px var(--surface-shadow);
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.hero-card::before,
+.hero-card::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+
+.hero-card::before {
+  inset: auto -18% -40% auto;
+  width: clamp(16rem, 24vw, 22rem);
+  height: clamp(16rem, 24vw, 22rem);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--primary) 45%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(60px);
+}
+
+.hero-card::after {
+  inset: -35% auto auto -20%;
+  width: clamp(14rem, 22vw, 20rem);
+  height: clamp(14rem, 22vw, 20rem);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--secondary) 45%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(50px);
+}
+
+.hero-intro {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 52ch;
+  position: relative;
+}
+
+.hero-intro h1 {
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.hero-intro p {
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.converter-shell {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.converter-card {
+  border-radius: 2rem;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-glass-1);
+  backdrop-filter: blur(24px);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  box-shadow: 0 28px 90px var(--surface-shadow);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.converter-card header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.converter-card h2 {
+  font-size: clamp(1.5rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+}
+
+.converter-card p {
+  color: var(--text3);
+  line-height: 1.6;
+}
+
+.converter-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.converter-form label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-weight: 600;
+  color: var(--text3);
+}
+
+.converter-input-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .converter-input-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.converter-input {
+  appearance: none;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 65%, transparent);
+  background: var(--surface1);
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  color: var(--text1);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.converter-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.converter-button {
+  align-self: stretch;
+  border: none;
+  border-radius: 1rem;
+  padding: 0.95rem 1.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  background: var(--primary);
+  color: var(--brand-inverted);
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  box-shadow: 0 22px 60px color-mix(in srgb, var(--primary) 45%, transparent);
+}
+
+.converter-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.converter-button:not(:disabled):hover,
+.converter-button:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--primary) 85%, var(--brand-core) 15%);
+}
+
+.converter-output {
+  border-radius: 1.75rem;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-glass-2);
+  padding: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.converter-output strong {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+.converter-output span {
+  color: var(--text3);
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.feedback {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.feedback[data-state="invalid"] {
+  color: color-mix(in srgb, var(--danger) 80%, var(--text1) 20%);
+}
+
+.feedback[data-state="valid"] {
+  color: color-mix(in srgb, var(--primary) 72%, var(--text1) 28%);
+}
+
+.history-list {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  background: var(--surface1);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--surface-shadow) 65%, transparent);
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  color: var(--text2);
+}
+
+.history-item strong {
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+}
+
+.legend-card {
+  border-radius: 2rem;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-glass-2);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  box-shadow: 0 24px 70px var(--surface-shadow);
+  display: grid;
+  gap: 1.25rem;
+}
+
+.legend-card h2 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  font-weight: 600;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.legend-grid span {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--surface-border) 65%, transparent);
+  background: var(--surface1);
+  font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.95rem;
+  color: var(--text2);
+}
+
+@media (min-width: 960px) {
+  .converter-page {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+}

@@ -120,6 +120,12 @@
     "description": "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions."
   },
   {
+    "name": "RPG Creature Compendium",
+    "path": "/portfolio/rpg-creature-compendium",
+    "title": "RPG Creature Compendium - Markus Morley personal portfolio",
+    "description": "Interactive creature lookup connecting to the freeCodeCamp RPG Creature API with dynamic stat breakdowns."
+  },
+  {
     "name": "Roman Numeral Converter",
     "path": "/portfolio/roman-numeral-converter",
     "title": "Roman Numeral Converter - Markus Morley personal portfolio",

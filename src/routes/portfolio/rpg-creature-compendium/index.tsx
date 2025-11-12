@@ -1,0 +1,521 @@
+import { $, component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import styles from "./rpg-creature-compendium.scss?inline";
+import siteConfig from "~/config/siteConfig.json";
+import { buildHead } from "~/utils/head";
+
+type CreatureSummary = {
+  id?: number;
+  index?: string;
+  name?: string;
+  slug?: string;
+};
+
+type RawProficiency = {
+  value?: number;
+  bonus?: number;
+  modifier?: number;
+  mod?: number;
+  proficiency?: { name?: string };
+  skill?: { name?: string };
+  name?: string;
+};
+
+type RawCreature = {
+  id?: number | string;
+  index?: string;
+  name?: string;
+  type?: string;
+  creature_type?: string;
+  alignment?: string;
+  armor_class?: number | string | Array<number | { value?: number; type?: string; name?: string }>;
+  hit_points?: number | string;
+  speed?: string | Record<string, string | number>;
+  strength?: number;
+  dexterity?: number;
+  constitution?: number;
+  intelligence?: number;
+  wisdom?: number;
+  charisma?: number;
+  ability_scores?: Partial<Record<AbilityKey, number>>;
+  stats?: Array<{ name?: string; stat?: string; ability?: string; score?: number; base_stat?: number; value?: number }>;
+  proficiencies?: RawProficiency[];
+  skills?: RawProficiency[];
+  saving_throws?: RawProficiency[];
+  damage_resistances?: string[];
+  damage_immunities?: string[];
+  damage_vulnerabilities?: string[];
+  condition_immunities?: Array<{ name?: string } | string>;
+  image?: string;
+  portrait?: string;
+  images?: string[];
+};
+
+type AbilityKey = "strength" | "dexterity" | "constitution" | "intelligence" | "wisdom" | "charisma";
+
+type NormalizedCreature = {
+  id: string;
+  name: string;
+  type: string;
+  alignment: string;
+  armorClass: string;
+  hitPoints: string;
+  speed: string;
+  abilityScores: Record<AbilityKey, string>;
+  proficiencies: string[];
+  specialDefense: string;
+  imageUrl?: string;
+};
+
+const API_ROOTS = [
+  "https://rpg-compendium.fly.dev/api",
+  "https://rpg-creature-api.freecodecamp.rocks/api",
+];
+
+const abilityLabels: Record<AbilityKey, string> = {
+  strength: "Strength",
+  dexterity: "Dexterity",
+  constitution: "Constitution",
+  intelligence: "Intelligence",
+  wisdom: "Wisdom",
+  charisma: "Charisma",
+};
+
+const formatArmorClass = (value: RawCreature["armor_class"]): string => {
+  if (Array.isArray(value)) {
+    const formatted = value
+      .map((entry) => {
+        if (typeof entry === "number") {
+          return entry.toString();
+        }
+        const score = entry?.value ?? entry?.name;
+        if (score == null) return "";
+        if (entry?.type) {
+          return `${score} (${entry.type})`;
+        }
+        return `${score}`;
+      })
+      .filter(Boolean);
+    return formatted.length > 0 ? formatted.join(", ") : "—";
+  }
+  if (value == null) return "—";
+  if (typeof value === "number") return value.toString();
+  return `${value}`;
+};
+
+const formatSpeed = (speed: RawCreature["speed"]): string => {
+  if (!speed) return "—";
+  if (typeof speed === "string") return speed;
+  const entries = Object.entries(speed)
+    .map(([mode, distance]) => {
+      if (distance == null || distance === "") return "";
+      const prettyMode = mode.replace(/_/g, " ");
+      return `${prettyMode} ${distance}`;
+    })
+    .filter(Boolean);
+  return entries.length > 0 ? entries.join(", ") : "—";
+};
+
+const formatSpecialDefense = (creature: RawCreature): string => {
+  const sections: string[] = [];
+  const pushSection = (label: string, value?: string | string[] | null) => {
+    if (!value) return;
+    const items = Array.isArray(value) ? value : [value];
+    const clean = items
+      .map((item) => {
+        if (!item) return "";
+        if (typeof item === "string") return item;
+        return item.name ?? "";
+      })
+      .filter(Boolean);
+    if (clean.length > 0) {
+      sections.push(`${label}: ${clean.join(", ")}`);
+    }
+  };
+
+  pushSection("Resistances", creature.damage_resistances ?? null);
+  pushSection("Immunities", creature.damage_immunities ?? null);
+  pushSection("Vulnerabilities", creature.damage_vulnerabilities ?? null);
+  pushSection("Condition", creature.condition_immunities ?? null);
+
+  return sections.length > 0 ? sections.join(" • ") : "—";
+};
+
+const extractAbilityScore = (creature: RawCreature, key: AbilityKey): string => {
+  const direct = creature[key];
+  if (typeof direct === "number") return direct.toString();
+
+  const abilityScores = creature.ability_scores?.[key];
+  if (typeof abilityScores === "number") return abilityScores.toString();
+
+  const statFromArray = creature.stats?.find((stat) => {
+    const name = stat.name?.toLowerCase();
+    const ability = stat.ability?.toLowerCase();
+    const statKey = stat.stat?.toLowerCase();
+    return name === key || ability === key || statKey === key;
+  });
+  if (statFromArray) {
+    const numeric =
+      statFromArray.base_stat ??
+      statFromArray.value ??
+      statFromArray.score ??
+      (typeof statFromArray.name === "string" && /\d+/.test(statFromArray.name)
+        ? Number.parseInt(statFromArray.name, 10)
+        : undefined);
+    if (numeric != null && !Number.isNaN(numeric)) {
+      return numeric.toString();
+    }
+  }
+
+  return "—";
+};
+
+const formatProficiency = (entry: RawProficiency): string | null => {
+  const label = entry.proficiency?.name ?? entry.skill?.name ?? entry.name;
+  if (!label) return null;
+  const modifier = entry.value ?? entry.bonus ?? entry.modifier ?? entry.mod;
+  if (modifier == null) return label;
+  const sign = modifier >= 0 ? "+" : "";
+  return `${label}: ${sign}${modifier}`;
+};
+
+const normalizeCreature = (creature: RawCreature): NormalizedCreature => {
+  const idValue = creature.id ?? creature.index ?? "";
+  const abilityScores: Record<AbilityKey, string> = {
+    strength: extractAbilityScore(creature, "strength"),
+    dexterity: extractAbilityScore(creature, "dexterity"),
+    constitution: extractAbilityScore(creature, "constitution"),
+    intelligence: extractAbilityScore(creature, "intelligence"),
+    wisdom: extractAbilityScore(creature, "wisdom"),
+    charisma: extractAbilityScore(creature, "charisma"),
+  };
+
+  const profArrays = [creature.proficiencies, creature.skills, creature.saving_throws].filter(
+    (arr): arr is RawProficiency[] => Array.isArray(arr)
+  );
+
+  const proficiencies = profArrays
+    .flatMap((arr) => arr.map(formatProficiency))
+    .filter((entry): entry is string => Boolean(entry));
+
+  const imageUrl = creature.image ?? creature.portrait ?? creature.images?.[0];
+
+  return {
+    id: `${idValue ?? ""}`,
+    name: creature.name ?? "Unknown Creature",
+    type: creature.type ?? creature.creature_type ?? "—",
+    alignment: creature.alignment ?? "—",
+    armorClass: formatArmorClass(creature.armor_class),
+    hitPoints: creature.hit_points != null ? `${creature.hit_points}` : "—",
+    speed: formatSpeed(creature.speed),
+    abilityScores,
+    proficiencies,
+    specialDefense: formatSpecialDefense(creature),
+    imageUrl,
+  };
+};
+
+const attemptJson = async (response: Response) => {
+  try {
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to parse JSON", error);
+    return null;
+  }
+};
+
+const unwrapCreature = (payload: unknown): RawCreature | null => {
+  if (!payload) return null;
+  if (Array.isArray(payload)) {
+    return payload[0] ?? null;
+  }
+  if (typeof payload !== "object") return null;
+  const record = payload as Record<string, unknown>;
+  if (record.creature && typeof record.creature === "object") {
+    return record.creature as RawCreature;
+  }
+  if (record.data && typeof record.data === "object") {
+    return record.data as RawCreature;
+  }
+  if (record.results && Array.isArray(record.results)) {
+    return (record.results as RawCreature[])[0] ?? null;
+  }
+  if (record.result && typeof record.result === "object") {
+    return record.result as RawCreature;
+  }
+  return payload as RawCreature;
+};
+
+export default component$(() => {
+  useStylesScoped$(styles);
+
+  const searchValue = useSignal("");
+  const status = useSignal<"idle" | "loading" | "error">("idle");
+  const errorMessage = useSignal<string | null>(null);
+  const creature = useSignal<NormalizedCreature | null>(null);
+  const summaries = useSignal<CreatureSummary[] | null>(null);
+
+  const loadSummaries = $(async () => {
+    if (summaries.value) return;
+
+    for (const root of API_ROOTS) {
+      try {
+        const response = await fetch(`${root}/creatures`);
+        if (!response.ok) continue;
+        const json = await attemptJson(response);
+        if (!json) continue;
+        const list = Array.isArray(json) ? json : (json as { results?: CreatureSummary[] }).results;
+        if (list && Array.isArray(list)) {
+          summaries.value = list;
+          return;
+        }
+      } catch (error) {
+        console.error("Failed to load creature list", error);
+      }
+    }
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(loadSummaries);
+
+  const resolveIdentifier = $(async (input: string) => {
+    const trimmed = input.trim();
+    if (!trimmed) return null;
+    if (/^\d+$/.test(trimmed)) {
+      return trimmed;
+    }
+
+    await loadSummaries();
+
+    const list = summaries.value;
+    if (!list) return trimmed;
+
+    const match = list.find((item) => item.name?.toLowerCase() === trimmed.toLowerCase());
+    if (match?.id != null) return `${match.id}`;
+    if (match?.index) return match.index;
+    if (match?.slug) return match.slug;
+    return trimmed;
+  });
+
+  const fetchCreature = $(async (identifier: string, rawInput: string) => {
+    const searchUrls = new Set<string>();
+
+    for (const root of API_ROOTS) {
+      searchUrls.add(`${root}/creatures/${identifier}`);
+      searchUrls.add(`${root}/creature/${identifier}`);
+      searchUrls.add(`${root}/creatures?id=${encodeURIComponent(identifier)}`);
+      searchUrls.add(`${root}/creatures?name=${encodeURIComponent(identifier)}`);
+      if (rawInput.toLowerCase() !== identifier.toLowerCase()) {
+        searchUrls.add(`${root}/creatures?name=${encodeURIComponent(rawInput)}`);
+        searchUrls.add(`${root}/creature/${encodeURIComponent(rawInput)}`);
+      }
+    }
+
+    for (const url of searchUrls) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) continue;
+        const json = await attemptJson(response);
+        const creatureData = unwrapCreature(json);
+        if (creatureData) {
+          return creatureData;
+        }
+      } catch (error) {
+        console.error("Failed request", url, error);
+      }
+    }
+
+    return null;
+  });
+
+  const handleClear = $(() => {
+    searchValue.value = "";
+    creature.value = null;
+    errorMessage.value = null;
+  });
+
+  const handleSearch = $(async () => {
+    const query = searchValue.value.trim();
+    if (!query) {
+      errorMessage.value = "Enter a creature name or numeric identifier.";
+      return;
+    }
+
+    errorMessage.value = null;
+    status.value = "loading";
+    creature.value = null;
+
+    const identifier = await resolveIdentifier(query);
+    if (!identifier) {
+      status.value = "idle";
+      errorMessage.value = "Unable to resolve the requested creature.";
+      return;
+    }
+
+    const rawCreature = await fetchCreature(identifier, query);
+    if (!rawCreature) {
+      status.value = "idle";
+      if (typeof window !== "undefined") {
+        window.alert("Creature not found");
+      }
+      errorMessage.value = "Creature not found. Try a different search.";
+      return;
+    }
+
+    creature.value = normalizeCreature(rawCreature);
+    status.value = "idle";
+  });
+
+  return (
+    <div id="app" class="page">
+      <header>
+        <h1 id="title">RPG Creature Compendium</h1>
+        <p class="subtitle">
+          Search for monsters by name or numeric identifier using the freeCodeCamp RPG Creature API. View essential lore, combat
+          statistics, and proficiency highlights instantly.
+        </p>
+      </header>
+
+      <section class="search-card" aria-labelledby="title">
+        <div class="search-input-group">
+          <label for="search-input">Creature name or ID</label>
+          <input
+            id="search-input"
+            type="text"
+            value={searchValue.value}
+            onInput$={(event) => (searchValue.value = (event.target as HTMLInputElement).value)}
+            placeholder="e.g. Pyrolysk or 27"
+            autocomplete="off"
+          />
+        </div>
+        <div class="actions">
+          <button id="search-button" type="button" onClick$={handleSearch} disabled={status.value === "loading"}>
+            {status.value === "loading" ? "Searching…" : "Search"}
+          </button>
+          <button id="clear-button" type="button" onClick$={handleClear}>
+            Clear
+          </button>
+        </div>
+        {errorMessage.value && <p class="alert" role="status">{errorMessage.value}</p>}
+        {!errorMessage.value && status.value === "loading" && <p class="status-line">Fetching creature profile…</p>}
+      </section>
+
+      <section class="content-grid">
+        <article class="profile-card">
+          <div class={`image-frame ${status.value === "loading" ? "skeleton" : ""}`}>
+            {creature.value?.imageUrl ? (
+              <img
+                id="creature-image"
+                src={creature.value.imageUrl}
+                alt={`Illustration of ${creature.value.name}`}
+                width={512}
+                height={640}
+              />
+            ) : (
+              <div class="empty-state">
+                <h2 class="empty-title">Awaiting your search</h2>
+                <p class="empty-body">
+                  Start by typing a creature name like <strong>Pyrolysk</strong> or any numeric identifier. Artwork will appear here
+                  when data is available.
+                </p>
+              </div>
+            )}
+          </div>
+          <div class="meta-grid">
+            <div>
+              <span class="meta-label">Creature Name</span>
+              <p id="creature-name" class="meta-value">
+                {creature.value?.name ?? "—"}
+              </p>
+            </div>
+            <div>
+              <span class="meta-label">Creature ID</span>
+              <p id="creature-id" class="meta-value">
+                {creature.value?.id ?? "—"}
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="stats-card">
+          <div class="details-grid">
+            <div class="detail-row">
+              <span class="detail-label">Type</span>
+              <span id="type" class="detail-value">
+                {creature.value?.type ?? "—"}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Alignment</span>
+              <span id="alignment" class="detail-value">
+                {creature.value?.alignment ?? "—"}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Armor Class</span>
+              <span id="armor-class" class="detail-value">
+                {creature.value?.armorClass ?? "—"}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Hit Points</span>
+              <span id="hit-points" class="detail-value">
+                {creature.value?.hitPoints ?? "—"}
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Speed</span>
+              <span id="speed" class="detail-value">
+                {creature.value?.speed ?? "—"}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <p class="section-title">Ability scores</p>
+            <div class="abilities-grid">
+              {Object.entries(abilityLabels).map(([key, label]) => (
+                <div key={key} class="ability-card">
+                  <span class="ability-label">{label}</span>
+                  <span id={key as AbilityKey} class="ability-score">
+                    {creature.value?.abilityScores[key as AbilityKey] ?? "—"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p class="section-title">Special defense</p>
+            <p id="special-defense" class="detail-value">
+              {creature.value?.specialDefense ?? "—"}
+            </p>
+          </div>
+
+          <div>
+            <p class="section-title">Proficiencies</p>
+            <div id="proficiencies">
+              {creature.value?.proficiencies.length ? (
+                creature.value.proficiencies.map((entry) => (
+                  <span key={entry} class="proficiency-chip">
+                    {entry}
+                  </span>
+                ))
+              ) : (
+                <span class="detail-value">—</span>
+              )}
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  );
+});
+
+export const head = buildHead(
+  {
+    title: "RPG Creature Compendium - Markus Morley personal portfolio",
+    description:
+      "Search the freeCodeCamp RPG Creature API for monsters by name or identifier and instantly review their core statistics.",
+  },
+  siteConfig,
+);

@@ -1,4 +1,4 @@
-import { $, component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, Signal, component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from "./rpg-creature-compendium.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -276,8 +276,8 @@ export default component$(() => {
   const creature = useSignal<NormalizedCreature | null>(null);
   const summaries = useSignal<CreatureSummary[] | null>(null);
 
-  const loadSummaries = async () => {
-    if (summaries.value) return;
+  const loadSummaries = $(async (target: Signal<CreatureSummary[] | null>) => {
+    if (target.value) return;
 
     for (const root of API_ROOTS) {
       try {
@@ -286,18 +286,18 @@ export default component$(() => {
         const json = await attemptJson(response);
         const list = extractSummaries(json);
         if (list) {
-          summaries.value = list;
+          target.value = list;
           return;
         }
       } catch (error) {
         console.error("Failed to load creature list", error);
       }
     }
-  };
+  });
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    void loadSummaries();
+    void loadSummaries(summaries);
   });
 
   const resolveIdentifier = $(async (input: string) => {
@@ -307,7 +307,7 @@ export default component$(() => {
       return trimmed;
     }
 
-    await loadSummaries();
+    await loadSummaries(summaries);
 
     const list = summaries.value;
     if (!list) return trimmed;

@@ -66,6 +66,116 @@ type NormalizedCreature = {
   imageUrl?: string;
 };
 
+const hasDetailedStats = (creature: RawCreature): boolean => {
+  if (!creature) return false;
+
+  const defensesPresent =
+    (Array.isArray(creature.damage_resistances) && creature.damage_resistances.length > 0) ||
+    (Array.isArray(creature.damage_immunities) && creature.damage_immunities.length > 0) ||
+    (Array.isArray(creature.damage_vulnerabilities) && creature.damage_vulnerabilities.length > 0) ||
+    (Array.isArray(creature.condition_immunities) && creature.condition_immunities.length > 0);
+
+  const proficienciesPresent =
+    (Array.isArray(creature.proficiencies) && creature.proficiencies.length > 0) ||
+    (Array.isArray(creature.skills) && creature.skills.length > 0) ||
+    (Array.isArray(creature.saving_throws) && creature.saving_throws.length > 0);
+
+  const abilityDataPresent =
+    typeof creature.strength === "number" ||
+    typeof creature.dexterity === "number" ||
+    typeof creature.constitution === "number" ||
+    typeof creature.intelligence === "number" ||
+    typeof creature.wisdom === "number" ||
+    typeof creature.charisma === "number" ||
+    (creature.ability_scores && Object.keys(creature.ability_scores).length > 0) ||
+    (Array.isArray(creature.stats) && creature.stats.length > 0);
+
+  return (
+    creature.armor_class != null ||
+    creature.hit_points != null ||
+    creature.speed != null ||
+    defensesPresent ||
+    proficienciesPresent ||
+    abilityDataPresent
+  );
+};
+
+const expandCandidatePaths = (root: string, creature: RawCreature): string[] => {
+  const identifiers = new Set<string>();
+  if (creature.id != null) identifiers.add(`${creature.id}`);
+  if (creature.index) identifiers.add(creature.index);
+  if (creature.slug) identifiers.add(creature.slug);
+  if (creature.name) identifiers.add(creature.name);
+
+  const paths: string[] = [];
+  identifiers.forEach((id) => {
+    const encoded = encodeURIComponent(id);
+    paths.push(`/creatures/${encoded}`);
+    paths.push(`/creature/${encoded}`);
+  });
+
+  return paths.map((path) => new URL(path, root).toString());
+};
+
+const searchRootForCreature = async (
+  root: string,
+  identifier: string,
+  rawInput: string,
+): Promise<{ creature: RawCreature; detailed: boolean } | null> => {
+  const visited = new Set<string>();
+  const queue: string[] = [];
+
+  const enqueue = (path: string) => {
+    const url = new URL(path, root).toString();
+    if (!visited.has(url) && !queue.includes(url)) {
+      queue.push(url);
+    }
+  };
+
+  const baseIdentifiers = new Set<string>([identifier]);
+  if (rawInput.toLowerCase() !== identifier.toLowerCase()) {
+    baseIdentifiers.add(rawInput);
+  }
+
+  baseIdentifiers.forEach((value) => {
+    const encoded = encodeURIComponent(value);
+    enqueue(`/creatures/${encoded}`);
+    enqueue(`/creature/${encoded}`);
+    enqueue(`/creatures?id=${encoded}`);
+    enqueue(`/creatures?name=${encoded}`);
+  });
+
+  let fallback: RawCreature | null = null;
+
+  while (queue.length > 0) {
+    const url = queue.shift()!;
+    if (visited.has(url)) continue;
+    visited.add(url);
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      const json = await attemptJson(response);
+      const creature = unwrapCreature(json);
+      if (!creature) continue;
+
+      if (hasDetailedStats(creature)) {
+        return { creature, detailed: true };
+      }
+
+      if (!fallback) {
+        fallback = creature;
+      }
+
+      expandCandidatePaths(root, creature).forEach(enqueue);
+    } catch (error) {
+      console.error("Failed request", url, error);
+    }
+  }
+
+  return fallback ? { creature: fallback, detailed: false } : null;
+};
+
 const API_ROOTS = [
   "https://rpg-compendium.fly.dev/api",
   "https://rpg-creature-api.freecodecamp.rocks/api",
@@ -320,34 +430,22 @@ export default component$(() => {
   });
 
   const fetchCreature = $(async (identifier: string, rawInput: string) => {
-    const searchUrls = new Set<string>();
+    let fallback: RawCreature | null = null;
 
     for (const root of API_ROOTS) {
-      searchUrls.add(`${root}/creatures/${identifier}`);
-      searchUrls.add(`${root}/creature/${identifier}`);
-      searchUrls.add(`${root}/creatures?id=${encodeURIComponent(identifier)}`);
-      searchUrls.add(`${root}/creatures?name=${encodeURIComponent(identifier)}`);
-      if (rawInput.toLowerCase() !== identifier.toLowerCase()) {
-        searchUrls.add(`${root}/creatures?name=${encodeURIComponent(rawInput)}`);
-        searchUrls.add(`${root}/creature/${encodeURIComponent(rawInput)}`);
+      const result = await searchRootForCreature(root, identifier, rawInput);
+      if (!result) continue;
+
+      if (result.detailed) {
+        return result.creature;
+      }
+
+      if (!fallback) {
+        fallback = result.creature;
       }
     }
 
-    for (const url of searchUrls) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) continue;
-        const json = await attemptJson(response);
-        const creatureData = unwrapCreature(json);
-        if (creatureData) {
-          return creatureData;
-        }
-      } catch (error) {
-        console.error("Failed request", url, error);
-      }
-    }
-
-    return null;
+    return fallback;
   });
 
   const handleClear = $(() => {

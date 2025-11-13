@@ -104,6 +104,13 @@ const hasDetailedStats = (creature: RawCreature): boolean => {
 const RESOURCE_PATHS = ["/creatures/", "/creature/", "/monsters/"];
 const IDENTIFIER_QUERIES = ["id", "name", "slug", "index", "search", "q"];
 
+const resolveApiUrl = (root: string, path: string): string => {
+  if (/^https?:\/\//i.test(path)) return path;
+  const normalizedRoot = root.endsWith("/") ? root : `${root}/`;
+  const normalizedPath = path.replace(/^\/+/, "");
+  return new URL(normalizedPath, normalizedRoot).toString();
+};
+
 const buildIdentifierPaths = (identifier: string): string[] => {
   const encoded = encodeURIComponent(identifier);
   const paths: string[] = [];
@@ -125,7 +132,7 @@ const expandCandidatePaths = (root: string, creature: RawCreature): string[] => 
 
   const paths: string[] = [];
   identifiers.forEach((id) => {
-    buildIdentifierPaths(id).forEach((path) => paths.push(new URL(path, root).toString()));
+    buildIdentifierPaths(id).forEach((path) => paths.push(resolveApiUrl(root, path)));
   });
 
   return paths;
@@ -170,7 +177,7 @@ const searchRootForCreature = async (
   const queue: string[] = [];
 
   const enqueue = (path: string) => {
-    const url = new URL(path, root).toString();
+    const url = resolveApiUrl(root, path);
     if (!visited.has(url) && !queue.includes(url)) {
       queue.push(url);
     }
@@ -447,7 +454,8 @@ export default component$(() => {
 
     for (const root of API_ROOTS) {
       try {
-        const response = await fetch(`${root}/creatures`);
+        const listUrl = resolveApiUrl(root, "/creatures");
+        const response = await fetch(listUrl);
         if (!response.ok) continue;
         const json = await attemptJson(response);
         const list = extractSummaries(json);

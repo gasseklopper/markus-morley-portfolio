@@ -24,6 +24,7 @@ type RawCreature = {
   id?: number | string;
   index?: string;
   name?: string;
+  slug?: string;
   type?: string;
   creature_type?: string;
   alignment?: string;

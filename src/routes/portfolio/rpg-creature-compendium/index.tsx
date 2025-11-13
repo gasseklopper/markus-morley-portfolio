@@ -101,6 +101,21 @@ const hasDetailedStats = (creature: RawCreature): boolean => {
   );
 };
 
+const RESOURCE_PATHS = ["/creatures/", "/creature/", "/monsters/"];
+const IDENTIFIER_QUERIES = ["id", "name", "slug", "index", "search", "q"];
+
+const buildIdentifierPaths = (identifier: string): string[] => {
+  const encoded = encodeURIComponent(identifier);
+  const paths: string[] = [];
+  for (const prefix of RESOURCE_PATHS) {
+    paths.push(`${prefix}${encoded}`);
+  }
+  for (const query of IDENTIFIER_QUERIES) {
+    paths.push(`/creatures?${query}=${encoded}`);
+  }
+  return paths;
+};
+
 const expandCandidatePaths = (root: string, creature: RawCreature): string[] => {
   const identifiers = new Set<string>();
   if (creature.id != null) identifiers.add(`${creature.id}`);
@@ -110,12 +125,40 @@ const expandCandidatePaths = (root: string, creature: RawCreature): string[] => 
 
   const paths: string[] = [];
   identifiers.forEach((id) => {
-    const encoded = encodeURIComponent(id);
-    paths.push(`/creatures/${encoded}`);
-    paths.push(`/creature/${encoded}`);
+    buildIdentifierPaths(id).forEach((path) => paths.push(new URL(path, root).toString()));
   });
 
-  return paths.map((path) => new URL(path, root).toString());
+  return paths;
+};
+
+const generateIdentifierVariants = (value: string): string[] => {
+  const variants = new Set<string>();
+  const trimmed = value.trim();
+  if (!trimmed) return [];
+
+  const slug = trimmed
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  const spaced = trimmed.replace(/[_-]+/g, " ");
+  const titleCased = spaced.replace(/\b(\w)/g, (match) => match.toUpperCase());
+
+  [
+    trimmed,
+    trimmed.toLowerCase(),
+    trimmed.toUpperCase(),
+    slug,
+    spaced,
+    titleCased,
+  ].forEach((entry) => {
+    const normalized = entry.trim();
+    if (normalized) {
+      variants.add(normalized);
+    }
+  });
+
+  return Array.from(variants);
 };
 
 const searchRootForCreature = async (
@@ -133,17 +176,13 @@ const searchRootForCreature = async (
     }
   };
 
-  const baseIdentifiers = new Set<string>([identifier]);
-  if (rawInput.toLowerCase() !== identifier.toLowerCase()) {
-    baseIdentifiers.add(rawInput);
-  }
+  const baseIdentifiers = new Set<string>([
+    ...generateIdentifierVariants(identifier),
+    ...generateIdentifierVariants(rawInput),
+  ]);
 
   baseIdentifiers.forEach((value) => {
-    const encoded = encodeURIComponent(value);
-    enqueue(`/creatures/${encoded}`);
-    enqueue(`/creature/${encoded}`);
-    enqueue(`/creatures?id=${encoded}`);
-    enqueue(`/creatures?name=${encoded}`);
+    buildIdentifierPaths(value).forEach(enqueue);
   });
 
   let fallback: RawCreature | null = null;
@@ -339,43 +378,57 @@ const attemptJson = async (response: Response): Promise<unknown> => {
   }
 };
 
+const SUMMARY_ARRAY_KEYS = ["results", "creatures", "data", "entries", "items", "monsters"];
+
 const extractSummaries = (payload: unknown): CreatureSummary[] | null => {
-  if (!payload) return null;
-  if (Array.isArray(payload)) {
-    return payload.filter((item): item is CreatureSummary =>
-      item != null && typeof item === "object",
-    );
-  }
-  if (typeof payload !== "object") return null;
-  const record = payload as Record<string, unknown>;
-  if (Array.isArray(record.results)) {
-    return record.results.filter((item): item is CreatureSummary =>
-      item != null && typeof item === "object",
-    );
-  }
-  return null;
+  const collect = (input: unknown): CreatureSummary[] => {
+    if (!input) return [];
+    if (Array.isArray(input)) {
+      return input.filter((item): item is CreatureSummary => item != null && typeof item === "object");
+    }
+    if (typeof input !== "object") return [];
+    const record = input as Record<string, unknown>;
+    for (const key of SUMMARY_ARRAY_KEYS) {
+      if (Array.isArray(record[key])) {
+        return (record[key] as unknown[]).filter((item): item is CreatureSummary =>
+          item != null && typeof item === "object",
+        );
+      }
+    }
+    return [];
+  };
+
+  const results = collect(payload);
+  return results.length > 0 ? results : null;
 };
 
 const unwrapCreature = (payload: unknown): RawCreature | null => {
   if (!payload) return null;
   if (Array.isArray(payload)) {
-    return payload[0] ?? null;
+    return (payload.find((item) => item && typeof item === "object") as RawCreature) ?? null;
   }
   if (typeof payload !== "object") return null;
   const record = payload as Record<string, unknown>;
-  if (record.creature && typeof record.creature === "object") {
-    return record.creature as RawCreature;
+
+  const objectKeys = ["creature", "result", "data", "entry"];
+  for (const key of objectKeys) {
+    const value = record[key];
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value as RawCreature;
+    }
+    if (Array.isArray(value) && value.length > 0) {
+      return value[0] as RawCreature;
+    }
   }
-  if (record.data && typeof record.data === "object") {
-    return record.data as RawCreature;
+
+  for (const key of SUMMARY_ARRAY_KEYS) {
+    const arrayValue = record[key];
+    if (Array.isArray(arrayValue) && arrayValue.length > 0) {
+      return arrayValue[0] as RawCreature;
+    }
   }
-  if (record.results && Array.isArray(record.results)) {
-    return (record.results as RawCreature[])[0] ?? null;
-  }
-  if (record.result && typeof record.result === "object") {
-    return record.result as RawCreature;
-  }
-  return payload as RawCreature;
+
+  return record as RawCreature;
 };
 
 export default component$(() => {
@@ -390,19 +443,34 @@ export default component$(() => {
   const loadSummaries = $(async (target: Signal<CreatureSummary[] | null>) => {
     if (target.value) return;
 
+    const registry = new Map<string, CreatureSummary>();
+
     for (const root of API_ROOTS) {
       try {
         const response = await fetch(`${root}/creatures`);
         if (!response.ok) continue;
         const json = await attemptJson(response);
         const list = extractSummaries(json);
-        if (list) {
-          target.value = list;
-          return;
-        }
+        if (!list) continue;
+
+        list.forEach((item) => {
+          const key =
+            item.slug?.toLowerCase() ??
+            item.index?.toLowerCase() ??
+            (item.id != null ? `${item.id}` : undefined) ??
+            item.name?.toLowerCase();
+          if (!key) return;
+          if (!registry.has(key)) {
+            registry.set(key, item);
+          }
+        });
       } catch (error) {
         console.error("Failed to load creature list", error);
       }
+    }
+
+    if (registry.size > 0) {
+      target.value = Array.from(registry.values());
     }
   });
 
@@ -423,10 +491,21 @@ export default component$(() => {
     const list = summaries.value;
     if (!list) return trimmed;
 
-    const match = list.find((item) => item.name?.toLowerCase() === trimmed.toLowerCase());
+    const lower = trimmed.toLowerCase();
+    const match = list.find((item) => {
+      const candidates = [
+        item.name?.toLowerCase(),
+        item.slug?.toLowerCase(),
+        item.index?.toLowerCase(),
+        item.id != null ? `${item.id}` : undefined,
+      ].filter(Boolean) as string[];
+      return candidates.includes(lower);
+    });
+
     if (match?.id != null) return `${match.id}`;
     if (match?.index) return match.index;
     if (match?.slug) return match.slug;
+    if (match?.name) return match.name;
     return trimmed;
   });
 

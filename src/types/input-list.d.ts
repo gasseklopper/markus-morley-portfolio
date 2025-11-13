@@ -1,12 +1,6 @@
-import type { QwikJSX } from "@builder.io/qwik";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      input: QwikJSX.IntrinsicElements["input"] & {
-        list?: string;
-      };
-    }
+declare module "@builder.io/qwik" {
+  interface HTMLAttributes<E extends Element> {
+    list?: E extends HTMLInputElement ? string : never;
   }
 }
 

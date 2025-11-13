@@ -57,10 +57,13 @@ export const onGet: RequestHandler = async ({ request, send }) => {
   }
 
   const body = await upstream.text();
-  const contentType = upstream.headers.get("content-type") ?? "application/json";
-
-  send(upstream.status, body, {
-    "Content-Type": contentType,
-    "Cache-Control": upstream.headers.get("cache-control") ?? "no-store",
+  const proxiedResponse = new Response(body, {
+    status: upstream.status,
+    headers: {
+      "Content-Type": upstream.headers.get("content-type") ?? "application/json",
+      "Cache-Control": upstream.headers.get("cache-control") ?? "no-store",
+    },
   });
+
+  send(proxiedResponse);
 };

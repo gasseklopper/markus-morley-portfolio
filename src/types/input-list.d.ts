@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { JSX } from "@builder.io/qwik";
+import type { QwikJSX } from "@builder.io/qwik";
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      input: JSX.IntrinsicElements["input"] & {
+      input: QwikJSX.IntrinsicElements["input"] & {
         list?: string;
       };
     }

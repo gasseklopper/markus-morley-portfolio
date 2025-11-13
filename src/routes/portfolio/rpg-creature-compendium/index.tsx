@@ -527,7 +527,7 @@ export const useCreatureSummaries = routeLoader$(async () => {
   return await collectCreatureSummaries();
 });
 
-export const useCreatureSearch = routeAction$(async (form, event) => {
+export const useCreatureSearch = routeAction$<CreatureSearchResult>(async (form) => {
   const queryValue = typeof form.query === "string" ? form.query : "";
   const trimmed = queryValue.trim();
 
@@ -535,7 +535,7 @@ export const useCreatureSearch = routeAction$(async (form, event) => {
     return { ok: false, message: "Enter a creature name or identifier to begin." } satisfies CreatureSearchResult;
   }
 
-  const summaries = await event.resolveValue(useCreatureSummaries);
+  const summaries = await collectCreatureSummaries();
   const identifier = resolveIdentifierFromSummaries(trimmed, summaries);
   const creature = await fetchCreatureFromRoots(identifier ?? trimmed, trimmed);
 
@@ -570,10 +570,10 @@ export default component$(() => {
   });
 
   useTask$(({ track }) => {
-    const actionStatus = track(() => searchAction.status);
+    const actionRunning = track(() => searchAction.isRunning);
     const result = track(() => searchAction.value);
 
-    if (actionStatus === "running") {
+    if (actionRunning) {
       status.value = "loading";
       errorMessage.value = null;
       return;

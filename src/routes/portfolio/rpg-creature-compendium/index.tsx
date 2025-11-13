@@ -1,11 +1,9 @@
-import { $, Signal, component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, useSignal, useStylesScoped$, useTask$ } from "@builder.io/qwik";
+import { Form, routeAction$, routeLoader$ } from "@builder.io/qwik-city";
 import styles from "./rpg-creature-compendium.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 import { API_ROOTS, resolveApiUrl } from "./api-config";
-
-const buildProxyRequestUrl = (target: string): string =>
-  `/api/rpg-creatures?target=${encodeURIComponent(target)}`;
 
 type CreatureSummary = {
   id?: number;
@@ -120,7 +118,7 @@ const buildIdentifierPaths = (identifier: string): string[] => {
   return paths;
 };
 
-const expandCandidatePaths = (root: string, creature: RawCreature): string[] => {
+const expandCandidatePaths = (creature: RawCreature): string[] => {
   const identifiers = new Set<string>();
   if (creature.id != null) identifiers.add(`${creature.id}`);
   if (creature.index) identifiers.add(creature.index);
@@ -129,7 +127,7 @@ const expandCandidatePaths = (root: string, creature: RawCreature): string[] => 
 
   const paths: string[] = [];
   identifiers.forEach((id) => {
-    buildIdentifierPaths(id).forEach((path) => paths.push(resolveApiUrl(root, path)));
+    buildIdentifierPaths(id).forEach((path) => paths.push(path));
   });
 
   return paths;
@@ -197,7 +195,7 @@ const searchRootForCreature = async (
     visited.add(url);
 
     try {
-      const response = await fetch(buildProxyRequestUrl(url));
+      const response = await fetch(url);
       if (!response.ok) continue;
       const json = await attemptJson(response);
       const creature = unwrapCreature(json);
@@ -211,13 +209,35 @@ const searchRootForCreature = async (
         fallback = creature;
       }
 
-      expandCandidatePaths(root, creature).forEach(enqueue);
+      expandCandidatePaths(creature).forEach(enqueue);
     } catch (error) {
       console.error("Failed request", url, error);
     }
   }
 
   return fallback ? { creature: fallback, detailed: false } : null;
+};
+
+const fetchCreatureFromRoots = async (
+  identifier: string,
+  rawInput: string,
+): Promise<RawCreature | null> => {
+  let fallback: RawCreature | null = null;
+
+  for (const root of API_ROOTS) {
+    const result = await searchRootForCreature(root, identifier, rawInput);
+    if (!result) continue;
+
+    if (result.detailed) {
+      return result.creature;
+    }
+
+    if (!fallback) {
+      fallback = result.creature;
+    }
+  }
+
+  return fallback;
 };
 
 const abilityLabels: Record<AbilityKey, string> = {
@@ -430,6 +450,108 @@ const unwrapCreature = (payload: unknown): RawCreature | null => {
   return record as RawCreature;
 };
 
+const collectCreatureSummaries = async (): Promise<CreatureSummary[]> => {
+  const registry = new Map<string, CreatureSummary>();
+
+  const register = (entry: CreatureSummary) => {
+    const candidates = [
+      entry.slug?.toLowerCase(),
+      entry.index?.toLowerCase(),
+      entry.name?.toLowerCase(),
+      entry.id != null ? `${entry.id}` : undefined,
+    ].filter(Boolean) as string[];
+
+    candidates.forEach((key) => {
+      if (!registry.has(key)) {
+        registry.set(key, entry);
+      }
+    });
+  };
+
+  for (const root of API_ROOTS) {
+    try {
+      const listUrl = resolveApiUrl(root, "/creatures");
+      const response = await fetch(listUrl);
+      if (!response.ok) continue;
+      const json = await attemptJson(response);
+      const list = extractSummaries(json);
+      if (!list) continue;
+      list.forEach(register);
+    } catch (error) {
+      console.error("Failed to load creature summaries", error);
+    }
+  }
+
+  return Array.from(registry.values());
+};
+
+const resolveIdentifierFromSummaries = (
+  input: string,
+  summaries: CreatureSummary[] | null,
+): string | null => {
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  if (/^\d+$/.test(trimmed)) {
+    return trimmed;
+  }
+  if (!summaries || summaries.length === 0) {
+    return trimmed;
+  }
+
+  const lower = trimmed.toLowerCase();
+  const match = summaries.find((item) => {
+    const candidates = [
+      item.name?.toLowerCase(),
+      item.slug?.toLowerCase(),
+      item.index?.toLowerCase(),
+      item.id != null ? `${item.id}` : undefined,
+    ].filter(Boolean) as string[];
+    return candidates.includes(lower);
+  });
+
+  if (!match) return trimmed;
+  if (match.id != null) return `${match.id}`;
+  if (match.index) return match.index;
+  if (match.slug) return match.slug;
+  if (match.name) return match.name;
+  return trimmed;
+};
+
+type CreatureSearchResult = {
+  ok: boolean;
+  creature?: NormalizedCreature;
+  message?: string;
+};
+
+export const useCreatureSummaries = routeLoader$(async () => {
+  return await collectCreatureSummaries();
+});
+
+export const useCreatureSearch = routeAction$(async (form, event) => {
+  const queryValue = typeof form.query === "string" ? form.query : "";
+  const trimmed = queryValue.trim();
+
+  if (!trimmed) {
+    return { ok: false, message: "Enter a creature name or identifier to begin." } satisfies CreatureSearchResult;
+  }
+
+  const summaries = await event.resolveValue(useCreatureSummaries);
+  const identifier = resolveIdentifierFromSummaries(trimmed, summaries);
+  const creature = await fetchCreatureFromRoots(identifier ?? trimmed, trimmed);
+
+  if (!creature) {
+    return {
+      ok: false,
+      message: `No creature found for “${trimmed}”.`,
+    } satisfies CreatureSearchResult;
+  }
+
+  return {
+    ok: true,
+    creature: normalizeCreature(creature),
+  } satisfies CreatureSearchResult;
+});
+
 export default component$(() => {
   useStylesScoped$(styles);
 
@@ -437,133 +559,41 @@ export default component$(() => {
   const status = useSignal<"idle" | "loading" | "error">("idle");
   const errorMessage = useSignal<string | null>(null);
   const creature = useSignal<NormalizedCreature | null>(null);
-  const summaries = useSignal<CreatureSummary[] | null>(null);
-
-  const loadSummaries = $(async (target: Signal<CreatureSummary[] | null>) => {
-    if (target.value) return;
-
-    const registry = new Map<string, CreatureSummary>();
-
-    for (const root of API_ROOTS) {
-      try {
-        const listUrl = resolveApiUrl(root, "/creatures");
-        const response = await fetch(buildProxyRequestUrl(listUrl));
-        if (!response.ok) continue;
-        const json = await attemptJson(response);
-        const list = extractSummaries(json);
-        if (!list) continue;
-
-        list.forEach((item) => {
-          const key =
-            item.slug?.toLowerCase() ??
-            item.index?.toLowerCase() ??
-            (item.id != null ? `${item.id}` : undefined) ??
-            item.name?.toLowerCase();
-          if (!key) return;
-          if (!registry.has(key)) {
-            registry.set(key, item);
-          }
-        });
-      } catch (error) {
-        console.error("Failed to load creature list", error);
-      }
-    }
-
-    if (registry.size > 0) {
-      target.value = Array.from(registry.values());
-    }
-  });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    void loadSummaries(summaries);
-  });
-
-  const resolveIdentifier = $(async (input: string) => {
-    const trimmed = input.trim();
-    if (!trimmed) return null;
-    if (/^\d+$/.test(trimmed)) {
-      return trimmed;
-    }
-
-    await loadSummaries(summaries);
-
-    const list = summaries.value;
-    if (!list) return trimmed;
-
-    const lower = trimmed.toLowerCase();
-    const match = list.find((item) => {
-      const candidates = [
-        item.name?.toLowerCase(),
-        item.slug?.toLowerCase(),
-        item.index?.toLowerCase(),
-        item.id != null ? `${item.id}` : undefined,
-      ].filter(Boolean) as string[];
-      return candidates.includes(lower);
-    });
-
-    if (match?.id != null) return `${match.id}`;
-    if (match?.index) return match.index;
-    if (match?.slug) return match.slug;
-    if (match?.name) return match.name;
-    return trimmed;
-  });
-
-  const fetchCreature = $(async (identifier: string, rawInput: string) => {
-    let fallback: RawCreature | null = null;
-
-    for (const root of API_ROOTS) {
-      const result = await searchRootForCreature(root, identifier, rawInput);
-      if (!result) continue;
-
-      if (result.detailed) {
-        return result.creature;
-      }
-
-      if (!fallback) {
-        fallback = result.creature;
-      }
-    }
-
-    return fallback;
-  });
+  const searchAction = useCreatureSearch();
+  const summaries = useCreatureSummaries();
 
   const handleClear = $(() => {
     searchValue.value = "";
     creature.value = null;
     errorMessage.value = null;
+    status.value = "idle";
   });
 
-  const handleSearch = $(async () => {
-    const query = searchValue.value.trim();
-    if (!query) {
-      errorMessage.value = "Enter a creature name or numeric identifier.";
+  useTask$(({ track }) => {
+    const actionStatus = track(() => searchAction.status);
+    const result = track(() => searchAction.value);
+
+    if (actionStatus === "running") {
+      status.value = "loading";
+      errorMessage.value = null;
       return;
     }
 
-    errorMessage.value = null;
-    status.value = "loading";
+    if (!result) {
+      status.value = "idle";
+      return;
+    }
+
+    if (result.ok && result.creature) {
+      creature.value = result.creature;
+      errorMessage.value = null;
+      status.value = "idle";
+      return;
+    }
+
     creature.value = null;
-
-    const identifier = await resolveIdentifier(query);
-    if (!identifier) {
-      status.value = "idle";
-      errorMessage.value = "Unable to resolve the requested creature.";
-      return;
-    }
-
-    const rawCreature = await fetchCreature(identifier, query);
-    if (!rawCreature) {
-      status.value = "idle";
-      if (typeof window !== "undefined") {
-        window.alert("Creature not found");
-      }
-      errorMessage.value = "Creature not found. Try a different search.";
-      return;
-    }
-
-    creature.value = normalizeCreature(rawCreature);
-    status.value = "idle";
+    status.value = "error";
+    errorMessage.value = result.message ?? "Unable to find that creature.";
   });
 
   return (
@@ -577,25 +607,40 @@ export default component$(() => {
       </header>
 
       <section class="search-card" aria-labelledby="title">
-        <div class="search-input-group">
-          <label for="search-input">Creature name or ID</label>
-          <input
-            id="search-input"
-            type="text"
-            value={searchValue.value}
-            onInput$={(event) => (searchValue.value = (event.target as HTMLInputElement).value)}
-            placeholder="e.g. Pyrolysk or 27"
-            autocomplete="off"
-          />
-        </div>
-        <div class="actions">
-          <button id="search-button" type="button" onClick$={handleSearch} disabled={status.value === "loading"}>
-            {status.value === "loading" ? "Searching…" : "Search"}
-          </button>
-          <button id="clear-button" type="button" onClick$={handleClear}>
-            Clear
-          </button>
-        </div>
+        <Form class="search-form" action={searchAction} aria-label="Search creatures">
+          <div class="search-input-group">
+            <label for="search-input">Creature name or ID</label>
+            <input
+              id="search-input"
+              name="query"
+              type="text"
+              value={searchValue.value}
+              list="creature-suggestions"
+              onInput$={(event) => (searchValue.value = (event.target as HTMLInputElement).value)}
+              placeholder="e.g. Pyrolysk or 27"
+              autocomplete="off"
+              disabled={status.value === "loading"}
+            />
+            <datalist id="creature-suggestions">
+              {(summaries.value ?? [])
+                .slice(0, 25)
+                .map((entry) => {
+                  const optionValue =
+                    entry.name ?? entry.slug ?? entry.index ?? (entry.id != null ? `${entry.id}` : null);
+                  if (!optionValue) return null;
+                  return <option key={optionValue} value={optionValue} />;
+                })}
+            </datalist>
+          </div>
+          <div class="actions">
+            <button id="search-button" type="submit" disabled={status.value === "loading"}>
+              {status.value === "loading" ? "Searching…" : "Search"}
+            </button>
+            <button id="clear-button" type="button" onClick$={handleClear}>
+              Clear
+            </button>
+          </div>
+        </Form>
         {errorMessage.value && <p class="alert" role="status">{errorMessage.value}</p>}
         {!errorMessage.value && status.value === "loading" && <p class="status-line">Fetching creature profile…</p>}
       </section>

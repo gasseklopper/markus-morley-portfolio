@@ -2,6 +2,10 @@ import { $, Signal, component$, useSignal, useStylesScoped$, useVisibleTask$ } f
 import styles from "./rpg-creature-compendium.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
+import { API_ROOTS, resolveApiUrl } from "./api-config";
+
+const buildProxyRequestUrl = (target: string): string =>
+  `/api/rpg-creatures?target=${encodeURIComponent(target)}`;
 
 type CreatureSummary = {
   id?: number;
@@ -104,13 +108,6 @@ const hasDetailedStats = (creature: RawCreature): boolean => {
 const RESOURCE_PATHS = ["/creatures/", "/creature/", "/monsters/"];
 const IDENTIFIER_QUERIES = ["id", "name", "slug", "index", "search", "q"];
 
-const resolveApiUrl = (root: string, path: string): string => {
-  if (/^https?:\/\//i.test(path)) return path;
-  const normalizedRoot = root.endsWith("/") ? root : `${root}/`;
-  const normalizedPath = path.replace(/^\/+/, "");
-  return new URL(normalizedPath, normalizedRoot).toString();
-};
-
 const buildIdentifierPaths = (identifier: string): string[] => {
   const encoded = encodeURIComponent(identifier);
   const paths: string[] = [];
@@ -200,7 +197,7 @@ const searchRootForCreature = async (
     visited.add(url);
 
     try {
-      const response = await fetch(url);
+      const response = await fetch(buildProxyRequestUrl(url));
       if (!response.ok) continue;
       const json = await attemptJson(response);
       const creature = unwrapCreature(json);
@@ -222,11 +219,6 @@ const searchRootForCreature = async (
 
   return fallback ? { creature: fallback, detailed: false } : null;
 };
-
-const API_ROOTS = [
-  "https://rpg-compendium.fly.dev/api",
-  "https://rpg-creature-api.freecodecamp.rocks/api",
-];
 
 const abilityLabels: Record<AbilityKey, string> = {
   strength: "Strength",
@@ -455,7 +447,7 @@ export default component$(() => {
     for (const root of API_ROOTS) {
       try {
         const listUrl = resolveApiUrl(root, "/creatures");
-        const response = await fetch(listUrl);
+        const response = await fetch(buildProxyRequestUrl(listUrl));
         if (!response.ok) continue;
         const json = await attemptJson(response);
         const list = extractSummaries(json);

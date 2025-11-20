@@ -1,5 +1,6 @@
 import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
-import type PhaserNamespace from "phaser";
+type PhaserNamespace = typeof import("phaser");
+type PhaserGame = import("phaser").Game;
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -77,7 +78,7 @@ export default component$(() => {
   // Load Phaser on the client and bootstrap the bunker scene
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    let game: PhaserNamespace.Game | undefined;
+    let game: PhaserGame | undefined;
     let cleanedUp = false;
 
     const loadPhaser = () =>
@@ -109,12 +110,12 @@ export default component$(() => {
         const DOOR_WIDTH = 2;
 
         class BunkerStartScene extends PhaserLib.Scene {
-          private cursors!: PhaserNamespace.Types.Input.Keyboard.CursorKeys;
-          private keys!: Record<string, PhaserNamespace.Input.Keyboard.Key>;
-          private player!: PhaserNamespace.GameObjects.Rectangle;
-          private exitZone!: PhaserNamespace.GameObjects.Zone;
-          private exitHint!: PhaserNamespace.GameObjects.Text;
-          private wallBodies!: PhaserNamespace.Physics.Arcade.StaticGroup;
+          private cursors!: import("phaser").Types.Input.Keyboard.CursorKeys;
+          private keys!: Record<string, import("phaser").Input.Keyboard.Key>;
+          private player!: import("phaser").GameObjects.Rectangle;
+          private exitZone!: import("phaser").GameObjects.Zone;
+          private exitHint!: import("phaser").GameObjects.Text;
+          private wallBodies!: import("phaser").Physics.Arcade.StaticGroup;
 
           constructor() {
             super("BunkerStartScene");
@@ -131,7 +132,7 @@ export default component$(() => {
             this.cursors = this.input.keyboard!.createCursorKeys();
             this.keys = this.input.keyboard!.addKeys("W,A,S,D,E") as Record<
               string,
-              PhaserNamespace.Input.Keyboard.Key
+              import("phaser").Input.Keyboard.Key
             >;
           }
 
@@ -212,7 +213,7 @@ export default component$(() => {
             this.player.setOrigin(0.5, 0.6);
 
             this.physics.add.existing(this.player);
-            const body = this.player.body as PhaserNamespace.Physics.Arcade.Body;
+            const body = this.player.body as import("phaser").Physics.Arcade.Body;
             body.setCollideWorldBounds(true);
             body.setSize(TILE * 0.6, TILE * 0.6);
             body.setOffset(-TILE * 0.3 + this.player.width / 2, -TILE * 0.3 + this.player.height / 2);
@@ -226,7 +227,7 @@ export default component$(() => {
             const doorCenterY = (ROOM_ROWS - 0.5) * TILE;
             this.exitZone = this.add.zone(doorCenterX, doorCenterY, TILE * DOOR_WIDTH, TILE * 0.8);
             this.physics.add.existing(this.exitZone);
-            const exitBody = this.exitZone.body as PhaserNamespace.Physics.Arcade.Body;
+            const exitBody = this.exitZone.body as import("phaser").Physics.Arcade.Body;
             exitBody.setAllowGravity(false);
             exitBody.setImmovable(true);
 
@@ -249,7 +250,7 @@ export default component$(() => {
           }
 
           update() {
-            const body = this.player.body as PhaserNamespace.Physics.Arcade.Body;
+            const body = this.player.body as import("phaser").Physics.Arcade.Body;
             const speed = 165;
             body.setVelocity(0);
 
@@ -284,7 +285,7 @@ export default component$(() => {
           physics: {
             default: "arcade",
             arcade: {
-              gravity: { y: 0 },
+              gravity: { x: 0, y: 0 },
               debug: false,
             },
           },

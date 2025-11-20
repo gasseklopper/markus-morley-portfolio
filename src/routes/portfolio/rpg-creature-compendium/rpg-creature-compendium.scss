@@ -177,6 +177,32 @@ label[for="search-input"] {
   gap: 0.75rem;
 }
 
+.detail-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+#detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: var(--text1);
+  border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-glass-1) 92%, transparent);
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+#detail-link:hover,
+#detail-link:focus-visible {
+  background: color-mix(in srgb, var(--surface-glass-1) 98%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px color-mix(in srgb, var(--surface-shadow) 35%, transparent);
+}
+
 .meta-label {
   font-size: 0.75rem;
   text-transform: uppercase;

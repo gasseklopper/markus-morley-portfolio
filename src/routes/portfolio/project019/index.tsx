@@ -1,4 +1,5 @@
 import { component$, useSignal, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import type PhaserNamespace from "phaser";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 
@@ -76,13 +77,13 @@ export default component$(() => {
   // Load Phaser on the client and bootstrap the bunker scene
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    let game: any;
+    let game: PhaserNamespace.Game | undefined;
     let cleanedUp = false;
 
     const loadPhaser = () =>
-      new Promise<any>((resolve, reject) => {
+      new Promise<PhaserNamespace>((resolve, reject) => {
         if ((globalThis as any).Phaser) {
-          resolve((globalThis as any).Phaser);
+          resolve((globalThis as any).Phaser as PhaserNamespace);
           return;
         }
 
@@ -96,7 +97,7 @@ export default component$(() => {
 
     const boot = async () => {
       try {
-        const PhaserLib = await loadPhaser();
+        const PhaserLib = (await loadPhaser()) as PhaserNamespace;
         if (!PhaserLib || cleanedUp) return;
 
         status.value = "Explore the bunker. Move with arrows or WASD.";
@@ -108,12 +109,12 @@ export default component$(() => {
         const DOOR_WIDTH = 2;
 
         class BunkerStartScene extends PhaserLib.Scene {
-          private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-          private keys!: Phaser.Types.Input.Keyboard.Key[];
-          private player!: Phaser.GameObjects.Rectangle;
-          private exitZone!: Phaser.GameObjects.Zone;
-          private exitHint!: Phaser.GameObjects.Text;
-          private wallBodies!: Phaser.Physics.Arcade.StaticGroup;
+          private cursors!: PhaserNamespace.Types.Input.Keyboard.CursorKeys;
+          private keys!: Record<string, PhaserNamespace.Input.Keyboard.Key>;
+          private player!: PhaserNamespace.GameObjects.Rectangle;
+          private exitZone!: PhaserNamespace.GameObjects.Zone;
+          private exitHint!: PhaserNamespace.GameObjects.Text;
+          private wallBodies!: PhaserNamespace.Physics.Arcade.StaticGroup;
 
           constructor() {
             super("BunkerStartScene");
@@ -128,7 +129,10 @@ export default component$(() => {
             this.createExit();
             this.createCamera();
             this.cursors = this.input.keyboard!.createCursorKeys();
-            this.keys = this.input.keyboard!.addKeys("W,A,S,D,E") as Phaser.Types.Input.Keyboard.Key[];
+            this.keys = this.input.keyboard!.addKeys("W,A,S,D,E") as Record<
+              string,
+              PhaserNamespace.Input.Keyboard.Key
+            >;
           }
 
           // Generate simple grid for floor and walls
@@ -208,7 +212,7 @@ export default component$(() => {
             this.player.setOrigin(0.5, 0.6);
 
             this.physics.add.existing(this.player);
-            const body = this.player.body as Phaser.Physics.Arcade.Body;
+            const body = this.player.body as PhaserNamespace.Physics.Arcade.Body;
             body.setCollideWorldBounds(true);
             body.setSize(TILE * 0.6, TILE * 0.6);
             body.setOffset(-TILE * 0.3 + this.player.width / 2, -TILE * 0.3 + this.player.height / 2);
@@ -222,7 +226,7 @@ export default component$(() => {
             const doorCenterY = (ROOM_ROWS - 0.5) * TILE;
             this.exitZone = this.add.zone(doorCenterX, doorCenterY, TILE * DOOR_WIDTH, TILE * 0.8);
             this.physics.add.existing(this.exitZone);
-            const exitBody = this.exitZone.body as Phaser.Physics.Arcade.Body;
+            const exitBody = this.exitZone.body as PhaserNamespace.Physics.Arcade.Body;
             exitBody.setAllowGravity(false);
             exitBody.setImmovable(true);
 
@@ -245,7 +249,7 @@ export default component$(() => {
           }
 
           update() {
-            const body = this.player.body as Phaser.Physics.Arcade.Body;
+            const body = this.player.body as PhaserNamespace.Physics.Arcade.Body;
             const speed = 165;
             body.setVelocity(0);
 

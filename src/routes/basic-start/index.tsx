@@ -8,7 +8,7 @@ export default component$(() => {
       <section class="basic-start-grid-1" aria-label="Golden ratio grid layout">
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_03_12.jpg" alt="" height="1100" width="1300" />
+            <img src="../assets/images/photography/black/Template_index_03_12.jpg" alt="" height="1100" width="1300" />
           </div>
         </div>
         <div class="basic-start-column">
@@ -26,13 +26,13 @@ export default component$(() => {
       <section class="basic-start-grid-2" aria-label="Golden ratio grid layout">
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/image.png" alt="" height="100" width="500" />
+            <img src="../assets/images/photography/image.png" alt="" height="100" width="500" />
 
           </div>
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/image2.png" alt="" height="100" width="500" />
+            <img src="../assets/images/photography/image2.png" alt="" height="100" width="500" />
 
           </div>
         </div>
@@ -45,7 +45,7 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_05.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_05.jpg" alt="" height="100" width="300" />
           </div>
         </div>
         <div class="basic-start-column">
@@ -55,14 +55,14 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_06.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_06.jpg" alt="" height="100" width="300" />
           </div>
         </div>
       </section>
       <section class="basic-start-grid-4" aria-label="Golden ratio grid layout">
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_08.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_08.jpg" alt="" height="100" width="300" />
           </div>
         </div>
         <div class="basic-start-column">
@@ -71,7 +71,7 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_011.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_011.jpg" alt="" height="100" width="300" />
           </div>
         </div>
         <div class="basic-start-column">
@@ -81,7 +81,7 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_09.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_09.jpg" alt="" height="100" width="300" />
           </div>
         </div>
       </section>
@@ -93,7 +93,7 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_015.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_015.jpg" alt="" height="100" width="300" />
           </div>
         </div>
         <div class="basic-start-column">
@@ -108,7 +108,7 @@ export default component$(() => {
         </div>
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_016.jpg" alt="" height="100" width="950" />
+            <img src="../assets/images/photography/black/Template_index_016.jpg" alt="" height="100" width="950" />
             <strong>1fr</strong>
             <span>golden ratio</span>
           </div>
@@ -117,7 +117,7 @@ export default component$(() => {
       <section class="basic-start-grid" aria-label="Golden ratio grid layout">
         <div class="basic-start-column">
           <div class="basic-start-content">
-            <img src="../public/assets/images/photography/black/Template_index_01.jpg" alt="" height="100" width="300" />
+            <img src="../assets/images/photography/black/Template_index_01.jpg" alt="" height="100" width="300" />
             <strong>1fr</strong>
             <span>golden ratio</span>
           </div>

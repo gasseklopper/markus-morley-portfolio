@@ -36,8 +36,8 @@ export const Card = component$(
 		return (
 			<div class={`card card--${variation}`}>
 				{imageSrc && (
-					<div class="card__image">
-						<img src={imageSrc} alt={imageAlt} width={imageWidth} height={imageHeight} />
+					<div class="card__image-wrapper">
+						<img class="card__image" src={imageSrc} alt={imageAlt} width={imageWidth} height={imageHeight} />
 					</div>
 				)}
 				<div class="card__content">

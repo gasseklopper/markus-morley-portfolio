@@ -1,10 +1,10 @@
 import { component$, Slot, useStyles$ } from "@builder.io/qwik";
-import styles from "../index.scss?inline";
+import styles from "./layout.scss?inline";
 
 export default component$(() => {
   useStyles$(styles);
   return (
-    <div class="page">
+    <div class="basic-start-layout">
       <Slot />
     </div>
   );

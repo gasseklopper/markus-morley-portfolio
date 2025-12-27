@@ -1,102 +1,37 @@
-import { component$ } from "@builder.io/qwik";
-import siteConfig from "~/config/siteConfig.json";
-import { buildHead } from "~/utils/head";
-import { useGsapAnimations } from "~/hooks/useGsapAnimations";
+import { component$ } from "@builder.io/qwik"
+import siteConfig from "~/config/siteConfig.json"
+import { buildHead } from "~/utils/head"
+import { useGsapAnimations } from "~/hooks/useGsapAnimations"
+import portfolioPages from "~/config/portfolio-pages.json"
 import { Card } from "./card"
 
+type PortfolioPage = (typeof portfolioPages)[number]
+
+const getProjectBadge = (page: PortfolioPage) => {
+  if (page.path === "/portfolio/color-theme") {
+    return "Design Tokens"
+  }
+
+  if (page.path === "/portfolio/farbkasten") {
+    return "Creative Coding"
+  }
+
+  if (page.path.startsWith("/portfolio/generative-art")) {
+    return page.path === "/portfolio/generative-art" ? "Generative Hub" : "Experiment"
+  }
+
+  if (page.name.toLowerCase().includes("project")) {
+    return "Case Study"
+  }
+
+  return "Case Study"
+}
+
 export default component$(() => {
-  useGsapAnimations();
+  useGsapAnimations()
 
   return (
     <div class="basic-start">
-      <section class="basic-start-grid" aria-label="Golden ratio grid layout">
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <Card
-            imageAlt="a alt text for this image clean"
-            imageWidth={800}
-            imageHeight={300}
-            imageSrc="../assets/images/photography/image.png"
-            headline="European pollution regulations: the first Euro 7 technical requirements have been published!"
-            description="The first package of Euro 7 implementing regulations was officially published at the beginning of September. It marks a crucial step in the European strategy to reduce polluting emissions from light road vehicles."
-            href="#"
-            ctaText="View Project"
-            variation="clean"
-            tagline="Puplications"
-          />
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <Card
-            imageAlt="a alt text for this image clean"
-            imageWidth={800}
-            imageHeight={300}
-            imageSrc="../assets/images/photography/image5.png"
-            headline="UTAC announces major global facility investments to support next-generation mobility"
-            description="Significant upgrades across UTAC’s international network strengthen electric motor, tyre, durability and driveline testing capabilities"
-            href="#"
-            ctaText="View Project"
-            variation="clean"
-            tagline="Puplications"
-          />
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <Card
-            headline="Weather Safe: An Innovative Project to Enhance Automotive Safety in Adverse Weather Conditions"
-            href="#"
-            ctaText="View Project"
-            variation="primary"
-            tagline="tagline"
-          />
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <Card
-            imageAlt="a alt text for this image second"
-            imageWidth={100}
-            imageHeight={100}
-            imageSrc="../assets/images/photography/image2.png"
-            headline="Weather Safe: An Innovative Project to Enhance Automotive Safety in Adverse Weather Conditions"
-            description="---"
-            href="#"
-            ctaText="View Project"
-            variation="secondary"
-            tagline="Puplications"
-          />
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <Card
-            headline="Weather Safe: An Innovative Project to Enhance Automotive Safety in Adverse Weather Conditions"
-            description="---"
-            href="#"
-            ctaText="View Project"
-            variation="secondary"
-            tagline="Puplications"
-          />
-        </div>
-      </section>
       <section class="basic-start-grid-1" aria-label="Golden ratio grid layout">
         <div class="basic-start-column" data-anim="fade">
           <div class="basic-start-content">
@@ -111,86 +46,32 @@ export default component$(() => {
         </div>
       </section>
       <section class="basic-start-grid" aria-label="Golden ratio grid layout">
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <div class="basic-start-content">
-            <img
-              src="../assets/images/photography/image.png"
-              alt=""
-              height="100"
-              width="500"
+        {portfolioPages.map((page, index) => (
+          <div
+            class="basic-start-column"
+            data-anim="reveal"
+            data-y="12"
+            data-duration="0.7"
+            key={index}
+          >
+            <Card
+              imageAlt={page.image?.alt || page.name}
+              imageWidth={800}
+              imageHeight={300}
+              imageSrc={page.image?.src}
+              headline={page.name}
+              description={page.description}
+              href={page.path}
+              ctaText="View Project"
+              variation="clean"
+              tagline={getProjectBadge(page)}
             />
           </div>
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <div class="basic-start-content">
-            <img
-              src="../assets/images/photography/image2.png"
-              alt=""
-              height="100"
-              width="500"
-            />
-          </div>
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <div class="basic-start-content">
-            <img
-              src="../assets/images/photography/image.png"
-              alt=""
-              height="100"
-              width="500"
-            />
-          </div>
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <div class="basic-start-content">
-            <img
-              src="../assets/images/photography/image2.png"
-              alt=""
-              height="100"
-              width="500"
-            />
-          </div>
-        </div>
-        <div
-          class="basic-start-column"
-          data-anim="reveal"
-          data-y="12"
-          data-duration="0.7"
-        >
-          <div class="basic-start-content">
-            <img
-              src="../assets/images/photography/image2.png"
-              alt=""
-              height="100"
-              width="500"
-            />
-          </div>
-        </div>
+        ))}
       </section>
-
     </div>
-  );
-});
+  )
+})
 
 
-export const head = buildHead(`Basic Start - ${siteConfig.metadata.title}`);
+export const head = buildHead(`Basic Start - ${siteConfig.metadata.title}`)

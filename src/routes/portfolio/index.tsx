@@ -3,7 +3,7 @@ import siteConfig from "~/config/siteConfig.json"
 import { buildHead } from "~/utils/head"
 import { useGsapAnimations } from "~/hooks/useGsapAnimations"
 import portfolioPages from "~/config/portfolio-pages.json"
-import { Card } from "./card"
+import { Card, PortfolioCardProps } from "./card"
 
 type PortfolioPage = (typeof portfolioPages)[number]
 
@@ -63,7 +63,7 @@ export default component$(() => {
               description={page.description}
               href={page.path}
               ctaText="View Project"
-              variation="clean"
+              variation={page.variation as PortfolioCardProps["variation"]}
               tagline={getProjectBadge(page)}
             />
           </div>

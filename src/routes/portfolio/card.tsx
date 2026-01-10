@@ -3,7 +3,7 @@ import { Link } from "@builder.io/qwik-city";
 import styles from "./card.scss?inline";
 
 export interface PortfolioCardProps  {
-	variation?: "primary" | "secondary" | "clean"
+	variation?: "primary" | "secondary" | "clean" | undefined
 	imageSrc?: string
 	imageWidth?: number
 	imageHeight?: number
@@ -19,7 +19,7 @@ export interface PortfolioCardProps  {
 
 export const Card = component$(
 	({
-		variation = "primary",
+		variation,
 		imageSrc,
 		headline = "No Headline Provided",
 		description,

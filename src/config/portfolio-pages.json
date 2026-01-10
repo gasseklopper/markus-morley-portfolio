@@ -4,6 +4,7 @@
     "path": "/portfolio/color-theme",
     "title": "Color Theme - Markus Morley personal portfolio",
     "description": "Color swatches for light, dark, neon and pastell themes.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/color-theme/preview.png",
       "alt": "Color Theme Preview"
@@ -14,6 +15,7 @@
     "path": "/portfolio/farbkasten",
     "title": "Farbkasten - Markus Morley personal portfolio",
     "description": "Draw on a portrait using the brand color.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/farbkasten/preview.png",
       "alt": "Farbkasten Preview"
@@ -23,61 +25,71 @@
     "name": "Project 001",
     "path": "/portfolio/project001",
     "title": "Project 001 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 001."
+    "description": "Dummy content for project 001.",
+    "variation": "clean"
   },
   {
     "name": "Project 002",
     "path": "/portfolio/project002",
     "title": "Project 002 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 002."
+    "description": "Dummy content for project 002.",
+    "variation": "clean"
   },
   {
     "name": "Project 003",
     "path": "/portfolio/project003",
     "title": "Project 003 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 003."
+    "description": "Dummy content for project 003.",
+    "variation": "clean"
   },
   {
     "name": "Project 004",
     "path": "/portfolio/project004",
     "title": "Project 004 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 004."
+    "description": "Dummy content for project 004.",
+    "variation": "clean"
   },
   {
     "name": "Project 005",
     "path": "/portfolio/project005",
     "title": "Project 005 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 005."
+    "description": "Dummy content for project 005.",
+    "variation": "clean"
   },
   {
     "name": "Project 006",
     "path": "/portfolio/project006",
     "title": "Project 006 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 006."
+    "description": "Dummy content for project 006.",
+    "variation": "primary"
   },
   {
     "name": "Project 007",
     "path": "/portfolio/project007",
     "title": "Project 007 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 007."
+    "description": "Dummy content for project 007.",
+    "variation": "clean"
   },
   {
     "name": "Project 008",
     "path": "/portfolio/project008",
     "title": "Project 008 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 008."
+    "description": "Dummy content for project 008.",
+    "variation": "clean"
   },
   {
     "name": "Project 009",
     "path": "/portfolio/project009",
     "title": "Project 009 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 009."
+    "description": "Dummy content for project 009.",
+    "variation": "clean"
   },
   {
     "name": "Project 010",
     "path": "/portfolio/project010",
     "title": "Project 010 - Markus Morley personal portfolio",
-    "description": "Dummy content for project 010."
+    "description": "Dummy content for project 010.",
+    "variation": "clean"
   },
   {
     "name": "Project 011",
@@ -94,6 +106,7 @@
     "path": "/portfolio/project012",
     "title": "Project 012 - Markus Morley personal portfolio",
     "description": "Interactive D3 scatterplot visualizing professional cycling times.",
+    "variation": "primary",
     "image": {
       "src": "/assets/portfolio/project012/preview.png",
       "alt": "Project 012 Preview"
@@ -104,6 +117,7 @@
     "path": "/portfolio/project013",
     "title": "Project 013 - Markus Morley personal portfolio",
     "description": "Interactive D3 heat map visualizing global temperature variance.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/project013/preview.png",
       "alt": "Project 013 Preview"
@@ -114,6 +128,7 @@
     "path": "/portfolio/project014",
     "title": "Project 014 - Markus Morley personal portfolio",
     "description": "Interactive D3 choropleth highlighting education attainment across U.S. counties.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/project014/preview.png",
       "alt": "Project 014 Preview"
@@ -124,6 +139,7 @@
     "path": "/portfolio/project015",
     "title": "Project 015 - Markus Morley personal portfolio",
     "description": "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/project015/preview.png",
       "alt": "Project 015 Preview"
@@ -133,13 +149,15 @@
     "name": "Project 016",
     "path": "/portfolio/project016",
     "title": "Project 016 - Markus Morley personal portfolio",
-    "description": "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero."
+    "description": "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero.",
+    "variation": "secondary"
   },
   {
     "name": "Project 017",
     "path": "/portfolio/project017",
     "title": "Project 017 - Markus Morley personal portfolio",
     "description": "Brutalist password generator featuring ASCII-safe defaults, clipboard copy, and configurable strength controls.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/project017/preview.png",
       "alt": "Project 017 Preview"
@@ -150,6 +168,7 @@
     "path": "/portfolio/project018",
     "title": "Project 018 - Markus Morley personal portfolio",
     "description": "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/project018/preview.png",
       "alt": "Project 018 Preview"
@@ -160,6 +179,7 @@
     "path": "/portfolio/project019",
     "title": "Project 019 - Markus Morley personal portfolio",
     "description": "Phaser-powered bunker starter with coded tiles, WASD movement, collisions, and exit prompt.",
+    "variation": "secondary",
     "image": {
       "src": "/assets/portfolio/project019/preview.png",
       "alt": "Project 019 Preview"
@@ -170,6 +190,7 @@
     "path": "/portfolio/roman-numeral-converter",
     "title": "Roman Numeral Converter - Markus Morley personal portfolio",
     "description": "Roman numeral converter with live validation, history log, and subtractive pair legend.",
+    "variation": "primary",
     "image": {
       "src": "/assets/portfolio/roman-numeral-converter/preview.png",
       "alt": "roman-numeral-converter Preview"
@@ -180,6 +201,7 @@
     "path": "/portfolio/generative-art",
     "title": "Generative Art - Markus Morley personal portfolio",
     "description": "Interactive generative art example.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/generative-art/preview.png",
       "alt": "Generative Art Preview"
@@ -190,6 +212,7 @@
     "path": "/portfolio/generative-art/drip-sort",
     "title": "Dripping Sort - Markus Morley personal portfolio",
     "description": "Black-and-white rectangles dripping downward while sorting.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/drip-sort/preview.png",
       "alt": "Dripping Sort Preview"
@@ -200,6 +223,7 @@
     "path": "/portfolio/generative-art/color-palette",
     "title": "Color Palette - Markus Morley personal portfolio",
     "description": "Extract and sort colors from images using p5.js.",
+    "variation": "primary",
     "image": {
       "src": "/assets/portfolio/color-palette/preview.png",
       "alt": "Color Palette Preview"
@@ -209,13 +233,15 @@
     "name": "Crayon — the Qwik.js way",
     "path": "/portfolio/generative-art/crayon",
     "title": "Crayon — the Qwik.js way - Markus Morley personal portfolio",
-    "description": "Interactive p5.brush sketch that responds to motion and gesture."
+    "description": "Interactive p5.brush sketch that responds to motion and gesture.",
+    "variation": "clean"
   },
   {
     "name": "Connected Agents",
     "path": "/portfolio/generative-art/connected-agents",
     "title": "Connected Agents - Markus Morley personal portfolio",
     "description": "Form morphing process by connected random agents.",
+    "variation": "clean",
     "image": {
       "src": "/assets/portfolio/connected-agents/preview.png",
       "alt": "Connected Agents Preview"

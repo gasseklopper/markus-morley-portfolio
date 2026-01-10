@@ -5,7 +5,7 @@
     "title": "Color Theme - Markus Morley personal portfolio",
     "description": "Color swatches for light, dark, neon and pastell themes.",
     "image": {
-      "src": "/public/portfolio/color-theme/preview.png",
+      "src": "/assets/portfolio/color-theme/preview.png",
       "alt": "Color Theme Preview"
     }
   },
@@ -15,7 +15,7 @@
     "title": "Farbkasten - Markus Morley personal portfolio",
     "description": "Draw on a portrait using the brand color.",
     "image": {
-      "src": "/public/portfolio/farbkasten/preview.png",
+      "src": "/assets/portfolio/farbkasten/preview.png",
       "alt": "Farbkasten Preview"
     }
   },
@@ -85,7 +85,7 @@
     "title": "Project 011 - Markus Morley personal portfolio",
     "description": "Interactive D3 bar chart visualizing US GDP.",
     "image": {
-      "src": "/public/portfolio/project011/preview.png",
+      "src": "/assets/portfolio/project011/preview.png",
       "alt": "Project 011 Preview"
     }
   },
@@ -95,7 +95,7 @@
     "title": "Project 012 - Markus Morley personal portfolio",
     "description": "Interactive D3 scatterplot visualizing professional cycling times.",
     "image": {
-      "src": "/public/portfolio/project012/preview.png",
+      "src": "/assets/portfolio/project012/preview.png",
       "alt": "Project 012 Preview"
     }
   },
@@ -105,7 +105,7 @@
     "title": "Project 013 - Markus Morley personal portfolio",
     "description": "Interactive D3 heat map visualizing global temperature variance.",
     "image": {
-      "src": "/public/portfolio/project013/preview.png",
+      "src": "/assets/portfolio/project013/preview.png",
       "alt": "Project 013 Preview"
     }
   },
@@ -115,7 +115,7 @@
     "title": "Project 014 - Markus Morley personal portfolio",
     "description": "Interactive D3 choropleth highlighting education attainment across U.S. counties.",
     "image": {
-      "src": "/public/portfolio/project014/preview.png",
+      "src": "/assets/portfolio/project014/preview.png",
       "alt": "Project 014 Preview"
     }
   },
@@ -125,7 +125,7 @@
     "title": "Project 015 - Markus Morley personal portfolio",
     "description": "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips.",
     "image": {
-      "src": "/public/portfolio/project015/preview.png",
+      "src": "/assets/portfolio/project015/preview.png",
       "alt": "Project 015 Preview"
     }
   },
@@ -141,7 +141,7 @@
     "title": "Project 017 - Markus Morley personal portfolio",
     "description": "Brutalist password generator featuring ASCII-safe defaults, clipboard copy, and configurable strength controls.",
     "image": {
-      "src": "/public/portfolio/project017/preview.png",
+      "src": "/assets/portfolio/project017/preview.png",
       "alt": "Project 017 Preview"
     }
   },
@@ -151,7 +151,7 @@
     "title": "Project 018 - Markus Morley personal portfolio",
     "description": "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions.",
     "image": {
-      "src": "/public/portfolio/project018/preview.png",
+      "src": "/assets/portfolio/project018/preview.png",
       "alt": "Project 018 Preview"
     }
   },
@@ -161,7 +161,7 @@
     "title": "Project 019 - Markus Morley personal portfolio",
     "description": "Phaser-powered bunker starter with coded tiles, WASD movement, collisions, and exit prompt.",
     "image": {
-      "src": "/public/portfolio/project019/preview.png",
+      "src": "/assets/portfolio/project019/preview.png",
       "alt": "Project 019 Preview"
     }
   },
@@ -171,7 +171,7 @@
     "title": "Roman Numeral Converter - Markus Morley personal portfolio",
     "description": "Roman numeral converter with live validation, history log, and subtractive pair legend.",
     "image": {
-      "src": "/public/portfolio/roman-numeral-converter/preview.png",
+      "src": "/assets/portfolio/roman-numeral-converter/preview.png",
       "alt": "roman-numeral-converter Preview"
     }
   },
@@ -181,7 +181,7 @@
     "title": "Generative Art - Markus Morley personal portfolio",
     "description": "Interactive generative art example.",
     "image": {
-      "src": "/public/portfolio/generative-art/preview.png",
+      "src": "/assets/portfolio/generative-art/preview.png",
       "alt": "Generative Art Preview"
     }
   },
@@ -191,7 +191,7 @@
     "title": "Dripping Sort - Markus Morley personal portfolio",
     "description": "Black-and-white rectangles dripping downward while sorting.",
     "image": {
-      "src": "/public/portfolio/drip-sort/preview.png",
+      "src": "/assets/portfolio/drip-sort/preview.png",
       "alt": "Dripping Sort Preview"
     }
   },
@@ -201,7 +201,7 @@
     "title": "Color Palette - Markus Morley personal portfolio",
     "description": "Extract and sort colors from images using p5.js.",
     "image": {
-      "src": "/public/portfolio/color-palette/preview.png",
+      "src": "/assets/portfolio/color-palette/preview.png",
       "alt": "Color Palette Preview"
     }
   },
@@ -217,7 +217,7 @@
     "title": "Connected Agents - Markus Morley personal portfolio",
     "description": "Form morphing process by connected random agents.",
     "image": {
-      "src": "/public/portfolio/connected-agents/preview.png",
+      "src": "/assets/portfolio/connected-agents/preview.png",
       "alt": "Connected Agents Preview"
     }
   }

@@ -7,27 +7,27 @@ const workItems = [
   {
     id: "gently",
     background:
-      "https://images.unsplash.com/photo-1526481280695-3c46973c85ff?auto=format&fit=crop&w=2400&q=80",
+      "/public/assets/images/photography/venedig/IMG_2039.jpg",
     lines: [
-      { text: "Gently", className: "text-left", accentClass: "color-1" },
+      { text: "sjksl", className: "text-left", accentClass: "color-1" },
       { text: "Scroll", className: "text-center", accentClass: "color-0" },
       { text: "Down", className: "text-right", accentClass: "color-2" },
     ],
     images: [
       {
-        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1939.jpg",
         alt: "Monochrome desktop setup with ambient lighting.",
       },
       {
-        src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1905.jpg",
         alt: "Designer adjusting colorful post-it notes on a board.",
       },
       {
-        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1903.jpg",
         alt: "Close-up of glowing keyboard keys.",
       },
       {
-        src: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1882.jpg",
         alt: "Creative mood board illuminated with neon lights.",
       },
     ],
@@ -35,7 +35,7 @@ const workItems = [
   {
     id: "ambient",
     background:
-      "https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=2400&q=80",
+      "/public/assets/images/photography/venedig/IMG_1859.jpg",
     lines: [
       { text: "Ambient", className: "text-left", accentClass: "color-3" },
       { text: "Motion", className: "text-center", accentClass: "color-1" },
@@ -43,19 +43,19 @@ const workItems = [
     ],
     images: [
       {
-        src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1841.jpg",
         alt: "Gradient light wash across geometric shapes.",
       },
       {
-        src: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=900&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1846.jpg",
         alt: "Designer sketching storyboard frames.",
       },
       {
-        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=820&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1859.jpg",
         alt: "Laptop screen showing scroll-triggered animation timeline.",
       },
       {
-        src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=820&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1862.jpg",
         alt: "Atmospheric lighting on a minimalist sculpture.",
       },
     ],
@@ -63,7 +63,7 @@ const workItems = [
   {
     id: "horizon",
     background:
-      "https://images.unsplash.com/photo-1526481280695-3c46973c85ff?auto=format&fit=crop&w=2400&q=80",
+      "/public/assets/images/photography/venedig/IMG_2063.jpg",
     lines: [
       { text: "Future", className: "text-left", accentClass: "color-2" },
       { text: "Scroll", className: "text-center", accentClass: "color-0" },
@@ -71,19 +71,19 @@ const workItems = [
     ],
     images: [
       {
-        src: "https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=860&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1869.jpg",
         alt: "Vibrant installation with moving projections.",
       },
       {
-        src: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=860&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1882.jpg",
         alt: "Team collaborating around illuminated wall.",
       },
       {
-        src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=820&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1905.jpg",
         alt: "Soft focus on color gradients in a studio.",
       },
       {
-        src: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=820&q=80",
+        src: "/public/assets/images/photography/venedig/IMG_1939.jpg",
         alt: "Close-up of tactile prototype components.",
       },
     ],
@@ -215,16 +215,19 @@ export default component$(() => {
         gsap.to(element, {
           clipPath: "inset(0 0 0 0%)",
           scrollTrigger: getBaseScrollTrigger(ghostItems[index]),
+          markers: false,
         });
 
         gsap.to(itemContainer, {
           xPercent: 0,
           scrollTrigger: getBaseScrollTrigger(ghostItems[index]),
+          markers: false,
         });
 
         gsap.to(itemBackground, {
           scale: 1,
           scrollTrigger: getBaseScrollTrigger(ghostItems[index]),
+          markers: false,
         });
 
         [0, 1].forEach((i) => {
@@ -247,6 +250,7 @@ export default component$(() => {
               start: "-25% top",
               end: "15% top",
               toggleActions: "play reverse restart reverse",
+              markers: false,
             },
           });
         });
@@ -260,6 +264,7 @@ export default component$(() => {
               scrub: true,
               start: "5% top",
               end: "50% top",
+              markers: false,
             },
           });
         });
@@ -271,6 +276,7 @@ export default component$(() => {
             scrub: true,
             start: "20% top",
             end: "55% top",
+            markers: false,
           },
         });
 
@@ -282,6 +288,7 @@ export default component$(() => {
             scrub: true,
             start: "100% bottom",
             toggleActions: "play reverse play reverse",
+            markers: false,
           },
         });
 
@@ -292,6 +299,7 @@ export default component$(() => {
             scrub: true,
             start: "100% bottom",
             toggleActions: "play reverse play reverse",
+             markers: false,
           },
         });
       });
@@ -348,12 +356,12 @@ export default component$(() => {
           <div class="hero_container">
             <div class="hero_image-wrapper" aria-hidden="true">
               <img
-                src="https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO.jpeg"
+                src="/public/assets/images/photography/venedig/IMG_2063.jpg"
                 loading="lazy"
                 sizes="100vw"
                 width={4140}
                 height={2760}
-                srcset="https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-500.jpeg 500w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-800.jpeg 800w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1080.jpeg 1080w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-1600.jpeg 1600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2000.jpeg 2000w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO-p-2600.jpeg 2600w, https://moussamamadou.github.io/scroll-trigger-gsap-gently/images/HERO.jpeg 4140w"
+                // srcset="/public/assets/images/photography/venedig/IMG_1523.jpg 500w, /public/assets/images/photography/venedig/IMG_1523.jpg 800w, /public/assets/images/photography/venedig/IMG_1523.jpg 1080w, /public/assets/images/photography/venedig/IMG_1523.jpg 1600w, /public/assets/images/photography/venedig/IMG_1523.jpg 2000w, /public/assets/images/photography/venedig/IMG_1523.jpg 2600w, /public/assets/images/photography/venedig/IMG_1523.jpg 4140w"
                 alt="Ambient lighting across fabric backdrop"
                 class="hero_image"
               />
@@ -425,7 +433,7 @@ export default component$(() => {
           <div class="footer_container">
             <div class="footer_image-wrapper" aria-hidden="true">
               <img
-                src="https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=2400&q=80"
+                src="/public/assets/images/photography/venedig/IMG_2094.jpg"
                 alt=""
                 loading="lazy"
                 width={2400}

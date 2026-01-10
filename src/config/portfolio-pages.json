@@ -15,7 +15,7 @@
     "path": "/portfolio/farbkasten",
     "title": "Farbkasten - Markus Morley personal portfolio",
     "description": "Draw on a portrait using the brand color.",
-    "variation": "clean",
+    "variation": "primary",
     "image": {
       "src": "/assets/portfolio/farbkasten/preview.png",
       "alt": "Farbkasten Preview"
@@ -33,7 +33,11 @@
     "path": "/portfolio/project002",
     "title": "Project 002 - Markus Morley personal portfolio",
     "description": "Dummy content for project 002.",
-    "variation": "clean"
+    "variation": "secondary",
+    "image": {
+      "src": "/assets/portfolio/farbkasten/preview.png",
+      "alt": "Farbkasten Preview"
+    }
   },
   {
     "name": "Project 003",

@@ -3,7 +3,7 @@ import siteConfig from "~/config/siteConfig.json"
 import { buildHead } from "~/utils/head"
 import { useGsapAnimations } from "~/hooks/useGsapAnimations"
 import portfolioPages from "~/config/portfolio-pages.json"
-import { Card, PortfolioCardProps } from "./card"
+import { Card, CardVariation} from "./card"
 
 type PortfolioPage = (typeof portfolioPages)[number]
 
@@ -54,7 +54,7 @@ export default component$(() => {
             data-duration="0.7"
             key={index}
           >
-            <Card
+            {/* <Card
               imageAlt={page.image?.alt || page.name}
               imageWidth={800}
               imageHeight={300}
@@ -65,7 +65,21 @@ export default component$(() => {
               ctaText="View Project"
               variation={page.variation as PortfolioCardProps["variation"]}
               tagline={getProjectBadge(page)}
-            />
+            /> */}
+            <Card.Root variation={page.variation as CardVariation}>
+              <Card.Image src={page.image?.src || ""} alt={page.image?.alt || page.name} width={800} height={450} />
+
+              <Card.Body>
+                <Card.Tagline>{getProjectBadge(page)}</Card.Tagline>
+                <Card.Headline>{page.name}</Card.Headline>
+                <Card.Description>{page.description}</Card.Description>
+              </Card.Body>
+
+              <Card.Footer>
+                <Card.Date>12.12.2023</Card.Date>
+                <Card.Link href={page.path}>Read more</Card.Link>
+              </Card.Footer>
+            </Card.Root>
           </div>
         ))}
       </section>

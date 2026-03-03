@@ -4,7 +4,9 @@ import {
 	createContextId,
 	useContextProvider,
 	useStyles$,
+	useContext,
 } from "@builder.io/qwik"
+import type { QwikIntrinsicElements } from "@builder.io/qwik"
 import { Link } from "@builder.io/qwik-city"
 import styles from "./card.scss?inline"
 
@@ -12,38 +14,57 @@ export type CardVariation = "primary" | "secondary" | "clean"
 
 type CardCtx = {
 	variation: CardVariation
+	isClickable: boolean
 }
+
+type DivProps = QwikIntrinsicElements["div"]
+type AnchorProps = QwikIntrinsicElements["a"]
+
+export type CardRootProps =
+	| ({ as?: "div"; variation?: "primary" | "secondary" | "clean" } & DivProps)
+	| ({ as: "a"; href: string; variation?: "primary" | "secondary" | "clean" } & AnchorProps)
 
 const CardContext = createContextId<CardCtx>("ui.card.ctx")
 
 /** Root: owns styling/variation and overall container behavior */
-export const CardRoot = component$<{
-	variation?: CardVariation
-	class?: string
-	/** Optional: make the whole card clickable */
-	href?: string
-	/** For external links etc. */
-	target?: HTMLAnchorElement["target"]
-	rel?: HTMLAnchorElement["rel"]
-}>((props) => {
+export const CardRoot = component$<CardRootProps>((props) => {
 	useStyles$(styles)
 
 	const variation = props.variation ?? "primary"
-	useContextProvider(CardContext, { variation })
+	const isClickable = props.as === "a";
+
+	useContextProvider(CardContext, { variation, isClickable })
 
 	const cls = `card card--${variation} ${props.class ?? ""}`.trim()
 
 	// If href is provided, wrap content in a Link for "clickable card" UX
-	if (props.href) {
+	if (props.as === "a") {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { href, variation: _v, as: _as, ...rest } = props;
 		return (
-			<Link href={props.href} class={cls} target={props.target} rel={props.rel}>
+			<Link href={href} class={cls} {...rest}>
 				<Slot />
 			</Link>
 		)
 	}
 
+	/**
+	 * IMPORTANT:
+	 * Even if your union says the div-branch doesn't have href,
+	 * at runtime consumers can still pass it (or spread an object with it).
+	 * So we MUST strip it before spreading to <div>.
+	 */
+	const { ...rest0 } = props;
+
+	// remove link-ish props defensively
+	const {...rest } = rest0 as DivProps & {
+		href?: unknown
+		target?: unknown
+		rel?: unknown
+	};
+
 	return (
-		<div class={cls}>
+		<div class={cls} {...rest}>
 			<Slot />
 		</div>
 	)
@@ -89,8 +110,20 @@ export const CardLink = component$<{
 	href: string
 	class?: string
 }>((props) => {
+	const ctx = useContext(CardContext)
+	const cls = ["card__link", props.class].filter(Boolean).join(" ")
+
+	// If the whole card is already a link, do NOT render another <a>/<Link>
+	if (ctx.isClickable) {
+		return (
+			<span class={cls} aria-hidden="true">
+			 	<Slot />
+			</span>
+		)
+	}
+
 	return (
-		<Link href={props.href} class={["card__link", props.class].filter(Boolean).join(" ")}>
+		<Link href={props.href} class={cls}>
 			<Slot />
 		</Link>
 	)

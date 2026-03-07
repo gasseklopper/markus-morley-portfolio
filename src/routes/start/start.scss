@@ -1,0 +1,36 @@
+.hero {
+  scroll-behavior: smooth;
+  background: radial-gradient(
+    circle at top,
+    #fdf7d9 0%,
+    #f6e6a9 45%,
+    #e7c671 100%
+  );
+  display: grid;
+  grid-template-columns: 1fr 36rem;
+  height: 3000px;
+  position: relative;
+
+  &__layout-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  &__layout-right {
+    align-self: start;
+    position: sticky;
+    top: 2rem;
+    padding: 2rem;
+  }
+
+  &__teaser-small {
+    padding: 2rem;
+  }
+
+  &__teaser-big {
+    background-color: #ff5841;
+    padding: 2rem;
+  }
+}

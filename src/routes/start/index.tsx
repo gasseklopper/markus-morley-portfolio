@@ -43,44 +43,101 @@ export default component$(() => {
       <section>
         <div class="footer">
           <div class="footer__layout-container">
-            <div class="footer__header">
-                  <ul class="submenu-list">
-                    <li class="submenu-item -p2">
+            <div class="footer__headlayout">
+              <div class="footer__logo">
+                <h2>MORLEY</h2>
+              </div>
+              <div class="footer__slogan">
+                <h2>MORLEY</h2>
+              </div>
+              <div class="footer__header">
+                <ul class="footer__submenu-list">
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/cyber-ew">Cyber/EW</a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/research"><span>Research</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="footer__content">
+                <div class="footer__phone">
+                  <p>phone: 123-456-7890</p>
+                </div>
+                <div class="footer__linkedin">
+                  <p>linked</p>
+                </div>
+                <div class="footer__email">
+                  <p>email: info@example.com</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer__headlayout">
+              <div class="footer__logo">
+                <h2></h2>
+              </div>
+              <div class="footer__slogan">
+                <h2></h2>
+              </div>
+              <div class="footer__header">
+                <ul class="footer__submenu-list">
+                  <li class="footer__submenu-item ">
                     <a class="item-link" href="/cyber-ew"><span>Cyber</span><span class="-slash"><span>/</span></span><span>EW</span></a>
                   </li>
-                    <li class="submenu-item -p2">
-                      <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
-                    </li>
-                    <li class="submenu-item -p2">
-                      <a class="item-link" href="/compliance"><span>Compliance</span></a>
-                    </li>
-                    <li class="submenu-item -p2">
-                      <a class="item-link" href="/research"><span>Research</span></a>
-                    </li>
-                  </ul>
-            </div>
-            <div class="footer__content">
-              <div class="footer__phone">
-                <p>phone: 123-456-7890</p>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/research"><span>Research</span></a>
+                  </li>
+                </ul>
               </div>
-              <div class="footer__linkedin">
-                <p>linked</p>
-              </div>
-              <div class="footer__email">
-                <p>email: info@example.com</p>
+              <div class="footer__content">
+                <div class="footer__phone">
+                  <p>phone: 123-456-7890</p>
+                </div>
+                <div class="footer__linkedin">
+                  <p>linked</p>
+                </div>
+                <div class="footer__email">
+                  <p>email: info@example.com</p>
+                </div>
               </div>
             </div>
             <div class="footer__footer">
-              <div class="footer__phone">
-                <p>phone: 123-456-7890</p>
-              </div>
-              <div class="footer__linkedin">
-                <p>linked</p>
-              </div>
-              <div class="footer__email">
-                <p>email: info@example.com</p>
+              <div class="footer__name">
+                <h2>MORLEY</h2>
               </div>
             </div>
+          </div>
+          <div class="footer__navigation">
+            <ul>
+              <li>
+                <a class="" href="/" >©2026 Markus Morley.
+                </a>
+              </li>
+              <li>
+                <a class="" href="/Privacy-Policy" >Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a class="" href="/License-Agreement" >License Agreement
+                </a>
+              </li>
+              <li>
+                <a class="" href="/Terms-of-Use" >Terms of Use
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -360,6 +417,108 @@ export default component$(() => {
             <div class="getintouch__email">
               <p>email: info@example.com</p>
             </div>
+          </div>
+        </div>
+      </section>
+      {/* footer */}
+      <section>
+        <div class="footer">
+          <div class="footer__layout-container">
+            <div class="footer__headlayout">
+              <div class="footer__logo">
+                <h2>MORLEY</h2>
+              </div>
+              <div class="footer__slogan">
+                <h2>MORLEY</h2>
+              </div>
+              <div class="footer__header">
+                <ul class="footer__submenu-list">
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/cyber-ew">Cyber/EW</a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/research"><span>Research</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="footer__content">
+                <div class="footer__phone">
+                  <p>phone: 123-456-7890</p>
+                </div>
+                <div class="footer__linkedin">
+                  <p>linked</p>
+                </div>
+                <div class="footer__email">
+                  <p>email: info@example.com</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer__headlayout">
+              <div class="footer__logo">
+                <h2></h2>
+              </div>
+              <div class="footer__slogan">
+                <h2></h2>
+              </div>
+              <div class="footer__header">
+                <ul class="footer__submenu-list">
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/cyber-ew"><span>Cyber</span><span class="-slash"><span>/</span></span><span>EW</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/research"><span>Research</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="footer__content">
+                <div class="footer__phone">
+                  <p>phone: 123-456-7890</p>
+                </div>
+                <div class="footer__linkedin">
+                  <p>linked</p>
+                </div>
+                <div class="footer__email">
+                  <p>email: info@example.com</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer__footer">
+              <div class="footer__name">
+                <h2>MORLEY</h2>
+              </div>
+            </div>
+          </div>
+          <div class="footer__navigation">
+            <ul>
+              <li>
+                <a class="" href="/" >©2026 Markus Morley.
+                </a>
+              </li>
+              <li>
+                <a class="" href="/Privacy-Policy" >Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a class="" href="/License-Agreement" >License Agreement
+                </a>
+              </li>
+              <li>
+                <a class="" href="/Terms-of-Use" >Terms of Use
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </section>

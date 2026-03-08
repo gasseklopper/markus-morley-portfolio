@@ -1,8 +1,10 @@
-import { component$, useSignal, $, useStyles$ } from "@builder.io/qwik"
+import { component$, useSignal, $, useStyles$, useVisibleTask$ } from "@builder.io/qwik"
 import baseStyles from "../index.scss?inline"
 import styles from "./start.scss?inline"
 import siteConfig from "~/config/siteConfig.json"
 import { buildHead } from "~/utils/head"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 
 
@@ -37,110 +39,43 @@ export default component$(() => {
     currentIndex.value =
       currentIndex.value === images.length - 1 ? 0 : currentIndex.value + 1
   })
+  const footerLayoutRef = useSignal<HTMLElement>()
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    if (!footerLayoutRef.value) return
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const el = footerLayoutRef.value
+
+    gsap.set(el, {
+      opacity: 0,
+      y: 140,
+      scaleY: 0.92,
+      transformOrigin: "top center",
+      clipPath: "inset(100% 0% 0% 0% round 18px 18px 0 0)",
+      willChange: "transform, opacity, clip-path",
+    })
+
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      scaleY: 1,
+      clipPath: "inset(0% 0% 0% 0% round 18px 18px 0 0)",
+      duration: 3,
+      ease: "sine.out",
+      scrollTrigger: {
+        trigger: el,
+        start: "top 85%",
+        toggleActions: "play none none none",
+        once: true
+      },
+    });
+  });
 
   return (
     <div class="page">
-      <section>
-        <div class="footer">
-          <div class="footer__layout-container">
-            <div class="footer__headlayout">
-              <div class="footer__logo">
-                <h2>MORLEY</h2>
-              </div>
-              <div class="footer__slogan">
-                <h2>MORLEY</h2>
-              </div>
-              <div class="footer__header">
-                <ul class="footer__submenu-list">
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew">Cyber/EW</a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/research"><span>Research</span></a>
-                  </li>
-                </ul>
-              </div>
-              <div class="footer__content">
-                <div class="footer__phone">
-                  <p>phone: 123-456-7890</p>
-                </div>
-                <div class="footer__linkedin">
-                  <p>linked</p>
-                </div>
-                <div class="footer__email">
-                  <p>email: info@example.com</p>
-                </div>
-              </div>
-            </div>
-            <div class="footer__headlayout">
-              <div class="footer__logo">
-                <h2></h2>
-              </div>
-              <div class="footer__slogan">
-                <h2></h2>
-              </div>
-              <div class="footer__header">
-                <ul class="footer__submenu-list">
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew"><span>Cyber</span><span class="-slash"><span>/</span></span><span>EW</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/research"><span>Research</span></a>
-                  </li>
-                </ul>
-              </div>
-              <div class="footer__content">
-                <div class="footer__phone">
-                  <p>phone: 123-456-7890</p>
-                </div>
-                <div class="footer__linkedin">
-                  <p>linked</p>
-                </div>
-                <div class="footer__email">
-                  <p>email: info@example.com</p>
-                </div>
-              </div>
-            </div>
-            <div class="footer__footer">
-              <div class="footer__name">
-                <h2>MORLEY</h2>
-              </div>
-            </div>
-          </div>
-          <div class="footer__navigation">
-            <ul>
-              <li>
-                <a class="" href="/" >©2026 Markus Morley.
-                </a>
-              </li>
-              <li>
-                <a class="" href="/Privacy-Policy" >Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a class="" href="/License-Agreement" >License Agreement
-                </a>
-              </li>
-              <li>
-                <a class="" href="/Terms-of-Use" >Terms of Use
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
       <section>
         <div class="hero">
           {/* layout left */}
@@ -423,40 +358,23 @@ export default component$(() => {
       {/* footer */}
       <section>
         <div class="footer">
-          <div class="footer__layout-container">
+          <div class="footer__layout-container" ref={footerLayoutRef}>
             <div class="footer__headlayout">
               <div class="footer__logo">
-                <h2>MORLEY</h2>
+                <h2>MARKUS MORLEY</h2>
               </div>
               <div class="footer__slogan">
-                <h2>MORLEY</h2>
+                <h2>Product Engineer</h2>
               </div>
               <div class="footer__header">
                 <ul class="footer__submenu-list">
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew">Cyber/EW</a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
-                  </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/research"><span>Research</span></a>
-                  </li>
+
                 </ul>
               </div>
               <div class="footer__content">
-                <div class="footer__phone">
-                  <p>phone: 123-456-7890</p>
-                </div>
-                <div class="footer__linkedin">
-                  <p>linked</p>
-                </div>
-                <div class="footer__email">
-                  <p>email: info@example.com</p>
-                </div>
+                <ul class="footer__submenu-list">
+
+                </ul>
               </div>
             </div>
             <div class="footer__headlayout">
@@ -469,29 +387,34 @@ export default component$(() => {
               <div class="footer__header">
                 <ul class="footer__submenu-list">
                   <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew"><span>Cyber</span><span class="-slash"><span>/</span></span><span>EW</span></a>
+                    <a class="item-link" href="/cyber-ew">About</a>
                   </li>
                   <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Predictive Maintenance</span></a>
+                    <a class="item-link" href="/predictive-maintenance"><span>Portfolio</span></a>
                   </li>
                   <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Compliance</span></a>
+                    <a class="item-link" href="/compliance"><span>Instagram</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/research"><span>Linkedin</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="footer__content">
+                <ul class="footer__submenu-list">
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/cyber-ew"><span>Instagram</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/predictive-maintenance"><span>Linkedin</span></a>
+                  </li>
+                  <li class="footer__submenu-item ">
+                    <a class="item-link" href="/compliance"><span>Github</span></a>
                   </li>
                   <li class="footer__submenu-item ">
                     <a class="item-link" href="/research"><span>Research</span></a>
                   </li>
                 </ul>
-              </div>
-              <div class="footer__content">
-                <div class="footer__phone">
-                  <p>phone: 123-456-7890</p>
-                </div>
-                <div class="footer__linkedin">
-                  <p>linked</p>
-                </div>
-                <div class="footer__email">
-                  <p>email: info@example.com</p>
-                </div>
               </div>
             </div>
             <div class="footer__footer">

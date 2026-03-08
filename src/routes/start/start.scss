@@ -357,6 +357,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+     overflow: hidden;
+  transform-origin: bottom center;
+  will-change: transform, opacity, clip-path;
   }
 
   &__headlayout {

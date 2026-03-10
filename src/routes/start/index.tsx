@@ -40,7 +40,7 @@ export default component$(() => {
       currentIndex.value === images.length - 1 ? 0 : currentIndex.value + 1
   })
   const footerLayoutRef = useSignal<HTMLElement>()
-
+  const footerRef = useSignal<HTMLElement>();
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!footerLayoutRef.value) return
@@ -74,6 +74,132 @@ export default component$(() => {
     });
   });
 
+  useVisibleTask$(async () => {
+    const footer = footerRef.value
+    if (!footer) return
+
+    const cleanup: Array<() => void> = []
+
+    const items = Array.from(
+      footer.querySelectorAll<HTMLElement>('.sticky-link')
+    )
+
+    const textItems = Array.from(
+      footer.querySelectorAll<HTMLElement>('.sticky-link__text')
+    )
+
+    const gsapModule = await import('gsap')
+    const gsap = gsapModule.gsap
+
+    items.forEach((item, i) => {
+      const text = textItems[i]
+      if (!text) return
+
+      const sticky = Number(item.dataset.sticky || 8)
+
+      const update = (x: number, y: number, duration: number) => {
+        gsap.to(text, {
+          x,
+          y,
+          duration,
+          ease: 'power2.out',
+          overwrite: true,
+        })
+      }
+
+      const onMove = (e: MouseEvent) => {
+        const rect = item.getBoundingClientRect()
+        const offsetX = e.clientX - rect.left
+        const offsetY = e.clientY - rect.top
+
+        update(
+          (offsetX - rect.width / 2) / sticky,
+          (offsetY - rect.height / 2) / sticky,
+          0.4
+        )
+      }
+
+      const onEnter = (e: MouseEvent) => {
+        const rect = item.getBoundingClientRect()
+        const offsetX = e.clientX - rect.left
+        const offsetY = e.clientY - rect.top
+
+        update(
+          (offsetX - rect.width / 2) / sticky,
+          (offsetY - rect.height / 2) / sticky,
+          0.12
+        )
+      }
+
+      const onLeave = () => {
+        update(0, 0, 0.5)
+      }
+
+      item.addEventListener('mousemove', onMove)
+      item.addEventListener('mouseenter', onEnter)
+      item.addEventListener('mouseleave', onLeave)
+
+      cleanup.push(() => {
+        item.removeEventListener('mousemove', onMove)
+        item.removeEventListener('mouseenter', onEnter)
+        item.removeEventListener('mouseleave', onLeave)
+      })
+    })
+
+    return () => {
+      cleanup.forEach((fn) => fn())
+    }
+  });
+   const moveSticky = $((e: MouseEvent, el: HTMLElement) => {
+    const text = el.querySelector('.sticky-link__text') as HTMLElement
+    if (!text) return
+
+    const sticky = Number(el.dataset.sticky || 8)
+
+    const rect = el.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
+    const offsetY = e.clientY - rect.top
+
+    const x = (offsetX - rect.width / 2) / sticky
+    const y = (offsetY - rect.height / 2) / sticky
+
+    gsap.to(text, {
+      x,
+      y,
+      duration: 0.4,
+      ease: 'power2.out'
+    })
+  })
+
+   const enterSticky = $((e: MouseEvent, el: HTMLElement) => {
+    const text = el.querySelector('.sticky-link__text') as HTMLElement
+    if (!text) return
+
+    const sticky = Number(el.dataset.sticky || 8)
+
+    const rect = el.getBoundingClientRect()
+    const offsetX = e.clientX - rect.left
+    const offsetY = e.clientY - rect.top
+
+    gsap.to(text, {
+      x: (offsetX - rect.width / 2) / sticky,
+      y: (offsetY - rect.height / 2) / sticky,
+      duration: 0.12,
+      ease: 'power2.out'
+    })
+  })
+
+   const leaveSticky = $((el: HTMLElement) => {
+    const text = el.querySelector('.sticky-link__text') as HTMLElement
+    if (!text) return
+
+    gsap.to(text, {
+      x: 0,
+      y: 0,
+      duration: 0.5,
+      ease: 'power2.out'
+    })
+  })
   return (
     <div class="page">
       <section>
@@ -357,7 +483,7 @@ export default component$(() => {
       </section>
       {/* footer */}
       <section>
-        <div class="footer">
+        <div class="footer" ref={footerRef}>
           <div class="footer__layout-container" ref={footerLayoutRef}>
             <div class="footer__headlayout">
               <div class="footer__logo">
@@ -385,34 +511,118 @@ export default component$(() => {
                 <h2></h2>
               </div>
               <div class="footer__header">
-                <ul class="footer__submenu-list">
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew">About</a>
+                <ul class="footer-links">
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Home</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Portfolio</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/About"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">About</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Instagram</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/Contact"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Contact</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/research"><span>Linkedin</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/Portfolio"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Portfolio</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/404"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">404</span>
+                    </a>
                   </li>
                 </ul>
               </div>
               <div class="footer__content">
-                <ul class="footer__submenu-list">
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/cyber-ew"><span>Instagram</span></a>
+                <ul class="footer-links">
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Instagram</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/predictive-maintenance"><span>Linkedin</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/About"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Linkedin</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/compliance"><span>Github</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/Contact"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Github</span>
+                    </a>
                   </li>
-                  <li class="footer__submenu-item ">
-                    <a class="item-link" href="/research"><span>Research</span></a>
+                  <li>
+                    <a
+                      class="sticky-link"
+                      data-sticky="1"
+                      href="/Portfolio"
+                      onMouseMove$={(e, el) => moveSticky(e, el)}
+                      onMouseEnter$={(e, el) => enterSticky(e, el)}
+                      onMouseLeave$={(_, el) => leaveSticky(el)}
+                    >
+                      <span class="sticky-link__text">Research</span>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -423,28 +633,56 @@ export default component$(() => {
               </div>
             </div>
           </div>
-          <div class="footer__navigation">
-            <ul>
+          <div class="footer__navigatiosn">
+            <ul class="footer-linkss">
               <li>
-                <a class="" href="/" >©2026 Markus Morley.
+                <a  href="/">
+                  <span class="sticky-link__text">©2026 Markus Morley.</span>
                 </a>
               </li>
               <li>
-                <a class="" href="/Privacy-Policy" >Privacy Policy
+                <a href="/Privacy-Policy">
+                  <span class="sticky-link__text">Privacy Policy</span>
                 </a>
               </li>
               <li>
-                <a class="" href="/License-Agreement" >License Agreement
+                <a  href="/License-Agreement">
+                  <span >License Agreement</span>
                 </a>
               </li>
               <li>
-                <a class="" href="/Terms-of-Use" >Terms of Use
+                <a  href="/Terms-of-Use">
+                  <span >Terms of Use</span>
                 </a>
               </li>
             </ul>
           </div>
         </div>
       </section>
+      {/* <footer ref={footerRef}>
+        <ul class="footer-links">
+          <li>
+            <a class="sticky-link" data-sticky="1" href="/">
+              <span class="sticky-link__text">©2026 Markus Morley.</span>
+            </a>
+          </li>
+          <li>
+            <a class="sticky-link" data-sticky="1" href="/Privacy-Policy">
+              <span class="sticky-link__text">Privacy Policy</span>
+            </a>
+          </li>
+          <li>
+            <a class="sticky-link" data-sticky="2" href="/License-Agreement">
+              <span class="sticky-link__text">License Agreement</span>
+            </a>
+          </li>
+          <li>
+            <a class="sticky-link" data-sticky="3" href="/Terms-of-Use">
+              <span class="sticky-link__text">Terms of Use</span>
+            </a>
+          </li>
+        </ul>
+      </footer> */}
     </div>
   )
 })

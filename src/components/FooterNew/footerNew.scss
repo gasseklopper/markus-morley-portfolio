@@ -1,0 +1,83 @@
+.footer {
+  background-color: var(--surfaceAccent);
+  color: var(--surfaceAccent);
+  height: 100vh;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 2rem;
+
+  &__layout-container {
+    padding: 2rem;
+    background-color: var(--black);
+    height: 98%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+     overflow: hidden;
+  transform-origin: bottom center;
+  will-change: transform, opacity, clip-path;
+  }
+
+  &__headlayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  &__name {
+    font-size: 31rem;
+    font-weight: bold;
+    color: var(--surfaceAccent);
+  }
+
+  &__navigation {
+    height: 5%;
+    ul {
+      padding-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 2rem;
+    }
+
+    a {
+      color: var(--black);
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  }
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  // gap: 1rem 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.sticky-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  // overflow: hidden;
+  margin: -0.4rem 0;
+  padding: 1.2rem 0;
+}
+
+.sticky-link__text {
+  display: inline-block;
+  will-change: transform;
+  pointer-events: none;
+}

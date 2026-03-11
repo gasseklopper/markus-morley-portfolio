@@ -1,0 +1,19 @@
+@use "./foundations/tokens";
+
+:root {
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
+  background: green;
+}

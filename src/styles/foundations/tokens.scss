@@ -1,0 +1,60 @@
+:root {
+  /* Colors */
+  --color-text: #111111;
+  --color-text-soft: #303030;
+  --color-surface: #b7b7b7;
+  --color-surface-accent: #8fdc55;
+  --color-inverse: #111111;
+  --color-border: #111111;
+
+  /* Typography */
+  --font-sans: "Inter", sans-serif;
+
+  /* Fluid type scale */
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.84rem + 0.2vw, 1rem);
+  --text-md: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  --text-2xl: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --text-3xl: clamp(3rem, 2rem + 4vw, 5.5rem);
+  --text-display: clamp(4rem, 8vw, 12rem);
+
+  /* Spacing scale */
+  --space-2xs: clamp(0.25rem, 0.2rem + 0.2vw, 0.5rem);
+  --space-xs: clamp(0.5rem, 0.4rem + 0.3vw, 0.75rem);
+  --space-sm: clamp(0.75rem, 0.6rem + 0.5vw, 1rem);
+  --space-md: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+  --space-lg: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  --space-xl: clamp(2rem, 1.5rem + 1.5vw, 3rem);
+  --space-2xl: clamp(3rem, 2rem + 2vw, 5rem);
+  --space-3xl: clamp(4rem, 3rem + 4vw, 8rem);
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  /* Layout */
+  --content-max: 90rem;
+  --content-padding: clamp(1rem, 2vw, 2rem);
+  --grid-gap: var(--space-md);
+
+  /* Breakpoint tokens */
+  --bp-xs: 30rem; /* 480px */
+  --bp-sm: 48rem; /* 768px */
+  --bp-md: 64rem; /* 1024px */
+  --bp-lg: 80rem; /* 1280px */
+  --bp-xl: 96rem; /* 1536px */
+
+  /* Container query thresholds */
+  --cq-sm: 30rem;
+  --cq-md: 45rem;
+  --cq-lg: 64rem;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

@@ -11,7 +11,8 @@ import { Cursor } from "./components/theme/cursor";
 import { LocalhostOutline } from "./components/dev-outline/dev-outline";
 
 import "./global.css";
-import "./styles/layout.scss";
+// import "./styles/layout.scss";
+import "./styles/index.scss";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -49,15 +50,15 @@ export default component$(() => {
       <body lang="en">
         {isDev && <LocalhostOutline />}
         <div>
-          <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
+          {/* <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
             <Header />
-          </header>
+          </header> */}
           <main >
             <RouterOutlet />
           </main>
-          <footer>
+          {/* <footer>
             <Footer />
-          </footer>
+          </footer> */}
         </div>
         <Overlay />
         <Cursor />

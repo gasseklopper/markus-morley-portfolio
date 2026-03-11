@@ -382,14 +382,54 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--cursor-color);
+  width: 16px;
+  height: 16px;
+  /* border-radius: 50%; */
+  background: white;
+  background:  var(--color-surface-accent);
   pointer-events: none;
   transform: translate(-50%, -50%);
   /* Animation handled via GSAP */
   z-index: 200;
+  mix-blend-mode: difference;
+}
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+   /* border-radius: 999px; */
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+
+  background: white;
+  background:  var(--color-surface-accent);
+  mix-blend-mode: difference;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform-origin: center center;
+  will-change: transform, width, height;
+  overflow: visible;
+}
+
+.cursor__particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-surface-accent);
+  mix-blend-mode: difference;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
 }
 
 :root[data-cursor="false"] .cursor {

@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik"
-import baseStyles from "../index.scss?inline"
+// import baseStyles from "../index.scss?inline"
 import styles from "./start.scss?inline"
 import siteConfig from "~/config/siteConfig.json"
 import { buildHead } from "~/utils/head"
@@ -14,7 +14,7 @@ import { GetInTouch } from "~/components/GetInTouch/GetInTouch"
 
 
 export default component$(() => {
-  useStyles$(baseStyles)
+  // useStyles$(baseStyles)
   useStyles$(styles)
 
   return (

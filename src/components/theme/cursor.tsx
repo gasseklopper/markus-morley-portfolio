@@ -65,7 +65,7 @@ export const Cursor = component$(() => {
     const burstParticles = () => {
       particleEls.forEach((particle, index) => {
         const angle = (Math.PI * 2 * index) / particleEls.length
-        const distance = 14 + Math.random() * 16
+        const distance = 14 + Math.random() * 36
 
         gsap.killTweensOf(particle)
 
@@ -77,17 +77,17 @@ export const Cursor = component$(() => {
         })
 
         gsap.to(particle, {
-          x: Math.cos(angle) * distance,
-          y: Math.sin(angle) * distance,
-          scale: 4,
+          x: Math.cos(angle) * (distance + 11),
+          y: Math.sin(angle) * (distance + 18),
+          scale: 5,
           opacity: 1,
           duration: 0.18,
           ease: "power2.out",
         })
 
         gsap.to(particle, {
-          x: Math.cos(angle) * (distance + 8),
-          y: Math.sin(angle) * (distance + 8),
+          x: Math.cos(angle) * (distance + 38),
+          y: Math.sin(angle) * (distance + 38),
           scale: 0,
           opacity: 0,
           duration: 0.35,

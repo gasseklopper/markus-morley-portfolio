@@ -19,6 +19,7 @@ export default component$(() => {
 
   return (
     <div class="page">
+      
       {/* Hero */}
       < Hero />
       {/* Gallery */}

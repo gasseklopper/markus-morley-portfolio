@@ -144,7 +144,7 @@ export const Cursor = component$(() => {
       })
     }
 
-    const hoverTargets = document.querySelectorAll(
+    const hoverTargets = document.querySelectorAll<HTMLElement>(
       "a, button, [data-cursor-hover]"
     )
 

@@ -12,7 +12,8 @@ export const Teaser = component$(() => {
 				{/* layout left */}
 				<div class="teaser__layout-left">
 					<div class="teaser__teaser-big">
-						<img src="../assets/images/photography/black/Template_index_011.jpg" alt="" />
+						{/* <img src="../assets/images/photography/black/Template_index_011.jpg" alt="" /> */}
+						<img src="../assets/images/image.png" alt="" />
 					</div>
 					<div class="teaser__teaser-right-bottom">
 						<p>date</p>

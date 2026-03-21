@@ -1,19 +1,15 @@
+
+// FOUNDATIONS
 @use "./foundations/tokens";
+@use "./foundations/html";
+@use "./foundations/root";
+@use "./foundations/body";
+@use "./foundations/fonts";
 
-:root {
-  color-scheme: light;
-}
+// SYSTEM
+@use "./system/pageTransition";
+@use "./system/cursor";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-
-body {
-  margin: 0;
-  color: var(--color-text);
-  background: var(--color-surface);
-  background: green;
-}
+// LAYOUT
+@use "./layout/page";
+@use "./layout/layoutShell";

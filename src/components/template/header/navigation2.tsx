@@ -5,55 +5,55 @@ import {
   useSignal,
   useStylesScoped$,
   useOnWindow,
-} from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
-import headerData from "./data";
-import styles from "./navigation.css?inline";
-import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags";
-import PrefferencesToggle from "./prefferences-toggle";
-import NotificationsPanel, { defaultNotifications } from "./notifications-panel";
-import AccountPanel from "./account-panel";
-import { useNotificationBadge } from "./use-notification-badge";
+} from "@builder.io/qwik"
+import { Link } from "@builder.io/qwik-city"
+import headerData from "./data"
+import styles from "./navigation.css?inline"
+import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
+import PrefferencesToggle from "./prefferences-toggle"
+import NotificationsPanel, { defaultNotifications } from "./notifications-panel"
+import AccountPanel from "./account-panel"
+import { useNotificationBadge } from "./use-notification-badge"
 
 type NavItem = {
-  name: string;
-  link: string;
-  flag?: string;
-};
+  name: string
+  link: string
+  flag?: string
+}
 
 const getNavItems = () =>
-  (Array.isArray(headerData.nav) ? headerData.nav : []) as NavItem[];
+  (Array.isArray(headerData.nav) ? headerData.nav : []) as NavItem[]
 
-const excludedNavLinks = new Set(["/datenschutz", "/impressum"]);
+const excludedNavLinks = new Set(["/datenschutz", "/impressum"])
 
 const isExcludedNavItem = (item: NavItem) =>
-  excludedNavLinks.has(item.link.toLowerCase());
+  excludedNavLinks.has(item.link.toLowerCase())
 
 const getFilteredNavItems = () =>
   getNavItems().filter(
     (item) =>
       !isExcludedNavItem(item) &&
       (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
-  );
+  )
 
 const OVERLAY_BUTTON_BASE_CLASS =
-  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]";
+  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
 
 const ACCOUNT_BUTTON_BASE_CLASS =
-  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]";
+  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
 
 const ACTIVE_BUTTON_CLASS =
-  "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]";
+  "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
 
 const composeButtonClass = (baseClass: string, isActive: boolean) =>
-  [baseClass, isActive ? ACTIVE_BUTTON_CLASS : ""].filter(Boolean).join(" ");
+  [baseClass, isActive ? ACTIVE_BUTTON_CLASS : ""].filter(Boolean).join(" ")
 
 export const MobileMenu = component$<{
-  openSig: Signal<boolean>;
-  navItems: ReadonlyArray<NavItem>;
+  openSig: Signal<boolean>
+  navItems: ReadonlyArray<NavItem>
 }>(
   ({ openSig, navItems }) => {
-    useStylesScoped$(styles);
+    useStylesScoped$(styles)
     return (
       <div
         id="mobile-menu"
@@ -74,93 +74,90 @@ export const MobileMenu = component$<{
           ))}
         </div>
       </div>
-    );
+    )
   },
-);
+)
 
 export default component$(() => {
-  useStylesScoped$(styles);
-  const menuOpen = useSignal(false);
-  const preferencesOpen = useSignal(false);
-  const notificationsOpen = useSignal(false);
-  const accountOpen = useSignal(false);
+  useStylesScoped$(styles)
+  const menuOpen = useSignal(false)
+  const preferencesOpen = useSignal(false)
+  const notificationsOpen = useSignal(false)
+  const accountOpen = useSignal(false)
 
-  const unreadCount = useNotificationBadge(defaultNotifications);
-  const navItems = getFilteredNavItems();
+  const unreadCount = useNotificationBadge(defaultNotifications)
+  const navItems = getFilteredNavItems()
 
   useOnWindow(
     "keydown",
     $((event: KeyboardEvent) => {
       if (event.key === "F10") {
-        event.preventDefault();
-        const next = !preferencesOpen.value;
-        preferencesOpen.value = next;
-        menuOpen.value = false;
+        event.preventDefault()
+        const next = !preferencesOpen.value
+        preferencesOpen.value = next
+        menuOpen.value = false
         if (next) {
-          notificationsOpen.value = false;
-          accountOpen.value = false;
+          notificationsOpen.value = false
+          accountOpen.value = false
         }
       }
     }),
-  );
+  )
 
   const toggleNotifications$ = $(() => {
-    const next = !notificationsOpen.value;
-    notificationsOpen.value = next;
-    menuOpen.value = false;
+    const next = !notificationsOpen.value
+    notificationsOpen.value = next
+    menuOpen.value = false
     if (next) {
-      preferencesOpen.value = false;
-      accountOpen.value = false;
+      preferencesOpen.value = false
+      accountOpen.value = false
     }
-  });
+  })
 
   const togglePreferences$ = $(() => {
-    menuOpen.value = false;
-    const next = !preferencesOpen.value;
-    preferencesOpen.value = next;
+    menuOpen.value = false
+    const next = !preferencesOpen.value
+    preferencesOpen.value = next
     if (next) {
-      notificationsOpen.value = false;
-      accountOpen.value = false;
+      notificationsOpen.value = false
+      accountOpen.value = false
     }
-  });
+  })
 
   const toggleAccount$ = $(() => {
-    const next = !accountOpen.value;
-    accountOpen.value = next;
-    menuOpen.value = false;
+    const next = !accountOpen.value
+    accountOpen.value = next
+    menuOpen.value = false
     if (next) {
-      notificationsOpen.value = false;
-      preferencesOpen.value = false;
+      notificationsOpen.value = false
+      preferencesOpen.value = false
     }
-  });
+  })
 
   const toggleMenu$ = $(() => {
-    const next = !menuOpen.value;
-    menuOpen.value = next;
+    const next = !menuOpen.value
+    menuOpen.value = next
     if (next) {
-      notificationsOpen.value = false;
-      preferencesOpen.value = false;
-      accountOpen.value = false;
+      notificationsOpen.value = false
+      preferencesOpen.value = false
+      accountOpen.value = false
     }
-  });
+  })
 
   const closeNotifications$ = $(() => {
-    notificationsOpen.value = false;
-  });
+    notificationsOpen.value = false
+  })
   const closePreferences$ = $(() => {
-    preferencesOpen.value = false;
-  });
+    preferencesOpen.value = false
+  })
   const closeAccount$ = $(() => {
-    accountOpen.value = false;
-  });
+    accountOpen.value = false
+  })
 
-  const navClass = [
-    "layout-shell relative z-[2000] flex w-full flex-col rounded-[2.5rem] border border-[var(--surface-border)] bg-[radial-gradient(circle_at_top,_var(--surface2)_0%,_var(--surface1)_80%)] text-[var(--text1)] shadow-[0_24px_90px_var(--surface-shadow)] backdrop-blur-xl transition-colors duration-300",
-    preferencesOpen.value ? "overflow-visible" : "overflow-hidden",
-  ].join(" ");
+
 
   return (
-    <nav class={navClass}>
+    <nav class="navClass" aria-label="Primary navigation">
       <div class="px-4 py-3 sm:px-6 lg:px-8">
         <div class="flex min-h-[4.5rem] items-center justify-between gap-6">
           <div class="flex items-center gap-4">
@@ -393,5 +390,5 @@ export default component$(() => {
         <AccountPanel onClose$={closeAccount$} />
       )}
     </nav>
-  );
-});
+  )
+})

@@ -1,8 +1,4 @@
-@use "./variables" as *;
-
-:root {
-  --layout-shell-max: 72rem;
-}
+@use "../variables" as *;
 
 .layout-shell {
   width: 100%;

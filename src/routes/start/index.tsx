@@ -3,7 +3,7 @@ import { component$, useStyles$ } from "@builder.io/qwik"
 import styles from "./start.scss?inline"
 import siteConfig from "~/config/siteConfig.json"
 import { buildHead } from "~/utils/head"
-import { FooterNew } from "~/components/FooterNew/FooterNew"
+// import { FooterNew } from "~/components/FooterNew/FooterNew"
 import { Gallery } from "~/components/Gallery/Gallery"
 import { Hero } from "~/components/Hero/Hero"
 import { Teaser } from "~/components/Teaser/Teaser"
@@ -16,8 +16,7 @@ export default component$(() => {
   useStyles$(styles)
 
   return (
-    <div class="page">
-
+    <div>
       {/* Hero */}
       < Hero />
       {/* Gallery */}
@@ -26,8 +25,6 @@ export default component$(() => {
       <Teaser />
       {/* get in touch */}
       <GetInTouch />
-      {/* footer */}
-      <FooterNew />
     </div>
   )
 })

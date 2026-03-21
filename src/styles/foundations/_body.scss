@@ -1,0 +1,15 @@
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-base);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
+  background: green;
+}

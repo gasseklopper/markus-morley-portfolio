@@ -12,6 +12,9 @@ export const Hero = component$(() => {
 				{/* layout left */}
 				<div class="hero__layout-left">
 					<div class="hero__teaser-big-about" style={{ height: "800px" }}>
+						<h2>Frontend Developer</h2>
+						<h2>Markus Morley</h2>
+						<img height={300} style={{ height: "50%", width: "40%" }} src="../assets/images/image.png" alt="" />
 						<p>I blend research-led design exploration with resilient engineering to help brands move boldly. From Frankfurt am Main, I build the prototypes, systems, and large-scale platforms that turn possibility into product reality.</p>
 						<h1>Fearless digital experiences crafted with precision.</h1>
 					</div>

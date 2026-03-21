@@ -1,4 +1,5 @@
 import { component$, useSignal, $, useVisibleTask$, useStyles$ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import styles from "./footerNew.scss?inline"
@@ -139,7 +140,7 @@ export const FooterNew = component$(
                     </a>
                   </li>
                   <li>
-                    <a
+                    <Link
                       class="sticky-link"
                       data-sticky="1"
                       href="/About"
@@ -148,7 +149,7 @@ export const FooterNew = component$(
                       onMouseLeave$={(_, el) => leaveSticky(el)}
                     >
                       <span class="sticky-link__text">About</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a

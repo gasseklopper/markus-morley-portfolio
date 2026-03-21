@@ -1,6 +1,7 @@
 import { component$, isDev, useVisibleTask$ } from "@builder.io/qwik";
 import { QwikCityProvider, RouterOutlet } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
+import { PageTransition } from "./components/PageTransition/PageTransition";
 import { registerSW } from "virtual:pwa-register";
 import siteConfig from "./config/siteConfig.json";
 // import { Footer } from "./components/template/footer";
@@ -49,6 +50,8 @@ export default component$(() => {
       </head>
       <body lang="en">
         {isDev && <LocalhostOutline />}
+        <Cursor />
+        <PageTransition />
         <div>
           {/* <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
             <Header />
@@ -61,7 +64,7 @@ export default component$(() => {
           </footer> */}
         </div>
         <Overlay />
-        <Cursor />
+
       </body>
     </QwikCityProvider>
   );

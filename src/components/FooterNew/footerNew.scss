@@ -1,21 +1,35 @@
+@use "../../styles/tools/mixins" as *;
+
+.footer {
+  // background-color: var(--surfaceAccent);
+  // min-height: 100svh;
+  // font-size: 1.25rem;
+  // font-weight: 600;
+  // padding: 2rem;
+}
+
 .footer {
   background-color: var(--surfaceAccent);
   color: var(--surfaceAccent);
   height: 100vh;
-  font-size: 1.25rem;
-  font-weight: 600;
-  padding: 2rem;
+  padding: 1rem;
+
+  @include mq(s) {
+    padding: 2rem;
+    color: red;
+  }
 
   &__layout-container {
-    padding: 2rem;
+    // padding: 2rem;
     background-color: var(--black);
-    height: 98%;
+    height: 95%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-     overflow: hidden;
-  transform-origin: bottom center;
-  will-change: transform, opacity, clip-path;
+    overflow: hidden;
+    transform-origin: bottom center;
+    will-change: transform, opacity, clip-path;
   }
 
   &__headlayout {
@@ -24,19 +38,34 @@
   }
 
   &__name {
-    font-size: 31rem;
+    font-size: var(--text-3xl);
     font-weight: bold;
     color: var(--surfaceAccent);
+    h2 {
+      text-align: center;
+      margin: 0;
+    }
   }
 
   &__navigation {
     height: 5%;
+    height: 20%;
+
     ul {
-      padding-top: 1rem;
+      // all: unset;
+      padding: 0rem;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
+      align-items: flex-start;
       width: 100%;
-      gap: 2rem;
+      gap: 1rem;
+
+      @include mq(s) {
+        padding: 1rem;
+        flex-direction: row;
+        color: red;
+      }
     }
 
     a {

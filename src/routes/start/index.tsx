@@ -11,12 +11,15 @@ import { GetInTouch } from "~/components/GetInTouch/GetInTouch"
 
 
 
+
+
 export default component$(() => {
   // useStyles$(baseStyles)
   useStyles$(styles)
 
   return (
     <div>
+
       {/* Hero */}
       < Hero />
       {/* Gallery */}

@@ -1,10 +1,14 @@
 import { component$, useStyles$ } from "@builder.io/qwik"
 import styles from "./teaser.scss?inline"
-
+import { BoxBasic } from "../box_basic"
+import portfolioPages from "~/config/portfolio-pages.json"
+import { getProjectBadge } from "~/routes/portfolio"
+import { Card, CardVariation } from "~/routes/portfolio/card"
+import { useGsapAnimations } from "~/hooks/useGsapAnimations"
 
 export const Teaser = component$(() => {
 	useStyles$(styles)
-
+	useGsapAnimations()
 
 	return (
 		<section>
@@ -27,96 +31,42 @@ export const Teaser = component$(() => {
 				{/* layout right */}
 				<div class="teaser__layout-right">
 					<div class="teaser__teaser-2-column">
-						<div class="teaser__base_card">
-							<h2>Design Systems</h2>
-							<p>
-								I build unapologetic, personality-packed design systems that balance experimentation with accessibility and usability standards.
-							</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Prototyping</h2>
-							<p>Rapid UX prototyping lets me transform ideas into tangible experiences quickly, gathering feedback that sharpens every interaction.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Large-Scale Projects</h2>
-							<p>I guide complex initiatives from concept to launch, shaping resilient architectures that support fearless digital storytelling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Hybrid Development</h2>
-							<p>Bridging design and engineering, I craft scalable front-end foundations using atomic principles and progressive tooling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Design Systems</h2>
-							<p>
-								I build unapologetic, personality-packed design systems that balance experimentation with accessibility and usability standards.
-							</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Prototyping</h2>
-							<p>Rapid UX prototyping lets me transform ideas into tangible experiences quickly, gathering feedback that sharpens every interaction.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Large-Scale Projects</h2>
-							<p>I guide complex initiatives from concept to launch, shaping resilient architectures that support fearless digital storytelling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Hybrid Development</h2>
-							<p>Bridging design and engineering, I craft scalable front-end foundations using atomic principles and progressive tooling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Design Systems</h2>
-							<p>
-								I build unapologetic, personality-packed design systems that balance experimentation with accessibility and usability standards.
-							</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Prototyping</h2>
-							<p>Rapid UX prototyping lets me transform ideas into tangible experiences quickly, gathering feedback that sharpens every interaction.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Large-Scale Projects</h2>
-							<p>I guide complex initiatives from concept to launch, shaping resilient architectures that support fearless digital storytelling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Hybrid Development</h2>
-							<p>Bridging design and engineering, I craft scalable front-end foundations using atomic principles and progressive tooling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Design Systems</h2>
-							<p>
-								I build unapologetic, personality-packed design systems that balance experimentation with accessibility and usability standards.
-							</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Prototyping</h2>
-							<p>Rapid UX prototyping lets me transform ideas into tangible experiences quickly, gathering feedback that sharpens every interaction.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Large-Scale Projects</h2>
-							<p>I guide complex initiatives from concept to launch, shaping resilient architectures that support fearless digital storytelling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Hybrid Development</h2>
-							<p>Bridging design and engineering, I craft scalable front-end foundations using atomic principles and progressive tooling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Design Systems</h2>
-							<p>
-								I build unapologetic, personality-packed design systems that balance experimentation with accessibility and usability standards.
-							</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Prototyping</h2>
-							<p>Rapid UX prototyping lets me transform ideas into tangible experiences quickly, gathering feedback that sharpens every interaction.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Large-Scale Projects</h2>
-							<p>I guide complex initiatives from concept to launch, shaping resilient architectures that support fearless digital storytelling.</p>
-						</div>
-						<div class="teaser__base_card">
-							<h2>Hybrid Development</h2>
-							<p>Bridging design and engineering, I craft scalable front-end foundations using atomic principles and progressive tooling.</p>
-						</div>
+						<BoxBasic.Root tone="brand" size="lg">
+							{/* <BoxBasic.Root > */}
+							<BoxBasic.Subheader>Featured</BoxBasic.Subheader>
+							<BoxBasic.Header>Design System Card</BoxBasic.Header>
+							<BoxBasic.Body>
+								Reusable, typed, and scalable compound component structure.
+							</BoxBasic.Body>
+							{/* <BoxBasic.Button>
+          <button>Explore</button>
+        </BoxBasic.Button> */}
+						</BoxBasic.Root>
+						{portfolioPages.slice(0, 8).map((page, index) => (
+							<div
+								class="basic-start-column"
+								data-anim="reveal"
+								data-y="12"
+								data-duration="0.7"
+								key={page.path + index}
+							>
+								<Card.Root variation={page.variation as CardVariation} href={page.path} as="a">
+									<Card.Image src={page.image?.src || ""} alt={page.image?.alt || page.name} width={800} height={450} />
+
+									<Card.Body>
+										<Card.Tagline>{getProjectBadge(page)}</Card.Tagline>
+										<Card.Headline>{page.name}</Card.Headline>
+										<Card.Description>{page.description}</Card.Description>
+									</Card.Body>
+
+									<Card.Footer>
+										<Card.Date>12.12.2023</Card.Date>
+										<Card.Link href={page.path}>Read more</Card.Link>
+									</Card.Footer>
+								</Card.Root>
+							</div>
+						))}
+
 					</div>
 				</div>
 

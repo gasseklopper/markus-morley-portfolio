@@ -1,4 +1,4 @@
-import { component$, useSignal, $, useVisibleTask$, useStyles$ } from "@builder.io/qwik";
+import { component$, useSignal, $, useVisibleTask$, useStyles$ } from "@builder.io/qwik"
 import { Link } from "@builder.io/qwik-city"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -43,6 +43,8 @@ export const FooterNew = component$(
         },
       })
     })
+
+
 
     const moveSticky = $((e: MouseEvent, el: HTMLElement) => {
       const text = el.querySelector('.sticky-link__text') as HTMLElement
@@ -98,7 +100,7 @@ export const FooterNew = component$(
 
     return (
       <section>
-        <div class="footer" ref={footerRef}>
+        <div class="footer" ref={footerRef} id="site-footer">
           <div class="footer__layout-container" ref={footerLayoutRef}>
             <div class="footer__headlayout">
               <div class="footer__logo">
@@ -244,20 +246,20 @@ export const FooterNew = component$(
             </div>
             <div class="footer__footer">
               <div class="footer__name">
-                <h2>MORLEY</h2>
+                <h2>©2026</h2>
               </div>
             </div>
           </div>
           <div class="footer__navigation">
             <ul class="">
-              <li>
+              {/* <li>
                 <a href="/">
-                  <span class="sticky-link__text">©2026 Markus Morley.</span>
+                  <span class="">©2026 Markus Morley.</span>
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a href="/Privacy-Policy">
-                  <span class="sticky-link__text">Privacy Policy</span>
+                  <span class="">Privacy Policy</span>
                 </a>
               </li>
               <li>
@@ -266,14 +268,14 @@ export const FooterNew = component$(
                 </a>
               </li>
               <li>
-                <a href="/Terms-of-Use">
+                <Link href="/Terms-of-Use">
                   <span >Terms of Use</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </section>
-    );
+    )
   }
-);
+)

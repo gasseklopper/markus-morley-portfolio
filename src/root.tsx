@@ -5,7 +5,7 @@ import { PageTransition } from "./components/PageTransition/PageTransition"
 import { registerSW } from "virtual:pwa-register"
 import siteConfig from "./config/siteConfig.json"
 // import { Footer } from "./components/template/footer";
-import { Header } from "./components/template/header";
+import { Header } from "./components/template/header"
 import { PreferenceScripts } from "./components/theme/preference-scripts"
 import { Overlay } from "./components/theme/overlay"
 import { Cursor } from "./components/theme/cursor"
@@ -55,8 +55,8 @@ export default component$(() => {
           <PageTransition />
           <div>
             <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
-            <Header />
-          </header>
+              <Header />
+            </header>
             <main >
               <RouterOutlet />
             </main>

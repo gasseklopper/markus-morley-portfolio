@@ -7,7 +7,7 @@ import { Card, CardVariation } from "./card"
 
 type PortfolioPage = (typeof portfolioPages)[number]
 
-const getProjectBadge = (page: PortfolioPage) => {
+export const getProjectBadge = (page: PortfolioPage) => {
 	if (page.path === "/portfolio/color-theme") {
 		return "Design Tokens"
 	}

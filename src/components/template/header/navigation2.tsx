@@ -1,20 +1,16 @@
 import {
   $,
-  Signal,
   component$,
   useSignal,
-  useOnWindow,
   useStyles$,
-  useVisibleTask$
+  useVisibleTask$,
 } from "@builder.io/qwik"
 import { Link } from "@builder.io/qwik-city"
-import headerData from "./data"
+import gsap from "gsap"
+import { SplitText } from "gsap/SplitText"
 import styles from "./navigation.scss?inline"
-import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
-import PrefferencesToggle from "./prefferences-toggle"
-import NotificationsPanel, { defaultNotifications } from "./notifications-panel"
-import AccountPanel from "./account-panel"
-import { useNotificationBadge } from "./use-notification-badge"
+import { FeatureFlag, isFeatureEnabled } from "~/utils/feature-flags"
+import headerData from "./data"
 
 type NavItem = {
   name: string
@@ -37,190 +33,249 @@ const getFilteredNavItems = () =>
       (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
   )
 
-const OVERLAY_BUTTON_BASE_CLASS =
-  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-
-const ACCOUNT_BUTTON_BASE_CLASS =
-  "group relative flex size-12 items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--text1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
-
-const ACTIVE_BUTTON_CLASS =
-  "border-[var(--primary)] text-[var(--primary)] hover:text-[var(--primary)]"
-
-const composeButtonClass = (baseClass: string, isActive: boolean) =>
-  [baseClass, isActive ? ACTIVE_BUTTON_CLASS : ""].filter(Boolean).join(" ")
-
-export const MobileMenu = component$<{
-  openSig: Signal<boolean>
-  navItems: ReadonlyArray<NavItem>
-}>(
-  ({ openSig, navItems }) => {
-    useStyles$(styles)
-    return (
-      <div
-        id="mobile-menu"
-        hidden={!openSig.value}
-        class="mt-4 w-full lg:hidden"
-      >
-        <div
-          class="flex flex-col gap-3 rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-4 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] backdrop-blur-lg transition-colors duration-300"
-        >
-          {navItems.map((item) => (
-            <Link
-              key={item.link}
-              href={item.link}
-              class="flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-2 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-    )
-  },
-)
-
 export default component$(() => {
   useStyles$(styles)
-  const menuOpen = useSignal(false)
-  const preferencesOpen = useSignal(false)
-  const notificationsOpen = useSignal(false)
-  const accountOpen = useSignal(false)
 
-  const unreadCount = useNotificationBadge(defaultNotifications)
   const navItems = getFilteredNavItems()
 
-  useOnWindow(
-    "keydown",
-    $((event: KeyboardEvent) => {
-      if (event.key === "F10") {
-        event.preventDefault()
-        const next = !preferencesOpen.value
-        preferencesOpen.value = next
-        menuOpen.value = false
-        if (next) {
-          notificationsOpen.value = false
-          accountOpen.value = false
-        }
-      }
-    }),
-  )
+  const isMenuOpen = useSignal(false)
+  const isAnimating = useSignal(false)
 
-  const toggleNotifications$ = $(() => {
-    const next = !notificationsOpen.value
-    notificationsOpen.value = next
-    menuOpen.value = false
-    if (next) {
-      preferencesOpen.value = false
-      accountOpen.value = false
-    }
+  const navRef = useSignal<HTMLElement>()
+  const menuRef = useSignal<HTMLElement>()
+  const menuBgPathRef = useSignal<SVGPathElement>()
+  const toggleMenuRef = useSignal<HTMLElement>()
+  const toggleCloseRef = useSignal<HTMLElement>()
+  const menuLogoRef = useSignal<HTMLElement>()
+  const menuInfoRef = useSignal<HTMLElement>()
+  const menuLinksWrapRef = useSignal<HTMLElement>()
+
+  const openTlRef = useSignal<gsap.core.Timeline>()
+  const closeTlRef = useSignal<gsap.core.Timeline>()
+
+  const openMenu$ = $(() => {
+    if (isAnimating.value || isMenuOpen.value) return
+    isAnimating.value = true
+    isMenuOpen.value = true
+    openTlRef.value?.restart()
   })
 
-  const togglePreferences$ = $(() => {
-    menuOpen.value = false
-    const next = !preferencesOpen.value
-    preferencesOpen.value = next
-    if (next) {
-      notificationsOpen.value = false
-      accountOpen.value = false
-    }
+  const closeMenu$ = $(() => {
+    if (isAnimating.value || !isMenuOpen.value) return
+    isAnimating.value = true
+    closeTlRef.value?.restart()
   })
 
-  const toggleAccount$ = $(() => {
-    const next = !accountOpen.value
-    accountOpen.value = next
-    menuOpen.value = false
-    if (next) {
-      notificationsOpen.value = false
-      preferencesOpen.value = false
-    }
-  })
-
-  const toggleMenu$ = $(() => {
-    const next = !menuOpen.value
-    menuOpen.value = next
-    if (next) {
-      notificationsOpen.value = false
-      preferencesOpen.value = false
-      accountOpen.value = false
-    }
-  })
-
-  const closeNotifications$ = $(() => {
-    notificationsOpen.value = false
-  })
-  const closePreferences$ = $(() => {
-    preferencesOpen.value = false
-  })
-  const closeAccount$ = $(() => {
-    accountOpen.value = false
-  })
-  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
-    let observer: IntersectionObserver | undefined
-    let frame = 0
+    gsap.registerPlugin(SplitText)
 
-    const connect = () => {
-      const footer = document.getElementById("site-footer")
-      if (!footer) {
-        frame = requestAnimationFrame(connect)
-        return
-      }
+    const nav = navRef.value
+    const menu = menuRef.value
+    const menuBg = menuBgPathRef.value
+    const toggleMenu = toggleMenuRef.value
+    const toggleClose = toggleCloseRef.value
+    const menuLogo = menuLogoRef.value
+    const menuInfoItems = menuInfoRef.value?.querySelectorAll("p, h3, h6")
+    const menuLinks = menuLinksWrapRef.value?.querySelectorAll("a")
 
-      observer = new IntersectionObserver(([entry]) => {
-        document.documentElement.toggleAttribute(
-          "data-footer-visible",
-          entry.isIntersecting
-        )
-        // alert("footer visibility changed: " + entry.isIntersecting)
+    if (
+      !nav ||
+      !menu ||
+      !menuBg ||
+      !toggleMenu ||
+      !toggleClose ||
+      !menuLogo ||
+      !menuInfoItems ||
+      !menuLinks
+    ) {
+      return
+    }
+
+    const svg = menuBg.ownerSVGElement
+    const viewBox = svg?.viewBox.baseVal
+    const svgWidth = viewBox?.width ?? 1131
+    const svgHeight = viewBox?.height ?? 861
+    const svgCenterX = svgWidth / 2
+
+    const OPEN_HIDDEN = `M${svgWidth},0 Q${svgCenterX},0 0,0 L0,0 L${svgWidth},0 Z`
+    const OPEN_BULGE = `M${svgWidth},345 Q${svgCenterX},620 0,345 L0,0 L${svgWidth},0 Z`
+    const OPEN_FULL = `M${svgWidth},${svgHeight} Q${svgCenterX},${svgHeight} 0,${svgHeight} L0,0 L${svgWidth},0 Z`
+
+    const CLOSE_START = `M${svgWidth},0 Q${svgCenterX},0 0,0 L0,${svgHeight} L${svgWidth},${svgHeight} Z`
+    const CLOSE_BULGE = `M${svgWidth},350 Q${svgCenterX},130 0,350 L0,${svgHeight} L${svgWidth},${svgHeight} Z`
+    const CLOSE_HIDDEN = `M${svgWidth},${svgHeight} Q${svgCenterX},${svgHeight} 0,${svgHeight} L0,${svgHeight} L${svgWidth},${svgHeight} Z`
+
+    gsap.set(menu, { autoAlpha: 1, pointerEvents: "none" })
+    gsap.set(menuBg, { attr: { d: OPEN_HIDDEN } })
+    gsap.set(toggleMenu, { opacity: 1 })
+    gsap.set(toggleClose, { opacity: 0 })
+    gsap.set(menuLogo, { opacity: 0 })
+    gsap.set(menuInfoItems, { opacity: 0, y: 100 })
+
+    const splits: SplitText[] = []
+    menuLinks.forEach((link) => {
+      const split = new SplitText(link as Element, {
+        type: "chars",
+        charsClass: "char",
+      })
+      splits.push(split)
+      gsap.set(split.chars, { opacity: 0, x: "750%" })
+    })
+
+    const menuLinksChars = splits.flatMap((split) => split.chars)
+
+    const openTl = gsap.timeline({
+      paused: true,
+      onStart: () => {
+        menu.classList.add("is-open")
+        gsap.set(menuLinks, { opacity: 1 })
+        splits.forEach(split => {
+          gsap.set(split.chars, { opacity: 0, x: "750%" })
+        })
+        gsap.set(menu, { pointerEvents: "auto" })
+      },
+      onComplete: () => {
+        isAnimating.value = false
+      },
+    })
+
+    openTl
+      .to(toggleMenu, {
+        duration: 0.25,
+        opacity: 0,
+        ease: "none",
+      })
+      .to(
+        toggleClose,
+        {
+          duration: 0.25,
+          opacity: 1,
+          ease: "none",
+          delay: 0.25,
+        },
+        0
+      )
+      .to(menuBg, {
+        duration: 0.5,
+        attr: { d: OPEN_BULGE },
+        ease: "power4.in",
+      })
+      .to(menuBg, {
+        duration: 0.5,
+        attr: { d: OPEN_FULL },
+        ease: "power4.out",
+      })
+      .to(
+        menuLogo,
+        {
+          duration: 0.1,
+          opacity: 1,
+          ease: "none",
+        },
+        "-=0.75"
+      )
+      .to(
+        menuInfoItems,
+        {
+          duration: 0.75,
+          opacity: 1,
+          y: 0,
+          ease: "power3.out",
+          stagger: 0.075,
+        },
+        "-=0.35"
+      )
+      .to(
+        menuLinksChars,
+        {
+          duration: 1.5,
+          opacity: 1,
+          x: "0%",
+          ease: "elastic.out(1, 0.25)",
+          stagger: 0.01,
+        },
+        0.45
+      )
+      .to(
+        menuLinksChars,
+        {
+          duration: 0.75,
+          opacity: 1,
+          ease: "power2.out",
+          stagger: 0.01,
+        },
+        0.45
+      )
+
+    const closeTl = gsap.timeline({
+      paused: true,
+      onStart: () => {
+        gsap.set(menuBg, { attr: { d: CLOSE_START } })
+      },
+      onComplete: () => {
+        menu.classList.remove("is-open")
+        gsap.set(menu, { pointerEvents: "none" })
+        gsap.set(menuBg, { attr: { d: OPEN_HIDDEN } })
+        gsap.set(menuLogo, { opacity: 0 })
+        gsap.set(menuInfoItems, { opacity: 0, y: 100 })
+        splits.forEach((split) => {
+          gsap.set(split.chars, { opacity: 0, x: "750%" })
+        })
+
+        isMenuOpen.value = false
+        isAnimating.value = false
+      },
+    })
+
+    closeTl
+      .to(toggleClose, {
+        duration: 0.3,
+        opacity: 0,
+        ease: "none",
+      })
+      .to(
+        toggleMenu,
+        {
+          duration: 0.3,
+          opacity: 1,
+          ease: "none",
+          delay: 0.25,
+        },
+        0
+      )
+      .to(menuLogo, { duration: 0.3, opacity: 0 })
+      .to(menuLinks, { duration: 0.3, opacity: 0 }, "<")
+      .to(menuInfoItems, { duration: 0.3, opacity: 0 }, "<")
+      .to(
+        menuBg,
+        {
+          duration: 0.5,
+          attr: { d: CLOSE_BULGE },
+          ease: "power3.in",
+        },
+        "<"
+      )
+      .to(menuBg, {
+        duration: 0.5,
+        attr: { d: CLOSE_HIDDEN },
+        ease: "power3.out",
       })
 
-      observer.observe(footer)
-    }
-
-    connect()
+    openTlRef.value = openTl
+    closeTlRef.value = closeTl
 
     cleanup(() => {
-      if (frame) cancelAnimationFrame(frame)
-      observer?.disconnect()
+      openTl.kill()
+      closeTl.kill()
+      splits.forEach((split) => split.revert())
     })
   })
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
-    let observer: IntersectionObserver | undefined
-    let frame = 0
-
-    const connect = () => {
-      const header = document.getElementById("site-header")
-      if (!header) {
-        frame = requestAnimationFrame(connect)
-        return
-      }
-
-      observer = new IntersectionObserver(([entry]) => {
-        document.documentElement.toggleAttribute(
-          "data-header-visible",
-          entry.isIntersecting
-        )
-        // alert("header visibility changed: " + entry.isIntersecting)
-      })
-
-      observer.observe(header)
-    }
-
-    connect()
-
-    cleanup(() => {
-      if (frame) cancelAnimationFrame(frame)
-      observer?.disconnect()
-    })
-  })
-
 
   return (
-    <nav class="navClass" id="site-header" aria-label="Primary navigation">
-      <div class="navClass__container">
-        <div class="navClass__logo" aria-hidden="true">
-          <div class="navClass__logo-icon" aria-hidden="true">
+    <>
+      <nav ref={navRef} class="navigation" id="site-header" aria-label="Primary navigation">
+        <div class="navigation__logo">
+          <a href="">
             <svg
               viewBox="0 0 1024 1024"
               xmlns="http://www.w3.org/2000/svg"
@@ -236,35 +291,340 @@ export default component$(() => {
               <rect x="652" y="372" width="280" height="280" fill="currentColor" />
               <rect x="652" y="652" width="280" height="280" fill="currentColor" />
             </svg>
-          </div>
-          <div class="navClass__logo-text">
-            {headerData.logo_text && (
-              <p class="">
-                {headerData.logo_text}
-              </p>
-            )}
+          </a>
+        </div>
+
+        <div class="navigation__toggle">
+          <button
+            class="navigation__toggle-button"
+            aria-expanded={isMenuOpen.value}
+            aria-controls="site-menu"
+          >
+            <span ref={toggleMenuRef} onClick$={openMenu$} class="navigation__toggle-menu">
+              Menu
+            </span>
+            <span ref={toggleCloseRef} onClick$={closeMenu$} class="navigation__toggle-close">
+              Close
+            </span>
+          </button>
+        </div>
+
+        <div ref={menuRef} id="site-menu" class="menu" aria-hidden={!isMenuOpen.value}>
+          <svg class="menu__bg-svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
+            <path ref={menuBgPathRef} fill="#f0eeee" />
+          </svg>
+
+          <div ref={menuLogoRef} class="menu__logo">
+            <a href="/">Logo</a>
           </div>
 
+          <div ref={menuInfoRef} class="menu__col menu__col-info">
+            <p>Get in touch</p>
+            <h3>m-morley@gmx.de</h3>
+            <h3>+49 177 371 6791</h3>
+            <h6>Löwenstrasse 1</h6>
+            <h6>63067 Offenbach</h6>
+          </div>
+
+          <div ref={menuLinksWrapRef} class="menu__col menu__col-links">
+            {navItems.map((item) => (
+              <Link key={item.link} href={item.link}>
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </div>
-        <div class="navClass__menu">
-          {navItems.length > 0 && (
-            <div class="">
-              <ul class="">
-                {navItems.map((item) => (
-                  <li key={item.link}>
-                    <Link
-                      href={item.link}
-                      class=""
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   )
 })
+
+
+
+// import {
+//   Signal,
+//   component$,
+//   useStyles$,
+//   useVisibleTask$,
+//   useSignal,
+//   $,
+// } from "@builder.io/qwik"
+// import { Link } from "@builder.io/qwik-city"
+// import headerData from "./data"
+// import styles from "./navigation.scss?inline"
+// import { isFeatureEnabled, type FeatureFlag } from "~/utils/feature-flags"
+// import gsap from "gsap"
+// import SplitText from "gsap/dist/SplitText"
+
+// type NavItem = {
+//   name: string
+//   link: string
+//   flag?: string
+// }
+
+// const getNavItems = () =>
+//   (Array.isArray(headerData.nav) ? headerData.nav : []) as NavItem[]
+
+// const excludedNavLinks = new Set(["/datenschutz", "/impressum"])
+
+// const isExcludedNavItem = (item: NavItem) =>
+//   excludedNavLinks.has(item.link.toLowerCase())
+
+// const getFilteredNavItems = () =>
+//   getNavItems().filter(
+//     (item) =>
+//       !isExcludedNavItem(item) &&
+//       (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
+//   )
+
+// export const MobileMenu = component$<{
+//   openSig: Signal<boolean>
+//   navItems: ReadonlyArray<NavItem>
+// }>(
+//   ({ openSig, navItems }) => {
+//     useStyles$(styles)
+//     return (
+//       <div
+//         id="mobile-menu"
+//         hidden={!openSig.value}
+//         class="mt-4 w-full lg:hidden"
+//       >
+//         <div
+//           class="flex flex-col gap-3 rounded-[2rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-4 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] backdrop-blur-lg transition-colors duration-300"
+//         >
+//           {navItems.map((item) => (
+//             <Link
+//               key={item.link}
+//               href={item.link}
+//               class="flex items-center justify-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-2 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+//             >
+//               {item.name}
+//             </Link>
+//           ))}
+//         </div>
+//       </div>
+//     )
+//   },
+// )
+
+// export default component$(() => {
+//   useStyles$(styles)
+
+
+
+//   const navItems = getFilteredNavItems()
+//   const isMenuOpen = useSignal(false);
+
+
+//   const openMenu$ = $(() => {
+//     isMenuOpen.value = true
+//     console.log("Menu clicked")
+//   })
+
+//   const closeMenu = $(() => {
+//     isMenuOpen.value = false
+//     console.log("Close clicked")
+//   });
+
+//   useVisibleTask$(({ track }) => {
+//     track(() => isMenuOpen.value);
+//     gsap.registerPlugin(SplitText)
+
+//     const menuBgSvg = document.querySelector(".menu__bg-svg") as SVGSVGElement
+//     console.log("Menu background SVG element:", menuBgSvg)
+
+//     const svgWidth = menuBgSvg.viewBox.baseVal.width
+//     const svgHeight = menuBgSvg.viewBox.baseVal.height
+//     const svgCenterX = svgWidth / 2
+
+//     const OPEN_HIDDEN = `M${svgWidth},0 Q${svgCenterX},0 0,0 L0,0 L${svgWidth},0 Z`
+//     const OPEN_BULGE = `M${svgWidth},345 Q${svgCenterX},620 0,345 L0,0 L${svgWidth},0 Z`
+//     const OPEN_FULL = `M${svgWidth},${svgHeight} Q${svgCenterX},${svgHeight} 0,${svgHeight} L0,0 L${svgWidth},0 Z`
+
+//     const CLOSE_START = `M${svgWidth},0 Q${svgCenterX},0 0,0 L0,${svgHeight} L${svgWidth},${svgHeight} Z`
+//     const CLOSE_BULGE = `M${svgWidth},350 Q${svgCenterX},130 0,350 L0,${svgHeight} L${svgWidth},${svgHeight} Z`
+//     const CLOSE_HIDDEN = `M${svgWidth},${svgHeight} Q${svgCenterX},${svgHeight} 0,${svgHeight} L0,${svgHeight} L${svgWidth},${svgHeight} Z`;
+
+//     if (isMenuOpen.value) {
+//       gsap.to(".menu", {
+//         autoAlpha: 1,
+//         y: 0,
+//         duration: 0.6,
+//       })
+
+//       gsap.to("#menu-bg-path", {
+//         attr: {
+//           d: "m1131,0 q565.5,430.5 0,861 l0,0 L1131,861 Z",
+//         },
+//         duration: 0.8,
+//       })
+//     } else {
+//       gsap.to(".menu", {
+//         autoAlpha: 0,
+//         y: -20,
+//         duration: 0.4,
+//       })
+
+//       gsap.to("#menu-bg-path", {
+//         attr: {
+//           d: "m1131,0 q565.5,0 0,0 l0,0 L1131,0 Z",
+//         },
+//         duration: 0.6,
+//       })
+//     }
+//   })
+
+
+//   return (
+//     <>
+//       <nav class="navigation" id="site-header" aria-label="Primary navigation">
+
+//         <div class="navigation__logo">
+//           <a href="">
+//             <svg
+//               viewBox="0 0 1024 1024"
+//               xmlns="http://www.w3.org/2000/svg"
+//               class="size-full"
+//               fill="none"
+//             >
+//               <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+//               <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+//               <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+//               <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+//               <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+//               <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+//               <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+//               <rect x="652" y="652" width="280" height="280" fill="currentColor" />
+//             </svg>
+//           </a>
+//         </div>
+
+//         <div class="navigation__toggle">
+//           {!isMenuOpen.value && (
+//             <p class="navigation__toggle-menu">
+//               <button onClick$={openMenu$} aria-expanded={isMenuOpen.value} aria-controls="site-menu">
+//                 Menu
+//               </button>
+//             </p>
+//           )}
+//           {isMenuOpen.value && (
+//             <p class="navigation__toggle-close">
+//               <button onClick$={closeMenu} aria-expanded={isMenuOpen.value} aria-controls="site-menu">
+//                 Close
+//               </button>
+//             </p>
+//           )}
+//         </div>
+
+//         <div class="menu">
+//           <svg
+//             class="menu__bg-svg"
+//             viewBox="0 0 1131 861"
+//             preserveAspectRatio="none"
+//             xmlns:xlink="http://www.w3.org/2000/svg"
+//           >
+//             <path
+//               id="menu-bg-path"
+//               fill="#f0eeee"
+//               d="m1131,0 q565.5,0 0,0 l0,0 L1131,0 Z"
+//             />
+//           </svg>
+
+//           <div class="menu__logo">
+//             <a href="">
+//               <svg
+//                 viewBox="0 0 1024 1024"
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 class="size-full"
+//                 fill="none"
+//               >
+//                 <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+//                 <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="652" width="280" height="280" fill="currentColor" />
+//               </svg>
+//             </a>
+//           </div>
+
+//           <div class="menu__col menu__col-info">
+//             <p>Get in touch</p>
+//             <h3>m-morley@gmx.de</h3>
+//             <h3>+49 177 371 6791</h3>
+//             <br />
+//             <h6>Löwenstrasse 1</h6>
+//             <h6>63067 Offenbach</h6>
+//           </div>
+
+//           <div class="menu__col menu__col-links">
+//             {navItems.length > 0 && (
+//               <>
+//                 {navItems.map((item) => (
+//                   <Link
+//                     key={item.link}
+//                     href={item.link}
+//                     class=""
+//                   >
+//                     {item.name}
+//                   </Link>
+//                 ))}
+//               </>
+//             )}
+//           </div>
+//         </div>
+//       </nav>
+//       <section class="hero-new">purple</section>
+//       {/* <nav class="navClass" id="site-header" aria-label="Primary navigation">
+//         <div class="navClass__container">
+//           <div class="navClass__logo" aria-hidden="true">
+//             <div class="navClass__logo-icon" aria-hidden="true">
+//               <svg
+//                 viewBox="0 0 1024 1024"
+//                 xmlns="http://www.w3.org/2000/svg"
+//                 class="size-full"
+//                 fill="none"
+//               >
+//                 <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+//                 <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+//                 <rect x="652" y="652" width="280" height="280" fill="currentColor" />
+//               </svg>
+//             </div>
+//             <div class="navClass__logo-text">
+//               {headerData.logo_text && (
+//                 <p class="">
+//                   {headerData.logo_text}
+//                 </p>
+//               )}
+//             </div>
+//           </div>
+//           <div class="navClass__menu">
+//             {navItems.length > 0 && (
+//               <div class="">
+//                 <ul class="">
+//                   {navItems.map((item) => (
+//                     <li key={item.link}>
+//                       <Link
+//                         href={item.link}
+//                         class=""
+//                       >
+//                         {item.name}
+//                       </Link>
+//                     </li>
+//                   ))}
+//                 </ul>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </nav> */}
+//     </>
+//   )
+// })

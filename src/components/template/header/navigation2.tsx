@@ -111,16 +111,94 @@ export default component$(() => {
     gsap.set(toggleClose, { opacity: 0 })
     gsap.set(menuLogo, { opacity: 0 })
     gsap.set(menuInfoItems, { opacity: 0, y: 100 })
-
+    /////
     const splits: SplitText[] = []
+    const hoverCleanups: Array<() => void> = []
+
     menuLinks.forEach((link) => {
       const split = new SplitText(link as Element, {
         type: "chars",
         charsClass: "char",
       })
+
       splits.push(split)
-      gsap.set(split.chars, { opacity: 0, x: "750%" })
+
+      split.chars.forEach((charEl, index) => {
+        const text = charEl.textContent ?? ""
+
+        charEl.innerHTML = `
+      <span class="char__line"></span>
+      <span class="char__glyph">${text === " " ? "&nbsp;" : text}</span>
+    `
+
+        if (index % 2 !== 0) {
+          charEl.classList.add("char--front")
+        }
+      })
+
+      gsap.set(split.chars, {
+        opacity: 0,
+        x: "750%",
+      })
+
+      const lines = split.chars
+        .map((char) => char.querySelector(".char__line"))
+        .filter(Boolean) as HTMLElement[]
+
+      gsap.set(lines, {
+        scaleX: 0,
+        transformOrigin: "left center",
+      })
+
+      const onEnter = () => {
+        gsap.killTweensOf(lines)
+
+        gsap.set(lines, {
+          transformOrigin: "left center",
+        })
+
+        gsap.to(lines, {
+          scaleX: 1,
+          duration: 0.116,
+          ease: "bounce.inOut",
+          stagger: 0.116,
+        })
+      }
+
+      const onLeave = () => {
+        gsap.killTweensOf(lines)
+
+        gsap.set(lines, {
+          transformOrigin: "right center",
+        })
+
+        gsap.to(lines, {
+          scaleX: 0,
+          duration: 0.16,
+          ease: "power2.inOut",
+          stagger: 0.025,
+        })
+      }
+
+      link.addEventListener("mouseenter", onEnter)
+      link.addEventListener("mouseleave", onLeave)
+
+      hoverCleanups.push(() => {
+        link.removeEventListener("mouseenter", onEnter)
+        link.removeEventListener("mouseleave", onLeave)
+      })
     })
+
+    /////
+    // const splits: SplitText[] = []
+    // menuLinks.forEach((link) => {
+    //   const split = new SplitText(link as Element, {
+    //     type: "chars",
+    //     charsClass: "char",
+    //   })
+    //   splits.push(split)
+    //   gsap.set(split.chars, { opacity: 0, x: "750%" })
+    // })
 
     const menuLinksChars = splits.flatMap((split) => split.chars)
 
@@ -185,27 +263,25 @@ export default component$(() => {
         },
         "-=0.35"
       )
-      .to(
-        menuLinksChars,
-        {
-          duration: 1.5,
-          opacity: 1,
-          x: "0%",
-          ease: "elastic.out(1, 0.25)",
-          stagger: 0.01,
-        },
-        0.45
-      )
-      .to(
-        menuLinksChars,
-        {
-          duration: 0.75,
-          opacity: 1,
-          ease: "power2.out",
-          stagger: 0.01,
-        },
-        0.45
-      )
+      .to(menuLinksChars, {
+        duration: 0.65,
+        opacity: 0,
+      }, 0.45)
+
+      .to(menuLinksChars, {
+        duration: 1.5,
+        opacity: 1,
+        x: "0%",
+        ease: "elastic.out(1, 0.25)",
+        stagger: 0.01,
+      }, ">") // start when previous ends
+
+      .to(menuLinksChars, {
+        duration: 0.75,
+        opacity: 1,
+        ease: "power2.out",
+        stagger: 0.01,
+      }, "<0.2") // start 0.2s after previous starts
 
     const closeTl = gsap.timeline({
       paused: true,
@@ -267,6 +343,7 @@ export default component$(() => {
     cleanup(() => {
       openTl.kill()
       closeTl.kill()
+      hoverCleanups.forEach((fn) => fn())
       splits.forEach((split) => split.revert())
     })
   })

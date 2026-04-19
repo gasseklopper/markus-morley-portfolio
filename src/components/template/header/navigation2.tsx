@@ -311,7 +311,7 @@ export default component$(() => {
 
         <div ref={menuRef} id="site-menu" class="menu" aria-hidden={!isMenuOpen.value}>
           <svg class="menu__bg-svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
-            <path ref={menuBgPathRef} fill="#f0eeee" />
+            <path ref={menuBgPathRef} fill="var(--surfaceAccent)" />
           </svg>
 
           <div ref={menuLogoRef} class="menu__logo">

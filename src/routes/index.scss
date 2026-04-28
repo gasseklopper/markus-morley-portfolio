@@ -137,6 +137,7 @@
 }
 
 .hero-effects a,
+.hero-effects button,
 .hero-social a {
   position: relative;
   cursor: pointer;
@@ -150,9 +151,12 @@
   text-transform: uppercase;
   opacity: 0.7;
   transition: color 0.3s ease;
+  background: transparent;
+  border: 0;
 }
 
 .hero-effects a::after,
+.hero-effects button::after,
 .hero-social a::after {
   content: "";
   position: absolute;
@@ -165,14 +169,18 @@
 }
 
 .hero-effects a:hover::after,
+.hero-effects button:hover::after,
 .hero-social a:hover::after,
-.hero-effects a.active::after {
+.hero-effects a.active::after,
+.hero-effects button.active::after {
   width: 100%;
 }
 
 .hero-effects a:hover,
+.hero-effects button:hover,
 .hero-social a:hover,
-.hero-effects a.active {
+.hero-effects a.active,
+.hero-effects button.active {
   color: var(--brand-inverted);
   mix-blend-mode: normal;
   opacity: 1;

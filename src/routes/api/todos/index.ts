@@ -1,28 +1,67 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
 import type { TodoItem } from "~/utils/todo-types";
 
+const COOKIE_NAME = "studio_todos";
+const COOKIE_TTL: [number, "days"] = [30, "days"];
+
 type TodoStore = Map<string, TodoItem>;
-
-declare global {
-  // eslint-disable-next-line no-var
-  var __todoStore: TodoStore | undefined;
-}
-
-const getStore = (): TodoStore => {
-  const globalStore = globalThis as typeof globalThis & { __todoStore?: TodoStore };
-
-  if (!globalStore.__todoStore) {
-    globalStore.__todoStore = new Map<string, TodoItem>();
-  }
-
-  return globalStore.__todoStore;
-};
 
 const sortTodos = (todos: Iterable<TodoItem>) =>
   [...todos].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
+
+const isTodoItem = (value: unknown): value is TodoItem => {
+  if (!isPlainObject(value)) {
+    return false;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  return (
+    typeof record.id === "string" &&
+    typeof record.title === "string" &&
+    typeof record.createdAt === "string" &&
+    typeof record.completed === "boolean"
+  );
+};
+
+const readStore = (event: Parameters<RequestHandler>[0]): TodoStore => {
+  const cookieValue = event.cookie.get(COOKIE_NAME);
+
+  if (!cookieValue) {
+    return new Map();
+  }
+
+  try {
+    const parsed = cookieValue.json<unknown>();
+
+    if (!Array.isArray(parsed)) {
+      return new Map();
+    }
+
+    const todos = parsed.filter(isTodoItem);
+    return new Map(todos.map((todo) => [todo.id, todo]));
+  } catch (error) {
+    void error;
+    return new Map();
+  }
+};
+
+const persistStore = (event: Parameters<RequestHandler>[0], store: TodoStore) => {
+  const sortedTodos = sortTodos(store.values());
+  const { request } = event;
+  const requestUrl = new URL(request.url);
+
+  event.cookie.set(COOKIE_NAME, JSON.stringify(sortedTodos), {
+    path: "/",
+    httpOnly: true,
+    sameSite: "lax",
+    maxAge: COOKIE_TTL,
+    secure: requestUrl.protocol === "https:",
+  });
+};
 
 const isPostPayload = (body: unknown): body is { title: string } => {
   if (!isPlainObject(body)) {
@@ -61,35 +100,36 @@ const isPatchPayload = (body: unknown): body is PatchPayload => {
   return true;
 };
 
-export const onGet: RequestHandler = ({ json }) => {
-  const store = getStore();
-  json(200, sortTodos(store.values()));
+export const onGet: RequestHandler = (event) => {
+  const store = readStore(event);
+  event.json(200, sortTodos(store.values()));
 };
 
-export const onPost: RequestHandler = async ({ request, json, send }) => {
+export const onPost: RequestHandler = async (event) => {
+  const { request } = event;
   let body: unknown;
 
   try {
     body = await request.json();
   } catch (error) {
     void error;
-    send(400, { message: "Invalid JSON payload" });
+    event.send(400, { message: "Invalid JSON payload" });
     return;
   }
 
   if (!isPostPayload(body)) {
-    send(400, { message: "A non-empty title is required" });
+    event.send(400, { message: "A non-empty title is required" });
     return;
   }
 
   const title = body.title.trim();
 
   if (!title) {
-    send(400, { message: "A non-empty title is required" });
+    event.send(400, { message: "A non-empty title is required" });
     return;
   }
 
-  const store = getStore();
+  const store = readStore(event);
   const id = typeof crypto?.randomUUID === "function" ? crypto.randomUUID() : Date.now().toString(36);
   const todo: TodoItem = {
     id,
@@ -99,44 +139,46 @@ export const onPost: RequestHandler = async ({ request, json, send }) => {
   };
 
   store.set(id, todo);
-  json(201, todo);
+  persistStore(event, store);
+  event.json(201, todo);
 };
 
-export const onPatch: RequestHandler = async ({ request, json, send }) => {
+export const onPatch: RequestHandler = async (event) => {
+  const { request } = event;
   let body: unknown;
 
   try {
     body = await request.json();
   } catch (error) {
     void error;
-    send(400, { message: "Invalid JSON payload" });
+    event.send(400, { message: "Invalid JSON payload" });
     return;
   }
 
   if (!isPatchPayload(body)) {
-    send(400, { message: "An id is required" });
+    event.send(400, { message: "An id is required" });
     return;
   }
 
   const id = body.id.trim();
 
   if (!id) {
-    send(400, { message: "An id is required" });
+    event.send(400, { message: "An id is required" });
     return;
   }
 
-  const store = getStore();
+  const store = readStore(event);
   const todo = store.get(id);
 
   if (!todo) {
-    send(404, { message: "Todo not found" });
+    event.send(404, { message: "Todo not found" });
     return;
   }
 
   const nextTitle = body.title?.trim();
 
   if (nextTitle !== undefined && !nextTitle) {
-    send(400, { message: "Updated title cannot be empty" });
+    event.send(400, { message: "Updated title cannot be empty" });
     return;
   }
 
@@ -149,25 +191,27 @@ export const onPatch: RequestHandler = async ({ request, json, send }) => {
   }
 
   store.set(id, todo);
-  json(200, todo);
+  persistStore(event, store);
+  event.json(200, todo);
 };
 
-export const onDelete: RequestHandler = ({ request, json, send }) => {
-  const url = new URL(request.url);
+export const onDelete: RequestHandler = (event) => {
+  const url = new URL(event.request.url);
   const id = url.searchParams.get("id");
 
   if (!id) {
-    send(400, { message: "An id query parameter is required" });
+    event.send(400, { message: "An id query parameter is required" });
     return;
   }
 
-  const store = getStore();
+  const store = readStore(event);
 
   if (!store.has(id)) {
-    send(404, { message: "Todo not found" });
+    event.send(404, { message: "Todo not found" });
     return;
   }
 
   store.delete(id);
-  json(200, { id });
+  persistStore(event, store);
+  event.json(200, { id });
 };

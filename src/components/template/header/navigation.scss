@@ -31,10 +31,10 @@ html[data-header-visible] .navClass__logo-text {
 // }
 
 .menu {
-  --menu-bg: var(--surface1, #f0eeee);
-  --menu-text: var(--text1, #222225);
-  --menu-muted: var(--text2, #5f5f66);
-  --menu-accent: var(--surfaceAccent, var(--primary, #8fdc55));
+  --menu-bg: var(--surfaceAccent, var(--primary, #8fdc55));
+  --menu-text: var(--black, var(--text1, #222225));
+  --menu-muted: color-mix(in srgb, var(--menu-text) 70%, transparent);
+  --menu-accent: var(--grey, var(--surface1, #f0eeee));
 
   position: fixed;
   top: 0;
@@ -54,7 +54,6 @@ html[data-header-visible] .navClass__logo-text {
 
   &.is-open {
     pointer-events: all;
-    background: var(--menu-bg);
   }
 
   &__bg-svg {

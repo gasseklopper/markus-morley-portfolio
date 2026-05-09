@@ -147,9 +147,75 @@
         "type": "page"
       },
       {
+        "name": "404",
+        "link": "/404",
+        "folder": "src/routes/404",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
         "name": "About",
         "link": "/about",
         "folder": "src/routes/about",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
+        "name": "Airplane Test",
+        "link": "/airplane-test",
+        "folder": "src/routes/airplane-test",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
+        "name": "API",
+        "link": "/api",
+        "folder": "src/routes/api",
+        "pattern": "folder",
+        "type": "route-group",
+        "children": [
+          {
+            "name": "Todos API",
+            "link": "/api/todos",
+            "folder": "src/routes/api/todos",
+            "pattern": "folder/index.ts",
+            "type": "endpoint"
+          }
+        ]
+      },
+      {
+        "name": "Basic Start",
+        "link": "/basic-start",
+        "folder": "src/routes/basic-start",
+        "pattern": "folder/index.tsx + folder/layout.tsx",
+        "type": "page-with-layout"
+      },
+      {
+        "name": "Datenschutz",
+        "link": "/datenschutz",
+        "folder": "src/routes/datenschutz",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
+        "name": "Dynamic Buttons",
+        "link": "/dynamic-buttons",
+        "folder": "src/routes/dynamic-buttons",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
+        "name": "Impressum",
+        "link": "/impressum",
+        "folder": "src/routes/impressum",
+        "pattern": "folder/index.tsx",
+        "type": "page"
+      },
+      {
+        "name": "Konzept",
+        "link": "/konzept",
+        "flag": "konzept",
+        "folder": "src/routes/konzept",
         "pattern": "folder/index.tsx",
         "type": "page"
       },
@@ -277,24 +343,23 @@
         ]
       },
       {
-        "name": "Konzept",
-        "link": "/konzept",
-        "flag": "konzept",
-        "folder": "src/routes/konzept",
+        "name": "Scroll Transition",
+        "link": "/scroll-transition",
+        "folder": "src/routes/scroll-transition",
         "pattern": "folder/index.tsx",
         "type": "page"
       },
       {
-        "name": "Impressum",
-        "link": "/impressum",
-        "folder": "src/routes/impressum",
-        "pattern": "folder/index.tsx",
-        "type": "page"
+        "name": "Start",
+        "link": "/start",
+        "folder": "src/routes/start",
+        "pattern": "folder/index.tsx + folder/layout.tsx",
+        "type": "page-with-layout"
       },
       {
-        "name": "Datenschutz",
-        "link": "/datenschutz",
-        "folder": "src/routes/datenschutz",
+        "name": "Todos",
+        "link": "/todos",
+        "folder": "src/routes/todos",
         "pattern": "folder/index.tsx",
         "type": "page"
       }

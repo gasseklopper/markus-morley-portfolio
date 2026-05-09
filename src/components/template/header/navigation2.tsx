@@ -5,9 +5,10 @@ import {
   type NoSerialize,
   useSignal,
   useStyles$,
+  useTask$,
   useVisibleTask$,
 } from "@builder.io/qwik"
-import { Link } from "@builder.io/qwik-city"
+import { Link, useLocation } from "@builder.io/qwik-city"
 import gsap from "gsap"
 import { SplitText } from "gsap/SplitText"
 import styles from "./navigation.scss?inline"
@@ -39,9 +40,11 @@ export default component$(() => {
   useStyles$(styles)
 
   const navItems = getFilteredNavItems()
+  const location = useLocation()
 
   const isMenuOpen = useSignal(false)
   const isAnimating = useSignal(false)
+  const currentPathname = useSignal("")
 
   const navRef = useSignal<HTMLElement>()
   const menuRef = useSignal<HTMLElement>()
@@ -63,9 +66,14 @@ export default component$(() => {
   })
 
   const closeMenu$ = $(() => {
-    if (isAnimating.value || !isMenuOpen.value || !closeTlRef.value) return
+    const closeTl = closeTlRef.value
+
+    if (!isMenuOpen.value || !closeTl) return
+    if (closeTl.isActive()) return
+
+    openTlRef.value?.pause()
     isAnimating.value = true
-    closeTlRef.value?.restart()
+    closeTl.restart()
   })
 
   const toggleMenu$ = $(() => {
@@ -75,6 +83,20 @@ export default component$(() => {
     }
 
     openMenu$()
+  })
+
+  useTask$(async ({ track }) => {
+    const pathname = track(() => location.url.pathname)
+
+    if (!currentPathname.value) {
+      currentPathname.value = pathname
+      return
+    }
+
+    if (pathname === currentPathname.value) return
+
+    currentPathname.value = pathname
+    await closeMenu$()
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -408,7 +430,9 @@ export default component$(() => {
         </svg>
 
         <div ref={menuLogoRef} class="menu__logo">
-          <a href="/">Logo</a>
+          <Link href="/" onClick$={closeMenu$}>
+            Logo
+          </Link>
         </div>
 
         <div ref={menuInfoRef} class="menu__col menu__col-info">
@@ -421,7 +445,7 @@ export default component$(() => {
 
         <div ref={menuLinksWrapRef} class="menu__col menu__col-links">
           {navItems.map((item) => (
-            <Link key={item.link} href={item.link}>
+            <Link key={item.link} href={item.link} onClick$={closeMenu$}>
               {item.name}
             </Link>
           ))}

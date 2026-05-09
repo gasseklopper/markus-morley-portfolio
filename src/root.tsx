@@ -54,7 +54,7 @@ export default component$(() => {
           <Cursor />
           <PageTransition />
           <div>
-            <header class="sticky top-0 z-[3000] px-4 pt-6 md:px-8">
+            <header class="heasderClass">
               <Header />
             </header>
             <main >

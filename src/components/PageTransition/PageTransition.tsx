@@ -11,6 +11,7 @@ export const PageTransition = component$(() => {
 	const overlayRef = useSignal<HTMLDivElement>()
 	const pathRef = useSignal<SVGPathElement>()
 
+	// eslint-disable-next-line qwik/no-use-visible-task
 	useVisibleTask$(() => {
 		const path = pathRef.value
 		const overlay = overlayRef.value

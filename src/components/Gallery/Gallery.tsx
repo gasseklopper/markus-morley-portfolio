@@ -4,28 +4,40 @@ import styles from "./gallery.scss?inline"
 type GalleryImage = {
 	src: string
 	alt: string
+	width: number
+	height: number
 }
 
 const images: GalleryImage[] = [
 	{
 		src: "/assets/images/photography/black/Template_index_014.jpg",
 		alt: "Black and white gallery image 1",
+		width: 941,
+		height: 557,
 	},
 	{
 		src: "/assets/images/photography/black/Template_index_016.jpg",
 		alt: "Black and white gallery image 2",
+		width: 941,
+		height: 557,
 	},
 	{
 		src: "/assets/images/photography/black/Template_index_019.jpg",
 		alt: "Black and white gallery image 3",
+		width: 941,
+		height: 557,
 	},
 	{
 		src: "/assets/images/photography/black/Template_index_011.jpg",
 		alt: "Black and white gallery image 4",
+		width: 941,
+		height: 557,
 	},
 	{
 		src: "/assets/images/photography/black/Template_index_012.jpg",
 		alt: "Black and white gallery image 5",
+		width: 941,
+		height: 557,
 	},
 ]
 
@@ -108,6 +120,8 @@ export const Gallery = component$(() => {
 									alt={image.alt}
 									loading="lazy"
 									decoding="async"
+									width={image.width}
+									height={image.height}
 								/>
 							</figure>
 						))}

@@ -6,8 +6,8 @@ import { buildHead } from "~/utils/head"
 // import { FooterNew } from "~/components/FooterNew/FooterNew"
 import { Gallery } from "~/components/Gallery/Gallery"
 import { Hero } from "~/components/Hero/Hero"
-import { Teaser } from "~/components/Teaser/Teaser"
-import { GetInTouch } from "~/components/GetInTouch/GetInTouch"
+// import { Teaser } from "~/components/Teaser/Teaser"
+// import { GetInTouch } from "~/components/GetInTouch/GetInTouch"
 
 
 
@@ -25,9 +25,9 @@ export default component$(() => {
       {/* Gallery */}
       <Gallery />
       {/* Teaser */}
-      <Teaser />
+      {/* <Teaser /> */}
       {/* get in touch */}
-      <GetInTouch />
+      {/* <GetInTouch /> */}
     </div>
   )
 })

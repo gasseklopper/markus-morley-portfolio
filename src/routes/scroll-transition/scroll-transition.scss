@@ -1,0 +1,221 @@
+.scroll-transition {
+  --scroll-transition-pad: clamp(1.25rem, 3vw, 4rem);
+  --scroll-transition-text: #f7f2ea;
+  --scroll-transition-muted: rgba(247, 242, 234, 0.68);
+
+  min-height: 100vh;
+  overflow: clip;
+  background: #050505;
+  color: var(--scroll-transition-text);
+  font-family:
+    "Playfair Display",
+    "Shippori Mincho",
+    Georgia,
+    serif;
+}
+
+.scroll-transition__spacer {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  align-content: space-between;
+  padding: 34vh var(--scroll-transition-pad) 4rem;
+  text-align: center;
+}
+
+.scroll-transition__spacer h1,
+.scroll-transition__spacer h2 {
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 8.5rem);
+  font-weight: 300;
+  line-height: 0.88;
+}
+
+.scroll-transition__spacer h1 span {
+  display: block;
+  margin-top: 0.35em;
+  color: var(--scroll-transition-muted);
+  font-size: clamp(1.35rem, 2.4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.scroll-transition__eyebrow,
+.scroll-transition__hint,
+.scroll-transition__title,
+.scroll-transition__copy {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.scroll-transition__eyebrow {
+  margin: 0 0 1rem;
+  color: var(--scroll-transition-muted);
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.scroll-transition__hint {
+  position: relative;
+  color: var(--scroll-transition-muted);
+  font-size: 0.92rem;
+}
+
+.scroll-transition__hint::after {
+  content: "";
+  position: absolute;
+  top: calc(100% + 0.9rem);
+  left: 50%;
+  width: 1px;
+  height: 2.4rem;
+  background: currentColor;
+}
+
+.scroll-transition__stage {
+  position: relative;
+  height: 500vh;
+}
+
+.scroll-transition__layers {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #050505;
+}
+
+.scroll-transition__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scroll-transition__layer image {
+  filter: brightness(0.72) contrast(1.08);
+}
+
+.scroll-transition__reduced-image {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.72) contrast(1.08);
+}
+
+.scroll-transition__texts {
+  position: absolute;
+  inset: 0;
+  padding: var(--scroll-transition-pad);
+  pointer-events: none;
+}
+
+.scroll-transition__text {
+  position: absolute;
+  inset: 0;
+  padding: max(7rem, 12vh) var(--scroll-transition-pad) var(--scroll-transition-pad);
+  clip-path: inset(100% 0 0 0);
+  transform: translateY(40px);
+  text-transform: uppercase;
+}
+
+.scroll-transition__text h2 {
+  max-width: 10ch;
+  margin: 0;
+  font-size: clamp(5rem, 10vw, 14rem);
+  font-weight: 300;
+  line-height: 0.78;
+}
+
+.scroll-transition__text h2 span {
+  display: block;
+}
+
+.scroll-transition__title {
+  margin: clamp(2.5rem, 6vw, 6rem) 0 0;
+  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+}
+
+.scroll-transition__copy {
+  max-width: 31ch;
+  margin: 1.8rem 0 0;
+  color: rgba(247, 242, 234, 0.82);
+  font-size: clamp(0.88rem, 1vw, 1rem);
+  line-height: 1.75;
+  text-transform: none;
+}
+
+.scroll-transition__progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 4rem);
+}
+
+.scroll-transition__segment {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(247, 242, 234, 0.22);
+}
+
+.scroll-transition__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: var(--scroll-transition-text);
+}
+
+.scroll-transition__spacer--end {
+  min-height: 70vh;
+  padding-top: 24vh;
+}
+
+.scroll-transition--reduced .scroll-transition__reduced-image {
+  display: block;
+}
+
+.scroll-transition--reduced .scroll-transition__layer {
+  display: none;
+}
+
+.scroll-transition--reduced .scroll-transition__text:first-child {
+  clip-path: none;
+}
+
+@media (max-width: 1024px) {
+  .scroll-transition__copy {
+    max-width: 38ch;
+  }
+}
+
+@media (max-width: 599px) {
+  .scroll-transition__spacer {
+    padding-top: 30vh;
+  }
+
+  .scroll-transition__text {
+    padding-top: 18vh;
+  }
+
+  .scroll-transition__text h2 {
+    font-size: clamp(4rem, 21vw, 7.5rem);
+  }
+
+  .scroll-transition__copy {
+    max-width: min(78vw, 34ch);
+  }
+}

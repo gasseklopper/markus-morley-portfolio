@@ -66,6 +66,7 @@ export default component$(() => {
     closeTlRef.value?.restart()
   })
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     gsap.registerPlugin(SplitText)
 
@@ -349,70 +350,67 @@ export default component$(() => {
   })
 
   return (
-    <>
-      <nav ref={navRef} class="navigation" id="site-header" aria-label="Primary navigation">
-        <div class="navigation__logo">
-          <a href="">
-            <svg
-              viewBox="0 0 1024 1024"
-              xmlns="http://www.w3.org/2000/svg"
-              class="size-full"
-              fill="none"
-            >
-              <rect x="92" y="92" width="280" height="280" fill="currentColor" />
-              <rect x="92" y="372" width="280" height="280" fill="currentColor" />
-              <rect x="92" y="652" width="280" height="280" fill="currentColor" />
-              <rect x="372" y="92" width="280" height="280" fill="currentColor" />
-              <rect x="372" y="372" width="280" height="280" fill="currentColor" />
-              <rect x="652" y="92" width="280" height="280" fill="currentColor" />
-              <rect x="652" y="372" width="280" height="280" fill="currentColor" />
-              <rect x="652" y="652" width="280" height="280" fill="currentColor" />
-            </svg>
-          </a>
-        </div>
-
-        <div class="navigation__toggle">
-          <button
-            class="navigation__toggle-button"
-            aria-expanded={isMenuOpen.value}
-            aria-controls="site-menu"
+    <nav ref={navRef} class="navigation" id="site-header" aria-label="Primary navigation">
+      <div class="navigation__logo">
+        <a href="">
+          <svg
+            viewBox="0 0 1024 1024"
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-full"
           >
-            <span ref={toggleMenuRef} onClick$={openMenu$} class="navigation__toggle-menu">
-              Menu
-            </span>
-            <span ref={toggleCloseRef} onClick$={closeMenu$} class="navigation__toggle-close">
-              Close
-            </span>
-          </button>
-        </div>
-
-        <div ref={menuRef} id="site-menu" class="menu" aria-hidden={!isMenuOpen.value}>
-          <svg class="menu__bg-svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
-            <path ref={menuBgPathRef} fill="var(--surfaceAccent)" />
+            <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+            <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+            <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+            <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+            <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+            <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+            <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+            <rect x="652" y="652" width="280" height="280" fill="currentColor" />
           </svg>
+        </a>
+      </div>
 
-          <div ref={menuLogoRef} class="menu__logo">
-            <a href="/">Logo</a>
-          </div>
+      <div class="navigation__toggle">
+        <button
+          class="navigation__toggle-button"
+          aria-expanded={isMenuOpen.value}
+          aria-controls="site-menu"
+        >
+          <span ref={toggleMenuRef} onClick$={openMenu$} class="navigation__toggle-menu">
+            Menu
+          </span>
+          <span ref={toggleCloseRef} onClick$={closeMenu$} class="navigation__toggle-close">
+            Close
+          </span>
+        </button>
+      </div>
 
-          <div ref={menuInfoRef} class="menu__col menu__col-info">
-            <p>Get in touch</p>
-            <h3>m-morley@gmx.de</h3>
-            <h3>+49 177 371 6791</h3>
-            <h6>Löwenstrasse 1</h6>
-            <h6>63067 Offenbach</h6>
-          </div>
+      <div ref={menuRef} id="site-menu" class="menu" aria-hidden={!isMenuOpen.value}>
+        <svg class="menu__bg-svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
+          <path ref={menuBgPathRef} fill="var(--surfaceAccent)" />
+        </svg>
 
-          <div ref={menuLinksWrapRef} class="menu__col menu__col-links">
-            {navItems.map((item) => (
-              <Link key={item.link} href={item.link}>
-                {item.name}
-              </Link>
-            ))}
-          </div>
+        <div ref={menuLogoRef} class="menu__logo">
+          <a href="/">Logo</a>
         </div>
-      </nav>
-    </>
+
+        <div ref={menuInfoRef} class="menu__col menu__col-info">
+          <p>Get in touch</p>
+          <h3>m-morley@gmx.de</h3>
+          <h3>+49 177 371 6791</h3>
+          <h6>Löwenstrasse 1</h6>
+          <h6>63067 Offenbach</h6>
+        </div>
+
+        <div ref={menuLinksWrapRef} class="menu__col menu__col-links">
+          {navItems.map((item) => (
+            <Link key={item.link} href={item.link}>
+              {item.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
   )
 })
 

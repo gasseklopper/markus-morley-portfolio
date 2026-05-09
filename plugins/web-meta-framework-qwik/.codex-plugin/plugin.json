@@ -1,0 +1,42 @@
+{
+  "name": "web-meta-framework-qwik",
+  "version": "0.1.0",
+  "description": "Qwik resumable framework patterns for zero hydration, lazy boundaries, signals, Qwik City routing, loaders, actions, server RPC, and serialization rules.",
+  "author": {
+    "name": "Markus Morley",
+    "email": "m-morley@gmx.de",
+    "url": "https://github.com/m-morley"
+  },
+  "homepage": "https://qwik.dev/",
+  "repository": "https://github.com/m-morley/markus-morley-portfolio",
+  "license": "MIT",
+  "keywords": [
+    "qwik",
+    "qwik-city",
+    "resumability",
+    "signals",
+    "typescript"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Qwik Framework Patterns",
+    "shortDescription": "Qwik resumability, lazy boundaries, routing, server data, and serialization guidance.",
+    "longDescription": "Guidance for building Qwik and Qwik City applications with component$, signals, stores, routeLoader$, routeAction$, server$, event handling, and serializable lazy boundaries.",
+    "developerName": "Markus Morley",
+    "category": "Development",
+    "capabilities": [
+      "Code",
+      "Review",
+      "Framework Guidance"
+    ],
+    "websiteURL": "https://qwik.dev/",
+    "privacyPolicyURL": "https://openai.com/policies/row-privacy-policy/",
+    "termsOfServiceURL": "https://openai.com/policies/row-terms-of-use/",
+    "defaultPrompt": [
+      "Review this Qwik component for resumability issues.",
+      "Implement this Qwik City route with routeLoader$.",
+      "Fix this Qwik event handler or serialization bug."
+    ],
+    "brandColor": "#18B6F6"
+  }
+}

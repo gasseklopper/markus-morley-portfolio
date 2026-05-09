@@ -5,6 +5,7 @@ export const Cursor = component$(() => {
   const cursorRef = useSignal<HTMLDivElement>()
   const enabled = useSignal(true)
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup }) => {
     const update = () => {
       enabled.value =
@@ -22,6 +23,7 @@ export const Cursor = component$(() => {
     cleanup(() => observer.disconnect())
   })
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(({ cleanup, track }) => {
     track(() => enabled.value)
 

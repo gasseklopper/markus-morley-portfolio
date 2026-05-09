@@ -104,10 +104,10 @@ export const FooterNew = component$(
           <div class="footer__layout-container" ref={footerLayoutRef}>
             <div class="footer__headlayout">
               <div class="footer__logo">
-                <h2>MARKUS MORLEY</h2>
+                {/* <h2>MARKUS MORLEY</h2> */}
               </div>
               <div class="footer__slogan">
-                <h2>Product Engineer</h2>
+                <h2>MARKUS MORLEY</h2>
               </div>
               <div class="footer__header">
                 <ul class="footer__submenu-list">
@@ -258,14 +258,14 @@ export const FooterNew = component$(
                 </a>
               </li> */}
               <li>
-                <a href="/Privacy-Policy">
+                <Link href="/Privacy-Policy">
                   <span class="">Privacy Policy</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/License-Agreement">
+                <Link href="/License-Agreement">
                   <span >License Agreement</span>
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/Terms-of-Use">

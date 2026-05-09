@@ -19,6 +19,13 @@
     color: red;
   }
 
+  &__logo {
+    padding-top: 4rem;
+    // font-size: var(--text-3xl);
+    // font-weight: bold;
+    // color: var(--black);
+  }
+
   &__layout-container {
     // padding: 2rem;
     background-color: var(--black);

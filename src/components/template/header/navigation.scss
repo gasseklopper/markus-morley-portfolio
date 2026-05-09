@@ -35,8 +35,9 @@ html[data-header-visible] .navClass__logo-text {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100svh;
-  padding: 2.5rem;
+  height: 100vh;
+  height: 100%;
+  // padding: 2.5rem;
   display: flex;
   gap: 2rem;
   color: var(--base-300);
@@ -60,7 +61,7 @@ html[data-header-visible] .navClass__logo-text {
   }
 
   &__logo {
-    background-color: green;
+    // background-color: green;
     opacity: 1;
     svg {
       width: 60px;
@@ -116,23 +117,33 @@ html[data-header-visible] .navClass__logo-text {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  height: 100dvh;
   pointer-events: none;
   z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--surfaceAccent);
+  // color: white;
+  mix-blend-mode: difference;
 
   &__logo {
-    // background-color: purple;
     svg {
       width: 60px;
       height: 60px;
     }
+
+    a {
+     color: white;
+    }
   }
 
   &__toggle {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
+    // position: absolute;
+    // top: 2rem;
+    // right: 2rem;
+    height: 80px;
     color: var(--base-100);
     cursor: pointer;
     padding: 0.5rem;
@@ -297,7 +308,7 @@ html[data-header-visible] .navClass__logo-text {
   height: 0.08em;
   background: var(--surfaceAccent);
   background: var(--grey);
-  transform: translateY(-50%) scaleX(0);
+  // transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   z-index: 1;
   pointer-events: none;
@@ -310,7 +321,7 @@ html[data-header-visible] .navClass__logo-text {
   height: 0.08em;
   background: var(--surfaceAccent);
   background: var(--grey);
-  transform: translateY(-50%) scaleX(0);
+  // transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   z-index: 1;
   pointer-events: none;

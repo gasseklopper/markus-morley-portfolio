@@ -1,4 +1,6 @@
 import { component$, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
+import ImgImg2063 from "~/media/assets/images/photography/venedig/IMG_2063.jpg?jsx";
+import ImgImg2094 from "~/media/assets/images/photography/venedig/IMG_2094.jpg?jsx";
 import gentlyStyles from "./gently.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
@@ -355,13 +357,9 @@ export default component$(() => {
         <section class="hero_section sticky" aria-labelledby="hero-title">
           <div class="hero_container">
             <div class="hero_image-wrapper" aria-hidden="true">
-              <img
-                src="/public/assets/images/photography/venedig/IMG_2063.jpg"
+              <ImgImg2063
                 loading="lazy"
                 sizes="100vw"
-                width={4140}
-                height={2760}
-                // srcset="/public/assets/images/photography/venedig/IMG_1523.jpg 500w, /public/assets/images/photography/venedig/IMG_1523.jpg 800w, /public/assets/images/photography/venedig/IMG_1523.jpg 1080w, /public/assets/images/photography/venedig/IMG_1523.jpg 1600w, /public/assets/images/photography/venedig/IMG_1523.jpg 2000w, /public/assets/images/photography/venedig/IMG_1523.jpg 2600w, /public/assets/images/photography/venedig/IMG_1523.jpg 4140w"
                 alt="Ambient lighting across fabric backdrop"
                 class="hero_image"
               />
@@ -432,12 +430,9 @@ export default component$(() => {
         <footer class="footer_section" aria-labelledby="footer-title">
           <div class="footer_container">
             <div class="footer_image-wrapper" aria-hidden="true">
-              <img
-                src="/public/assets/images/photography/venedig/IMG_2094.jpg"
+              <ImgImg2094
                 alt=""
                 loading="lazy"
-                width={2400}
-                height={1600}
                 class="footer_image"
               />
             </div>

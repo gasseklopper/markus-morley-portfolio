@@ -6,6 +6,7 @@ import {
   useSignal,
   useVisibleTask$,
 } from "@builder.io/qwik";
+import ImgImageMalkasten from "~/media/assets/images/image_malkasten.png?jsx";
 
 export const Malkasten = component$(() => {
   const canvasRef = useSignal<HTMLCanvasElement>();
@@ -35,6 +36,7 @@ export const Malkasten = component$(() => {
   });
 
   // Setup canvas and event listeners when component is visible
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const canvas = canvasRef.value;
     if (!canvas) return;
@@ -172,8 +174,7 @@ export const Malkasten = component$(() => {
 
   return (
     <div class="relative h-96 w-full sm:h-[600px]">
-      <img
-        src="/assets/images/image_malkasten.png"
+      <ImgImageMalkasten
         alt="Portrait"
         class="absolute inset-0 h-full w-full object-cover"
       />

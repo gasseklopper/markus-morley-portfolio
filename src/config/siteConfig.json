@@ -141,28 +141,162 @@
     "nav": [
       {
         "name": "Home",
-        "link": "/"
+        "link": "/",
+        "folder": "src/routes",
+        "pattern": "index.tsx",
+        "type": "page"
       },
       {
         "name": "About",
-        "link": "/about"
+        "link": "/about",
+        "folder": "src/routes/about",
+        "pattern": "folder/index.tsx",
+        "type": "page"
       },
       {
         "name": "Portfolio",
-        "link": "/portfolio"
+        "link": "/portfolio",
+        "folder": "src/routes/portfolio",
+        "pattern": "folder/index.tsx + folder/layout.tsx",
+        "type": "page-with-layout",
+        "children": [
+          {
+            "name": "Color Theme",
+            "path": "/portfolio/color-theme",
+            "folder": "src/routes/portfolio/color-theme",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Farbkasten",
+            "path": "/portfolio/farbkasten",
+            "folder": "src/routes/portfolio/farbkasten",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Generative Art",
+            "path": "/portfolio/generative-art",
+            "folder": "src/routes/portfolio/generative-art",
+            "pattern": "folder/index.tsx",
+            "type": "page",
+            "children": [
+              {
+                "name": "Color Palette",
+                "path": "/portfolio/generative-art/color-palette",
+                "folder": "src/routes/portfolio/generative-art/color-palette",
+                "pattern": "folder/index.tsx",
+                "type": "page"
+              },
+              {
+                "name": "Connected Agents",
+                "path": "/portfolio/generative-art/connected-agents",
+                "folder": "src/routes/portfolio/generative-art/connected-agents",
+                "pattern": "folder/index.tsx",
+                "type": "page"
+              },
+              {
+                "name": "Crayon",
+                "path": "/portfolio/generative-art/crayon",
+                "folder": "src/routes/portfolio/generative-art/crayon",
+                "pattern": "folder/index.tsx",
+                "type": "page"
+              },
+              {
+                "name": "Drip Sort",
+                "path": "/portfolio/generative-art/drip-sort",
+                "folder": "src/routes/portfolio/generative-art/drip-sort",
+                "pattern": "folder/index.tsx",
+                "type": "page"
+              }
+            ]
+          },
+          {
+            "name": "Project 011",
+            "path": "/portfolio/project011",
+            "folder": "src/routes/portfolio/project011",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 012",
+            "path": "/portfolio/project012",
+            "folder": "src/routes/portfolio/project012",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 013",
+            "path": "/portfolio/project013",
+            "folder": "src/routes/portfolio/project013",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 014",
+            "path": "/portfolio/project014",
+            "folder": "src/routes/portfolio/project014",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 015",
+            "path": "/portfolio/project015",
+            "folder": "src/routes/portfolio/project015",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 016",
+            "path": "/portfolio/project016",
+            "folder": "src/routes/portfolio/project016",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 017",
+            "path": "/portfolio/project017",
+            "folder": "src/routes/portfolio/project017",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Project 018",
+            "path": "/portfolio/project018",
+            "folder": "src/routes/portfolio/project018",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          },
+          {
+            "name": "Roman Numeral Converter",
+            "path": "/portfolio/roman-numeral-converter",
+            "folder": "src/routes/portfolio/roman-numeral-converter",
+            "pattern": "folder/index.tsx",
+            "type": "page"
+          }
+        ]
       },
       {
         "name": "Konzept",
         "link": "/konzept",
-        "flag": "konzept"
+        "flag": "konzept",
+        "folder": "src/routes/konzept",
+        "pattern": "folder/index.tsx",
+        "type": "page"
       },
       {
         "name": "Impressum",
-        "link": "/impressum"
+        "link": "/impressum",
+        "folder": "src/routes/impressum",
+        "pattern": "folder/index.tsx",
+        "type": "page"
       },
       {
         "name": "Datenschutz",
-        "link": "/datenschutz"
+        "link": "/datenschutz",
+        "folder": "src/routes/datenschutz",
+        "pattern": "folder/index.tsx",
+        "type": "page"
       }
     ]
   },

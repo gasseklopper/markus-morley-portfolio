@@ -1,6 +1,8 @@
 import {
   $,
   component$,
+  noSerialize,
+  type NoSerialize,
   useSignal,
   useStyles$,
   useVisibleTask$,
@@ -50,20 +52,29 @@ export default component$(() => {
   const menuInfoRef = useSignal<HTMLElement>()
   const menuLinksWrapRef = useSignal<HTMLElement>()
 
-  const openTlRef = useSignal<gsap.core.Timeline>()
-  const closeTlRef = useSignal<gsap.core.Timeline>()
+  const openTlRef = useSignal<NoSerialize<gsap.core.Timeline>>()
+  const closeTlRef = useSignal<NoSerialize<gsap.core.Timeline>>()
 
   const openMenu$ = $(() => {
-    if (isAnimating.value || isMenuOpen.value) return
+    if (isAnimating.value || isMenuOpen.value || !openTlRef.value) return
     isAnimating.value = true
     isMenuOpen.value = true
     openTlRef.value?.restart()
   })
 
   const closeMenu$ = $(() => {
-    if (isAnimating.value || !isMenuOpen.value) return
+    if (isAnimating.value || !isMenuOpen.value || !closeTlRef.value) return
     isAnimating.value = true
     closeTlRef.value?.restart()
+  })
+
+  const toggleMenu$ = $(() => {
+    if (isMenuOpen.value) {
+      closeMenu$()
+      return
+    }
+
+    openMenu$()
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -206,6 +217,7 @@ export default component$(() => {
     const openTl = gsap.timeline({
       paused: true,
       onStart: () => {
+        nav.classList.add("is-menu-open")
         menu.classList.add("is-open")
         gsap.set(menuLinks, { opacity: 1 })
         splits.forEach(split => {
@@ -290,6 +302,7 @@ export default component$(() => {
         gsap.set(menuBg, { attr: { d: CLOSE_START } })
       },
       onComplete: () => {
+        nav.classList.remove("is-menu-open")
         menu.classList.remove("is-open")
         gsap.set(menu, { pointerEvents: "none" })
         gsap.set(menuBg, { attr: { d: OPEN_HIDDEN } })
@@ -338,12 +351,13 @@ export default component$(() => {
         ease: "power3.out",
       })
 
-    openTlRef.value = openTl
-    closeTlRef.value = closeTl
+    openTlRef.value = noSerialize(openTl)
+    closeTlRef.value = noSerialize(closeTl)
 
     cleanup(() => {
       openTl.kill()
       closeTl.kill()
+      nav.classList.remove("is-menu-open")
       hoverCleanups.forEach((fn) => fn())
       splits.forEach((split) => split.revert())
     })
@@ -375,11 +389,14 @@ export default component$(() => {
           class="navigation__toggle-button"
           aria-expanded={isMenuOpen.value}
           aria-controls="site-menu"
+          aria-label={isMenuOpen.value ? "Close menu" : "Open menu"}
+          type="button"
+          onClick$={toggleMenu$}
         >
-          <span ref={toggleMenuRef} onClick$={openMenu$} class="navigation__toggle-menu">
+          <span ref={toggleMenuRef} class="navigation__toggle-menu">
             Menu
           </span>
-          <span ref={toggleCloseRef} onClick$={closeMenu$} class="navigation__toggle-close">
+          <span ref={toggleCloseRef} class="navigation__toggle-close">
             Close
           </span>
         </button>

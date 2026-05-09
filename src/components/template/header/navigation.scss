@@ -31,37 +31,54 @@ html[data-header-visible] .navClass__logo-text {
 // }
 
 .menu {
-  position: absolute;
+  --menu-bg: var(--surface1, #f0eeee);
+  --menu-text: var(--text1, #222225);
+  --menu-muted: var(--text2, #5f5f66);
+  --menu-accent: var(--surfaceAccent, var(--primary, #8fdc55));
+
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  height: 100%;
-  // padding: 2.5rem;
+  min-height: 100dvh;
+  padding: clamp(1rem, 2.5vw, 2.5rem);
   display: flex;
   gap: 2rem;
-  color: var(--base-300);
-  // pointer-events: none;
+  color: var(--menu-text);
+  pointer-events: none;
   z-index: 1000;
-  // background-color: yellow;
+  isolation: isolate;
+  mix-blend-mode: normal;
+  background: transparent;
 
-  &__is-open {
+  &.is-open {
     pointer-events: all;
+    background: var(--menu-bg);
   }
 
   &__bg-svg {
     position: absolute;
-    // background-color: red;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: -1;
+    z-index: 0;
+    overflow: visible;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  &__bg-svg path {
+    fill: var(--menu-bg);
   }
 
   &__logo {
-    // background-color: green;
+    position: relative;
+    z-index: 1;
     opacity: 1;
     svg {
       width: 60px;
@@ -70,6 +87,8 @@ html[data-header-visible] .navClass__logo-text {
   }
 
   &__col {
+    position: relative;
+    z-index: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -77,7 +96,7 @@ html[data-header-visible] .navClass__logo-text {
 
     a {
       text-decoration: none;
-      color: var(--base-300);
+      color: var(--menu-text);
       font-size: clamp(2.5rem, 5vw, 5rem);
       font-size: clamp(4.5rem, 9vw, 9rem);
       line-height: 1.35;
@@ -91,7 +110,7 @@ html[data-header-visible] .navClass__logo-text {
     }
 
     p {
-      color: var(--base-200);
+      color: var(--menu-muted);
       margin-bottom: 1rem;
     }
 
@@ -128,6 +147,11 @@ html[data-header-visible] .navClass__logo-text {
   // color: white;
   mix-blend-mode: difference;
 
+  &.is-menu-open {
+    color: var(--text1, #222225);
+    mix-blend-mode: normal;
+  }
+
   &__logo {
     svg {
       width: 60px;
@@ -144,7 +168,7 @@ html[data-header-visible] .navClass__logo-text {
     // top: 2rem;
     // right: 2rem;
     height: 80px;
-    color: var(--base-100);
+    color: var(--surface1, #f0eeee);
     cursor: pointer;
     padding: 0.5rem;
     z-index: 1001;
@@ -157,14 +181,14 @@ html[data-header-visible] .navClass__logo-text {
   }
 
   &__toggle-menu {
-    color: var(--base-100);
+    color: var(--surface1, #f0eeee);
   }
 
   &__toggle-close {
     // position: absolute;
     // top: 1.5rem;
     // right: 0.5rem;
-    // color: var(--base-300);
+    color: var(--text1, #222225);
     opacity: 0;
   }
 
@@ -298,6 +322,7 @@ html[data-header-visible] .navClass__logo-text {
   position: relative;
   z-index: 2;
   display: block;
+  color: inherit;
 }
 
 .char__line {
@@ -307,7 +332,7 @@ html[data-header-visible] .navClass__logo-text {
   width: 100%;
   height: 0.08em;
   background: var(--surfaceAccent);
-  background: var(--grey);
+  background: var(--menu-accent, var(--grey));
   // transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   z-index: 1;
@@ -320,7 +345,7 @@ html[data-header-visible] .navClass__logo-text {
   width: 100%;
   height: 0.08em;
   background: var(--surfaceAccent);
-  background: var(--grey);
+  background: var(--menu-accent, var(--grey));
   // transform: translateY(-50%) scaleX(0);
   transform-origin: left center;
   z-index: 1;

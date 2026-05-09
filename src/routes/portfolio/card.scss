@@ -5,6 +5,9 @@
   --text--02: #000000;
   --outline-01: #37faff;
   --outline-02: #000000;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 8px;
   // border: 4px solid red;
 
@@ -41,22 +44,22 @@
   }
 
   &__body {
-    padding: 48px 24px;
+    padding: 32px 20px;
   }
 
   &__headline {
-    font-size: 2.8rem;
+    font-size: 2.4rem;
     font-weight: 900;
     margin-bottom: 1rem;
     margin-bottom: 0;
-    line-height: 3rem;
+    line-height: 2.6rem;
   }
 
   &__description {
     font-weight: 600;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     margin: 32px 0;
-    line-height: 1.7rem;
+    line-height: 1.5rem;
   }
 
   &__image-wrapper {
@@ -118,9 +121,10 @@
   }
 
   &__footer {
-    padding: 48px 24px;
+    padding: 32px 20px;
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
   }
 
   &__tagline {
@@ -153,11 +157,11 @@
     }
 
     .card__headline {
-      font-size: 4.8rem;
+      font-size: 3rem;
       font-weight: 900;
       margin-bottom: 1rem;
       margin-bottom: 0;
-      line-height: 5rem;
+      line-height: 3.2rem;
     }
 
     .card__description {
@@ -194,6 +198,35 @@
     &:hover {
       .card__image {
         transform: scale(1.1);
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .card {
+    &__body {
+      padding: 48px 24px;
+    }
+
+    &__headline {
+      font-size: 2.8rem;
+      line-height: 3rem;
+    }
+
+    &__description {
+      font-size: 1.3rem;
+      line-height: 1.7rem;
+    }
+
+    &__footer {
+      padding: 48px 24px;
+    }
+
+    &--primary {
+      .card__headline {
+        font-size: 4.8rem;
+        line-height: 5rem;
       }
     }
   }

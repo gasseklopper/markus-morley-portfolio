@@ -97,7 +97,7 @@ html[data-header-visible] .navClass__logo-text {
       text-decoration: none;
       color: var(--menu-text);
       font-size: clamp(2.5rem, 5vw, 5rem);
-      font-size: clamp(4.5rem, 9vw, 9rem);
+      font-size: clamp(2.5rem, 5vw, 5rem);
       line-height: 1.35;
       display: block;
       width: max-content;
@@ -144,7 +144,7 @@ html[data-header-visible] .navClass__logo-text {
   justify-content: space-between;
   color: var(--surfaceAccent);
   // color: white;
-  mix-blend-mode: difference;
+  mix-blend-mode: normal;
 
   &.is-menu-open {
     color: var(--text1, #222225);
@@ -152,6 +152,8 @@ html[data-header-visible] .navClass__logo-text {
   }
 
   &__logo {
+    mix-blend-mode: difference;
+
     svg {
       width: 60px;
       height: 60px;
@@ -163,13 +165,12 @@ html[data-header-visible] .navClass__logo-text {
   }
 
   &__toggle {
-    // position: absolute;
-    // top: 2rem;
-    // right: 2rem;
-    height: 80px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 80px;
     color: var(--surface1, #f0eeee);
-    cursor: pointer;
-    padding: 0.5rem;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
     z-index: 1001;
   }
 
@@ -179,16 +180,92 @@ html[data-header-visible] .navClass__logo-text {
     pointer-events: all;
   }
 
+  &__toggle-button {
+    align-items: center;
+    appearance: none;
+    background-color: #fcfcfd;
+    border: 0;
+    border-radius: 4px;
+    box-shadow:
+      rgba(45, 35, 66, 0.4) 0 2px 4px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+      #d6d6e7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395a;
+    cursor: pointer;
+    display: inline-grid;
+    font-family: var(--font-semibold, var(--font-base, inherit));
+    font-size: 18px;
+    justify-content: center;
+    line-height: 1;
+    min-height: 48px;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    transition:
+      box-shadow 0.15s,
+      transform 0.15s;
+  }
+
+  &__toggle-button:hover {
+    box-shadow:
+      rgba(45, 35, 66, 0.4) 0 4px 8px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+      #d6d6e7 0 -3px 0 inset;
+    transform: translateY(-2px);
+  }
+
+  &__toggle-button:active {
+    box-shadow: #d6d6e7 0 3px 7px inset;
+    transform: translateY(2px);
+  }
+
+  &__toggle-button:focus {
+    box-shadow:
+      #d6d6e7 0 0 0 1.5px inset,
+      rgba(45, 35, 66, 0.4) 0 2px 4px,
+      rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+      #d6d6e7 0 -3px 0 inset;
+  }
+
+  &__toggle-button span {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 1;
+    display: block;
+    color: currentColor;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
   &__toggle-menu {
-    color: var(--surface1, #f0eeee);
+    color: currentColor;
   }
 
   &__toggle-close {
-    // position: absolute;
-    // top: 1.5rem;
-    // right: 0.5rem;
-    color: var(--text1, #222225);
+    color: currentColor;
     opacity: 0;
+  }
+
+  @media (max-width: 640px) {
+    &__toggle {
+      padding: 0.75rem;
+    }
+
+    &__toggle-button {
+      min-height: 48px;
+      padding-inline: 14px;
+      font-size: 16px;
+    }
   }
 
   // &__toggle-menu.is-hidden,

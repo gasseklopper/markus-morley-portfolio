@@ -7,227 +7,27 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import { feature, mesh } from "topojson-client";
-import type { Feature, FeatureCollection, Geometry, MultiLineString } from "geojson";
+import type {
+  Feature,
+  FeatureCollection,
+  Geometry,
+  MultiLineString,
+} from "geojson";
 import type { GeoPermissibleObjects } from "d3";
 import type { GeometryCollection, Topology } from "topojson-specification";
+import styles from "./project014.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
-import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
+import {
+  FCC_TEST_SCRIPT_ID,
+  FCC_TEST_SCRIPT_SRC,
+  resetFccTestSuiteUI,
+} from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
 
-const styles = `
-  .choropleth-page {
-    display: grid;
-    gap: clamp(2rem, 5vw, 3rem);
-    padding: clamp(2.5rem, 4vw, 5rem) clamp(1.5rem, 6vw, 6rem) clamp(4rem, 8vw, 6rem);
-    color: var(--text1);
-    background:
-      radial-gradient(circle at top left, color-mix(in srgb, var(--primary) 16%, transparent) 0%, transparent 60%),
-      radial-gradient(circle at bottom right, color-mix(in srgb, var(--tertiary) 12%, transparent) 0%, transparent 65%),
-      var(--surface1);
-    min-height: 100vh;
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .choropleth-page .choropleth-content {
-    display: grid;
-    gap: clamp(2.25rem, 4vw, 3rem);
-    align-content: start;
-  }
-
-  .choropleth-page .choropleth-summary,
-  .choropleth-page .choropleth-actions {
-    margin: 0 auto;
-    width: min(1040px, 100%);
-  }
-
-  .choropleth-page .choropleth-summary {
-    text-align: center;
-  }
-
-  .choropleth-page .choropleth-actions {
-    text-align: center;
-  }
-
-  .choropleth-page .map-shell {
-    position: relative;
-    margin: 0 auto;
-    width: min(1040px, 100%);
-    border-radius: 2.25rem;
-    padding: clamp(1.75rem, 3vw, 2.75rem);
-    background:
-      linear-gradient(
-        145deg,
-        color-mix(in srgb, var(--surface-glass-1) 88%, transparent) 0%,
-        color-mix(in srgb, var(--surface-glass-2) 82%, transparent) 100%
-      );
-    border: 1px solid var(--surface-border);
-    box-shadow: 0 30px 120px var(--surface-shadow);
-    overflow: hidden;
-    height: clamp(520px, 70vh, 820px);
-  }
-
-  .choropleth-page .map-shell::after {
-    content: "";
-    position: absolute;
-    inset: 10% 15% auto auto;
-    width: clamp(180px, 28%, 240px);
-    height: clamp(180px, 28%, 240px);
-    background: radial-gradient(circle, color-mix(in srgb, var(--primary) 30%, transparent) 0%, transparent 68%);
-    opacity: 0.28;
-    pointer-events: none;
-    filter: blur(6px);
-  }
-
-  .choropleth-page header {
-    display: grid;
-    gap: 1rem;
-    max-width: 720px;
-  }
-
-  .choropleth-page #title {
-    font-size: clamp(2.5rem, 4vw, 3.5rem);
-    font-family: var(--font-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .choropleth-page #description {
-    font-size: clamp(0.95rem, 1vw + 0.5rem, 1.125rem);
-    color: var(--text2);
-    line-height: 1.65;
-    max-width: 56ch;
-  }
-
-  .choropleth-page .map-shell svg {
-    width: 100%;
-    height: auto;
-    border-radius: 1.5rem;
-    border: 1px solid color-mix(in srgb, var(--surface-border) 70%, transparent);
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--surface2) 84%, transparent) 0%,
-      color-mix(in srgb, var(--surface3) 64%, transparent) 100%
-    );
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--surface-border) 40%, transparent);
-  }
-
-  .choropleth-page .county {
-    stroke: color-mix(in srgb, var(--surface-border) 55%, transparent);
-    stroke-width: 0.4px;
-    transition: transform 0.18s ease, filter 0.18s ease, stroke-width 0.18s ease;
-    transform-origin: center;
-    cursor: pointer;
-  }
-
-  .choropleth-page .county:hover,
-  .choropleth-page .county:focus-visible {
-    stroke-width: 1.2px;
-    filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--surface-shadow) 60%, transparent));
-  }
-
-  .choropleth-page .state-boundary {
-    fill: none;
-    stroke: color-mix(in srgb, var(--surface-border) 96%, transparent);
-    stroke-width: 1.2px;
-    pointer-events: none;
-  }
-
-  .choropleth-page #legend {
-    font-family: var(--font-medium);
-    fill: color-mix(in srgb, var(--text2) 90%, transparent);
-  }
-
-  .choropleth-page #legend rect {
-    stroke: color-mix(in srgb, var(--surface-border) 75%, transparent);
-    stroke-width: 0.5px;
-    rx: 6px;
-  }
-
-  .choropleth-page .legend-axis path,
-  .choropleth-page .legend-axis line {
-    stroke: color-mix(in srgb, var(--surface-border) 70%, transparent);
-  }
-
-  .choropleth-page .legend-axis text {
-    fill: color-mix(in srgb, var(--text3) 96%, transparent);
-    font-size: clamp(0.65rem, 0.6rem + 0.22vw, 0.8rem);
-  }
-
-  .choropleth-page #tooltip {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    min-width: clamp(180px, 40vw, 260px);
-    padding: 1rem 1.25rem;
-    border-radius: 1.25rem;
-    background: color-mix(in srgb, var(--surface1) 94%, transparent);
-    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
-    box-shadow: 0 22px 60px color-mix(in srgb, var(--surface-shadow) 70%, transparent);
-    transform: translate(-50%, -100%) scale(0.96);
-    transition: opacity 0.18s ease, transform 0.18s ease;
-    backdrop-filter: blur(10px);
-    color: var(--text1);
-    line-height: 1.45;
-    z-index: 10;
-  }
-
-  .choropleth-page #tooltip strong {
-    font-family: var(--font-semibold);
-  }
-
-  @media (min-width: 1200px) {
-    .choropleth-page {
-      grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
-      gap: clamp(2.5rem, 4vw, 4rem);
-      padding: clamp(2.5rem, 4vw, 5rem) clamp(3.5rem, 6vw, 7rem) clamp(3rem, 6vw, 4.5rem);
-    }
-
-    .choropleth-page .choropleth-content {
-      position: sticky;
-      top: clamp(2.5rem, 4vw, 5rem);
-      max-width: 420px;
-    }
-
-    .choropleth-page .choropleth-summary,
-    .choropleth-page .choropleth-actions {
-      margin: 0;
-      width: 100%;
-    }
-
-    .choropleth-page header {
-      text-align: left;
-    }
-
-    .choropleth-page .choropleth-summary {
-      text-align: left;
-    }
-
-    .choropleth-page .choropleth-actions {
-      align-items: flex-start;
-      text-align: left;
-      gap: 1.5rem;
-    }
-
-    .choropleth-page .map-shell {
-      width: 100%;
-      height: clamp(640px, calc(100vh - 6rem), 1040px);
-      margin: 0;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .choropleth-page .map-shell {
-      border-radius: 1.75rem;
-    }
-
-  .choropleth-page .map-shell svg {
-      border-radius: 1.25rem;
-    }
-  }
-`;
-
-const COUNTY_DATA_URL = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
-const EDUCATION_DATA_URL = "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
+const COUNTY_DATA_URL =
+  "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
+const EDUCATION_DATA_URL =
+  "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
 
 const triggerDomContentLoaded = () => {
   if (document.readyState !== "loading") {
@@ -347,7 +147,8 @@ export default component$(() => {
       }
 
       const educationData: EducationDatum[] = await educationResponse.json();
-      const countyTopology = (await countyResponse.json()) as Topology<CountyObjects>;
+      const countyTopology =
+        (await countyResponse.json()) as Topology<CountyObjects>;
 
       const countyFeatures = feature(
         countyTopology,
@@ -370,28 +171,38 @@ export default component$(() => {
 
       const minEducation = d3.min(educationValues) ?? 0;
       const maxEducation = d3.max(educationValues) ?? 100;
-      const step = (maxEducation - minEducation) / (colorPalette.length - 1 || 1);
+      const step =
+        (maxEducation - minEducation) / (colorPalette.length - 1 || 1);
       const thresholdDomain = d3.range(minEducation + step, maxEducation, step);
-      const colorScale = d3.scaleThreshold<number, string>().domain(thresholdDomain).range(colorPalette);
+      const colorScale = d3
+        .scaleThreshold<number, string>()
+        .domain(thresholdDomain)
+        .range(colorPalette);
       const legendStops = [minEducation, ...colorScale.domain(), maxEducation];
 
       const renderChart = () => {
-        const { width: rawWidth, height: rawHeight } = wrapperElement.getBoundingClientRect();
+        const { width: rawWidth, height: rawHeight } =
+          wrapperElement.getBoundingClientRect();
         const measuredWidth = rawWidth || wrapperElement.clientWidth || 960;
-        const measuredHeight = rawHeight || wrapperElement.clientHeight || measuredWidth * 0.65;
+        const measuredHeight =
+          rawHeight || wrapperElement.clientHeight || measuredWidth * 0.65;
         const width = Math.max(360, measuredWidth);
         const height = Math.max(420, measuredHeight);
-        const margin = width > 1280
-          ? { top: 72, right: 64, bottom: 120, left: 64 }
-          : width > 960
-          ? { top: 64, right: 56, bottom: 110, left: 56 }
-          : width > 720
-          ? { top: 56, right: 40, bottom: 100, left: 40 }
-          : { top: 48, right: 28, bottom: 110, left: 32 };
+        const margin =
+          width > 1280
+            ? { top: 72, right: 64, bottom: 120, left: 64 }
+            : width > 960
+              ? { top: 64, right: 56, bottom: 110, left: 56 }
+              : width > 720
+                ? { top: 56, right: 40, bottom: 100, left: 40 }
+                : { top: 48, right: 28, bottom: 110, left: 32 };
 
         svg.selectAll("*").remove();
 
-        svg.attr("width", width).attr("height", height).attr("viewBox", `0 0 ${width} ${height}`);
+        svg
+          .attr("width", width)
+          .attr("height", height)
+          .attr("viewBox", `0 0 ${width} ${height}`);
 
         const chartGroup = svg
           .append("g")
@@ -399,10 +210,16 @@ export default component$(() => {
 
         const mapWidth = width - margin.left - margin.right;
         const legendSpace = width > 960 ? 120 : width > 720 ? 110 : 130;
-        const mapHeight = Math.max(260, height - margin.top - margin.bottom - legendSpace);
+        const mapHeight = Math.max(
+          260,
+          height - margin.top - margin.bottom - legendSpace,
+        );
         const projection = d3
           .geoIdentity()
-          .fitSize([mapWidth, mapHeight], countyFeatures as unknown as GeoPermissibleObjects);
+          .fitSize(
+            [mapWidth, mapHeight],
+            countyFeatures as unknown as GeoPermissibleObjects,
+          );
         const geoPath = d3.geoPath(projection);
 
         const mapGroup = chartGroup
@@ -448,18 +265,26 @@ export default component$(() => {
               .style("left", `${clientX}px`)
               .style("top", `${clientY - 12}px`);
 
-            d3.select<SVGPathElement, Feature<Geometry, { id: string }>>(this).raise();
+            d3.select<SVGPathElement, Feature<Geometry, { id: string }>>(
+              this,
+            ).raise();
           })
           .on("mousemove", function (event) {
             const [clientX, clientY] = d3.pointer(event, wrapperElement);
-            tooltip.style("left", `${clientX}px`).style("top", `${clientY - 12}px`);
+            tooltip
+              .style("left", `${clientX}px`)
+              .style("top", `${clientY - 12}px`);
           })
           .on("mouseleave blur", () => {
-            tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.96)");
+            tooltip
+              .style("opacity", 0)
+              .style("transform", "translate(-50%, -100%) scale(0.96)");
           });
 
         if (stateMesh) {
-          const statePath = geoPath(stateMesh as unknown as GeoPermissibleObjects);
+          const statePath = geoPath(
+            stateMesh as unknown as GeoPermissibleObjects,
+          );
           if (statePath) {
             statesGroup
               .append("path")
@@ -472,14 +297,17 @@ export default component$(() => {
         const legendX = (mapWidth - legendWidth) / 2;
         const legendY = mapHeight + 40;
 
-        const legendScale = d3.scaleLinear().domain([minEducation, maxEducation]).range([0, legendWidth]);
+        const legendScale = d3
+          .scaleLinear()
+          .domain([minEducation, maxEducation])
+          .range([0, legendWidth]);
 
         const legendGroup = chartGroup
           .append("g")
           .attr("id", "legend")
           .attr("transform", `translate(${legendX},${legendY})`);
 
-        const legendStepWidth = legendWidth / (colorPalette.length);
+        const legendStepWidth = legendWidth / colorPalette.length;
 
         legendGroup
           .selectAll("rect")
@@ -491,7 +319,10 @@ export default component$(() => {
           .attr("height", 16)
           .attr("fill", (d) => d);
 
-        const legendAxis = d3.axisBottom(legendScale).tickValues(legendStops).tickFormat((value) => `${value}%`);
+        const legendAxis = d3
+          .axisBottom(legendScale)
+          .tickValues(legendStops)
+          .tickFormat((value) => `${value}%`);
 
         legendGroup
           .append("g")
@@ -521,7 +352,8 @@ export default component$(() => {
       };
     } catch (error) {
       console.error(error);
-      errorMessage.value = "Failed to load county education data. Please try again.";
+      errorMessage.value =
+        "Failed to load county education data. Please try again.";
     } finally {
       isLoading.value = false;
     }
@@ -534,34 +366,39 @@ export default component$(() => {
   return (
     <div class="page choropleth-page">
       <div class="choropleth-content">
-        <header>
-          <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">Data Visualization Studio</p>
-          <h1 id="title">United States Education Attainment</h1>
-          <p id="description">
-            Choropleth view that explores the percentage of adults aged 25 and older with a bachelor&apos;s degree or above across
-            U.S. counties. Hover to reveal local insights and watch the legend adapt responsively to the canvas.
+        <header class="choropleth-header">
+          <p class="choropleth-eyebrow">Data Visualization Studio</p>
+          <h1 id="title" class="choropleth-title">
+            United States Education Attainment
+          </h1>
+          <p id="description" class="choropleth-description">
+            Choropleth view that explores the percentage of adults aged 25 and
+            older with a bachelor&apos;s degree or above across U.S. counties.
+            Hover to reveal local insights and watch the legend adapt
+            responsively to the canvas.
           </p>
         </header>
 
-        <section class="choropleth-summary mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
-            Data Visualization Projects
+        <section class="choropleth-summary">
+          <p class="choropleth-summary-title">Data Visualization Projects</p>
+          <p class="choropleth-summary-copy">
+            This choropleth pulls TopoJSON county shapes and education stats
+            with parallel fetch calls, converts them with topojson-client
+            helpers, and renders the map through D3 geo paths, threshold color
+            scales, and layered state meshes.
           </p>
-          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-            This choropleth pulls TopoJSON county shapes and education stats with parallel fetch calls, converts them with
-            topojson-client helpers, and renders the map through D3 geo paths, threshold color scales, and layered state meshes.
-          </p>
-          <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
-            Use the refresh-and-fetch button to fire both AJAX requests again, recompute the legend, and redraw the projection
-            so the map stays synced with the latest dataset.
+          <p class="choropleth-summary-copy">
+            Use the refresh-and-fetch button to fire both AJAX requests again,
+            recompute the legend, and redraw the projection so the map stays
+            synced with the latest dataset.
           </p>
         </section>
 
-        <div class="choropleth-actions mx-auto mt-8 flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+        <div class="choropleth-actions">
           <button
             type="button"
             onClick$={handleRefresh}
-            class="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface-glass-1)_70%,transparent)] px-2.5 py-1 text-[0.55rem] font-medium uppercase tracking-[0.18em] text-[var(--text3)] shadow-sm transition-all duration-200 hover:border-[var(--primary)]/50 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+            class="choropleth-refresh"
             disabled={isLoading.value}
           >
             <svg
@@ -570,7 +407,11 @@ export default component$(() => {
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
-              class={`h-[0.65rem] w-[0.65rem] ${isLoading.value ? "animate-spin" : ""}`}
+              class={
+                isLoading.value
+                  ? "choropleth-refresh-icon choropleth-refresh-icon--spinning"
+                  : "choropleth-refresh-icon"
+              }
               aria-hidden="true"
             >
               <path
@@ -581,10 +422,10 @@ export default component$(() => {
             </svg>
             {isLoading.value ? "Refreshing" : "Refresh data"}
           </button>
-          <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
-            {isLoading.value && <span>Loading dataset…</span>}
+          <div aria-live="polite" class="choropleth-status">
+            {isLoading.value && <span>Loading dataset...</span>}
             {!isLoading.value && errorMessage.value && (
-              <span class="text-[var(--primary)]">{errorMessage.value}</span>
+              <span class="choropleth-error">{errorMessage.value}</span>
             )}
           </div>
         </div>
@@ -592,10 +433,15 @@ export default component$(() => {
 
       <section class="map-shell" ref={wrapperRef}>
         <svg ref={svgRef} role="img" aria-labelledby="title description" />
-        <div id="tooltip" ref={tooltipRef} aria-hidden="true" data-education="" />
+        <div
+          id="tooltip"
+          ref={tooltipRef}
+          aria-hidden="true"
+          data-education=""
+        />
       </section>
     </div>
   );
 });
 
-export const head = buildHead(`${siteConfig.metadata.title} — Choropleth Map`);
+export const head = buildHead(`${siteConfig.metadata.title} - Choropleth Map`);

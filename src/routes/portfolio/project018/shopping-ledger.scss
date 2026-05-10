@@ -33,6 +33,11 @@
     var(--lab-bg);
 }
 
+.shopping-lab,
+.shopping-lab * {
+  box-sizing: border-box;
+}
+
 .shopping-lab::after {
   content: "";
   position: absolute;
@@ -72,7 +77,7 @@
   font-family: var(--font-bold, "Barlow bold"), var(--font-base);
   font-size: clamp(2.6rem, 6vw, 4.6rem);
   line-height: 0.98;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   max-width: 18ch;
   text-transform: uppercase;
   text-shadow: 0 12px 40px color-mix(in srgb, var(--lab-highlight) 35%, transparent);
@@ -221,6 +226,8 @@
   color: color-mix(in srgb, var(--lab-highlight) 86%, var(--lab-text-strong) 14%);
   font-family: var(--font-semibold, "Barlow semibold"), var(--font-base);
   letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-align: center;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 160ms ease, box-shadow 160ms ease;
@@ -284,6 +291,7 @@
   gap: 0.35rem;
   cursor: pointer;
   flex: 1;
+  min-width: 0;
 }
 
 .lab-list__select:focus-visible {
@@ -324,11 +332,13 @@
   font-size: 1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .lab-list__meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
   color: var(--lab-text-muted);
   font-size: 0.75rem;
@@ -368,6 +378,7 @@
   font-size: clamp(1.4rem, 1.2rem + 1vw, 2rem);
   text-transform: uppercase;
   letter-spacing: 0.12em;
+  overflow-wrap: anywhere;
 }
 
 .lab-canvas__empty {
@@ -400,6 +411,7 @@
 
 .lab-card__title {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
@@ -414,6 +426,7 @@
   letter-spacing: 0.08em;
   font-size: 0.95rem;
   color: var(--lab-text-strong);
+  overflow-wrap: anywhere;
 }
 
 .lab-card__body {
@@ -445,6 +458,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .lab-item__toggle {
@@ -494,6 +508,7 @@
 .lab-item__meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.7rem;
   justify-self: end;
   color: var(--lab-text-soft);
@@ -540,6 +555,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   transition: transform 150ms ease, border-color 150ms ease;
+  max-width: 100%;
 }
 
 .lab-chip:focus-within,
@@ -560,6 +576,7 @@
   font-size: inherit;
   text-transform: inherit;
   cursor: pointer;
+  min-width: 0;
 }
 
 .lab-chip__action:focus-visible {
@@ -570,6 +587,7 @@
   font-family: var(--font-semibold, "Barlow semibold"), var(--font-base);
   font-size: 0.82rem;
   letter-spacing: 0.1em;
+  overflow-wrap: anywhere;
 }
 
 .lab-chip__remove {
@@ -629,13 +647,170 @@
 }
 
 @media (max-width: 768px) {
+  .shopping-lab {
+    gap: clamp(1.5rem, 7vw, 2.75rem);
+    padding: clamp(5.25rem, 18vw, 6.5rem) clamp(1rem, 5vw, 1.5rem) clamp(3rem, 9vw, 4.5rem);
+  }
+
+  .lab-hero {
+    gap: 1.25rem;
+  }
+
+  .lab-hero__badge {
+    justify-self: start;
+    max-width: 100%;
+    padding-inline: 1rem;
+    letter-spacing: 0.18em;
+    white-space: normal;
+  }
+
+  .lab-hero__title {
+    max-width: 12ch;
+    font-size: clamp(2.25rem, 12vw, 3.4rem);
+    line-height: 1.02;
+  }
+
+  .lab-hero__lead {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .lab-hero__meta {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-hero__meta div {
+    padding: 1rem;
+    letter-spacing: 0.18em;
+  }
+
+  .lab-shell {
+    border-radius: var(--lab-radius-md);
+    padding: clamp(1rem, 5vw, 1.35rem);
+  }
+
   .lab-canvas__header {
-    justify-content: center;
-    text-align: center;
+    display: grid;
+    justify-content: stretch;
+    text-align: left;
   }
 
   .lab-canvas__header h3 {
     width: 100%;
+  }
+
+  .lab-canvas__header .lab-button,
+  .lab-sidebar__form .lab-button {
+    width: 100%;
+  }
+
+  .lab-list,
+  .lab-sidebar__form {
+    padding: 0.85rem;
+  }
+
+  .lab-list__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    padding: 0.85rem;
+  }
+
+  .lab-list__remove {
+    justify-self: start;
+    border-radius: var(--lab-radius-sm);
+  }
+
+  .lab-card {
+    padding: clamp(1rem, 5vw, 1.25rem);
+  }
+
+  .lab-card__title {
+    display: grid;
+    justify-content: stretch;
+    gap: 0.45rem;
+  }
+
+  .lab-card__title span {
+    font-size: 0.84rem;
+    letter-spacing: 0.08em;
+  }
+
+  .lab-items {
+    gap: 0.85rem;
+  }
+
+  .lab-item {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: 0.85rem;
+  }
+
+  .lab-item__label {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .lab-item__meta {
+    grid-column: 2;
+    justify-self: stretch;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .lab-item__remove {
+    border: 1px solid color-mix(in srgb, var(--lab-card-border) 60%, transparent);
+    background: color-mix(in srgb, var(--surface3) 35%, transparent);
+  }
+
+  .lab-frequency {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .lab-chip {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    border-radius: var(--lab-radius-sm);
+  }
+
+  .lab-chip__action {
+    justify-content: space-between;
+  }
+
+  .lab-settings {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .shopping-lab {
+    padding-inline: 0.85rem;
+  }
+
+  .lab-hero__badge,
+  .lab-button,
+  .lab-input,
+  .lab-tag,
+  .lab-flash {
+    letter-spacing: 0.1em;
+  }
+
+  .lab-shell {
+    margin-inline: -0.25rem;
+  }
+
+  .lab-item {
+    grid-template-columns: 1fr;
+  }
+
+  .lab-item__toggle,
+  .lab-item__meta {
+    grid-column: 1;
+  }
+
+  .lab-item__toggle {
+    justify-self: start;
   }
 }
 

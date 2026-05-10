@@ -4,7 +4,7 @@ import { buildHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(({ cleanup }) => {
     const canvas = document.getElementById(
       "dripSortCanvas",
     ) as HTMLCanvasElement | null;
@@ -30,6 +30,8 @@ export default component$(() => {
 
     const drips: Drip[] = [];
     const count = 60;
+
+    let animationFrameId = 0;
 
     const button = document.createElement("button");
     button.style.top = "110px";
@@ -91,10 +93,15 @@ export default component$(() => {
         }
       }
 
-      requestAnimationFrame(draw);
+      animationFrameId = requestAnimationFrame(draw);
     };
 
     draw();
+
+    cleanup(() => {
+      cancelAnimationFrame(animationFrameId);
+      button.remove();
+    });
   });
 
   return <canvas id="dripSortCanvas" />;

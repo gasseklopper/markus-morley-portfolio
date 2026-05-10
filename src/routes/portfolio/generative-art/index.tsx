@@ -4,7 +4,7 @@ import { buildHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(({ cleanup }) => {
     console.log("Color Stripes");
     const canvas = document.getElementById(
       "morleyDotsCanvas",
@@ -34,6 +34,8 @@ export default component$(() => {
     };
 
     const bubbles: Bubble[] = [];
+
+    let animationFrameId = 0;
 
     const button = document.createElement("button");
     button.style.top = "110px";
@@ -120,13 +122,18 @@ export default component$(() => {
           }
         }
       }
-      requestAnimationFrame(draw);
+      animationFrameId = requestAnimationFrame(draw);
     };
 
     while (bubbles.length < initBubbles) {
       bubbles.push(createBubble());
     }
     draw();
+
+    cleanup(() => {
+      cancelAnimationFrame(animationFrameId);
+      button.remove();
+    });
   });
 
   return <canvas id="morleyDotsCanvas" />;

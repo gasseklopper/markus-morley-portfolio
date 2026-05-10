@@ -2,81 +2,12 @@ import { $, component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import styles from "./password-forge.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
-
-const MIN_LENGTH = 12;
-const ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const ASCII_LOWER = "abcdefghijklmnopqrstuvwxyz";
-const ASCII_DIGITS = "0123456789";
-const ASCII_SYMBOLS = "!@#$%^&*()_+-=[]{}|;:',.<>?/`~\\\"";
-
-type PasswordOptions = {
-  length: number;
-  includeUpper: boolean;
-  includeLower: boolean;
-  includeDigits: boolean;
-  includeSymbols: boolean;
-};
-
-const MAX_UINT32_EXCLUSIVE = 0x100000000;
-
-const secureRandomInt = (upperBound: number) => {
-  if (upperBound <= 0) return 0;
-  const cryptoApi = globalThis.crypto;
-  if (!cryptoApi || !cryptoApi.getRandomValues) {
-    throw new Error("Secure random generator unavailable");
-  }
-
-  const rangeLimit = Math.floor(MAX_UINT32_EXCLUSIVE / upperBound) * upperBound;
-  const buffer = new Uint32Array(1);
-
-  let randomValue = 0;
-  do {
-    cryptoApi.getRandomValues(buffer);
-    randomValue = buffer[0] ?? 0;
-  } while (randomValue >= rangeLimit);
-
-  return randomValue % upperBound;
-};
-
-const shuffleCharacters = (chars: string[]) => {
-  for (let index = chars.length - 1; index > 0; index--) {
-    const randomIndex = secureRandomInt(index + 1);
-    [chars[index], chars[randomIndex]] = [chars[randomIndex], chars[index]];
-  }
-  return chars.join("");
-};
-
-const createPassword = ({
-  length,
-  includeUpper,
-  includeLower,
-  includeDigits,
-  includeSymbols,
-}: PasswordOptions) => {
-  const activeSets: string[] = [];
-
-  if (includeUpper) activeSets.push(ASCII_UPPER);
-  if (includeLower) activeSets.push(ASCII_LOWER);
-  if (includeDigits) activeSets.push(ASCII_DIGITS);
-  if (includeSymbols) activeSets.push(ASCII_SYMBOLS);
-
-  const setsToUse = activeSets.length > 0 ? activeSets : [ASCII_UPPER, ASCII_DIGITS];
-  const guaranteedCharacters: string[] = setsToUse.map((set) => {
-    const randomIndex = secureRandomInt(set.length);
-    return set[randomIndex] ?? "";
-  });
-
-  const pool = setsToUse.join("");
-  const remainingCharacters: string[] = [];
-  const targetLength = Math.max(MIN_LENGTH, length);
-
-  for (let index = guaranteedCharacters.length; index < targetLength; index++) {
-    const randomIndex = secureRandomInt(pool.length);
-    remainingCharacters.push(pool[randomIndex] ?? "");
-  }
-
-  return shuffleCharacters([...guaranteedCharacters, ...remainingCharacters]);
-};
+import {
+  type CharacterSetName,
+  MIN_LENGTH,
+  createPassword,
+  getActiveCharacterSetCount,
+} from "./password-forge-model";
 
 type CopyState = "idle" | "copied" | "error";
 
@@ -96,7 +27,9 @@ export default component$(() => {
     const input = event.target as HTMLInputElement | null;
     if (!input) return;
     const parsed = Number.parseInt(input.value, 10);
-    const safeValue = Number.isNaN(parsed) ? MIN_LENGTH : Math.max(MIN_LENGTH, parsed);
+    const safeValue = Number.isNaN(parsed)
+      ? MIN_LENGTH
+      : Math.max(MIN_LENGTH, parsed);
     length.value = safeValue;
     password.value = createPassword({
       length: length.value,
@@ -107,89 +40,37 @@ export default component$(() => {
     });
     copyState.value = "idle";
   });
-  const handleUpperToggle = $((event: Event) => {
-    const input = event.target as HTMLInputElement | null;
-    if (!input) return;
 
-    if (!input.checked && ![includeLower.value, includeDigits.value, includeSymbols.value].some(Boolean)) {
-      toggleWarning.value = "Keep at least one character set active.";
-      return;
-    }
+  const handleCharacterSetToggle = $(
+    (event: Event, setName: CharacterSetName) => {
+      const input = event.target as HTMLInputElement | null;
+      if (!input) return;
 
-    toggleWarning.value = null;
-    includeUpper.value = input.checked;
-    password.value = createPassword({
-      length: length.value,
-      includeUpper: includeUpper.value,
-      includeLower: includeLower.value,
-      includeDigits: includeDigits.value,
-      includeSymbols: includeSymbols.value,
-    });
-    copyState.value = "idle";
-  });
+      const nextOptions = {
+        length: length.value,
+        includeUpper: setName === "upper" ? input.checked : includeUpper.value,
+        includeLower: setName === "lower" ? input.checked : includeLower.value,
+        includeDigits:
+          setName === "digits" ? input.checked : includeDigits.value,
+        includeSymbols:
+          setName === "symbols" ? input.checked : includeSymbols.value,
+      };
 
-  const handleLowerToggle = $((event: Event) => {
-    const input = event.target as HTMLInputElement | null;
-    if (!input) return;
+      if (getActiveCharacterSetCount(nextOptions) === 0) {
+        toggleWarning.value = "Keep at least one character set active.";
+        input.checked = true;
+        return;
+      }
 
-    if (!input.checked && ![includeUpper.value, includeDigits.value, includeSymbols.value].some(Boolean)) {
-      toggleWarning.value = "Keep at least one character set active.";
-      return;
-    }
-
-    toggleWarning.value = null;
-    includeLower.value = input.checked;
-    password.value = createPassword({
-      length: length.value,
-      includeUpper: includeUpper.value,
-      includeLower: includeLower.value,
-      includeDigits: includeDigits.value,
-      includeSymbols: includeSymbols.value,
-    });
-    copyState.value = "idle";
-  });
-
-  const handleDigitToggle = $((event: Event) => {
-    const input = event.target as HTMLInputElement | null;
-    if (!input) return;
-
-    if (!input.checked && ![includeUpper.value, includeLower.value, includeSymbols.value].some(Boolean)) {
-      toggleWarning.value = "Keep at least one character set active.";
-      return;
-    }
-
-    toggleWarning.value = null;
-    includeDigits.value = input.checked;
-    password.value = createPassword({
-      length: length.value,
-      includeUpper: includeUpper.value,
-      includeLower: includeLower.value,
-      includeDigits: includeDigits.value,
-      includeSymbols: includeSymbols.value,
-    });
-    copyState.value = "idle";
-  });
-
-  const handleSymbolToggle = $((event: Event) => {
-    const input = event.target as HTMLInputElement | null;
-    if (!input) return;
-
-    if (!input.checked && ![includeUpper.value, includeLower.value, includeDigits.value].some(Boolean)) {
-      toggleWarning.value = "Keep at least one character set active.";
-      return;
-    }
-
-    toggleWarning.value = null;
-    includeSymbols.value = input.checked;
-    password.value = createPassword({
-      length: length.value,
-      includeUpper: includeUpper.value,
-      includeLower: includeLower.value,
-      includeDigits: includeDigits.value,
-      includeSymbols: includeSymbols.value,
-    });
-    copyState.value = "idle";
-  });
+      toggleWarning.value = null;
+      includeUpper.value = nextOptions.includeUpper;
+      includeLower.value = nextOptions.includeLower;
+      includeDigits.value = nextOptions.includeDigits;
+      includeSymbols.value = nextOptions.includeSymbols;
+      password.value = createPassword(nextOptions);
+      copyState.value = "idle";
+    },
+  );
 
   const regenerate = $(() => {
     password.value = createPassword({
@@ -235,8 +116,8 @@ export default component$(() => {
         <div class="hero__badge">Project 017</div>
         <h1 class="hero__title">ASCII Password Forge</h1>
         <p class="hero__lead">
-          A brutalist utility that forges uncompromising ASCII passwords. Built for teams that want a
-          tactile, trustworthy security ritual.
+          A brutalist utility that forges uncompromising ASCII passwords. Built
+          for teams that want a tactile, trustworthy security ritual.
         </p>
         <dl class="hero__meta">
           <div>
@@ -258,21 +139,31 @@ export default component$(() => {
         <header class="generator__header">
           <h2 id="password-forge">Generate resilient credentials</h2>
           <p>
-            Toggle the ingredients, set your length, and carve out a password with at least twelve ASCII
-            characters. Copy happens instantly.
+            Toggle the ingredients, set your length, and carve out a password
+            with at least twelve ASCII characters. Copy happens instantly.
           </p>
         </header>
 
         <div class="generator__panel">
           <div class="password-display" aria-live="polite">
-            <span class="password-display__value" aria-label="Generated password">
+            <span
+              class="password-display__value"
+              aria-label="Generated password"
+            >
               {password.value}
             </span>
             <div class="password-display__actions">
-              <button type="button" class="password-display__copy" onClick$={handleCopy}>
+              <button
+                type="button"
+                class="password-display__copy"
+                onClick$={handleCopy}
+              >
                 Copy
               </button>
-              <span class={`copy-state copy-state--${copyState.value}`} aria-live="assertive">
+              <span
+                class={`copy-state copy-state--${copyState.value}`}
+                aria-live="assertive"
+              >
                 {copyState.value === "copied"
                   ? "Copied to clipboard."
                   : copyState.value === "error"
@@ -305,7 +196,9 @@ export default component$(() => {
                 <input
                   type="checkbox"
                   checked={includeUpper.value}
-                  onChange$={handleUpperToggle}
+                  onChange$={(event) =>
+                    handleCharacterSetToggle(event, "upper")
+                  }
                 />
                 <span>Uppercase</span>
               </label>
@@ -313,7 +206,9 @@ export default component$(() => {
                 <input
                   type="checkbox"
                   checked={includeLower.value}
-                  onChange$={handleLowerToggle}
+                  onChange$={(event) =>
+                    handleCharacterSetToggle(event, "lower")
+                  }
                 />
                 <span>Lowercase</span>
               </label>
@@ -321,7 +216,9 @@ export default component$(() => {
                 <input
                   type="checkbox"
                   checked={includeDigits.value}
-                  onChange$={handleDigitToggle}
+                  onChange$={(event) =>
+                    handleCharacterSetToggle(event, "digits")
+                  }
                 />
                 <span>Digits</span>
               </label>
@@ -329,17 +226,28 @@ export default component$(() => {
                 <input
                   type="checkbox"
                   checked={includeSymbols.value}
-                  onChange$={handleSymbolToggle}
+                  onChange$={(event) =>
+                    handleCharacterSetToggle(event, "symbols")
+                  }
                 />
                 <span>Symbols</span>
               </label>
             </fieldset>
-            <p id="toggle-warning" class="control__warning" role="status" aria-live="polite">
+            <p
+              id="toggle-warning"
+              class="control__warning"
+              role="status"
+              aria-live="polite"
+            >
               {toggleWarning.value}
             </p>
           </div>
           <div class="generator__actions">
-            <button type="button" class="button button--primary" onClick$={regenerate}>
+            <button
+              type="button"
+              class="button button--primary"
+              onClick$={regenerate}
+            >
               Forge another password
             </button>
           </div>
@@ -352,23 +260,26 @@ export default component$(() => {
           <article>
             <h3>Minimum strength baked in</h3>
             <p>
-              Every password respects the twelve character floor and ensures balanced representation from
-              each active character set. The forge rejects weak mixes so teams can deliver secure defaults
-              without thinking twice.
+              Every password respects the twelve character floor and ensures
+              balanced representation from each active character set. The forge
+              rejects weak mixes so teams can deliver secure defaults without
+              thinking twice.
             </p>
           </article>
           <article>
             <h3>Clipboard ritual</h3>
             <p>
-              The copy trigger flashes feedback the moment the password hits your clipboard. No extra
-              dialogs, no second guessing—just press once and paste where it matters.
+              The copy trigger flashes feedback the moment the password hits
+              your clipboard. No extra dialogs, no second guessing—just press
+              once and paste where it matters.
             </p>
           </article>
           <article>
             <h3>Bold brutal aesthetic</h3>
             <p>
-              The interface leans on oversized typography, vivid gradients, and industrial textures that
-              celebrate utility. It is unapologetically loud, guiding attention directly to the generator.
+              The interface leans on oversized typography, vivid gradients, and
+              industrial textures that celebrate utility. It is unapologetically
+              loud, guiding attention directly to the generator.
             </p>
           </article>
         </div>

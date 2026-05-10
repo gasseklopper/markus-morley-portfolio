@@ -6,130 +6,10 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import * as d3 from "d3";
+import styles from "./project012.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
-
-const styles = `
-  .chart-wrapper {
-    position: relative;
-    margin: 0 auto;
-    width: min(100%, 960px);
-  }
-
-  .chart-theme {
-    --chart-bg-1: color-mix(in srgb, var(--surface-glass-1) 82%, transparent);
-    --chart-bg-2: color-mix(in srgb, var(--surface-glass-2) 88%, transparent);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 86%, #ffffff 14%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
-    --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 82%, #ffffff 18%);
-    --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #ffffff 4%);
-  }
-
-  svg {
-    width: 100%;
-    background: linear-gradient(135deg, var(--chart-bg-1) 0%, var(--chart-bg-2) 100%);
-    border-radius: 1.5rem;
-    border: 1px solid var(--surface-border);
-    box-shadow: 0 24px 80px var(--surface-shadow);
-    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  :global([data-theme="dark"]) .chart-theme {
-    --chart-bg-1: color-mix(in srgb, var(--surface2) 72%, rgba(148, 163, 184, 0.25) 28%);
-    --chart-bg-2: color-mix(in srgb, var(--surface3) 82%, rgba(148, 163, 184, 0.18) 18%);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 88%, #f8fafc 12%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 96%, #f8fafc 4%);
-    --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 88%, #f8fafc 12%);
-    --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #f8fafc 4%);
-  }
-
-  :global([data-theme="neon"]) .chart-theme {
-    --chart-bg-1: color-mix(in srgb, #062438 70%, rgba(57, 255, 20, 0.12) 30%);
-    --chart-bg-2: color-mix(in srgb, #092f47 82%, rgba(0, 229, 255, 0.16) 18%);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 90%, #ffffff 10%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
-    --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 90%, #ffffff 10%);
-    --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 98%, #ffffff 2%);
-  }
-
-  #tooltip {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    transform: translate(-50%, -100%) scale(0.98);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    min-width: 220px;
-    max-width: min(320px, 80vw);
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-    background: color-mix(in srgb, var(--surface1) 96%, transparent);
-    box-shadow: 0 18px 60px color-mix(in srgb, var(--surface-shadow) 70%, transparent);
-    backdrop-filter: blur(12px);
-    color: var(--text1);
-    line-height: 1.5;
-    font-family: var(--font-medium);
-  }
-
-  .dot {
-    stroke-width: 1.5px;
-    transition: transform 0.2s ease, filter 0.2s ease;
-    cursor: pointer;
-  }
-
-  .legend-dot {
-    stroke-width: 1.5px;
-  }
-
-  .dot:focus-visible {
-    outline: none;
-    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--primary) 50%, transparent));
-  }
-
-  .dot--doping {
-    fill: var(--chart-dot-doping-fill);
-    stroke: var(--chart-dot-doping-stroke);
-  }
-
-  .dot--clean {
-    fill: var(--chart-dot-clean-fill);
-    stroke: var(--chart-dot-clean-stroke);
-  }
-
-  .dot:hover {
-    transform: scale(1.15);
-    filter: drop-shadow(0 12px 30px color-mix(in srgb, var(--surface-shadow) 60%, transparent));
-  }
-
-  .axis path,
-  .axis line {
-    stroke: color-mix(in srgb, var(--surface-border) 85%, transparent);
-  }
-
-  .axis text {
-    fill: color-mix(in srgb, var(--text2) 92%, transparent);
-    font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.9rem);
-    font-family: var(--font-medium);
-    letter-spacing: 0.04em;
-  }
-
-  #legend text {
-    fill: color-mix(in srgb, var(--text2) 92%, transparent);
-    font-size: clamp(0.75rem, 0.72rem + 0.2vw, 0.9rem);
-    font-family: var(--font-medium);
-  }
-
-  @media (max-width: 768px) {
-    svg {
-      border-radius: 1.25rem;
-    }
-
-    #tooltip {
-      font-size: 0.95rem;
-    }
-  }
-`;
 
 const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
 const triggerDomContentLoaded = () => {
@@ -345,7 +225,7 @@ export default component$(() => {
           }
 
           const dopingInfo = datum.doping
-            ? `<div class="mt-3 rounded-xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-3 text-sm leading-snug text-[var(--chart-dot-doping-stroke)]">${datum.doping}</div>`
+            ? `<div class="project012__tooltip-doping">${datum.doping}</div>`
             : "";
 
           tooltip
@@ -353,9 +233,9 @@ export default component$(() => {
             .style("transform", "translate(-50%, -110%) scale(1)")
             .attr("data-year", datum.year.toString())
             .html(
-              `<div class="text-xs uppercase tracking-[0.28em] text-[var(--text3)]">${datum.year} • ${datum.timeLabel}</div>` +
-                `<div class="mt-1 text-lg font-semibold text-[var(--text1)]">${datum.name}</div>` +
-                `<div class="text-sm text-[var(--text2)]">${datum.nationality}</div>` +
+              `<div class="project012__tooltip-meta">${datum.year} - ${datum.timeLabel}</div>` +
+                `<div class="project012__tooltip-name">${datum.name}</div>` +
+                `<div class="project012__tooltip-nationality">${datum.nationality}</div>` +
                 dopingInfo,
             )
             .style("left", `${x}px`)
@@ -369,20 +249,22 @@ export default component$(() => {
         points
           .on("mouseenter", function (event, d) {
             showTooltip(event as MouseEvent, d);
-            d3.select(this).raise();
+            d3.select(this).raise().attr("r", dotRadius + 2);
           })
           .on("mousemove", function (event, d) {
             showTooltip(event as MouseEvent, d);
           })
           .on("mouseleave", () => {
             hideTooltip();
+            points.attr("r", dotRadius);
           })
           .on("focus", function (event, d) {
             showTooltip(event as FocusEvent, d);
-            d3.select(this).raise();
+            d3.select(this).raise().attr("r", dotRadius + 2);
           })
           .on("blur", () => {
             hideTooltip();
+            points.attr("r", dotRadius);
           });
 
         chartGroup
@@ -392,7 +274,7 @@ export default component$(() => {
           .attr("text-anchor", "middle")
           .attr("id", "title")
           .attr("fill", "var(--text1)")
-          .attr("font-size", isCompact ? "1.6rem" : "1.85rem")
+          .attr("font-size", isCompact ? "1.28rem" : "1.85rem")
           .attr("font-family", "var(--font-semibold)")
           .attr("letter-spacing", "0.02em")
           .text("Professional Cyclist Performance");
@@ -488,37 +370,37 @@ export default component$(() => {
   });
 
   return (
-    <section class="layout-shell mt-12 text-[var(--text1)] md:mt-20">
-      <div class="mx-auto max-w-5xl text-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
-        <h1 class="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
+    <section class="layout-shell project012">
+      <div class="project012__hero">
+        <p class="project012__eyebrow">Data Storytelling</p>
+        <h1 class="project012__title">
           Visualize Data with a Scatterplot Graph
         </h1>
-        <p class="mt-4 text-base leading-relaxed text-[var(--text3)] md:text-lg">
+        <p class="project012__lead">
           A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
           racer to explore doping allegations, nationalities, and performance patterns.
         </p>
       </div>
 
-      <div class="mx-auto mt-8 max-w-3xl rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-center shadow-[0_18px_60px_var(--surface-shadow)]">
-        <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+      <div class="project012__note">
+        <p class="project012__note-title">
           Data Visualization Projects
         </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+        <p class="project012__note-copy">
           Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
           scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
         </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+        <p class="project012__note-copy">
           Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
           and interactions respond to the live dataset.
         </p>
       </div>
 
-      <div class="mx-auto mt-8 flex max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2)]">
+      <div class="project012__controls">
         <button
           type="button"
           onClick$={handleRefresh}
-          class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+          class="project012__refresh"
           disabled={isLoading.value}
         >
           <svg
@@ -527,7 +409,7 @@ export default component$(() => {
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
-            class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
+            class={`project012__refresh-icon${isLoading.value ? " project012__refresh-icon--spinning" : ""}`}
             aria-hidden="true"
           >
             <path
@@ -538,70 +420,69 @@ export default component$(() => {
           </svg>
           {isLoading.value ? "Refreshing" : "Refresh data"}
         </button>
-        <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+        <div aria-live="polite" class="project012__status">
           {isLoading.value && <span>Loading dataset…</span>}
           {!isLoading.value && errorMessage.value && (
-            <span class="text-[var(--primary)]">{errorMessage.value}</span>
+            <span class="project012__error">{errorMessage.value}</span>
           )}
         </div>
       </div>
 
-      <div ref={wrapperRef} class="chart-wrapper chart-theme mt-12 flex w-full flex-col items-center px-2 sm:px-4">
+      <div ref={wrapperRef} class="project012__chart project012__chart-theme">
         <svg ref={svgRef} role="img" aria-labelledby="title" />
         <div
           ref={tooltipRef}
           id="tooltip"
-          class="font-medium"
+          class="project012__tooltip"
           aria-hidden="true"
         />
       </div>
 
       {cyclists.value.length > 0 && (
-        <div class="mt-10 w-full md:hidden">
-          <div class="chart-theme mx-auto max-w-5xl px-2 sm:px-4">
-            <h2 class="text-left text-2xl font-semibold text-[var(--text1)]">Race leaderboard</h2>
-            <p class="mt-2 text-sm leading-relaxed text-[var(--text3)]">
+        <div class="project012__leaderboard project012__chart-theme">
+          <div class="project012__leaderboard-inner">
+            <h2>Race leaderboard</h2>
+            <p>
               Scroll the mobile table to compare finishing times and see which riders carried doping allegations.
             </p>
-            <div class="mt-4 overflow-hidden rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] shadow-[0_18px_60px_var(--surface-shadow)]">
-              <div class="max-h-[480px] overflow-y-auto">
-                <table class="min-w-full divide-y divide-[var(--surface-border)] text-left text-sm">
-                  <caption class="sr-only">Cyclist finishing times with doping allegation status</caption>
-                  <thead class="bg-[var(--surface-glass-2)] text-[0.7rem] uppercase tracking-[0.32em] text-[var(--text3)]">
+            <div class="project012__table-shell">
+              <div class="project012__table-scroll">
+                <table class="project012__table">
+                  <caption class="project012__sr-only">Cyclist finishing times with doping allegation status</caption>
+                  <thead>
                     <tr>
-                      <th scope="col" class="px-4 py-3 text-left font-semibold">Year</th>
-                      <th scope="col" class="px-4 py-3 text-left font-semibold">Athlete</th>
-                      <th scope="col" class="px-4 py-3 text-left font-semibold">Time</th>
-                      <th scope="col" class="px-4 py-3 text-left font-semibold">Status</th>
+                      <th scope="col">Year</th>
+                      <th scope="col">Athlete</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-[var(--surface-border)] text-[var(--text2)]">
+                  <tbody>
                     {cyclists.value.map((rider) => (
                       <tr
                         key={`${rider.year}-${rider.name}`}
-                        class="transition-colors hover:bg-[var(--surface-glass-2)] focus-within:bg-[var(--surface-glass-2)]"
                       >
-                        <th scope="row" class="whitespace-nowrap px-4 py-3 text-sm font-semibold text-[var(--text1)]">
+                        <th scope="row" class="project012__table-year">
                           {rider.year}
                         </th>
-                        <td class="px-4 py-3">
-                          <div class="font-semibold text-[var(--text1)]">{rider.name}</div>
-                          <div class="text-xs uppercase tracking-[0.24em] text-[var(--text3)]">{rider.nationality}</div>
+                        <td>
+                          <div class="project012__table-name">{rider.name}</div>
+                          <div class="project012__table-nationality">{rider.nationality}</div>
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3 text-sm font-medium text-[var(--text2)]">{rider.timeLabel}</td>
-                        <td class="px-4 py-3">
+                        <td class="project012__table-time">{rider.timeLabel}</td>
+                        <td>
                           <span
-                            class={`inline-flex items-center rounded-full border px-3 py-1 text-[0.7rem] font-semibold tracking-[0.22em] ${
+                            class={`project012__status-pill ${
                               rider.doping
-                                ? "border-[var(--chart-dot-doping-stroke)] text-[var(--chart-dot-doping-stroke)]"
-                                : "border-[var(--chart-dot-clean-stroke)] text-[var(--chart-dot-clean-stroke)]"
+                                ? "project012__status-pill--doping"
+                                : "project012__status-pill--clean"
                             }`}
                             title={rider.doping || undefined}
                           >
                             {rider.doping ? "ALLEGED" : "CLEAR"}
                           </span>
                           {rider.doping && (
-                            <p class="mt-2 text-xs leading-snug text-[var(--text3)]">{rider.doping}</p>
+                            <p class="project012__table-doping">{rider.doping}</p>
                           )}
                         </td>
                       </tr>

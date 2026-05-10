@@ -10,6 +10,7 @@ import gsap from "gsap"
 export const PageTransition = component$(() => {
 	const overlayRef = useSignal<HTMLDivElement>()
 	const pathRef = useSignal<SVGPathElement>()
+	const transitionId = useSignal(0)
 
 	// eslint-disable-next-line qwik/no-use-visible-task
 	useVisibleTask$(() => {
@@ -19,7 +20,7 @@ export const PageTransition = component$(() => {
 
 		const length = path.getTotalLength()
 
-		gsap.set(overlay, { opacity: 0 })
+		gsap.set(overlay, { display: "none", opacity: 0 })
 		gsap.set(path, {
 			strokeDasharray: length,
 			strokeDashoffset: length,
@@ -31,6 +32,8 @@ export const PageTransition = component$(() => {
 		"qviewTransition",
 		$(async (event: Event) => {
 			const transition = (event as CustomEvent<any>).detail
+			const currentTransitionId = transitionId.value + 1
+			transitionId.value = currentTransitionId
 
 			const overlay = overlayRef.value
 			const path = pathRef.value
@@ -40,80 +43,102 @@ export const PageTransition = component$(() => {
 
 			gsap.killTweensOf([overlay, path])
 
-			gsap.set(overlay, { opacity: 1 })
+			const hideOverlay = () => {
+				if (transitionId.value !== currentTransitionId) return
+
+				gsap.killTweensOf([overlay, path])
+				gsap.set(overlay, { display: "none", opacity: 0 })
+				gsap.set(path, {
+					strokeDasharray: length,
+					strokeDashoffset: length,
+					strokeWidth: 2,
+				})
+			}
+
+			gsap.set(overlay, { display: "grid", opacity: 1 })
 			gsap.set(path, {
 				strokeDasharray: length,
 				strokeDashoffset: length,
 				strokeWidth: 2,
 			})
 
-			await transition.ready
+			try {
+				await transition.ready.catch(() => undefined)
 
-			// keep old page visible under overlay, hide new page completely
-			document.documentElement.animate(
-				[
-					{ opacity: 1, transform: "scale(1)" },
-					{ opacity: 0.96, transform: "scale(0.985)" },
-				],
-				{
-					duration: 700,
-					easing: "cubic-bezier(0.32, 0, 0.67, 0)",
-					fill: "forwards",
-					pseudoElement: "::view-transition-old(root)",
-				},
-			)
+				if (transitionId.value !== currentTransitionId) return
 
-			document.documentElement.animate(
-				[
-					{ opacity: 0.96, transform: "scale(1.015)" },
-					{ opacity: 1, transform: "scale(1)" },
-				],
-				{
-					duration: 700,
-					easing: "cubic-bezier(0.33, 1, 0.68, 1)",
-					fill: "forwards",
-					pseudoElement: "::view-transition-new(root)",
-				},
-			);
+				// keep old page visible under overlay, hide new page completely
+				document.documentElement.animate(
+					[
+						{ opacity: 1, transform: "scale(1)" },
+						{ opacity: 0.96, transform: "scale(0.985)" },
+					],
+					{
+						duration: 700,
+						easing: "cubic-bezier(0.32, 0, 0.67, 0)",
+						fill: "forwards",
+						pseudoElement: "::view-transition-old(root)",
+					},
+				)
 
-			await new Promise<void>((resolve) => {
-				const tl = gsap.timeline({ onComplete: resolve })
+				document.documentElement.animate(
+					[
+						{ opacity: 0.96, transform: "scale(1.015)" },
+						{ opacity: 1, transform: "scale(1)" },
+					],
+					{
+						duration: 700,
+						easing: "cubic-bezier(0.33, 1, 0.68, 1)",
+						fill: "forwards",
+						pseudoElement: "::view-transition-new(root)",
+					},
+				)
 
-				tl.to(path, {
-					strokeDashoffset: 0,
-					strokeWidth: 300,
-					duration: 1.4,
-					ease: "power2.inOut",
+				await new Promise<void>((resolve) => {
+					const tl = gsap.timeline({ onComplete: resolve })
+
+					tl.to(path, {
+						strokeDashoffset: 0,
+						strokeWidth: 300,
+						duration: 1.4,
+						ease: "power2.inOut",
+					})
+
+					// hold a bit if you want
+					tl.to({}, { duration: 0.1 })
+
+					// fade overlay out only near the end
+					tl.to(
+						overlay,
+						{
+							opacity: 0,
+							duration: 0.45,
+							ease: "power2.inOut",
+						},
+						"-=0.1",
+					)
 				})
 
-				// hold a bit if you want
-				tl.to({}, { duration: 0.1 })
+				if (transitionId.value !== currentTransitionId) return
 
-				// fade overlay out only near the end
-				tl.to(
-					overlay,
+				// now reveal the new page AFTER overlay animation is done
+				const revealAnimation = document.documentElement.animate(
+					[
+						{ opacity: 0, transform: "scale(1.015)" },
+						{ opacity: 1, transform: "scale(1)" },
+					],
 					{
-						opacity: 0,
-						duration: 0.45,
-						ease: "power2.inOut",
+						duration: 450,
+						easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+						fill: "forwards",
+						pseudoElement: "::view-transition-new(root)",
 					},
-					"-=0.1",
 				)
-			})
 
-			// now reveal the new page AFTER overlay animation is done
-			document.documentElement.animate(
-				[
-					{ opacity: 0, transform: "scale(1.015)" },
-					{ opacity: 1, transform: "scale(1)" },
-				],
-				{
-					duration: 450,
-					easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-					fill: "forwards",
-					pseudoElement: "::view-transition-new(root)",
-				},
-			)
+				await revealAnimation.finished.catch(() => undefined)
+			} finally {
+				hideOverlay()
+			}
 		}),
 	)
 

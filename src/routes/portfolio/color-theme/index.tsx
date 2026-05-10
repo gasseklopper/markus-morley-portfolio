@@ -1,7 +1,15 @@
-import { component$, useVisibleTask$, useStore, useSignal, $ } from "@builder.io/qwik";
+import {
+  $,
+  component$,
+  useSignal,
+  useStore,
+  useStyles$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import { themeStorageKey } from "~/components/theme/preference-scripts";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
+import styles from "./color-theme.scss?inline";
 
 interface Theme {
   name: string;
@@ -159,6 +167,8 @@ const currentVarNames = [
 ];
 
 export default component$(() => {
+  useStyles$(styles);
+
   const themeOptions = ["light", "dark", "neon", "pastell"] as const;
   type ThemeName = (typeof themeOptions)[number];
   const currentTheme = useSignal<ThemeName>("light");
@@ -176,12 +186,17 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    const storedTheme = localStorage.getItem(themeStorageKey) as ThemeName | null;
-    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const storedTheme = localStorage.getItem(
+      themeStorageKey,
+    ) as ThemeName | null;
+    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
       ? "dark"
       : "light";
     const theme =
-      storedTheme && themeOptions.includes(storedTheme) ? storedTheme : preferredTheme;
+      storedTheme && themeOptions.includes(storedTheme)
+        ? storedTheme
+        : preferredTheme;
     if (!storedTheme) {
       localStorage.setItem(themeStorageKey, theme);
     }
@@ -190,7 +205,9 @@ export default component$(() => {
     updateCurrentColors();
 
     const observer = new MutationObserver(() => {
-      const newTheme = document.documentElement.getAttribute("data-theme") as ThemeName | null;
+      const newTheme = document.documentElement.getAttribute(
+        "data-theme",
+      ) as ThemeName | null;
       if (newTheme && themeOptions.includes(newTheme)) {
         currentTheme.value = newTheme;
         updateCurrentColors();
@@ -207,60 +224,115 @@ export default component$(() => {
     updateCurrentColors();
   });
 
+  const formatThemeName = (theme: ThemeName) =>
+    theme.charAt(0).toUpperCase() + theme.slice(1);
+
   return (
-    <>
-      <div class="mb-8 flex items-center justify-between">
-        <h1>Color Theme</h1>
-        <div class="flex gap-2">
-          {themeOptions.map((t) => (
-            <button
-              key={t}
-              type="button"
-              class="cursor-pointer rounded-md border border-[var(--color-text)] bg-[var(--color-bg)] px-3 py-1 text-sm text-[var(--color-text)] transition duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg)] aria-[pressed=true]:translate-y-[1px] aria-[pressed=true]:border-[var(--color-primary)] aria-[pressed=true]:bg-[var(--color-primary)] aria-[pressed=true]:text-[var(--color-bg)] aria-[pressed=true]:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]"
-              aria-pressed={currentTheme.value === t}
-              onClick$={() => setTheme$(t)}
-            >
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-      <section class="mb-8">
-        <h2>Current</h2>
-        <p>Resolved variables from the active theme.</p>
-        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
-          {current.colors.map((c) => (
-            <div class="flex items-center gap-2" key={c.name}>
-              <div class={`h-10 w-10 rounded border bg-[var(--${c.name})]`} />
-              <div class="text-sm">
-                <div>{c.name}</div>
-                <div>{c.value}</div>
+    <main class="color-theme page">
+      <section class="color-theme__hero">
+        <div class="layout-shell">
+          <div class="color-theme__hero-panel">
+            <div class="color-theme__intro">
+              <span class="color-theme__eyebrow">Design Tokens</span>
+              <h1>Color Theme</h1>
+              <p>
+                A live palette overview for the active interface theme,
+                including resolved CSS variables and the source values for each
+                preset.
+              </p>
+            </div>
+
+            <div class="color-theme__switcher" aria-label="Theme options">
+              <span class="color-theme__switcher-label">Theme</span>
+              <div class="color-theme__theme-options">
+                {themeOptions.map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    class="color-theme__button"
+                    aria-pressed={currentTheme.value === t}
+                    onClick$={() => setTheme$(t)}
+                  >
+                    {formatThemeName(t)}
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
-      {themes.map((theme) => (
-        <section key={theme.name} class="mb-8">
-          <h2>{theme.name}</h2>
-          <p>{theme.description}</p>
-          <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
-            {theme.colors.map((c) => (
-              <div class="flex items-center gap-2" key={c.name}>
+
+      <div class="layout-shell color-theme__content">
+        <section class="color-theme__section color-theme__section--current">
+          <div class="color-theme__section-header">
+            <span class="color-theme__eyebrow">Current</span>
+            <div>
+              <h2>Resolved Variables</h2>
+              <p>Values read from the active theme on the document root.</p>
+            </div>
+          </div>
+          <div
+            class="color-theme__swatch-grid"
+            aria-label="Current theme colors"
+          >
+            {current.colors.map((c) => (
+              <article class="color-theme__swatch" key={c.name}>
                 <div
-                  class="h-10 w-10 rounded border"
+                  class="color-theme__swatch-preview"
                   style={{ background: c.value }}
+                  aria-hidden="true"
                 />
-                <div class="text-sm">
-                  <div>{c.name}</div>
-                  <div>{c.value}</div>
+                <div class="color-theme__swatch-copy">
+                  <h3>{c.name}</h3>
+                  <p>{c.value || "Not set"}</p>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </section>
-      ))}
-    </>
+
+        <section class="color-theme__section">
+          <div class="color-theme__section-header">
+            <span class="color-theme__eyebrow">Presets</span>
+            <div>
+              <h2>Theme Palettes</h2>
+              <p>Source token values grouped by available theme mode.</p>
+            </div>
+          </div>
+
+          <div class="color-theme__palette-list">
+            {themes.map((theme) => (
+              <article class="color-theme__palette" key={theme.name}>
+                <header class="color-theme__palette-header">
+                  <div>
+                    <h3>{theme.name}</h3>
+                    <p>{theme.description}</p>
+                  </div>
+                </header>
+                <div
+                  class="color-theme__swatch-grid color-theme__swatch-grid--compact"
+                  aria-label={`${theme.name} theme colors`}
+                >
+                  {theme.colors.map((c) => (
+                    <article class="color-theme__swatch" key={c.name}>
+                      <div
+                        class="color-theme__swatch-preview"
+                        style={{ background: c.value }}
+                        aria-hidden="true"
+                      />
+                      <div class="color-theme__swatch-copy">
+                        <h4>{c.name}</h4>
+                        <p>{c.value}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
   );
 });
 

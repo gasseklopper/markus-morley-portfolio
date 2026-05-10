@@ -32,6 +32,17 @@
     }
   },
   {
+    "name": "test-codex",
+    "path": "/portfolio/test-codex",
+    "title": "test-codex - Markus Morley personal portfolio",
+    "description": "Photographic GSAP motion art direction study with ScrollTrigger, masked reveals, and micro interactions.",
+    "variation": "secondary",
+    "image": {
+      "src": "/assets/images/photography/black/Template_index_014.jpg",
+      "alt": "test-codex photographic motion study preview"
+    }
+  },
+  {
     "name": "Project 012",
     "path": "/portfolio/project012",
     "title": "Project 012 - Markus Morley personal portfolio",

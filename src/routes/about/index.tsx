@@ -1,5 +1,5 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
-import styles from "../index.scss?inline";
+import styles from "./about.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
 import { AboutProfile } from "~/components/about/about-profile";
@@ -172,7 +172,7 @@ const resumeHighlights: ResumeHighlight[] = [
 export default component$(() => {
   useStyles$(styles);
   return (
-    <div class="page relative text-[var(--text1)]">
+    <div class="about-page page relative text-[var(--text1)]">
       {/* Hero */}
       <section class="relative overflow-hidden border-b border-[color-mix(in_srgb,var(--surface-border)_80%,transparent)] bg-[radial-gradient(circle_at_top_left,_var(--surface2)_0%,_var(--surface1)_75%)] text-[var(--text1)]">
         <div

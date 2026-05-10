@@ -1,0 +1,506 @@
+@use "../../styles/variables" as *;
+
+.about-page {
+  --about-radius-lg: 2rem;
+  --about-radius-xl: 2.5rem;
+  --about-panel: color-mix(in srgb, var(--surface1) 90%, transparent);
+  --about-panel-strong: color-mix(in srgb, var(--surface2) 82%, transparent);
+  --about-border: color-mix(in srgb, var(--surface-border) 78%, transparent);
+  --about-shadow: 0 28px 90px -52px var(--surface-shadow);
+
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  color: var(--text1);
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  dl,
+  ol,
+  ul {
+    margin-top: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  > section:first-of-type {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--about-border);
+    background:
+      radial-gradient(
+        circle at top right,
+        color-mix(in srgb, var(--primary) 16%, transparent) 0%,
+        transparent 42rem
+      ),
+      radial-gradient(circle at top left, var(--surface2) 0%, var(--surface1) 75%);
+  }
+
+  > section:first-of-type > .layout-shell,
+  > .layout-shell {
+    width: min(100% - clamp(2rem, 7vw, 8rem), var(--layout-shell-max, 1180px));
+    max-width: 1180px;
+    margin-inline: auto;
+  }
+
+  > section:first-of-type > .layout-shell {
+    position: relative;
+    padding-block: clamp(5.5rem, 10vw, 8rem) clamp(3rem, 7vw, 5rem);
+  }
+
+  > section:first-of-type > .layout-shell > div {
+    display: grid;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+    padding: clamp(1.5rem, 4vw, 4rem);
+    border: 1px solid var(--about-border);
+    border-radius: var(--about-radius-xl);
+    background: var(--about-panel);
+    box-shadow: var(--about-shadow);
+    backdrop-filter: blur(12px);
+  }
+
+  > section:first-of-type > .layout-shell > div > div:first-child {
+    display: grid;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  > section:first-of-type span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  > section:first-of-type h1 {
+    max-width: 12ch;
+    margin-bottom: 1.5rem;
+    font-size: clamp(2.5rem, 8vw, 6.75rem);
+    font-weight: 800;
+    line-height: 0.96;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  > section:first-of-type p {
+    max-width: 42rem;
+    margin-bottom: 0;
+    color: var(--text2);
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  > section:first-of-type h1 + p,
+  > section:first-of-type .space-y-6 {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  > section:first-of-type .space-y-10 > span:first-child,
+  > section:first-of-type aside header span,
+  > .layout-shell section > div > div > span,
+  .about-profile span[class*="uppercase"] {
+    width: fit-content;
+    border: 1px solid var(--about-border);
+    border-radius: 999px;
+    background: var(--about-panel-strong);
+    padding: 0.65rem 1rem;
+    color: var(--text3);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  > section:first-of-type .flex.flex-col.gap-4 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    color: var(--text3);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  > section:first-of-type aside {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2rem;
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border: 1px solid var(--about-border);
+    border-radius: var(--about-radius-lg);
+    background: var(--about-panel-strong);
+    box-shadow: 0 24px 80px -55px var(--surface-shadow);
+  }
+
+  > section:first-of-type aside header {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  > section:first-of-type aside header > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  > section:first-of-type aside h2 {
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.05;
+  }
+
+  > section:first-of-type aside h3 {
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  > section:first-of-type aside dl {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 0;
+  }
+
+  > section:first-of-type aside dl > div {
+    display: grid;
+    gap: 0.25rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--about-border);
+  }
+
+  > section:first-of-type aside dt {
+    color: var(--text3);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  > section:first-of-type aside dd {
+    margin: 0;
+    color: var(--text2);
+    line-height: 1.45;
+  }
+
+  > section:first-of-type aside article {
+    padding: 1.25rem;
+    border: 1px solid var(--about-border);
+    border-radius: 1.25rem;
+    background: color-mix(in srgb, var(--surface1) 96%, transparent);
+    box-shadow: 0 18px 70px -60px var(--surface-shadow);
+  }
+
+  > section:first-of-type aside article p:first-child,
+  > section:first-of-type aside > p:last-child {
+    color: var(--text3);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .about-profile {
+    width: min(100% - clamp(2rem, 7vw, 8rem), var(--layout-shell-max, 1180px));
+    max-width: 1180px;
+    margin: clamp(3rem, 7vw, 5rem) auto 0;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--about-border);
+    border-radius: var(--about-radius-xl);
+    background: radial-gradient(circle at top, var(--surface2) 0%, var(--surface1) 72%);
+    box-shadow: 0 32px 120px -70px var(--surface-shadow);
+  }
+
+  .about-profile__layout,
+  .about-profile__details {
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .about-profile__layout > div:first-child,
+  .about-profile__biography,
+  .about-profile__services,
+  > .layout-shell > section {
+    min-width: 0;
+    border: 1px solid var(--about-border);
+    border-radius: var(--about-radius-lg);
+    background: var(--about-panel);
+    box-shadow: 0 22px 80px -62px var(--surface-shadow);
+  }
+
+  .about-profile__layout > div:first-child {
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    text-align: center;
+  }
+
+  .about-profile__layout > div:first-child > div:first-child {
+    width: clamp(8.5rem, 26vw, 11rem);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 4px solid var(--primary);
+    border-radius: 999px;
+    background: var(--surface1);
+    box-shadow: 0 18px 50px -32px var(--surface-shadow);
+  }
+
+  .about-profile__layout img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-profile h2,
+  .about-profile h3,
+  .about-profile h4 {
+    margin-bottom: 0;
+    line-height: 1.1;
+  }
+
+  .about-profile a[href="#download-cv"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.8rem;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    background: var(--primary);
+    color: var(--brand-inverted);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 18px 45px -26px var(--brand-glow);
+  }
+
+  .about-profile__biography,
+  .about-profile__services {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .about-profile__facts,
+  .about-profile__services-grid {
+    gap: 1rem;
+  }
+
+  .about-profile__facts > div,
+  .about-profile__services-grid > div,
+  .about-page-card {
+    border: 1px solid var(--about-border);
+    border-radius: 1.25rem;
+    background: var(--about-panel-strong);
+  }
+
+  .about-profile__facts > div {
+    padding: 1rem;
+  }
+
+  .about-profile__services-grid > div {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  > .layout-shell {
+    padding-block: clamp(3rem, 7vw, 5rem);
+  }
+
+  > .layout-shell > section {
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  > .layout-shell > section:first-child {
+    max-width: 46rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  > .layout-shell > section + section {
+    margin-top: clamp(3rem, 7vw, 6rem);
+  }
+
+  > .layout-shell h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.05;
+  }
+
+  > .layout-shell p,
+  > .layout-shell li {
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  > .layout-shell section > div:first-child {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  > .layout-shell section > div:first-child:has(+ ul),
+  > .layout-shell section > div:first-child:has(+ ol) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  > .layout-shell ul[aria-label="Tool stack"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0.75rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  > .layout-shell ul[aria-label="Tool stack"] span {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--about-border);
+    border-radius: 999px;
+    background: var(--about-panel-strong);
+    color: var(--text2);
+    font-size: 0.92rem;
+  }
+
+  > .layout-shell ol {
+    display: grid;
+    gap: 1.1rem;
+    margin: 2rem 0 0;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--about-border);
+    list-style: none;
+  }
+
+  > .layout-shell ol li {
+    position: relative;
+  }
+
+  > .layout-shell ol li > span:first-child {
+    position: absolute;
+    left: -1.82rem;
+    top: 0.6rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--primary);
+  }
+
+  > .layout-shell ol a {
+    text-decoration: underline;
+    text-decoration-color: var(--surface-border);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25rem;
+  }
+
+  > .layout-shell section:last-child > div:last-child {
+    display: grid;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  > .layout-shell section:last-child ul:not([aria-label]) {
+    display: grid;
+    gap: 0.8rem;
+    margin: 1rem 0 0;
+    padding-left: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .about-page {
+    > section:first-of-type aside dl > div {
+      grid-template-columns: minmax(8rem, 0.8fr) minmax(0, 1.2fr);
+      align-items: baseline;
+    }
+
+    .about-profile__facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > .layout-shell section:last-child > div:last-child {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-page {
+    > section:first-of-type > .layout-shell > div {
+      grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+    }
+
+    > section:first-of-type .flex.flex-col.gap-4 {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .about-profile__layout {
+      display: grid;
+      grid-template-columns: minmax(18rem, 0.34fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .about-profile__facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .about-profile__services-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .about-page {
+    --about-radius-lg: 1.25rem;
+    --about-radius-xl: 1.5rem;
+
+    > section:first-of-type > .layout-shell,
+    > .layout-shell,
+    .about-profile {
+      width: min(100% - 1.5rem, 100%);
+    }
+
+    > section:first-of-type h1 {
+      max-width: 16ch;
+      font-size: clamp(1.95rem, 7.2vw, 2.35rem);
+      line-height: 1;
+    }
+
+    > section:first-of-type aside header > div {
+      display: grid;
+    }
+
+    > .layout-shell ul[aria-label="Tool stack"] {
+      grid-template-columns: 1fr;
+    }
+  }
+}

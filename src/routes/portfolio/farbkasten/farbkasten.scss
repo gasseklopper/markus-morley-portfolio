@@ -1,0 +1,42 @@
+.farbkasten-page {
+  width: min(100% - 2rem, 1120px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: clamp(5.5rem, 24vw, 9rem) 0 clamp(3rem, 8vw, 6rem);
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.farbkasten-page__header {
+  max-width: 760px;
+}
+
+.farbkasten-page__header h1 {
+  margin: 0;
+  color: var(--color-text, #111);
+  font-size: clamp(3rem, 6vw, 4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.farbkasten-page__header p {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  color: color-mix(in srgb, var(--color-text, #111) 72%, transparent);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.4;
+}
+
+@media (min-width: 960px) {
+  .farbkasten-page {
+    grid-template-columns: minmax(25rem, 0.42fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .farbkasten-page {
+    padding-top: 148px;
+  }
+}

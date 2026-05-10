@@ -1,15 +1,20 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useStyles$ } from "@builder.io/qwik";
 import { Malkasten } from "~/components/malkasten/Malkasten";
 import siteConfig from "~/config/siteConfig.json";
 import { buildHead } from "~/utils/head";
+import styles from "./farbkasten.scss?inline";
 
 export default component$(() => {
+  useStyles$(styles);
+
   return (
-    <>
-      <h1>Farbkasten</h1>
-      <p>Paint over the portrait using the brand color.</p>
+    <section class="farbkasten-page">
+      <header class="farbkasten-page__header">
+        <h1>Farbkasten</h1>
+        <p>Paint over the portrait using the brand color.</p>
+      </header>
       <Malkasten />
-    </>
+    </section>
   );
 });
 

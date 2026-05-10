@@ -4,11 +4,15 @@ import {
   noSerialize,
   type NoSerialize,
   useSignal,
+  useStyles$,
   useVisibleTask$,
 } from "@builder.io/qwik";
 import ImgImageMalkasten from "~/media/assets/images/image_malkasten.png?jsx";
+import styles from "./malkasten.scss?inline";
 
 export const Malkasten = component$(() => {
+  useStyles$(styles);
+
   const canvasRef = useSignal<HTMLCanvasElement>();
   const drawing = useSignal(false);
   const ctx = useSignal<NoSerialize<CanvasRenderingContext2D> | null>(null);
@@ -47,11 +51,23 @@ export const Malkasten = component$(() => {
       .getPropertyValue("--brand")
       .trim();
     const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.max(1, Math.round(rect.width * dpr));
+      const height = Math.max(1, Math.round(rect.height * dpr));
+
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+      }
+
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
-    window.addEventListener("resize", resize);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(canvas);
 
     if (dripInterval.value === null) {
       dripInterval.value = window.setInterval(() => {
@@ -81,11 +97,18 @@ export const Malkasten = component$(() => {
 
     const getPos = (e: MouseEvent | TouchEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const clientX =
-        ("touches" in e ? e.touches[0].clientX : e.clientX) - rect.left;
-      const clientY =
-        ("touches" in e ? e.touches[0].clientY : e.clientY) - rect.top;
-      return { x: clientX, y: clientY };
+      if ("touches" in e) {
+        const touch = e.touches[0] ?? e.changedTouches[0];
+        return {
+          x: (touch?.clientX ?? rect.left) - rect.left,
+          y: (touch?.clientY ?? rect.top) - rect.top,
+        };
+      }
+
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
     };
 
     const addDrip = (
@@ -101,6 +124,7 @@ export const Malkasten = component$(() => {
     };
 
     const start = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault();
       drawing.value = true;
       const { x, y } = getPos(e);
       lastPos.value = { x, y };
@@ -151,14 +175,14 @@ export const Malkasten = component$(() => {
     };
 
     canvas.addEventListener("mousedown", start);
-    canvas.addEventListener("touchstart", start);
+    canvas.addEventListener("touchstart", start, { passive: false });
     canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("touchmove", draw);
+    canvas.addEventListener("touchmove", draw, { passive: false });
     window.addEventListener("mouseup", end);
     window.addEventListener("touchend", end);
 
     return () => {
-      window.removeEventListener("resize", resize);
+      resizeObserver.disconnect();
       canvas.removeEventListener("mousedown", start);
       canvas.removeEventListener("touchstart", start);
       canvas.removeEventListener("mousemove", draw);
@@ -173,25 +197,27 @@ export const Malkasten = component$(() => {
   });
 
   return (
-    <div class="relative h-96 w-full sm:h-[600px]">
+    <div class="malkasten">
       <ImgImageMalkasten
         alt="Portrait"
-        class="absolute inset-0 h-full w-full object-cover"
+        class="malkasten__image"
       />
       <canvas
         ref={canvasRef}
-        class="absolute inset-0 h-full w-full cursor-crosshair"
+        class="malkasten__canvas"
       />
-      <div class="absolute top-4 left-4 flex gap-2">
+      <div class="malkasten__palette" aria-label="Paint colors">
         <button
           type="button"
           onClick$={() => (color.value = "#000")}
-          class="h-6 w-6 rounded-full border border-black bg-black"
+          class="malkasten__swatch malkasten__swatch--black"
+          aria-label="Use black paint"
         />
         <button
           type="button"
           onClick$={() => (color.value = "#fff")}
-          class="h-6 w-6 rounded-full border border-black bg-white"
+          class="malkasten__swatch malkasten__swatch--white"
+          aria-label="Use white paint"
         />
         <button
           type="button"
@@ -202,14 +228,14 @@ export const Malkasten = component$(() => {
               .getPropertyValue("--brand")
               .trim())
           }
-          class="h-6 w-6 rounded-full border border-black"
-          style="background: var(--brand)"
+          class="malkasten__swatch malkasten__swatch--brand"
+          aria-label="Use brand paint"
         />
       </div>
       <button
         type="button"
         onClick$={reset}
-        class="absolute top-4 right-4 rounded bg-white/80 px-3 py-1 text-sm"
+        class="malkasten__reset"
       >
         Reset
       </button>

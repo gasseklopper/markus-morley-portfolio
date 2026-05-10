@@ -1,0 +1,101 @@
+.malkasten {
+  position: relative;
+  width: min(100%, 980px);
+  min-height: clamp(420px, 64vw, 680px);
+  overflow: hidden;
+  background: #f7f7f4;
+  border: 1px solid color-mix(in srgb, var(--color-text, #111) 14%, transparent);
+  box-shadow: 0 22px 70px rgba(17, 17, 17, 0.14);
+  isolation: isolate;
+}
+
+.malkasten__image,
+.malkasten__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.malkasten__image {
+  object-fit: cover;
+  object-position: center top;
+  user-select: none;
+  pointer-events: none;
+}
+
+.malkasten__canvas {
+  cursor: crosshair;
+  touch-action: none;
+  z-index: 1;
+}
+
+.malkasten__palette,
+.malkasten__reset {
+  position: absolute;
+  z-index: 2;
+}
+
+.malkasten__palette {
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.malkasten__swatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid #111;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.malkasten__swatch:focus-visible,
+.malkasten__reset:focus-visible {
+  outline: 3px solid var(--brand, #8fdc55);
+  outline-offset: 3px;
+}
+
+.malkasten__swatch--black {
+  background: #111;
+}
+
+.malkasten__swatch--white {
+  background: #fff;
+}
+
+.malkasten__swatch--brand {
+  background: var(--brand, #8fdc55);
+}
+
+.malkasten__reset {
+  top: 1rem;
+  right: 1rem;
+  min-height: 2.45rem;
+  padding: 0 0.9rem;
+  border: 1px solid rgba(17, 17, 17, 0.18);
+  background: rgba(255, 255, 255, 0.86);
+  color: #111;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+}
+
+.malkasten__reset:hover,
+.malkasten__swatch:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 720px) {
+  .malkasten {
+    min-height: 520px;
+  }
+}

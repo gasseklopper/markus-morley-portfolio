@@ -6,134 +6,10 @@ import {
   useStylesScoped$,
 } from "@builder.io/qwik";
 import * as d3 from "d3";
+import styles from "./project011.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
 import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
-
-const styles = `
-  .chart-wrapper {
-    position: relative;
-    margin: 0 auto;
-    width: 100%;
-    max-width: min(100%, 72rem);
-  }
-
-  svg {
-    background: linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--surface-glass-1) 75%, transparent) 0%,
-      color-mix(in srgb, var(--surface-glass-2) 85%, transparent) 100%
-    );
-    border-radius: 1.5rem;
-    border: 1px solid var(--surface-border);
-    box-shadow: 0 24px 80px var(--surface-shadow);
-  }
-
-  #tooltip {
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-    transform: translate(-50%, -100%);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    min-width: 200px;
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-    background: color-mix(in srgb, var(--surface1) 96%, transparent);
-    box-shadow: 0 18px 60px color-mix(in srgb, var(--surface-shadow) 70%, transparent);
-    backdrop-filter: blur(12px);
-    color: var(--text1);
-  }
-
-  .bar {
-    fill: color-mix(in srgb, var(--primary) 70%, transparent);
-    transition: fill 0.2s ease;
-  }
-
-  .bar:hover,
-  .bar:focus {
-    fill: var(--primary);
-  }
-
-  .axis path,
-  .axis line {
-    stroke: color-mix(in srgb, var(--surface-border) 85%, transparent);
-  }
-
-  .axis text {
-    fill: color-mix(in srgb, var(--text2) 85%, transparent);
-    font-size: 0.75rem;
-  }
-
-  .project011-intro {
-    display: grid;
-    gap: clamp(2rem, 4vw, 3.5rem);
-    width: 100%;
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .project011-hero {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-    align-items: center;
-  }
-
-  .project011-aside {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .project011-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
-  @media (max-width: 639px) {
-    .project011-controls {
-      align-items: center;
-      text-align: center;
-    }
-  }
-
-  :global(:root[data-layout="full"]) .chart-wrapper {
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
-  }
-
-  @media (min-width: 1024px) {
-    :global(:root[data-layout="full"]) .project011-intro {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
-      align-items: start;
-    }
-
-    :global(:root[data-layout="full"]) .project011-hero {
-      text-align: left;
-      align-items: flex-start;
-    }
-
-    :global(:root[data-layout="full"]) .project011-aside {
-      align-items: stretch;
-    }
-  }
-
-  :global(:root[data-layout="box"]) .project011-intro {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  @media (max-width: 1023px) {
-    .project011-hero {
-      text-align: center;
-      align-items: center;
-    }
-  }
-`;
 
 const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
 const triggerDomContentLoaded = () => {
@@ -309,11 +185,11 @@ export default component$(() => {
         chartGroup
           .append("g")
           .attr("id", "x-axis")
-          .attr("class", "axis")
+          .attr("class", "project011__axis")
           .attr("transform", `translate(0,${innerHeight})`)
           .call(xAxis);
 
-        chartGroup.append("g").attr("id", "y-axis").attr("class", "axis").call(yAxis);
+        chartGroup.append("g").attr("id", "y-axis").attr("class", "project011__axis").call(yAxis);
 
         const tooltipOffset = isCompact ? 32 : 48;
         const clampVertical = (value: number) =>
@@ -328,11 +204,11 @@ export default component$(() => {
             .style("transform", "translate(-50%, -100%) scale(1)")
             .attr("data-date", datum.rawDate)
             .html(
-              `<div class="text-xs uppercase tracking-[0.3em] text-[var(--text3)]">${datum.date.toLocaleString("en-US", {
+              `<div class="project011__tooltip-date">${datum.date.toLocaleString("en-US", {
                 month: "short",
                 year: "numeric",
               })}</div>` +
-                `<div class="mt-1 text-lg font-semibold text-[var(--text1)]">$${datum.gdp.toLocaleString("en-US", {
+                `<div class="project011__tooltip-value">$${datum.gdp.toLocaleString("en-US", {
                   minimumFractionDigits: 1,
                 })} Billion</div>`,
             )
@@ -341,10 +217,10 @@ export default component$(() => {
         };
 
         chartGroup
-          .selectAll<SVGRectElement, GdpDatum>(".bar")
+          .selectAll<SVGRectElement, GdpDatum>(".project011__bar")
           .data(dataset)
           .join("rect")
-          .attr("class", "bar")
+          .attr("class", "project011__bar")
           .attr("data-date", (d) => d.rawDate)
           .attr("data-gdp", (d) => d.gdp.toString())
           .attr("x", (d) => xScale(d.date) ?? 0)
@@ -435,37 +311,37 @@ export default component$(() => {
   });
 
   return (
-    <section class="layout-shell mt-12 text-[var(--text1)] md:mt-20">
-      <div class="project011-intro">
-        <div class="project011-hero">
-          <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--primary)]">Data Storytelling</p>
-          <h1 class="text-4xl font-semibold leading-tight md:text-5xl">Visualize Data with a Bar Chart</h1>
-          <p class="text-base text-[var(--text3)] md:text-lg">
+    <section class="layout-shell project011">
+      <div class="project011__intro">
+        <div class="project011__hero">
+          <p class="project011__eyebrow">Data Storytelling</p>
+          <h1 class="project011__title">Visualize Data with a Bar Chart</h1>
+          <p class="project011__lead">
             An interactive D3 visualization of the United States Gross Domestic Product, showcasing over six decades of quarterly
             economic data with custom styling and responsive tooltips.
           </p>
         </div>
 
-        <div class="project011-aside">
-          <div class="w-full rounded-3xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-6 text-left shadow-[0_18px_60px_var(--surface-shadow)] sm:p-8">
-            <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+        <div class="project011__aside">
+          <div class="project011__note">
+            <p class="project011__note-title">
               Data Visualization Projects
             </p>
-            <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            <p class="project011__note-copy">
               This build streams the Federal Reserve GDP archive through fetch, then channels the JSON into D3 time and linear
               scales to plot each quarter with precise axes, transitions, and accessible tooltips.
             </p>
-            <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+            <p class="project011__note-copy">
               The refresh-and-fetch button reruns the AJAX request on demand, rebuilding the SVG so you can watch the data
               pipeline power this certification project in real time.
             </p>
           </div>
 
-          <div class="project011-controls text-sm text-[var(--text2)]">
+          <div class="project011__controls">
             <button
               type="button"
               onClick$={handleRefresh}
-              class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.65rem] font-medium uppercase tracking-[0.22em] text-[var(--text3)] transition-colors duration-200 hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] disabled:cursor-not-allowed disabled:opacity-70"
+              class="project011__refresh"
               disabled={isLoading.value}
             >
               <svg
@@ -474,7 +350,7 @@ export default component$(() => {
                 fill="none"
                 stroke="currentColor"
                 stroke-width="1.5"
-                class={`h-3.5 w-3.5 ${isLoading.value ? "animate-spin" : ""}`}
+                class={`project011__refresh-icon${isLoading.value ? " project011__refresh-icon--spinning" : ""}`}
                 aria-hidden="true"
               >
                 <path
@@ -485,22 +361,22 @@ export default component$(() => {
               </svg>
               {isLoading.value ? "Refreshing" : "Refresh data"}
             </button>
-            <div aria-live="polite" class="min-h-[1.5rem] text-xs uppercase tracking-[0.28em] text-[var(--text3)]">
+            <div aria-live="polite" class="project011__status">
               {isLoading.value && <span>Loading dataset…</span>}
               {!isLoading.value && errorMessage.value && (
-                <span class="text-[var(--primary)]">{errorMessage.value}</span>
+                <span class="project011__error">{errorMessage.value}</span>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      <div ref={wrapperRef} class="chart-wrapper mt-12 flex flex-col items-center">
+      <div ref={wrapperRef} class="project011__chart">
         <svg ref={svgRef} role="img" aria-labelledby="title" />
         <div
           ref={tooltipRef}
           id="tooltip"
-          class="font-medium"
+          class="project011__tooltip"
           aria-hidden="true"
         />
       </div>

@@ -3,8 +3,8 @@
 import ColorPalette from "./index";
 
 describe("Color palette page", () => {
-  it("renders canvas", () => {
+  it("renders the sketch container", () => {
     cy.mount(<ColorPalette />);
-    cy.get("canvas").should("exist");
+    cy.get("#p5-container").should("exist");
   });
 });

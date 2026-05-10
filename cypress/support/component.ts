@@ -24,6 +24,14 @@ import "./commands";
 
 import { mount } from "cypress-ct-qwik";
 
+beforeEach(() => {
+  cy.get("[data-cy-root]").then(($root) => {
+    $root.empty();
+    $root.removeAttr("q:container");
+    $root.removeAttr("q:version");
+  });
+});
+
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
 // Alternatively, can be defined in cypress/support/component.d.ts

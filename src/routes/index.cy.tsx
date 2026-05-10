@@ -3,9 +3,9 @@
 import Index from "./index";
 
 describe("Root page", () => {
-  it("renders welcome text", () => {
+  it("renders portfolio hero text", () => {
     cy.mount(<Index />);
-    cy.contains("Can't wait to see what you build with qwik!").should(
+    cy.contains("Brutalist design & code for fearless brands.").should(
       "be.visible",
     );
   });

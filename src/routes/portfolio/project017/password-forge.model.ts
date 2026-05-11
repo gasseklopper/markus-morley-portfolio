@@ -1,12 +1,8 @@
-export const MIN_LENGTH = 12;
+import { MIN_LENGTH, PASSWORD_CHARACTER_SETS } from "./password-forge.config";
 
-const ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const ASCII_LOWER = "abcdefghijklmnopqrstuvwxyz";
-const ASCII_DIGITS = "0123456789";
-const ASCII_SYMBOLS = "!@#$%^&*()_+-=[]{}|;:',.<>?/`~\\\"";
 const MAX_UINT32_EXCLUSIVE = 0x100000000;
 
-export type CharacterSetName = "upper" | "lower" | "digits" | "symbols";
+export type CharacterSetName = keyof typeof PASSWORD_CHARACTER_SETS;
 
 export type PasswordOptions = {
   length: number;
@@ -24,6 +20,21 @@ export const getActiveCharacterSetCount = ({
 }: PasswordOptions) =>
   [includeUpper, includeLower, includeDigits, includeSymbols].filter(Boolean)
     .length;
+
+export const coercePasswordLength = (value: number) =>
+  Number.isNaN(value) ? MIN_LENGTH : Math.max(MIN_LENGTH, value);
+
+export const createPasswordOptions = (
+  current: PasswordOptions,
+  setName: CharacterSetName,
+  enabled: boolean,
+): PasswordOptions => ({
+  ...current,
+  includeUpper: setName === "upper" ? enabled : current.includeUpper,
+  includeLower: setName === "lower" ? enabled : current.includeLower,
+  includeDigits: setName === "digits" ? enabled : current.includeDigits,
+  includeSymbols: setName === "symbols" ? enabled : current.includeSymbols,
+});
 
 const secureRandomInt = (upperBound: number) => {
   if (upperBound <= 0) return 0;
@@ -61,13 +72,15 @@ export const createPassword = ({
 }: PasswordOptions) => {
   const activeSets: string[] = [];
 
-  if (includeUpper) activeSets.push(ASCII_UPPER);
-  if (includeLower) activeSets.push(ASCII_LOWER);
-  if (includeDigits) activeSets.push(ASCII_DIGITS);
-  if (includeSymbols) activeSets.push(ASCII_SYMBOLS);
+  if (includeUpper) activeSets.push(PASSWORD_CHARACTER_SETS.upper);
+  if (includeLower) activeSets.push(PASSWORD_CHARACTER_SETS.lower);
+  if (includeDigits) activeSets.push(PASSWORD_CHARACTER_SETS.digits);
+  if (includeSymbols) activeSets.push(PASSWORD_CHARACTER_SETS.symbols);
 
   const setsToUse =
-    activeSets.length > 0 ? activeSets : [ASCII_UPPER, ASCII_DIGITS];
+    activeSets.length > 0
+      ? activeSets
+      : [PASSWORD_CHARACTER_SETS.upper, PASSWORD_CHARACTER_SETS.digits];
   const guaranteedCharacters = setsToUse.map((set) => {
     const randomIndex = secureRandomInt(set.length);
     return set[randomIndex] ?? "";

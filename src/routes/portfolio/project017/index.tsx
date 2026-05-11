@@ -1,23 +1,40 @@
 import { $, component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import styles from "./password-forge.scss?inline";
 import { buildPortfolioHead } from "~/utils/head";
+import { copyPasswordToClipboard } from "./password-forge.client";
+import {
+  COPY_RESET_DELAY,
+  DEFAULT_PASSWORD_OPTIONS,
+  MAX_LENGTH,
+  MIN_LENGTH,
+} from "./password-forge.config";
 import {
   type CharacterSetName,
-  MIN_LENGTH,
+  type PasswordOptions,
+  coercePasswordLength,
   createPassword,
+  createPasswordOptions,
   getActiveCharacterSetCount,
-} from "./password-forge-model";
+} from "./password-forge.model";
 
 type CopyState = "idle" | "copied" | "error";
 
 export default component$(() => {
   useStylesScoped$(styles);
 
-  const length = useSignal(16);
-  const includeUpper = useSignal(true);
-  const includeLower = useSignal(true);
-  const includeDigits = useSignal(true);
-  const includeSymbols = useSignal(true);
+  const length = useSignal<number>(DEFAULT_PASSWORD_OPTIONS.length);
+  const includeUpper = useSignal<boolean>(
+    DEFAULT_PASSWORD_OPTIONS.includeUpper,
+  );
+  const includeLower = useSignal<boolean>(
+    DEFAULT_PASSWORD_OPTIONS.includeLower,
+  );
+  const includeDigits = useSignal<boolean>(
+    DEFAULT_PASSWORD_OPTIONS.includeDigits,
+  );
+  const includeSymbols = useSignal<boolean>(
+    DEFAULT_PASSWORD_OPTIONS.includeSymbols,
+  );
   const password = useSignal("");
   const copyState = useSignal<CopyState>("idle");
   const toggleWarning = useSignal<string | null>(null);
@@ -26,17 +43,15 @@ export default component$(() => {
     const input = event.target as HTMLInputElement | null;
     if (!input) return;
     const parsed = Number.parseInt(input.value, 10);
-    const safeValue = Number.isNaN(parsed)
-      ? MIN_LENGTH
-      : Math.max(MIN_LENGTH, parsed);
-    length.value = safeValue;
-    password.value = createPassword({
-      length: length.value,
+    const nextOptions: PasswordOptions = {
+      length: coercePasswordLength(parsed),
       includeUpper: includeUpper.value,
       includeLower: includeLower.value,
       includeDigits: includeDigits.value,
       includeSymbols: includeSymbols.value,
-    });
+    };
+    length.value = nextOptions.length;
+    password.value = createPassword(nextOptions);
     copyState.value = "idle";
   });
 
@@ -45,15 +60,17 @@ export default component$(() => {
       const input = event.target as HTMLInputElement | null;
       if (!input) return;
 
-      const nextOptions = {
-        length: length.value,
-        includeUpper: setName === "upper" ? input.checked : includeUpper.value,
-        includeLower: setName === "lower" ? input.checked : includeLower.value,
-        includeDigits:
-          setName === "digits" ? input.checked : includeDigits.value,
-        includeSymbols:
-          setName === "symbols" ? input.checked : includeSymbols.value,
-      };
+      const nextOptions = createPasswordOptions(
+        {
+          length: length.value,
+          includeUpper: includeUpper.value,
+          includeLower: includeLower.value,
+          includeDigits: includeDigits.value,
+          includeSymbols: includeSymbols.value,
+        },
+        setName,
+        input.checked,
+      );
 
       if (getActiveCharacterSetCount(nextOptions) === 0) {
         toggleWarning.value = "Keep at least one character set active.";
@@ -94,15 +111,11 @@ export default component$(() => {
 
   const handleCopy = $(async () => {
     try {
-      if (typeof navigator === "undefined" || !navigator.clipboard) {
-        throw new Error("Clipboard API unavailable");
-      }
-
-      await navigator.clipboard.writeText(password.value);
+      await copyPasswordToClipboard(password.value);
       copyState.value = "copied";
       window.setTimeout(() => {
         copyState.value = "idle";
-      }, 2400);
+      }, COPY_RESET_DELAY);
     } catch (error) {
       console.error("Clipboard copy failed", error);
       copyState.value = "error";
@@ -178,11 +191,11 @@ export default component$(() => {
                 <input
                   type="range"
                   min={MIN_LENGTH}
-                  max={40}
+                  max={MAX_LENGTH}
                   value={length.value}
                   onInput$={handleLengthChange}
                   aria-valuemin={MIN_LENGTH}
-                  aria-valuemax={40}
+                  aria-valuemax={MAX_LENGTH}
                   aria-valuenow={length.value}
                 />
                 <output>{length.value}</output>

@@ -1,201 +1,35 @@
 .project012 {
-  display: grid;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  width: 100%;
-  max-width: 100%;
-  margin-top: 3rem;
-  overflow-x: clip;
-  padding-bottom: clamp(3rem, 6vw, 5rem);
-  color: var(--text1);
-  overflow-wrap: anywhere;
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-    min-width: 0;
-  }
-
-  &__hero {
-    width: min(100%, 64rem);
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  &__eyebrow,
-  &__note-title {
-    margin: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.38em;
-    text-transform: uppercase;
-  }
-
-  &__eyebrow {
-    color: var(--primary);
-  }
-
-  &__title {
-    margin: 1rem 0 0;
-    font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3rem);
-    font-weight: 600;
-    line-height: 1.12;
-    text-wrap: balance;
-  }
-
-  &__lead {
-    margin: 1rem 0 0;
-    color: var(--text3);
-    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-    line-height: 1.65;
-  }
-
-  &__note {
-    width: min(100%, 48rem);
-    margin: 0 auto;
-    padding: 1.5rem;
-    border: 1px solid var(--surface-border);
-    border-radius: 1.5rem;
-    background: var(--surface-glass-1);
-    box-shadow: 0 18px 60px var(--surface-shadow);
-    text-align: center;
-  }
-
-  &__note-title {
-    color: var(--text3);
-    font-size: 0.7rem;
-    letter-spacing: 0.32em;
-  }
-
-  &__note-copy {
-    margin: 0.75rem 0 0;
-    color: var(--text2);
-    font-size: 0.875rem;
-    line-height: 1.6;
-  }
-
-  &__controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    width: min(100%, 48rem);
-    margin: 0 auto;
-    color: var(--text2);
-    font-size: 0.875rem;
-  }
-
-  &__refresh {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    border: 1px solid transparent;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--text3);
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: var(--primary);
-    }
-
-    &:focus {
-      outline: none;
-    }
-
-    &:focus-visible {
-      box-shadow:
-        0 0 0 2px var(--surface1),
-        0 0 0 5px var(--primary);
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
-  }
-
-  &__refresh-icon {
-    width: 0.875rem;
-    height: 0.875rem;
-
-    &--spinning {
-      animation: project012-spin 1s linear infinite;
-    }
-  }
-
-  &__status {
-    min-height: 1.5rem;
-    color: var(--text3);
-    font-size: 0.75rem;
-    letter-spacing: 0.28em;
-    text-align: center;
-    text-transform: uppercase;
-  }
-
-  &__error {
-    color: var(--primary);
-  }
-
   &__chart-theme {
     --chart-bg-1: color-mix(in srgb, var(--surface-glass-1) 82%, transparent);
     --chart-bg-2: color-mix(in srgb, var(--surface-glass-2) 88%, transparent);
-    --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 86%, #ffffff 14%);
-    --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
-    --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 82%, #ffffff 18%);
-    --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #ffffff 4%);
+    --chart-dot-doping-fill: color-mix(
+      in srgb,
+      var(--primary) 86%,
+      #ffffff 14%
+    );
+    --chart-dot-doping-stroke: color-mix(
+      in srgb,
+      var(--primary) 98%,
+      #ffffff 2%
+    );
+    --chart-dot-clean-fill: color-mix(
+      in srgb,
+      var(--secondary) 82%,
+      #ffffff 18%
+    );
+    --chart-dot-clean-stroke: color-mix(
+      in srgb,
+      var(--secondary) 96%,
+      #ffffff 4%
+    );
   }
 
-  &__chart {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: min(100%, 60rem);
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0 0.5rem;
-
-    > svg {
-      width: 100%;
-      max-width: 100%;
-      border: 1px solid var(--surface-border);
-      border-radius: 1.5rem;
-      background: linear-gradient(135deg, var(--chart-bg-1) 0%, var(--chart-bg-2) 100%);
-      box-shadow: 0 24px 80px var(--surface-shadow);
-      transition:
-        background 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
-    }
-  }
-
-  &__tooltip {
-    position: absolute;
-    min-width: 220px;
-    max-width: min(320px, 80vw);
-    padding: 1rem;
-    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-    border-radius: 1rem;
-    background: color-mix(in srgb, var(--surface1) 96%, transparent);
-    box-shadow: 0 18px 60px color-mix(in srgb, var(--surface-shadow) 70%, transparent);
-    color: var(--text1);
-    font-family: var(--font-medium);
-    line-height: 1.5;
-    pointer-events: none;
-    opacity: 0;
-    transform: translate(-50%, -100%) scale(0.98);
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease;
-    backdrop-filter: blur(12px);
+  &__chart > svg {
+    background: linear-gradient(
+      135deg,
+      var(--chart-bg-1) 0%,
+      var(--chart-bg-2) 100%
+    );
   }
 
   &__leaderboard {
@@ -336,12 +170,24 @@
 }
 
 :global(:root[data-theme="dark"]) .project012__chart-theme {
-  --chart-bg-1: color-mix(in srgb, var(--surface2) 72%, rgba(148, 163, 184, 0.25) 28%);
-  --chart-bg-2: color-mix(in srgb, var(--surface3) 82%, rgba(148, 163, 184, 0.18) 18%);
+  --chart-bg-1: color-mix(
+    in srgb,
+    var(--surface2) 72%,
+    rgba(148, 163, 184, 0.25) 28%
+  );
+  --chart-bg-2: color-mix(
+    in srgb,
+    var(--surface3) 82%,
+    rgba(148, 163, 184, 0.18) 18%
+  );
   --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 88%, #f8fafc 12%);
   --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 96%, #f8fafc 4%);
   --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 88%, #f8fafc 12%);
-  --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 96%, #f8fafc 4%);
+  --chart-dot-clean-stroke: color-mix(
+    in srgb,
+    var(--secondary) 96%,
+    #f8fafc 4%
+  );
 }
 
 :global(:root[data-theme="neon"]) .project012__chart-theme {
@@ -350,7 +196,11 @@
   --chart-dot-doping-fill: color-mix(in srgb, var(--primary) 90%, #ffffff 10%);
   --chart-dot-doping-stroke: color-mix(in srgb, var(--primary) 98%, #ffffff 2%);
   --chart-dot-clean-fill: color-mix(in srgb, var(--secondary) 90%, #ffffff 10%);
-  --chart-dot-clean-stroke: color-mix(in srgb, var(--secondary) 98%, #ffffff 2%);
+  --chart-dot-clean-stroke: color-mix(
+    in srgb,
+    var(--secondary) 98%,
+    #ffffff 2%
+  );
 }
 
 :global(.dot) {
@@ -368,7 +218,9 @@
 
 :global(.dot:focus-visible) {
   outline: none;
-  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--primary) 50%, transparent));
+  filter: drop-shadow(
+    0 0 12px color-mix(in srgb, var(--primary) 50%, transparent)
+  );
 }
 
 :global(.dot--doping) {
@@ -383,7 +235,9 @@
 
 :global(.dot:hover) {
   stroke-width: 2.5px;
-  filter: drop-shadow(0 12px 30px color-mix(in srgb, var(--surface-shadow) 60%, transparent));
+  filter: drop-shadow(
+    0 12px 30px color-mix(in srgb, var(--surface-shadow) 60%, transparent)
+  );
 }
 
 :global(.axis path),
@@ -435,88 +289,13 @@
 }
 
 @media (min-width: 768px) {
-  .project012 {
-    margin-top: 5rem;
-
-    &__leaderboard {
-      display: none;
-    }
+  .project012__leaderboard {
+    display: none;
   }
 }
 
 @media (max-width: 767px) {
-  .project012 {
-    gap: 1.75rem;
-    margin-top: 2rem;
-
-    &__hero,
-    &__note,
-    &__controls,
-    &__chart,
-    &__leaderboard-inner {
-      width: min(100%, calc(100dvw - 2rem));
-      max-width: calc(100dvw - 2rem);
-      margin-right: auto;
-      margin-left: auto;
-    }
-
-    &__hero,
-    &__note {
-      text-align: left;
-    }
-
-    &__title {
-      font-size: clamp(2rem, 10vw, 2.65rem);
-      line-height: 1.08;
-    }
-
-    &__lead {
-      font-size: 1rem;
-      line-height: 1.55;
-    }
-
-    &__note {
-      padding: 1.1rem;
-    }
-
-    &__note-copy {
-      font-size: 0.85rem;
-      line-height: 1.55;
-    }
-
-    &__refresh {
-      width: 100%;
-      justify-content: flex-start;
-      padding: 0.65rem 0;
-    }
-
-    &__status {
-      width: 100%;
-      text-align: left;
-    }
-
-    &__note,
-    &__chart > svg {
-      border-radius: 1rem;
-    }
-
-    &__chart {
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    &__tooltip {
-      font-size: 0.95rem;
-    }
-
-    &__table {
-      min-width: 44rem;
-    }
-  }
-}
-
-@keyframes project012-spin {
-  to {
-    transform: rotate(360deg);
+  .project012__table {
+    min-width: 44rem;
   }
 }

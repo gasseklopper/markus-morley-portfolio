@@ -1,0 +1,309 @@
+:where(.project012, .project013) {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  width: 100%;
+  max-width: 100%;
+  margin-top: 3rem;
+  overflow-x: clip;
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  color: var(--text1);
+  overflow-wrap: anywhere;
+}
+
+:where(.project012, .project013) *,
+:where(.project012, .project013) *::before,
+:where(.project012, .project013) *::after {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+:where(.project012__hero, .project013__hero) {
+  width: min(100%, 64rem);
+  margin: 0 auto;
+  text-align: center;
+}
+
+:where(
+    .project012__eyebrow,
+    .project012__note-title,
+    .project013__eyebrow,
+    .project013__note-title
+  ) {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+:where(.project012__eyebrow, .project013__eyebrow) {
+  color: var(--primary);
+}
+
+:where(.project012__title, .project013__title) {
+  margin: 1rem 0 0;
+  font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3rem);
+  font-weight: 600;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+:where(.project012__lead, .project013__lead) {
+  margin: 1rem 0 0;
+  color: var(--text3);
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  line-height: 1.65;
+}
+
+:where(.project012__note, .project013__note) {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: 1.5rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 1.5rem;
+  background: var(--surface-glass-1);
+  box-shadow: 0 18px 60px var(--surface-shadow);
+  text-align: center;
+}
+
+:where(.project012__note-title, .project013__note-title) {
+  color: var(--text3);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+}
+
+:where(.project012__note-copy, .project013__note-copy) {
+  margin: 0.75rem 0 0;
+  color: var(--text2);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+:where(.project012__controls, .project013__controls, .choropleth-actions) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text2);
+  font-size: 0.875rem;
+}
+
+:where(.project012__controls, .project013__controls) {
+  width: min(100%, 48rem);
+  margin: 0 auto;
+}
+
+:where(.project012__refresh, .project013__refresh, .choropleth-refresh) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text3);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+:where(.project012__refresh, .project013__refresh, .choropleth-refresh):hover {
+  color: var(--primary);
+}
+
+:where(.project012__refresh, .project013__refresh, .choropleth-refresh):focus {
+  outline: none;
+}
+
+:where(
+    .project012__refresh,
+    .project013__refresh,
+    .choropleth-refresh
+  ):focus-visible {
+  box-shadow:
+    0 0 0 2px var(--surface1),
+    0 0 0 5px var(--primary);
+}
+
+:where(
+    .project012__refresh,
+    .project013__refresh,
+    .choropleth-refresh
+  ):disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+:where(
+    .project012__refresh-icon,
+    .project013__refresh-icon,
+    .choropleth-refresh-icon
+  ) {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+:where(
+    .project012__refresh-icon--spinning,
+    .project013__refresh-icon--spinning,
+    .choropleth-refresh-icon--spinning
+  ) {
+  animation: demo-refresh-spin 1s linear infinite;
+}
+
+:where(.project012__status, .project013__status, .choropleth-status) {
+  min-height: 1.5rem;
+  color: var(--text3);
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+:where(.project012__error, .project013__error, .choropleth-error) {
+  color: var(--primary);
+}
+
+:where(.project012__chart, .project013__chart) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 60rem);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+}
+
+:where(.project012__chart, .project013__chart) > svg {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--surface-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 24px 80px var(--surface-shadow);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+:where(.project012__tooltip, .project013__tooltip, #tooltip) {
+  position: absolute;
+  color: var(--text1);
+  line-height: 1.5;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -100%) scale(0.98);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  backdrop-filter: blur(12px);
+}
+
+:where(.project012__tooltip, .project013__tooltip) {
+  min-width: 220px;
+  max-width: min(320px, 80vw);
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface1) 96%, transparent);
+  box-shadow: 0 18px 60px
+    color-mix(in srgb, var(--surface-shadow) 70%, transparent);
+  font-family: var(--font-medium);
+}
+
+@media (min-width: 768px) {
+  :where(.project012, .project013) {
+    margin-top: 5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  :where(.project012, .project013) {
+    gap: 1.75rem;
+    margin-top: 2rem;
+  }
+
+  :where(
+      .project012__hero,
+      .project012__note,
+      .project012__controls,
+      .project012__chart,
+      .project012__leaderboard-inner,
+      .project013__hero,
+      .project013__note,
+      .project013__controls,
+      .project013__chart
+    ) {
+    width: min(100%, calc(100dvw - 2rem));
+    max-width: calc(100dvw - 2rem);
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  :where(
+      .project012__hero,
+      .project012__note,
+      .project013__hero,
+      .project013__note
+    ) {
+    text-align: left;
+  }
+
+  :where(.project012__title, .project013__title) {
+    font-size: clamp(2rem, 10vw, 2.65rem);
+    line-height: 1.08;
+  }
+
+  :where(.project012__lead, .project013__lead) {
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  :where(.project012__note, .project013__note) {
+    padding: 1.1rem;
+  }
+
+  :where(.project012__note-copy, .project013__note-copy) {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  :where(.project012__refresh, .project013__refresh, .choropleth-refresh) {
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0.65rem 0;
+  }
+
+  :where(.project012__status, .project013__status, .choropleth-status) {
+    width: 100%;
+    text-align: left;
+  }
+
+  :where(
+      .project012__note,
+      .project012__chart > svg,
+      .project013__chart > svg
+    ) {
+    border-radius: 1rem;
+  }
+
+  :where(.project012__chart, .project013__chart) {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  :where(.project012__tooltip, .project013__tooltip) {
+    font-size: 0.95rem;
+  }
+}
+
+@keyframes demo-refresh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

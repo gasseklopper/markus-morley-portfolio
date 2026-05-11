@@ -98,32 +98,14 @@
   line-height: 1.6;
 }
 
-.choropleth-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--text2);
-  font-size: 0.875rem;
-}
-
 .choropleth-refresh {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
   padding: 0.25rem 0.625rem;
   border: 1px solid color-mix(in srgb, var(--surface-border) 65%, transparent);
-  border-radius: 999px;
   background: color-mix(in srgb, var(--surface-glass-1) 70%, transparent);
   box-shadow: 0 1px 2px
     color-mix(in srgb, var(--surface-shadow) 20%, transparent);
-  color: var(--text3);
   font-size: 0.55rem;
-  font-weight: 500;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
   transition:
     border-color 0.2s ease,
     color 0.2s ease,
@@ -133,43 +115,11 @@
     border-color: color-mix(in srgb, var(--primary) 50%, transparent);
     color: var(--primary);
   }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    box-shadow:
-      0 0 0 2px var(--surface1),
-      0 0 0 5px var(--primary);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
 }
 
 .choropleth-refresh-icon {
   width: 0.65rem;
   height: 0.65rem;
-
-  &--spinning {
-    animation: project014-spin 1s linear infinite;
-  }
-}
-
-.choropleth-status {
-  min-height: 1.5rem;
-  color: var(--text3);
-  font-size: 0.75rem;
-  letter-spacing: 0.28em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.choropleth-error {
-  color: var(--primary);
 }
 
 .map-shell {
@@ -395,7 +345,6 @@
   .choropleth-status {
     width: 100%;
     font-size: 0.68rem;
-    text-align: left;
   }
 
   .map-shell {
@@ -417,11 +366,5 @@
     max-width: calc(100dvw - 3rem);
     padding: 0.85rem 1rem;
     font-size: 0.9rem;
-  }
-}
-
-@keyframes project014-spin {
-  to {
-    transform: rotate(360deg);
   }
 }

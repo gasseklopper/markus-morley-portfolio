@@ -1,4 +1,3 @@
-
 // FOUNDATIONS
 @use "./foundations/img";
 @use "./foundations/tokens";
@@ -14,3 +13,6 @@
 // LAYOUT
 @use "./layout/page";
 @use "./layout/layoutShell";
+
+// COMPONENTS
+@use "./components/demo";

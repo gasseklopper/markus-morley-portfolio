@@ -2,14 +2,13 @@ import {
   createCleanupBag,
   observeElementResize,
   prefersReducedMotion,
+  timeout,
 } from "~/utils/browserClient";
 import { loadGsap } from "~/utils/gsapClient";
-
-type BlindSet = {
-  cells: SVGRectElement[];
-  rows: number;
-  cols: number;
-};
+import { cleanupScrollTransition } from "./cleanup";
+import { scrollTransitionConfig } from "./config";
+import { queryScrollTransitionDom } from "./dom";
+import { createBlinds, type BlindSet } from "./patterns";
 
 export const setupScrollTransition = async (root: HTMLElement) => {
   if (prefersReducedMotion()) {
@@ -21,8 +20,9 @@ export const setupScrollTransition = async (root: HTMLElement) => {
   const lenisMod = await import("lenis");
   const Lenis = (lenisMod as any).default ?? lenisMod;
   const cleanupBag = createCleanupBag();
-  const svgNS = "http://www.w3.org/2000/svg";
-  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  const isTouch = window.matchMedia(
+    scrollTransitionConfig.touchPointerQuery,
+  ).matches;
   const lenis = new Lenis({
     lerp: 0.15,
     smoothWheel: true,
@@ -31,47 +31,7 @@ export const setupScrollTransition = async (root: HTMLElement) => {
 
   let blindsSets: BlindSet[] = [];
   let master: gsap.core.Timeline | undefined;
-  let resizeTimer: number | undefined;
-
-  const getGridCols = () => {
-    if (window.innerWidth <= 599) return 6;
-    if (window.innerWidth <= 1024) return 10;
-    return 14;
-  };
-
-  const createBlinds = (group: SVGGElement | null): BlindSet | null => {
-    if (!group) return null;
-
-    group.innerHTML = "";
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const vbWidth = 100;
-    const vbHeight = (height / width) * 100;
-    const cols = getGridCols();
-    const rows = Math.max(1, Math.round(cols * (vbHeight / vbWidth)));
-    const cellW = vbWidth / cols;
-    const cellH = vbHeight / rows;
-    const cells: SVGRectElement[] = [];
-
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const rect = document.createElementNS(svgNS, "rect");
-        rect.setAttribute("x", String(x * cellW));
-        rect.setAttribute("y", String(y * cellH));
-        rect.setAttribute("width", String(cellW));
-        rect.setAttribute("height", String(cellH));
-        rect.setAttribute("fill", "white");
-        rect.setAttribute("shape-rendering", "crispEdges");
-        rect.setAttribute("opacity", "0");
-
-        group.appendChild(rect);
-        cells.push(rect);
-      }
-    }
-
-    return { cells, rows, cols };
-  };
+  let cleanupResizeTimeout: (() => void) | undefined;
 
   const openBlinds = ({ cells, rows, cols }: BlindSet) => {
     const ordered: SVGRectElement[] = [];
@@ -123,10 +83,7 @@ export const setupScrollTransition = async (root: HTMLElement) => {
   const buildMasterTimeline = () => {
     if (master) master.kill();
 
-    const texts = gsap.utils.toArray(
-      root.querySelectorAll(".scroll-transition__text"),
-    );
-    const stage = root.querySelector(".scroll-transition__stage");
+    const { texts, stage } = queryScrollTransitionDom(root);
     if (!stage) return;
 
     master = gsap.timeline({
@@ -158,31 +115,26 @@ export const setupScrollTransition = async (root: HTMLElement) => {
     const vbHeight = (height / width) * 100;
     blindsSets = [];
 
-    root
-      .querySelectorAll<SVGSVGElement>(".scroll-transition__layer")
-      .forEach((svg) => {
-        svg.setAttribute("viewBox", `0 0 ${vbWidth} ${vbHeight}`);
+    queryScrollTransitionDom(root).layers.forEach((svg) => {
+      svg.setAttribute("viewBox", `0 0 ${vbWidth} ${vbHeight}`);
 
-        const maskRect = svg.querySelector("mask rect");
-        maskRect?.setAttribute("width", String(vbWidth));
-        maskRect?.setAttribute("height", String(vbHeight));
+      const maskRect = svg.querySelector("mask rect");
+      maskRect?.setAttribute("width", String(vbWidth));
+      maskRect?.setAttribute("height", String(vbHeight));
 
-        const img = svg.querySelector("image");
-        img?.setAttribute("width", String(vbWidth));
-        img?.setAttribute("height", String(vbHeight));
+      const img = svg.querySelector("image");
+      img?.setAttribute("width", String(vbWidth));
+      img?.setAttribute("height", String(vbHeight));
 
-        const result = createBlinds(svg.querySelector("g[data-blinds]"));
-        if (result) blindsSets.push(result);
-      });
+      const result = createBlinds(svg.querySelector("g[data-blinds]"));
+      if (result) blindsSets.push(result);
+    });
 
     buildMasterTimeline();
   };
 
   const initProgressBar = () => {
-    const progressFills = Array.from(
-      root.querySelectorAll<HTMLElement>(".scroll-transition__fill"),
-    );
-    const stage = root.querySelector(".scroll-transition__stage");
+    const { progressFills, stage } = queryScrollTransitionDom(root);
     if (!stage) return undefined;
 
     return ScrollTrigger.create({
@@ -205,12 +157,12 @@ export const setupScrollTransition = async (root: HTMLElement) => {
   };
 
   const onResize = () => {
-    if (resizeTimer) window.clearTimeout(resizeTimer);
+    cleanupResizeTimeout?.();
 
-    resizeTimer = window.setTimeout(() => {
+    cleanupResizeTimeout = timeout(() => {
       ScrollTrigger.refresh();
       updateLayout();
-    }, 250);
+    }, scrollTransitionConfig.resizeDebounce);
   };
 
   const lenisUpdate = () => ScrollTrigger.update();
@@ -220,17 +172,21 @@ export const setupScrollTransition = async (root: HTMLElement) => {
   gsap.ticker.add(tick);
   updateLayout();
   const progressTrigger = initProgressBar();
-  cleanupBag.add(observeElementResize(root, onResize));
+  observeElementResize(root, onResize, cleanupBag);
 
   return () => {
-    cleanupBag.run();
-    if (resizeTimer) window.clearTimeout(resizeTimer);
-    gsap.ticker.remove(tick);
-    progressTrigger?.kill();
-    master?.kill();
-    ScrollTrigger.getAll().forEach((trigger: any) => {
-      if (root.contains(trigger.trigger)) trigger.kill();
-    });
-    lenis.destroy();
+    cleanupResizeTimeout?.();
+    cleanupScrollTransition(
+      cleanupBag.run,
+      () => gsap.ticker.remove(tick),
+      () => progressTrigger?.kill(),
+      () => master?.kill(),
+      () => {
+        ScrollTrigger.getAll().forEach((trigger: any) => {
+          if (root.contains(trigger.trigger)) trigger.kill();
+        });
+      },
+      () => lenis.destroy(),
+    );
   };
 };

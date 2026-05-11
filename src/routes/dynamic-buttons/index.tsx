@@ -1,6 +1,7 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
+import { createMountedClientEffect } from "~/utils/browserClient";
 import { setupDynamicButtons } from "./dynamic-buttons.client";
 
 import "./dynamic-buttons.scss";
@@ -125,21 +126,10 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ cleanup }) => {
-    const root = rootRef.value;
-    if (!root) return;
-
-    const lifecycle = {
-      disposed: false,
-      dispose: undefined as (() => void) | undefined,
-    };
-
-    cleanup(() => {
-      lifecycle.disposed = true;
-      lifecycle.dispose?.();
+    await createMountedClientEffect(cleanup, () => {
+      const root = rootRef.value;
+      return root ? setupDynamicButtons(root) : undefined;
     });
-
-    lifecycle.dispose = await setupDynamicButtons(root);
-    if (lifecycle.disposed) lifecycle.dispose();
   });
 
   return (

@@ -1,11 +1,13 @@
 import {
   component$,
+  useSignal,
   useStylesScoped$,
   useVisibleTask$,
 } from "@builder.io/qwik";
 import styles from "./test-codex.scss?inline";
 import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
+import { createMountedClientEffect } from "~/utils/browserClient";
 import { setupTestCodexAnimations } from "./test-codex.client";
 
 /* eslint-disable qwik/jsx-img */
@@ -203,28 +205,22 @@ const finaleWords = [
 ];
 
 export default component$(() => {
+  const rootRef = useSignal<HTMLElement>();
+
   useStylesScoped$(styles);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ cleanup }) => {
-    const lifecycle = {
-      disposed: false,
-      dispose: undefined as (() => void) | undefined,
-    };
-
-    cleanup(() => {
-      lifecycle.disposed = true;
-      lifecycle.dispose?.();
+    await createMountedClientEffect(cleanup, () => {
+      const root = rootRef.value;
+      return root ? setupTestCodexAnimations(root) : undefined;
     });
-
-    lifecycle.dispose = await setupTestCodexAnimations();
-    if (lifecycle.disposed) lifecycle.dispose();
   });
 
   const title = "test-codex";
 
   return (
-    <main class="test-codex" data-test-codex>
+    <main class="test-codex" data-test-codex ref={rootRef}>
       <div class="test-codex__progress" aria-hidden="true">
         <span data-progress />
       </div>

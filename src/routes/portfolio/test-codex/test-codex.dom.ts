@@ -1,0 +1,25 @@
+export const queryTestCodexDom = (root: HTMLElement) => ({
+  titleChars: root.querySelectorAll<HTMLElement>("[data-title-char]"),
+  plates: root.querySelectorAll<HTMLElement>("[data-plate]"),
+  frameRows: root.querySelectorAll<HTMLElement>("[data-frame-row]"),
+  floatingImages: root.querySelectorAll<HTMLElement>("[data-floating-image]"),
+  signalLines: root.querySelectorAll<HTMLElement>("[data-signal-line]"),
+  chapterCards: root.querySelectorAll<HTMLElement>("[data-chapter]"),
+  reelTrack: root.querySelector<HTMLElement>("[data-reel-track]"),
+  reelSection: root.querySelector<HTMLElement>("[data-reel-section]"),
+  progressBar: root.querySelector<HTMLElement>("[data-progress]"),
+  heroFloat: root.querySelectorAll<HTMLElement>("[data-hero-float]"),
+  hero: root.querySelector<HTMLElement>("[data-hero]"),
+  marqueeItems: root.querySelectorAll<HTMLElement>("[data-marquee]"),
+  kineticWords: root.querySelectorAll<HTMLElement>("[data-kinetic-word]"),
+  iris: root.querySelector<HTMLElement>("[data-iris]"),
+  metricValues: root.querySelectorAll<HTMLElement>("[data-metric-value]"),
+  metricLabels: root.querySelectorAll<HTMLElement>("[data-metric-label]"),
+  finale: root.querySelector<HTMLElement>("[data-finale]"),
+  finaleCopy: root.querySelector<HTMLElement>("[data-finale-copy]"),
+  finaleWords: root.querySelectorAll<HTMLElement>("[data-finale-word]"),
+  finaleKicker: root.querySelector<HTMLElement>("[data-finale-kicker]"),
+  microCards: root.querySelectorAll<HTMLElement>("[data-micro-card]"),
+});
+
+export type TestCodexDom = ReturnType<typeof queryTestCodexDom>;

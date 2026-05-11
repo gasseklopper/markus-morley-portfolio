@@ -1,7 +1,13 @@
-import { component$, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
+import {
+  component$,
+  useSignal,
+  useStyles$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import styles from "./index.scss?inline";
 import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
+import { createMountedClientEffect } from "~/utils/browserClient";
 import { setupHomeHeroAnimations } from "./home-hero.client";
 
 interface WorkItem {
@@ -33,23 +39,17 @@ const workItems: WorkItem[] = [
 ];
 
 export default component$(() => {
+  const rootRef = useSignal<HTMLElement>();
+
   useStyles$(styles);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(
     async ({ cleanup }) => {
-      const lifecycle = {
-        disposed: false,
-        dispose: undefined as (() => void) | undefined,
-      };
-
-      cleanup(() => {
-        lifecycle.disposed = true;
-        lifecycle.dispose?.();
+      await createMountedClientEffect(cleanup, () => {
+        const root = rootRef.value;
+        return root ? setupHomeHeroAnimations(root) : undefined;
       });
-
-      lifecycle.dispose = await setupHomeHeroAnimations();
-      if (lifecycle.disposed) lifecycle.dispose();
     },
     {
       strategy: "document-ready",
@@ -57,7 +57,7 @@ export default component$(() => {
   );
 
   return (
-    <div class="page home-hero">
+    <div class="page home-hero" ref={rootRef}>
       <div class="hero-viewport">
         <header class="hero-header">
           <div class="hero-header__container">
@@ -100,10 +100,12 @@ export default component$(() => {
 
         <section class="hero-section" aria-labelledby="hero-title">
           <div class="hero-core">
-            <h1 id="hero-title">Markus Morley — Brutalist design & code for fearless brands.</h1>
+            <h1 id="hero-title">
+              Markus Morley — Brutalist design & code for fearless brands.
+            </h1>
             <p>
-              Hybrid designer & front-end engineer from Frankfurt am Main, weaving research-led storytelling
-              with resilient product delivery.
+              Hybrid designer & front-end engineer from Frankfurt am Main,
+              weaving research-led storytelling with resilient product delivery.
             </p>
           </div>
 
@@ -190,7 +192,6 @@ export default component$(() => {
             </text>
           </svg>
 
-
           <div class="speed-indicator" />
         </section>
       </div>
@@ -198,10 +199,13 @@ export default component$(() => {
       <section class="home-hero__intro" aria-labelledby="intro-title">
         <div class="home-hero__intro-shell">
           <p class="home-hero__badge">Available for collaborations</p>
-          <h2 id="intro-title">Fearless digital experiences crafted with precision.</h2>
+          <h2 id="intro-title">
+            Fearless digital experiences crafted with precision.
+          </h2>
           <p>
-            I blend research-led design exploration with resilient engineering to help brands move boldly. From
-            Frankfurt am Main, I build the prototypes, systems, and large-scale platforms that turn possibility
+            I blend research-led design exploration with resilient engineering
+            to help brands move boldly. From Frankfurt am Main, I build the
+            prototypes, systems, and large-scale platforms that turn possibility
             into product reality.
           </p>
         </div>

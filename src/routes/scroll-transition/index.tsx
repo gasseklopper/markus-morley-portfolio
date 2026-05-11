@@ -1,9 +1,10 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik"
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head"
-import { setupScrollTransition } from "./scroll-transition.client"
+import { buildHead } from "~/utils/head";
+import { createMountedClientEffect } from "~/utils/browserClient";
+import { setupScrollTransition } from "./scroll-transition.client";
 
-import "./scroll-transition.scss"
+import "./scroll-transition.scss";
 
 const slides = [
   {
@@ -27,33 +28,25 @@ const slides = [
     title: "ScrollTrigger",
     copy: "GSAP, ScrollTrigger, and Lenis stay inside the browser-only Qwik task so the route remains resumable.",
   },
-]
+];
 
 export default component$(() => {
-  const rootRef = useSignal<HTMLElement>()
+  const rootRef = useSignal<HTMLElement>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ cleanup }) => {
-    const root = rootRef.value
-    if (!root) return
-
-    const lifecycle = {
-      disposed: false,
-      dispose: undefined as (() => void) | undefined,
-    }
-
-    cleanup(() => {
-      lifecycle.disposed = true
-      lifecycle.dispose?.()
-    })
-
-    lifecycle.dispose = await setupScrollTransition(root)
-    if (lifecycle.disposed) lifecycle.dispose()
-  })
+    await createMountedClientEffect(cleanup, () => {
+      const root = rootRef.value;
+      return root ? setupScrollTransition(root) : undefined;
+    });
+  });
 
   return (
     <article class="scroll-transition" ref={rootRef}>
-      <section class="scroll-transition__spacer" aria-labelledby="scroll-transition-title">
+      <section
+        class="scroll-transition__spacer"
+        aria-labelledby="scroll-transition-title"
+      >
         <div>
           <p class="scroll-transition__eyebrow">Qwik / GSAP / ScrollTrigger</p>
           <h1 id="scroll-transition-title">
@@ -64,7 +57,10 @@ export default component$(() => {
         <span class="scroll-transition__hint">Scroll down</span>
       </section>
 
-      <section class="scroll-transition__stage" aria-label="Column grid image transition">
+      <section
+        class="scroll-transition__stage"
+        aria-label="Column grid image transition"
+      >
         <div class="scroll-transition__layers">
           <img
             class="scroll-transition__reduced-image"
@@ -74,7 +70,7 @@ export default component$(() => {
             height="1100"
           />
           {slides.map((slide, index) => {
-            const maskId = `scroll-transition-mask-${index + 1}`
+            const maskId = `scroll-transition-mask-${index + 1}`;
 
             return (
               <svg
@@ -100,7 +96,7 @@ export default component$(() => {
                   mask={`url(#${maskId})`}
                 />
               </svg>
-            )
+            );
           })}
 
           <div class="scroll-transition__progress" aria-hidden="true">
@@ -130,7 +126,7 @@ export default component$(() => {
         <h2>Scroll Transition Testpage</h2>
       </section>
     </article>
-  )
-})
+  );
+});
 
-export const head = buildHead(`Scroll Transition - ${siteMetadata.title}`)
+export const head = buildHead(`Scroll Transition - ${siteMetadata.title}`);

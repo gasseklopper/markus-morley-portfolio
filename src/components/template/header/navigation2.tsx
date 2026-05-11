@@ -9,10 +9,9 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik"
 import { Link, useLocation } from "@builder.io/qwik-city"
-import gsap from "gsap"
-import { SplitText } from "gsap/SplitText"
 import styles from "./navigation.scss?inline"
 import { FeatureFlag, isFeatureEnabled } from "~/utils/feature-flags"
+import { loadGsap } from "~/utils/gsapClient"
 import headerData from "./data"
 
 type NavItem = {
@@ -55,8 +54,8 @@ export default component$(() => {
   const menuInfoRef = useSignal<HTMLElement>()
   const menuLinksWrapRef = useSignal<HTMLElement>()
 
-  const openTlRef = useSignal<NoSerialize<gsap.core.Timeline>>()
-  const closeTlRef = useSignal<NoSerialize<gsap.core.Timeline>>()
+  const openTlRef = useSignal<NoSerialize<any>>()
+  const closeTlRef = useSignal<NoSerialize<any>>()
 
   const openMenu$ = $(() => {
     if (isAnimating.value || isMenuOpen.value || !openTlRef.value) return
@@ -100,8 +99,11 @@ export default component$(() => {
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup }) => {
-    gsap.registerPlugin(SplitText)
+  useVisibleTask$(async ({ cleanup }) => {
+    const { gsap, SplitText } = await loadGsap({
+      scrollTrigger: false,
+      splitText: true,
+    })
 
     const nav = navRef.value
     const menu = menuRef.value
@@ -146,7 +148,7 @@ export default component$(() => {
     gsap.set(menuLogo, { opacity: 0 })
     gsap.set(menuInfoItems, { opacity: 0, y: 100 })
     /////
-    const splits: SplitText[] = []
+    const splits: any[] = []
     const hoverCleanups: Array<() => void> = []
 
     menuLinks.forEach((link) => {
@@ -157,7 +159,7 @@ export default component$(() => {
 
       splits.push(split)
 
-      split.chars.forEach((charEl, index) => {
+      split.chars.forEach((charEl: HTMLElement, index: number) => {
         const text = charEl.textContent ?? ""
 
         charEl.innerHTML = `
@@ -176,7 +178,7 @@ export default component$(() => {
       })
 
       const lines = split.chars
-        .map((char) => char.querySelector(".char__line"))
+        .map((char: HTMLElement) => char.querySelector(".char__line"))
         .filter(Boolean) as HTMLElement[]
 
       gsap.set(lines, {

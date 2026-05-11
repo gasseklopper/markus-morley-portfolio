@@ -1,5 +1,5 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik"
-import { gsap } from "gsap"
+import { loadGsap } from "~/utils/gsapClient"
 
 export const Cursor = component$(() => {
   const cursorRef = useSignal<HTMLDivElement>()
@@ -24,8 +24,16 @@ export const Cursor = component$(() => {
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(({ cleanup, track }) => {
+  useVisibleTask$(async ({ cleanup, track }) => {
     track(() => enabled.value)
+
+    let disposed = false
+    cleanup(() => {
+      disposed = true
+    })
+
+    const { gsap } = await loadGsap({ scrollTrigger: false })
+    if (disposed) return
 
     const cursorEl = cursorRef.value
     if (!cursorEl || !enabled.value) return

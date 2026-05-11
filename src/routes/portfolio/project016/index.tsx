@@ -3,6 +3,7 @@ import ImgImg2063 from "~/media/assets/images/photography/venedig/IMG_2063.jpg?j
 import ImgImg2094 from "~/media/assets/images/photography/venedig/IMG_2094.jpg?jsx";
 import gentlyStyles from "./gently.scss?inline";
 import siteConfig from "~/config/siteConfig.json";
+import { loadGsap } from "~/utils/gsapClient";
 import { buildHead } from "~/utils/head";
 
 const workItems = [
@@ -106,13 +107,10 @@ export default component$(() => {
       return;
     }
 
-    const [{ gsap }, { ScrollTrigger }, { default: Lenis }] = await Promise.all([
-      import("gsap"),
-      import("gsap/ScrollTrigger"),
+    const [{ gsap, ScrollTrigger }, { default: Lenis }] = await Promise.all([
+      loadGsap(),
       import("lenis"),
     ]);
-
-    gsap.registerPlugin(ScrollTrigger);
 
     const ghostContainer = document.createElement("div");
     ghostContainer.className = "ghost_work-container";

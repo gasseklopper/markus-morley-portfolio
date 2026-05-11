@@ -5,7 +5,7 @@ import {
 	useSignal,
 	useVisibleTask$,
 } from "@builder.io/qwik"
-import gsap from "gsap"
+import { loadGsap } from "~/utils/gsapClient"
 
 export const PageTransition = component$(() => {
 	const overlayRef = useSignal<HTMLDivElement>()
@@ -13,7 +13,8 @@ export const PageTransition = component$(() => {
 	const transitionId = useSignal(0)
 
 	// eslint-disable-next-line qwik/no-use-visible-task
-	useVisibleTask$(() => {
+	useVisibleTask$(async () => {
+		const { gsap } = await loadGsap({ scrollTrigger: false })
 		const path = pathRef.value
 		const overlay = overlayRef.value
 		if (!path || !overlay) return
@@ -31,6 +32,7 @@ export const PageTransition = component$(() => {
 	useOnDocument(
 		"qviewTransition",
 		$(async (event: Event) => {
+			const { gsap } = await loadGsap({ scrollTrigger: false })
 			const transition = (event as CustomEvent<any>).detail
 			const currentTransitionId = transitionId.value + 1
 			transitionId.value = currentTransitionId

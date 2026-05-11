@@ -1,5 +1,6 @@
 // src/hooks/useGsapReveal.ts
 import { useVisibleTask$ } from "@builder.io/qwik"
+import { loadGsap } from "~/utils/gsapClient"
 
 export const useGsapReveal = () => {
 	// eslint-disable-next-line qwik/no-use-visible-task
@@ -7,12 +8,7 @@ export const useGsapReveal = () => {
 		const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 		if (reduce) return
 
-		const gsapMod = await import("gsap")
-		const stMod = await import("gsap/ScrollTrigger")
-		const gsap = (gsapMod as any).gsap ?? (gsapMod as any).default ?? gsapMod
-		const ScrollTrigger = (stMod as any).ScrollTrigger ?? (stMod as any).default
-
-		gsap.registerPlugin(ScrollTrigger)
+		const { gsap, ScrollTrigger } = await loadGsap()
 
 		const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"))
 

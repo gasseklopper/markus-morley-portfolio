@@ -1,7 +1,6 @@
 import { component$, useSignal, $, useVisibleTask$, useStyles$ } from "@builder.io/qwik"
 import { Link } from "@builder.io/qwik-city"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { loadGsap } from "~/utils/gsapClient"
 import styles from "./footerNew.scss?inline"
 
 
@@ -12,10 +11,10 @@ export const FooterNew = component$(
     const footerLayoutRef = useSignal<HTMLElement>()
     const footerRef = useSignal<HTMLElement>()
     // eslint-disable-next-line qwik/no-use-visible-task
-    useVisibleTask$(() => {
+    useVisibleTask$(async () => {
       if (!footerLayoutRef.value) return
 
-      gsap.registerPlugin(ScrollTrigger)
+      const { gsap } = await loadGsap()
 
       const el = footerLayoutRef.value
 
@@ -46,7 +45,8 @@ export const FooterNew = component$(
 
 
 
-    const moveSticky = $((e: MouseEvent, el: HTMLElement) => {
+    const moveSticky = $(async (e: MouseEvent, el: HTMLElement) => {
+      const { gsap } = await loadGsap({ scrollTrigger: false })
       const text = el.querySelector('.sticky-link__text') as HTMLElement
       if (!text) return
 
@@ -67,7 +67,8 @@ export const FooterNew = component$(
       })
     })
 
-    const enterSticky = $((e: MouseEvent, el: HTMLElement) => {
+    const enterSticky = $(async (e: MouseEvent, el: HTMLElement) => {
+      const { gsap } = await loadGsap({ scrollTrigger: false })
       const text = el.querySelector('.sticky-link__text') as HTMLElement
       if (!text) return
 
@@ -85,7 +86,8 @@ export const FooterNew = component$(
       })
     })
 
-    const leaveSticky = $((el: HTMLElement) => {
+    const leaveSticky = $(async (el: HTMLElement) => {
+      const { gsap } = await loadGsap({ scrollTrigger: false })
       const text = el.querySelector('.sticky-link__text') as HTMLElement
       if (!text) return
 

@@ -4,30 +4,6 @@ import { useGsapAnimations } from "~/hooks/useGsapAnimations";
 import { portfolioPages } from "~/config/portfolio";
 import { Card, CardVariation } from "./card";
 
-type PortfolioPage = (typeof portfolioPages)[number];
-
-export const getProjectBadge = (page: PortfolioPage) => {
-  if (page.path === "/portfolio/color-theme") {
-    return "Design Tokens";
-  }
-
-  if (page.path === "/portfolio/farbkasten") {
-    return "Creative Coding";
-  }
-
-  if (page.path.startsWith("/portfolio/generative-art")) {
-    return page.path === "/portfolio/generative-art"
-      ? "Generative Hub"
-      : "Experiment";
-  }
-
-  if (page.name.toLowerCase().includes("project")) {
-    return "Case Study";
-  }
-
-  return "Case Study";
-};
-
 export default component$(() => {
   useGsapAnimations();
 
@@ -60,21 +36,23 @@ export default component$(() => {
               href={page.path}
               as="a"
             >
-              <Card.Image
-                src={page.image?.src || ""}
-                alt={page.image?.alt || page.name}
-                width={800}
-                height={450}
-              />
+              {page.preview.image ? (
+                <Card.Image
+                  src={page.preview.image.src}
+                  alt={page.preview.image.alt}
+                  width={800}
+                  height={450}
+                />
+              ) : null}
 
               <Card.Body>
-                <Card.Tagline>{getProjectBadge(page)}</Card.Tagline>
+                <Card.Tagline>{page.badge}</Card.Tagline>
                 <Card.Headline>{page.name}</Card.Headline>
                 <Card.Description>{page.description}</Card.Description>
               </Card.Body>
 
               <Card.Footer>
-                <Card.Date>12.12.2023</Card.Date>
+                <Card.Date>{page.date}</Card.Date>
                 <Card.Link href={page.path}>Read more</Card.Link>
               </Card.Footer>
             </Card.Root>

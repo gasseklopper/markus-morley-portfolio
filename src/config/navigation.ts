@@ -1,4 +1,5 @@
 import type { FooterConfig, NavItem, SocialLink } from "./types";
+import { portfolioNavItems } from "./portfolio";
 
 export const headerNavigation = {
   logoText: "Markus Morley",
@@ -14,6 +15,7 @@ export const headerNavigation = {
     {
       name: "Portfolio",
       link: "/portfolio",
+      children: portfolioNavItems,
     },
   ],
 } as const satisfies { logoText: string; nav: readonly NavItem[] };

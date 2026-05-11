@@ -2,7 +2,6 @@ import { component$, useStyles$ } from "@builder.io/qwik";
 import styles from "./teaser.scss?inline";
 import { BoxBasic } from "../box_basic";
 import { portfolioPages } from "~/config/portfolio";
-import { getProjectBadge } from "~/routes/portfolio";
 import { Card, CardVariation } from "~/routes/portfolio/card";
 import { useGsapAnimations } from "~/hooks/useGsapAnimations";
 
@@ -66,21 +65,23 @@ export const Teaser = component$(() => {
                   href={page.path}
                   as="a"
                 >
-                  <Card.Image
-                    src={page.image?.src || ""}
-                    alt={page.image?.alt || page.name}
-                    width={800}
-                    height={450}
-                  />
+                  {page.preview.image ? (
+                    <Card.Image
+                      src={page.preview.image.src}
+                      alt={page.preview.image.alt}
+                      width={800}
+                      height={450}
+                    />
+                  ) : null}
 
                   <Card.Body>
-                    <Card.Tagline>{getProjectBadge(page)}</Card.Tagline>
+                    <Card.Tagline>{page.badge}</Card.Tagline>
                     <Card.Headline>{page.name}</Card.Headline>
                     <Card.Description>{page.description}</Card.Description>
                   </Card.Body>
 
                   <Card.Footer>
-                    <Card.Date>12.12.2023</Card.Date>
+                    <Card.Date>{page.date}</Card.Date>
                     <Card.Link href={page.path}>Read more</Card.Link>
                   </Card.Footer>
                 </Card.Root>

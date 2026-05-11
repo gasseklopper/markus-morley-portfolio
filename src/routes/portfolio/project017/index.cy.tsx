@@ -14,7 +14,7 @@ describe("Password forge page", () => {
   it("renders a generated password with the default length", () => {
     cy.mount(<PasswordForge />);
 
-    cy.contains(".hero__badge", "Project 017").should("be.visible");
+    cy.contains(".hero__badge", "Utility").should("be.visible");
     cy.contains("h1", "ASCII Password Forge").should("be.visible");
     cy.get(".password-display__value")
       .invoke("text")

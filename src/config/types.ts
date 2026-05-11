@@ -89,15 +89,41 @@ export type FooterConfig = {
 
 export type PortfolioVariation = "clean" | "primary" | "secondary";
 
+export type PortfolioCategory =
+  | "Creative Coding"
+  | "Data Visualization"
+  | "Design Systems"
+  | "Frontend Prototype"
+  | "Utility";
+
+export type PortfolioStatus = "Live" | "Prototype" | "Study";
+
 export type PortfolioImage = {
   src: string;
   alt: string;
 };
 
+export type PortfolioPreview =
+  | {
+      image: PortfolioImage;
+      missingReason?: never;
+    }
+  | {
+      image: null;
+      missingReason: string;
+    };
+
 export type PortfolioPage = SitemapRoute & {
   title: string;
   description: string;
+  badge: string;
+  date: string;
+  category: PortfolioCategory;
+  status: PortfolioStatus;
+  tech: readonly string[];
+  order: number;
   variation?: PortfolioVariation;
+  preview: PortfolioPreview;
   image?: PortfolioImage;
 };
 

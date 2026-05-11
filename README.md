@@ -51,7 +51,7 @@ Inside your project, you'll see the following directory structure:
 
 - `src/utils`: Shared helpers. For example `src/utils/head.ts` provides a
   `buildHead()` function used across routes to create `DocumentHead` values.
-- `src/config/portfolio-pages.json`: List of individual portfolio pages used for the portfolio listing and sitemap. Each entry provides a `name`, `path`, `title` and `description`.
+- `src/config/portfolio.ts`: Typed list of portfolio pages used for cards, navigation, sitemap, and SEO. Each entry provides display metadata such as `name`, `path`, `description`, `badge`, `date`, `category`, `status`, `tech`, `order`, and preview image state.
 
 - `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 
@@ -80,8 +80,8 @@ This starter includes a few basic routes:
 - `/konzept` - Konzept page (set `PUBLIC_FEATURE_KONZEPT=true` to enable)
 
 A sitemap is generated at `/sitemap.xml` using Qwik City.
-Route metadata is defined via a shared `buildHead()` helper to keep pages consistent. Individual portfolio pages are defined in `src/config/portfolio-pages.json` and included in the sitemap.
-Each portfolio entry also specifies a title and description used by the respective page.
+Route metadata is defined via a shared `buildHead()` helper to keep pages consistent. Individual portfolio pages are defined in `src/config/portfolio.ts` and included in the sitemap.
+Each portfolio entry also specifies the title, description, card badge, date, category, status, tech stack, ordering, and preview state used by listing cards, navigation, and the respective page head.
 
 ## Todo list backend example
 

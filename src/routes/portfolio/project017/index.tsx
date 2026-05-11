@@ -112,7 +112,7 @@ export default component$(() => {
   return (
     <div class="brutal-page">
       <section class="hero">
-        <div class="hero__badge">Project 017</div>
+        <div class="hero__badge">Utility</div>
         <h1 class="hero__title">ASCII Password Forge</h1>
         <p class="hero__lead">
           A brutalist utility that forges uncompromising ASCII passwords. Built

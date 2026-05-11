@@ -6,8 +6,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import styles from "./project012.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import {
   bindResponsiveChart,
   fetchJson,
@@ -466,7 +465,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Project 012 - ${siteMetadata.title}`,
-  "Interactive D3 scatterplot visualizing professional cyclist times and doping allegations.",
-);
+export const head = buildPortfolioHead("/portfolio/project012");

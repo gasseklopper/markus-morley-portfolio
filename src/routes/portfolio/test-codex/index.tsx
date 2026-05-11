@@ -5,8 +5,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import styles from "./test-codex.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import { createMountedClientEffect } from "~/utils/browserClient";
 import { setupTestCodexAnimations } from "./test-codex.client";
 
@@ -528,7 +527,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `test-codex - ${siteMetadata.title}`,
-  "A GSAP and ScrollTrigger powered photographic motion portfolio study built in Qwik.",
-);
+export const head = buildPortfolioHead("/portfolio/test-codex");

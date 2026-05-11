@@ -2,7 +2,6 @@ import { component$, useStyles$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import ImgHeroPortrait from "~/media/assets/images/heros/image.png?jsx";
 import styles from "../index.scss?inline";
-import { siteMetadata } from "~/config/site";
 import { portfolioPages } from "~/config/portfolio";
 import { buildHead } from "~/utils/head";
 
@@ -244,4 +243,7 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`Portfolio - ${siteMetadata.title}`);
+export const head = buildHead(
+  "Portfolio - Markus Morley Portfolio",
+  "Selected interaction design, frontend, and creative coding work by Markus Morley.",
+);

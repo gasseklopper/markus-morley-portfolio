@@ -7,8 +7,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import styles from "./shopping-ledger.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import * as ledgerModel from "./shopping-ledger-model";
 import type {
   LedgerEntry,
@@ -581,7 +580,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  "Project 018 - Markus Morley personal portfolio",
-  `${siteMetadata.title} — Brutalist shopping list atelier that stores lists in local storage, tags them with creation dates, and suggests frequently used topics within an adjustable window.`,
-);
+export const head = buildPortfolioHead("/portfolio/project018");

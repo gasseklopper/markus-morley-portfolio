@@ -1,4 +1,5 @@
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { getPortfolioPage } from "~/config/portfolio";
 import { siteMetadata } from "~/config/site";
 
 /**
@@ -17,4 +18,13 @@ export function buildHead(
       },
     ],
   };
+}
+
+export function buildPortfolioHead(path: string): DocumentHead {
+  const page = getPortfolioPage(path);
+
+  return buildHead(
+    page?.title ?? siteMetadata.title,
+    page?.description ?? siteMetadata.description,
+  );
 }

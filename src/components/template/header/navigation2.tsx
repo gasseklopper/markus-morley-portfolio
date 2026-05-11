@@ -441,7 +441,7 @@ export default component$(() => {
           <p>Get in touch</p>
           <h3>m-morley@gmx.de</h3>
           <h3>+49 177 371 6791</h3>
-          <h6>Löwenstrasse 1</h6>
+          <h6>Loewenstrasse 1</h6>
           <h6>63067 Offenbach</h6>
         </div>
 
@@ -673,7 +673,7 @@ export default component$(() => {
 //             <h3>m-morley@gmx.de</h3>
 //             <h3>+49 177 371 6791</h3>
 //             <br />
-//             <h6>Löwenstrasse 1</h6>
+//             <h6>Loewenstrasse 1</h6>
 //             <h6>63067 Offenbach</h6>
 //           </div>
 

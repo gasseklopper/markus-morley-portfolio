@@ -1,5 +1,4 @@
 import { component$ } from "@builder.io/qwik";
-import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import { useGsapAnimations } from "~/hooks/useGsapAnimations";
 import { portfolioPages } from "~/config/portfolio";
@@ -86,4 +85,7 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`Basic Start - ${siteMetadata.title}`);
+export const head = buildHead(
+  "Portfolio - Markus Morley Portfolio",
+  "Selected interaction design, frontend, and creative coding work by Markus Morley.",
+);

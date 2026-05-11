@@ -6,8 +6,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import treemapStyles from "./treemap.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import {
   bindResponsiveChart,
   fetchJson,
@@ -439,7 +438,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Project 015 – Arcade Universe Treemap | ${siteMetadata.title}`,
-  "Interactive D3 treemap showcasing global video game sales by genre, built for the FreeCodeCamp data visualization certification.",
-);
+export const head = buildPortfolioHead("/portfolio/project015");

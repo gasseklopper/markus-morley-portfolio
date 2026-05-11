@@ -117,7 +117,7 @@ export const Footer = component$(() => {
           onClick$={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           class="fixed right-4 bottom-4 rounded-full border border-[var(--surface-border)] bg-[var(--primary)] p-3 text-[var(--brand-inverted)] shadow-[0_24px_60px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-1 focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
         >
-          <span aria-hidden="true">↑</span>
+          <span aria-hidden="true">Up</span>
         </button>
       )}
     </footer>

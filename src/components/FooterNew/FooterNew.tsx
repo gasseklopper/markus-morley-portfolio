@@ -147,7 +147,7 @@ export const FooterNew = component$(
                     <Link
                       class="sticky-link"
                       data-sticky="1"
-                      href="/About"
+                      href="/about"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
@@ -159,19 +159,19 @@ export const FooterNew = component$(
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/Contact"
+                      href="/datenschutz"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
                     >
-                      <span class="sticky-link__text">Contact</span>
+                      <span class="sticky-link__text">Datenschutz</span>
                     </a>
                   </li>
                   <li>
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/Portfolio"
+                      href="/portfolio"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
@@ -183,12 +183,12 @@ export const FooterNew = component$(
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/404"
+                      href="/impressum"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
                     >
-                      <span class="sticky-link__text">404</span>
+                      <span class="sticky-link__text">Impressum</span>
                     </a>
                   </li>
                 </ul>
@@ -211,7 +211,7 @@ export const FooterNew = component$(
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/About"
+                      href="https://www.linkedin.com/in/markus-morley/"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
@@ -223,7 +223,7 @@ export const FooterNew = component$(
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/Contact"
+                      href="https://github.com/gasseklopper"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
@@ -235,7 +235,7 @@ export const FooterNew = component$(
                     <a
                       class="sticky-link"
                       data-sticky="1"
-                      href="/Portfolio"
+                      href="https://www.behance.net/markusmorley"
                       onMouseMove$={(e, el) => moveSticky(e, el)}
                       onMouseEnter$={(e, el) => enterSticky(e, el)}
                       onMouseLeave$={(_, el) => leaveSticky(el)}
@@ -248,7 +248,7 @@ export const FooterNew = component$(
             </div>
             <div class="footer__footer">
               <div class="footer__name">
-                <h2>©2026</h2>
+                <h2>(c) 2026</h2>
               </div>
             </div>
           </div>
@@ -256,22 +256,22 @@ export const FooterNew = component$(
             <ul class="">
               {/* <li>
                 <a href="/">
-                  <span class="">©2026 Markus Morley.</span>
+                  <span class="">(c) 2026 Markus Morley.</span>
                 </a>
               </li> */}
               <li>
-                <Link href="/Privacy-Policy">
-                  <span class="">Privacy Policy</span>
+                <Link href="/datenschutz">
+                  <span class="">Datenschutz</span>
                 </Link>
               </li>
               <li>
-                <Link href="/License-Agreement">
-                  <span >License Agreement</span>
+                <Link href="/impressum">
+                  <span>Impressum</span>
                 </Link>
               </li>
               <li>
-                <Link href="/Terms-of-Use">
-                  <span >Terms of Use</span>
+                <Link href="/portfolio">
+                  <span>Portfolio</span>
                 </Link>
               </li>
             </ul>

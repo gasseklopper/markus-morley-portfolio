@@ -1,6 +1,5 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -139,7 +138,4 @@ export default component$(() => {
   return <canvas id="morleyDotsCanvas" />;
 });
 
-export const head = buildHead(
-  `Generative Art - ${siteMetadata.title}`,
-  "Interactive generative color stripes example.",
-);
+export const head = buildPortfolioHead("/portfolio/generative-art");

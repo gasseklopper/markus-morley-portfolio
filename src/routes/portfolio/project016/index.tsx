@@ -4,9 +4,8 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import gentlyStyles from "./gently.scss?inline";
-import { siteMetadata } from "~/config/site";
 import { loadGsap } from "~/utils/gsapClient";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 
 /* eslint-disable qwik/jsx-img */
 
@@ -504,7 +503,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Project 016 – Scroll Trigger Study | ${siteMetadata.title}`,
-  "Immersive GSAP ScrollTrigger and Lenis powered gallery exploring ambient motion design in a sticky hero layout.",
-);
+export const head = buildPortfolioHead("/portfolio/project016");

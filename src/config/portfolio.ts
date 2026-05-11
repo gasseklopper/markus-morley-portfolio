@@ -1,10 +1,14 @@
+import { siteMetadata } from "./site";
 import type { PortfolioPage } from "./types";
 
-export const portfolioPages: readonly PortfolioPage[] = [
+type PortfolioPageInput = Omit<PortfolioPage, "title">;
+
+const createPortfolioTitle = (name: string) => `${name} - ${siteMetadata.title}`;
+
+const portfolioPageEntries = [
   {
     name: "Color Theme",
     path: "/portfolio/color-theme",
-    title: "Color Theme - Markus Morley personal portfolio",
     description: "Color swatches for light, dark, neon and pastel themes.",
     variation: "clean",
     image: {
@@ -15,7 +19,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Farbkasten",
     path: "/portfolio/farbkasten",
-    title: "Farbkasten - Markus Morley personal portfolio",
     description: "Draw on a portrait using the brand color.",
     variation: "primary",
     image: {
@@ -26,7 +29,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 011",
     path: "/portfolio/project011",
-    title: "Project 011 - Markus Morley personal portfolio",
     description: "Interactive D3 bar chart visualizing US GDP.",
     image: {
       src: "/assets/portfolio/project011/preview.png",
@@ -36,7 +38,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Test Codex",
     path: "/portfolio/test-codex",
-    title: "Test Codex - Markus Morley personal portfolio",
     description:
       "Photographic GSAP motion art direction study with ScrollTrigger, masked reveals, and micro interactions.",
     variation: "secondary",
@@ -48,7 +49,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 012",
     path: "/portfolio/project012",
-    title: "Project 012 - Markus Morley personal portfolio",
     description:
       "Interactive D3 scatterplot visualizing professional cycling times.",
     variation: "primary",
@@ -60,7 +60,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 013",
     path: "/portfolio/project013",
-    title: "Project 013 - Markus Morley personal portfolio",
     description:
       "Interactive D3 heat map visualizing global temperature variance.",
     variation: "clean",
@@ -72,7 +71,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 014",
     path: "/portfolio/project014",
-    title: "Project 014 - Markus Morley personal portfolio",
     description:
       "Interactive D3 choropleth highlighting education attainment across U.S. counties.",
     variation: "clean",
@@ -84,7 +82,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 015",
     path: "/portfolio/project015",
-    title: "Project 015 - Markus Morley personal portfolio",
     description:
       "Interactive D3 treemap illustrating video game sales by genre with responsive legend and tooltips.",
     variation: "clean",
@@ -96,7 +93,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 016",
     path: "/portfolio/project016",
-    title: "Project 016 - Markus Morley personal portfolio",
     description:
       "Scroll-triggered GSAP and Lenis gallery inspired by the Gently concept with floating imagery and sticky hero.",
     variation: "secondary",
@@ -104,7 +100,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 017",
     path: "/portfolio/project017",
-    title: "Project 017 - Markus Morley personal portfolio",
     description:
       "Brutalist password generator featuring ASCII-safe defaults, clipboard copy, and configurable strength controls.",
     variation: "clean",
@@ -116,7 +111,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Project 018",
     path: "/portfolio/project018",
-    title: "Project 018 - Markus Morley personal portfolio",
     description:
       "Bold brutal shopping list atelier with offline storage, date-tagged lists, and adjustable frequent topic suggestions.",
     variation: "clean",
@@ -126,21 +120,8 @@ export const portfolioPages: readonly PortfolioPage[] = [
     },
   },
   {
-    name: "Project 019",
-    path: "/portfolio/project019",
-    title: "Project 019 - Markus Morley personal portfolio",
-    description:
-      "Phaser-powered bunker starter with coded tiles, WASD movement, collisions, and exit prompt.",
-    variation: "secondary",
-    image: {
-      src: "/assets/portfolio/project019/preview.png",
-      alt: "Project 019 Preview",
-    },
-  },
-  {
     name: "Roman Numeral Converter",
     path: "/portfolio/roman-numeral-converter",
-    title: "Roman Numeral Converter - Markus Morley personal portfolio",
     description:
       "Roman numeral converter with live validation, history log, and subtractive pair legend.",
     variation: "primary",
@@ -152,7 +133,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Generative Art",
     path: "/portfolio/generative-art",
-    title: "Generative Art - Markus Morley personal portfolio",
     description: "Interactive generative art example.",
     variation: "clean",
     image: {
@@ -163,7 +143,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Drip Sort",
     path: "/portfolio/generative-art/drip-sort",
-    title: "Drip Sort - Markus Morley personal portfolio",
     description: "Black-and-white rectangles dripping downward while sorting.",
     variation: "clean",
     image: {
@@ -174,7 +153,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Color Palette",
     path: "/portfolio/generative-art/color-palette",
-    title: "Color Palette - Markus Morley personal portfolio",
     description: "Extract and sort colors from images using p5.js.",
     variation: "primary",
     image: {
@@ -183,9 +161,8 @@ export const portfolioPages: readonly PortfolioPage[] = [
     },
   },
   {
-    name: "Crayon — the Qwik.js way",
+    name: "Crayon - the Qwik.js way",
     path: "/portfolio/generative-art/crayon",
-    title: "Crayon — the Qwik.js way - Markus Morley personal portfolio",
     description:
       "Interactive p5.brush sketch that responds to motion and gesture.",
     variation: "clean",
@@ -193,7 +170,6 @@ export const portfolioPages: readonly PortfolioPage[] = [
   {
     name: "Connected Agents",
     path: "/portfolio/generative-art/connected-agents",
-    title: "Connected Agents - Markus Morley personal portfolio",
     description: "Form morphing process by connected random agents.",
     variation: "clean",
     image: {
@@ -201,6 +177,22 @@ export const portfolioPages: readonly PortfolioPage[] = [
       alt: "Connected Agents Preview",
     },
   },
-] as const;
+] as const satisfies readonly PortfolioPageInput[];
+
+export const portfolioPages: readonly PortfolioPage[] = portfolioPageEntries.map(
+  (page) => ({
+    ...page,
+    title: createPortfolioTitle(page.name),
+  }),
+);
+
+export const portfolioRoutes = portfolioPages.map(({ name, path, flag }) => ({
+  name,
+  path,
+  ...(flag ? { flag } : {}),
+}));
+
+export const getPortfolioPage = (path: string) =>
+  portfolioPages.find((page) => page.path === path);
 
 export type { PortfolioPage };

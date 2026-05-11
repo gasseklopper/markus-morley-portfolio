@@ -1,7 +1,6 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import type p5 from "p5";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -97,7 +96,4 @@ export default component$(() => {
   return <div id="p5-container" />;
 });
 
-export const head = buildHead(
-  `Color Palette - ${siteMetadata.title}`,
-  "Extract and sort color palette from images with p5.js.",
-);
+export const head = buildPortfolioHead("/portfolio/generative-art/color-palette");

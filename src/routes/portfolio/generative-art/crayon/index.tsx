@@ -1,7 +1,6 @@
 import { component$, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
 import type p5Type from "p5";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 
 const styles = `
   .crayon-page {
@@ -514,7 +513,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Crayon — the Qwik.js way - ${siteMetadata.title}`,
-  "Interactive WebGL sketch that pairs p5.brush trails with responsive pointer physics.",
-);
+export const head = buildPortfolioHead("/portfolio/generative-art/crayon");

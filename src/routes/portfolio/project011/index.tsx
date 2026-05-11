@@ -6,8 +6,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import styles from "./project011.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import {
   bindResponsiveChart,
   fetchJson,
@@ -352,7 +351,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Project 011 - ${siteMetadata.title}`,
-  "Interactive D3 bar chart visualizing United States GDP from 1947 to 2015.",
-);
+export const head = buildPortfolioHead("/portfolio/project011");

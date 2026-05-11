@@ -1,7 +1,6 @@
 import { $, component$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import styles from "./password-forge.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import {
   type CharacterSetName,
   MIN_LENGTH,
@@ -288,7 +287,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  "Project 017 - Markus Morley personal portfolio",
-  `${siteMetadata.title} — Brutalist password generator with clipboard copy actions and a minimum length of twelve ASCII characters.`,
-);
+export const head = buildPortfolioHead("/portfolio/project017");

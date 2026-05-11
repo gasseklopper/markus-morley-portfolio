@@ -3,13 +3,14 @@ import type { SiteInfo, SiteMetadata } from "./types";
 export const siteMetadata: SiteMetadata = {
   author: "Markus Morley",
   image: "",
-  description: "Markus Morley personal portfolio website",
-  title: "Markus Morley personal portfolio",
+  description:
+    "Personal portfolio of Markus Morley, interaction designer and frontend developer.",
+  title: "Markus Morley Portfolio",
 };
 
 export const siteInfo: SiteInfo = {
-  title: "Markus Morley personal portfolio",
-  description: "",
+  title: siteMetadata.title,
+  description: siteMetadata.description,
   baseUrl: "",
   favicon: "/assets/favicon.png",
   logo: "",
@@ -20,7 +21,7 @@ export const siteInfo: SiteInfo = {
   logoDark2: "",
   logoWidth2: "",
   logoHeight2: "",
-  logoText: "Markus Morley",
+  logoText: siteMetadata.author,
 };
 
 export const notFoundPage = {

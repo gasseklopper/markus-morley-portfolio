@@ -1,6 +1,6 @@
 import type { SitemapRoute } from "./types";
 
-export const sitemapRoutes: readonly SitemapRoute[] = [
+export const publicRoutes: readonly SitemapRoute[] = [
   {
     name: "Home",
     path: "/",
@@ -31,3 +31,5 @@ export const sitemapRoutes: readonly SitemapRoute[] = [
     flag: "konzept",
   },
 ] as const;
+
+export const sitemapRoutes = publicRoutes;

@@ -15,8 +15,7 @@ import type {
 import type { GeoPermissibleObjects } from "d3";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import styles from "./project014.scss?inline";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import {
   bindResponsiveChart,
   fetchJson,
@@ -375,4 +374,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`${siteMetadata.title} - Choropleth Map`);
+export const head = buildPortfolioHead("/portfolio/project014");

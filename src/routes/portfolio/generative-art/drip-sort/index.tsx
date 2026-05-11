@@ -1,6 +1,5 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 
 export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -107,7 +106,4 @@ export default component$(() => {
   return <canvas id="dripSortCanvas" />;
 });
 
-export const head = buildHead(
-  `Dripping Sort Art - ${siteMetadata.title}`,
-  "Black and white dripping rectangles that continuously sort by shade.",
-);
+export const head = buildPortfolioHead("/portfolio/generative-art/drip-sort");

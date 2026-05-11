@@ -26,9 +26,6 @@ export type SiteInfo = {
 export type NavItem = {
   name: string;
   link: string;
-  folder?: string;
-  pattern?: string;
-  type?: "page" | "page-with-layout" | "route-group" | "endpoint";
   flag?: FeatureFlag;
   children?: readonly NavItem[];
 };

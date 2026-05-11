@@ -7,8 +7,7 @@ import {
   useVisibleTask$,
 } from "@builder.io/qwik";
 import { themeStorageKey } from "~/components/theme/preference-scripts";
-import { siteMetadata } from "~/config/site";
-import { buildHead } from "~/utils/head";
+import { buildPortfolioHead } from "~/utils/head";
 import styles from "./color-theme.scss?inline";
 
 interface Theme {
@@ -336,7 +335,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(
-  `Color Theme - ${siteMetadata.title}`,
-  "Color swatches for light, dark, neon and pastell themes.",
-);
+export const head = buildPortfolioHead("/portfolio/color-theme");

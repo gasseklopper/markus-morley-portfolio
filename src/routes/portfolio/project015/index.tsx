@@ -1,9 +1,19 @@
-import { $, component$, useSignal, useVisibleTask$, useStylesScoped$ } from "@builder.io/qwik";
+import {
+  component$,
+  useSignal,
+  useVisibleTask$,
+  useStylesScoped$,
+} from "@builder.io/qwik";
 import * as d3 from "d3";
 import treemapStyles from "./treemap.scss?inline";
 import { siteMetadata } from "~/config/site";
-import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
+import {
+  bindResponsiveChart,
+  fetchJson,
+  useDemoLoadState,
+  useFccTestLoader,
+} from "~/utils/portfolio-demo";
 
 const caseStudyStyles = `
   .project-page {
@@ -115,12 +125,6 @@ interface TreeMapNode {
 const DATASET_URL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json";
 
-const triggerDomContentLoaded = () => {
-  if (document.readyState !== "loading") {
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-  }
-};
-
 const COLOR_PALETTE = [
   "#38bdf8",
   "#22d3ee",
@@ -139,189 +143,165 @@ const COLOR_PALETTE = [
 export default component$(() => {
   useStylesScoped$(`${treemapStyles}\n${caseStudyStyles}`);
 
-  const isLoading = useSignal(true);
-  const errorMessage = useSignal<string | null>(null);
-  const refreshCounter = useSignal(0);
+  const containerRef = useSignal<HTMLDivElement>();
+  const legendRef = useSignal<HTMLDivElement>();
+  const tooltipRef = useSignal<HTMLDivElement>();
+  const { isLoading, errorMessage, refreshCounter, handleRefresh } =
+    useDemoLoadState();
 
-  const handleRefresh = $(() => {
-    isLoading.value = true;
-    errorMessage.value = null;
-    refreshCounter.value++;
-  });
+  useFccTestLoader();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
     track(() => refreshCounter.value);
 
-    const container = d3.select<HTMLElement, unknown>("#treemap-container");
-    if (container.empty()) {
+    const containerElement = containerRef.value;
+    const legendElement = legendRef.value;
+    const tooltipElement = tooltipRef.value;
+
+    if (!containerElement || !legendElement || !tooltipElement) {
       isLoading.value = false;
       return;
     }
 
-    resetFccTestSuiteUI();
-
-    const existingScript = document.getElementById(
-      FCC_TEST_SCRIPT_ID,
-    ) as HTMLScriptElement | null;
-    const handleLoad = () => {
-      triggerDomContentLoaded();
-    };
-
-    const script = existingScript ?? document.createElement("script");
-    const createdScript = existingScript === null;
-
-    if (existingScript) {
-      triggerDomContentLoaded();
-    } else {
-      script.id = FCC_TEST_SCRIPT_ID;
-      script.src = FCC_TEST_SCRIPT_SRC;
-      script.async = true;
-      script.addEventListener("load", handleLoad);
-      document.body.append(script);
-    }
-
-    const cleanupTestScript = () => {
-      if (createdScript) {
-        script.removeEventListener("load", handleLoad);
-      }
-      if (script.isConnected) {
-        script.remove();
-      }
-      resetFccTestSuiteUI();
-    };
+    const container = d3.select(containerElement);
+    const legendRoot = d3.select(legendElement);
+    const tooltip = d3.select(tooltipElement);
+    let cleanupResize: (() => void) | undefined;
 
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const response = await fetch(DATASET_URL, {
-        headers: {
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      });
+      const data = await fetchJson<TreeMapNode>(DATASET_URL);
 
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const data = (await response.json()) as TreeMapNode;
-
-      const width = 960;
-      const height = 600;
-
-      const hierarchyRoot = d3
-        .hierarchy<TreeMapNode>(data)
-        .sum((d) => d.value)
-        .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
-
-      const treemap = d3.treemap<TreeMapNode>().size([width, height]).paddingInner(2).round(true);
-
-      const root = treemap(hierarchyRoot);
-
-      const leaves = root.leaves();
-      const categories = Array.from(new Set(leaves.map((leaf) => leaf.data.category)));
-
+      const categories = Array.from(
+        new Set(data.children?.map((node) => node.name) ?? []),
+      );
       const color = d3
         .scaleOrdinal<string, string>()
         .domain(categories)
         .range(COLOR_PALETTE.slice(0, Math.max(categories.length, 2)));
 
-      container.selectAll("*").remove();
+      const renderChart = () => {
+        const measuredWidth = containerElement.clientWidth || 960;
+        const width = Math.max(360, measuredWidth);
+        const height = Math.max(460, Math.round(width * 0.625));
 
-      const svg = container
-        .append("svg")
-        .attr("class", "treemap-svg")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("viewBox", `0 0 ${width} ${height}`)
-        .attr("role", "img")
-        .attr("aria-labelledby", "title description");
+        const hierarchyRoot = d3
+          .hierarchy<TreeMapNode>(data)
+          .sum((d) => d.value)
+          .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
 
-      const tooltip = d3.select<HTMLDivElement, unknown>("#tooltip");
+        const root = d3
+          .treemap<TreeMapNode>()
+          .size([width, height])
+          .paddingInner(0)
+          .round(false)(hierarchyRoot);
 
-      const tiles = svg
-        .selectAll<SVGGElement, typeof leaves[number]>("g")
-        .data(leaves)
-        .join("g")
-        .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+        const leaves = root.leaves();
 
-      tiles
-        .append("rect")
-        .attr("class", "tile")
-        .attr("data-name", (d) => d.data.name)
-        .attr("data-category", (d) => d.data.category)
-        .attr("data-value", (d) => d.data.value)
-        .attr("width", (d) => Math.max(0, d.x1 - d.x0))
-        .attr("height", (d) => Math.max(0, d.y1 - d.y0))
-        .attr("fill", (d) => color(d.data.category))
-        .on("mousemove", (event, d) => {
-          const [x, y] = [event.clientX + 20, event.clientY - 28];
-          tooltip
-            .classed("visible", true)
-            .style("left", `${x}px`)
-            .style("top", `${y}px`)
-            .attr("data-value", d.data.value)
-            .html(
-              `<strong>${d.data.name}</strong><br />Category: ${d.data.category}<br />Value: ${d.data.value.toLocaleString()}`,
-            );
-        })
-        .on("mouseleave", () => {
+        container.selectAll("*").remove();
+        legendRoot.selectAll("*").remove();
+
+        const svg = container
+          .append("svg")
+          .attr("class", "treemap-svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("viewBox", `0 0 ${width} ${height}`)
+          .attr("role", "img")
+          .attr("aria-labelledby", "title description");
+
+        const tiles = svg
+          .selectAll<SVGGElement, (typeof leaves)[number]>("g")
+          .data(leaves)
+          .join("g")
+          .attr("transform", (d) => `translate(${d.x0},${d.y0})`);
+
+        tiles
+          .append("rect")
+          .attr("class", "tile")
+          .attr("data-name", (d) => d.data.name)
+          .attr("data-category", (d) => d.data.category)
+          .attr("data-value", (d) => d.data.value)
+          .attr("width", (d) => Math.max(0, d.x1 - d.x0))
+          .attr("height", (d) => Math.max(0, d.y1 - d.y0))
+          .attr("fill", (d) => color(d.data.category))
+          .on("mousemove", (event, d) => {
+            const [x, y] = [event.clientX + 20, event.clientY - 28];
+            tooltip
+              .classed("visible", true)
+              .style("left", `${x}px`)
+              .style("top", `${y}px`)
+              .attr("data-value", d.data.value)
+              .html(
+                `<strong>${d.data.name}</strong><br />Category: ${d.data.category}<br />Value: ${d.data.value.toLocaleString()}`,
+              );
+          })
+          .on("mouseleave", () => {
+            tooltip.classed("visible", false);
+          });
+
+        tiles
+          .append("text")
+          .attr("class", "tile-label")
+          .selectAll("tspan")
+          .data((d) => d.data.name.split(/\s+/g))
+          .join("tspan")
+          .attr("x", 6)
+          .attr("y", (_d, i) => 16 + i * 12)
+          .text((word) => word);
+
+        const legendWidth = Math.min(720, Math.max(320, width));
+        const legendRectSize = 18;
+        const legendPadding = 12;
+        const itemsPerRow = Math.max(1, Math.floor(legendWidth / 180));
+
+        const legendSvg = legendRoot
+          .append("svg")
+          .attr("width", "100%")
+          .attr(
+            "viewBox",
+            `0 0 ${legendWidth} ${Math.ceil(categories.length / itemsPerRow) * 32}`,
+          )
+          .attr("role", "presentation");
+
+        const legendItems = legendSvg
+          .selectAll<SVGGElement, string>("g")
+          .data(categories)
+          .join("g")
+          .attr("transform", (_category, index) => {
+            const row = Math.floor(index / itemsPerRow);
+            const col = index % itemsPerRow;
+            return `translate(${col * (legendRectSize * 6)}, ${row * 32})`;
+          });
+
+        legendItems
+          .append("rect")
+          .attr("class", "legend-item")
+          .attr("width", legendRectSize)
+          .attr("height", legendRectSize)
+          .attr("rx", 6)
+          .attr("ry", 6)
+          .attr("fill", (category) => color(category));
+
+        legendItems
+          .append("text")
+          .attr("class", "legend-label")
+          .attr("x", legendRectSize + legendPadding)
+          .attr("y", legendRectSize - 4)
+          .text((category) => category);
+      };
+
+      cleanupResize = bindResponsiveChart({
+        wrapperElement: containerElement,
+        renderChart,
+        cleanupChart: () => {
+          container.selectAll("*").remove();
+          legendRoot.selectAll("*").remove();
           tooltip.classed("visible", false);
-        });
-
-      tiles
-        .append("text")
-        .attr("class", "tile-label")
-        .selectAll("tspan")
-        .data((d) => d.data.name.split(/\s+/g))
-        .join("tspan")
-        .attr("x", 6)
-        .attr("y", (_d, i) => 16 + i * 12)
-        .text((word) => word);
-
-      const legendRoot = d3.select<HTMLElement, unknown>("#legend");
-      legendRoot.selectAll("*").remove();
-
-      const legendWidth = 720;
-      const legendRectSize = 18;
-      const legendPadding = 12;
-      const itemsPerRow = Math.max(1, Math.floor(legendWidth / 180));
-
-      const legendSvg = legendRoot
-        .append("svg")
-        .attr("width", "100%")
-        .attr(
-          "viewBox",
-          `0 0 ${legendWidth} ${Math.ceil(categories.length / itemsPerRow) * 32}`,
-        )
-        .attr("role", "presentation");
-
-      const legendItems = legendSvg
-        .selectAll<SVGGElement, string>("g")
-        .data(categories)
-        .join("g")
-        .attr("transform", (_category, index) => {
-          const row = Math.floor(index / itemsPerRow);
-          const col = index % itemsPerRow;
-          return `translate(${col * (legendRectSize * 6)}, ${row * 32})`;
-        });
-
-      legendItems
-        .append("rect")
-        .attr("class", "legend-item")
-        .attr("width", legendRectSize)
-        .attr("height", legendRectSize)
-        .attr("rx", 6)
-        .attr("ry", 6)
-        .attr("fill", (category) => color(category));
-
-      legendItems
-        .append("text")
-        .attr("class", "legend-label")
-        .attr("x", legendRectSize + legendPadding)
-        .attr("y", legendRectSize - 4)
-        .text((category) => category);
+        },
+      });
     } catch (error) {
       console.error("Failed to load treemap data", error);
       errorMessage.value = "Failed to load treemap data. Please try again.";
@@ -330,8 +310,7 @@ export default component$(() => {
     }
 
     return () => {
-      cleanupTestScript();
-      container.selectAll("*").remove();
+      cleanupResize?.();
     };
   });
 
@@ -346,31 +325,35 @@ export default component$(() => {
           </div>
           <h1 id="title">Arcade Universe Treemap</h1>
           <p id="description" class="case-study-description">
-            Explore the landscape of the best-selling video games by genre. Each block reveals a title, its category,
-            and the millions of copies sold. The layout scales proportionally to sales performance, spotlighting
-            dominant franchises within each category.
+            Explore the landscape of the best-selling video games by genre. Each
+            block reveals a title, its category, and the millions of copies
+            sold. The layout scales proportionally to sales performance,
+            spotlighting dominant franchises within each category.
           </p>
         </header>
 
-        <section class="mx-auto w-full max-w-3xl rounded-3xl border border-[var(--surface-border, #1e293b)] bg-[var(--surface-glass-1, rgba(15,23,42,0.85))] p-6 text-center shadow-[0_18px_60px_rgba(15,23,42,0.45)]">
-          <p class="text-[0.7rem] font-semibold uppercase tracking-[0.32em] text-[var(--text3, #94a3b8)]">
+        <section class="border-[var(--surface-border, #1e293b)] bg-[var(--surface-glass-1, rgba(15,23,42,0.85))] mx-auto w-full max-w-3xl rounded-3xl border p-6 text-center shadow-[0_18px_60px_rgba(15,23,42,0.45)]">
+          <p class="text-[var(--text3, #94a3b8)] text-[0.7rem] font-semibold tracking-[0.32em] uppercase">
             Data Visualization Projects
           </p>
-          <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
-            The treemap consumes the FreeCodeCamp video game sales feed with fetch, shapes it into a D3 hierarchy, and applies
-            the treemap layout to size every rectangle by revenue while tinting genres with a custom palette.
+          <p class="text-[var(--text2, #cbd5f5)] mt-3 text-sm leading-relaxed">
+            The treemap consumes the FreeCodeCamp video game sales feed with
+            fetch, shapes it into a D3 hierarchy, and applies the treemap layout
+            to size every rectangle by revenue while tinting genres with a
+            custom palette.
           </p>
-          <p class="mt-3 text-sm leading-relaxed text-[var(--text2, #cbd5f5)]">
-            Tap the refresh-and-fetch control to rerun the AJAX call, rebuild the hierarchy, and regenerate tooltips so the
-            interactive grid always reflects the live dataset.
+          <p class="text-[var(--text2, #cbd5f5)] mt-3 text-sm leading-relaxed">
+            Tap the refresh-and-fetch control to rerun the AJAX call, rebuild
+            the hierarchy, and regenerate tooltips so the interactive grid
+            always reflects the live dataset.
           </p>
         </section>
 
-        <div class="mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-sm text-[var(--text2, #cbd5f5)]">
+        <div class="text-[var(--text2, #cbd5f5)] mx-auto flex w-full max-w-3xl flex-col items-center gap-3 text-sm">
           <button
             type="button"
             onClick$={handleRefresh}
-            class="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium uppercase tracking-[0.22em] text-[var(--text3, #94a3b8)] transition-colors duration-200 hover:text-[var(--primary, #38bdf8)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1, #0f172a)] disabled:cursor-not-allowed disabled:opacity-70"
+            class="text-[var(--text3, #94a3b8)] hover:text-[var(--primary, #38bdf8)] focus-visible:ring-[var(--primary, #38bdf8)] focus-visible:ring-offset-[var(--surface1, #0f172a)] inline-flex items-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.6rem] font-medium tracking-[0.22em] uppercase transition-colors duration-200 focus:outline-none focus-visible:ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isLoading.value}
           >
             <svg
@@ -390,10 +373,15 @@ export default component$(() => {
             </svg>
             {isLoading.value ? "Refreshing" : "Refresh data"}
           </button>
-          <div aria-live="polite" class="min-h-[1.5rem] text-center text-xs uppercase tracking-[0.28em] text-[var(--text3, #94a3b8)]">
+          <div
+            aria-live="polite"
+            class="text-[var(--text3, #94a3b8)] min-h-[1.5rem] text-center text-xs tracking-[0.28em] uppercase"
+          >
             {isLoading.value && <span>Loading dataset…</span>}
             {!isLoading.value && errorMessage.value && (
-              <span class="text-[var(--primary, #38bdf8)]">{errorMessage.value}</span>
+              <span class="text-[var(--primary, #38bdf8)]">
+                {errorMessage.value}
+              </span>
             )}
           </div>
         </div>
@@ -401,28 +389,41 @@ export default component$(() => {
         <div class="case-study-layout">
           <div class="visual-wrapper">
             <section class="treemap-card">
-              <div id="treemap-container" aria-live="polite" />
+              <div
+                id="treemap-container"
+                ref={containerRef}
+                aria-live="polite"
+              />
             </section>
             <section class="legend-card">
               <h2 class="sr-only">Legend</h2>
-              <div id="legend" />
+              <div id="legend" ref={legendRef} />
             </section>
           </div>
           <aside class="case-study-notes">
             <h2>Process Notes</h2>
             <p>
-              The treemap is rendered with D3&apos;s hierarchy utilities, translating raw category totals into proportional
-              rectangles. Hover states reveal individual titles via an accessible tooltip that mirrors the FreeCodeCamp
-              test requirements.
+              The treemap is rendered with D3&apos;s hierarchy utilities,
+              translating raw category totals into proportional rectangles.
+              Hover states reveal individual titles via an accessible tooltip
+              that mirrors the FreeCodeCamp test requirements.
             </p>
             <p>
-              Color groupings are generated dynamically from the data set, ensuring each genre maintains a distinctive
-              hue in both the legend and tile grid. Layout spacing and radius are tuned for readability within the
-              portfolio aesthetic.
+              Color groupings are generated dynamically from the data set,
+              ensuring each genre maintains a distinctive hue in both the legend
+              and tile grid. Layout spacing and radius are tuned for readability
+              within the portfolio aesthetic.
             </p>
             <a class="open-demo-link" href="#treemap-container">
               Jump to treemap
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" width="16" height="16">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+                width="16"
+                height="16"
+              >
                 <path
                   fill-rule="evenodd"
                   d="M5.22 14.78a.75.75 0 0 1 0-1.06L10.94 8l-5.72-5.72a.75.75 0 0 1 1.06-1.06l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"
@@ -433,7 +434,7 @@ export default component$(() => {
           </aside>
         </div>
       </article>
-      <div id="tooltip" role="tooltip" aria-hidden="true" />
+      <div id="tooltip" ref={tooltipRef} role="tooltip" aria-hidden="true" />
     </div>
   );
 });

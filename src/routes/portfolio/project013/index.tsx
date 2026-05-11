@@ -1,5 +1,4 @@
 import {
-  $,
   component$,
   useSignal,
   useStylesScoped$,
@@ -8,21 +7,16 @@ import {
 import * as d3 from "d3";
 import styles from "./project013.scss?inline";
 import { siteMetadata } from "~/config/site";
-import {
-  FCC_TEST_SCRIPT_ID,
-  FCC_TEST_SCRIPT_SRC,
-  resetFccTestSuiteUI,
-} from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
+import {
+  bindResponsiveChart,
+  fetchJson,
+  useDemoLoadState,
+  useFccTestLoader,
+} from "~/utils/portfolio-demo";
 
 const DATA_URL =
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
-
-const triggerDomContentLoaded = () => {
-  if (document.readyState !== "loading") {
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-  }
-};
 
 const monthNames = [
   "January",
@@ -63,51 +57,10 @@ export default component$(() => {
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
   const heatmapData = useSignal<HeatmapDatum[]>([]);
-  const isLoading = useSignal(true);
-  const errorMessage = useSignal<string | null>(null);
-  const refreshCounter = useSignal(0);
+  const { isLoading, errorMessage, refreshCounter, handleRefresh } =
+    useDemoLoadState();
 
-  const handleRefresh = $(() => {
-    isLoading.value = true;
-    errorMessage.value = null;
-    refreshCounter.value++;
-  });
-
-  // Load FCC testing bundle for manual verification when available
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    resetFccTestSuiteUI();
-
-    const existingScript = document.getElementById(
-      FCC_TEST_SCRIPT_ID,
-    ) as HTMLScriptElement | null;
-    const handleLoad = () => {
-      triggerDomContentLoaded();
-    };
-
-    const script = existingScript ?? document.createElement("script");
-    const createdScript = existingScript === null;
-
-    if (existingScript) {
-      triggerDomContentLoaded();
-    } else {
-      script.id = FCC_TEST_SCRIPT_ID;
-      script.src = FCC_TEST_SCRIPT_SRC;
-      script.async = true;
-      script.addEventListener("load", handleLoad);
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (createdScript) {
-        script.removeEventListener("load", handleLoad);
-      }
-      if (script.isConnected) {
-        script.remove();
-      }
-      resetFccTestSuiteUI();
-    };
-  });
+  useFccTestLoader();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
@@ -129,25 +82,14 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const response = await fetch(DATA_URL, {
-        headers: {
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const payload: {
+      const payload = await fetchJson<{
         baseTemperature: number;
         monthlyVariance: Array<{
           year: number;
           month: number;
           variance: number;
         }>;
-      } = await response.json();
+      }>(DATA_URL);
 
       const dataset: HeatmapDatum[] = payload.monthlyVariance.map((entry) => ({
         year: entry.year,
@@ -396,20 +338,10 @@ export default component$(() => {
           .text("Temperature (deg C)");
       };
 
-      renderChart();
-
-      if (typeof ResizeObserver !== "undefined") {
-        const observer = new ResizeObserver(() => {
-          renderChart();
-        });
-        observer.observe(wrapperElement);
-        cleanupResize = () => observer.disconnect();
-      } else {
-        const handleResize = () => renderChart();
-        window.addEventListener("resize", handleResize);
-        cleanupResize = () =>
-          window.removeEventListener("resize", handleResize);
-      }
+      cleanupResize = bindResponsiveChart({
+        wrapperElement,
+        renderChart,
+      });
     } catch (error) {
       console.error("Failed to load temperature data", error);
       errorMessage.value = "Failed to load temperature data. Please try again.";

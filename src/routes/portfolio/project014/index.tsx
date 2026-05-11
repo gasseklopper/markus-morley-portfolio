@@ -1,5 +1,4 @@
 import {
-  $,
   component$,
   useSignal,
   useStyles$,
@@ -17,23 +16,18 @@ import type { GeoPermissibleObjects } from "d3";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import styles from "./project014.scss?inline";
 import { siteMetadata } from "~/config/site";
-import {
-  FCC_TEST_SCRIPT_ID,
-  FCC_TEST_SCRIPT_SRC,
-  resetFccTestSuiteUI,
-} from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
+import {
+  bindResponsiveChart,
+  fetchJson,
+  useDemoLoadState,
+  useFccTestLoader,
+} from "~/utils/portfolio-demo";
 
 const COUNTY_DATA_URL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
 const EDUCATION_DATA_URL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
-
-const triggerDomContentLoaded = () => {
-  if (document.readyState !== "loading") {
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-  }
-};
 
 type EducationDatum = {
   fips: number;
@@ -62,50 +56,10 @@ export default component$(() => {
   const svgRef = useSignal<SVGSVGElement>();
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
-  const isLoading = useSignal(true);
-  const errorMessage = useSignal<string | null>(null);
-  const refreshCounter = useSignal(0);
+  const { isLoading, errorMessage, refreshCounter, handleRefresh } =
+    useDemoLoadState();
 
-  const handleRefresh = $(() => {
-    isLoading.value = true;
-    errorMessage.value = null;
-    refreshCounter.value++;
-  });
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    resetFccTestSuiteUI();
-
-    const existingScript = document.getElementById(
-      FCC_TEST_SCRIPT_ID,
-    ) as HTMLScriptElement | null;
-    const handleLoad = () => {
-      triggerDomContentLoaded();
-    };
-
-    const script = existingScript ?? document.createElement("script");
-    const createdScript = existingScript === null;
-
-    if (existingScript) {
-      triggerDomContentLoaded();
-    } else {
-      script.id = FCC_TEST_SCRIPT_ID;
-      script.src = FCC_TEST_SCRIPT_SRC;
-      script.async = true;
-      script.addEventListener("load", handleLoad);
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (createdScript) {
-        script.removeEventListener("load", handleLoad);
-      }
-      if (script.isConnected) {
-        script.remove();
-      }
-      resetFccTestSuiteUI();
-    };
-  });
+  useFccTestLoader();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
@@ -127,28 +81,10 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const [educationResponse, countyResponse] = await Promise.all([
-        fetch(EDUCATION_DATA_URL, {
-          headers: {
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        }),
-        fetch(COUNTY_DATA_URL, {
-          headers: {
-            Accept: "application/json",
-          },
-          cache: "no-store",
-        }),
+      const [educationData, countyTopology] = await Promise.all([
+        fetchJson<EducationDatum[]>(EDUCATION_DATA_URL),
+        fetchJson<Topology<CountyObjects>>(COUNTY_DATA_URL),
       ]);
-
-      if (!educationResponse.ok || !countyResponse.ok) {
-        throw new Error("Failed to load datasets");
-      }
-
-      const educationData: EducationDatum[] = await educationResponse.json();
-      const countyTopology =
-        (await countyResponse.json()) as Topology<CountyObjects>;
 
       const countyFeatures = feature(
         countyTopology,
@@ -338,18 +274,13 @@ export default component$(() => {
           .text("Adults with bachelor's degree or higher");
       };
 
-      renderChart();
-
-      const resizeObserver = new ResizeObserver(() => {
-        renderChart();
+      cleanup = bindResponsiveChart({
+        wrapperElement,
+        renderChart,
+        cleanupChart: () => {
+          svg.selectAll("*").remove();
+        },
       });
-
-      resizeObserver.observe(wrapperElement);
-
-      cleanup = () => {
-        resizeObserver.disconnect();
-        svg.selectAll("*").remove();
-      };
     } catch (error) {
       console.error(error);
       errorMessage.value =

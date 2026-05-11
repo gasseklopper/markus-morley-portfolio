@@ -1,5 +1,4 @@
 import {
-  $, 
   component$,
   useSignal,
   useVisibleTask$,
@@ -8,15 +7,16 @@ import {
 import * as d3 from "d3";
 import styles from "./project011.scss?inline";
 import { siteMetadata } from "~/config/site";
-import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
+import {
+  bindResponsiveChart,
+  fetchJson,
+  useDemoLoadState,
+  useFccTestLoader,
+} from "~/utils/portfolio-demo";
 
-const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
-const triggerDomContentLoaded = () => {
-  if (document.readyState !== "loading") {
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-  }
-};
+const DATA_URL =
+  "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json";
 
 interface GdpDatum {
   date: Date;
@@ -30,51 +30,10 @@ export default component$(() => {
   const svgRef = useSignal<SVGSVGElement>();
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
-  const isLoading = useSignal(true);
-  const errorMessage = useSignal<string | null>(null);
-  const refreshCounter = useSignal(0);
+  const { isLoading, errorMessage, refreshCounter, handleRefresh } =
+    useDemoLoadState();
 
-  const handleRefresh = $(() => {
-    isLoading.value = true;
-    errorMessage.value = null;
-    refreshCounter.value++;
-  });
-
-  // Load FCC testing bundle for manual verification when available
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    resetFccTestSuiteUI();
-
-    const existingScript = document.getElementById(
-      FCC_TEST_SCRIPT_ID,
-    ) as HTMLScriptElement | null;
-    const handleLoad = () => {
-      triggerDomContentLoaded();
-    };
-
-    const script = existingScript ?? document.createElement("script");
-    const createdScript = existingScript === null;
-
-    if (existingScript) {
-      triggerDomContentLoaded();
-    } else {
-      script.id = FCC_TEST_SCRIPT_ID;
-      script.src = FCC_TEST_SCRIPT_SRC;
-      script.async = true;
-      script.addEventListener("load", handleLoad);
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (createdScript) {
-        script.removeEventListener("load", handleLoad);
-      }
-      if (script.isConnected) {
-        script.remove();
-      }
-      resetFccTestSuiteUI();
-    };
-  });
+  useFccTestLoader();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
@@ -89,7 +48,6 @@ export default component$(() => {
       return;
     }
 
-
     const svg = d3.select(svgElement);
     const tooltip = d3.select(tooltipElement);
     let cleanupResize: (() => void) | undefined;
@@ -97,18 +55,7 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const response = await fetch(DATA_URL, {
-        headers: {
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const payload: { data: [string, number][] } = await response.json();
+      const payload = await fetchJson<{ data: [string, number][] }>(DATA_URL);
 
       const dataset: GdpDatum[] = payload.data.map(([date, gdp]) => ({
         date: new Date(date),
@@ -129,22 +76,29 @@ export default component$(() => {
 
       const renderChart = () => {
         const measuredWidth =
-          wrapperElement.clientWidth || svgElement.getBoundingClientRect().width || 960;
+          wrapperElement.clientWidth ||
+          svgElement.getBoundingClientRect().width ||
+          960;
         const width = Math.max(measuredWidth, 360);
         const isCompact = width < 768;
         const isVeryWide = width > 1200;
         const height = Math.max(
-          isCompact ? Math.round(width * 0.72) : Math.round(width * (isVeryWide ? 0.5 : 0.58)),
+          isCompact
+            ? Math.round(width * 0.72)
+            : Math.round(width * (isVeryWide ? 0.5 : 0.58)),
           isCompact ? 420 : 560,
         );
         const margin = isCompact
           ? { top: 64, right: 24, bottom: 68, left: 76 }
           : isVeryWide
-          ? { top: 112, right: 64, bottom: 92, left: 132 }
-          : { top: 92, right: 40, bottom: 80, left: 108 };
+            ? { top: 112, right: 64, bottom: 92, left: 132 }
+            : { top: 92, right: 40, bottom: 80, left: 108 };
 
         const innerWidth = Math.max(width - margin.left - margin.right, 280);
-        const innerHeight = Math.max(height - margin.top - margin.bottom, isCompact ? 260 : 320);
+        const innerHeight = Math.max(
+          height - margin.top - margin.bottom,
+          isCompact ? 260 : 320,
+        );
 
         svg
           .attr("width", width)
@@ -154,7 +108,9 @@ export default component$(() => {
 
         svg.selectAll("*").remove();
 
-        tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.96)");
+        tooltip
+          .style("opacity", 0)
+          .style("transform", "translate(-50%, -100%) scale(0.96)");
 
         const xScale = d3
           .scaleTime()
@@ -178,7 +134,10 @@ export default component$(() => {
           .append("g")
           .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        const tickCount = Math.min(14, Math.max(6, Math.floor(innerWidth / 80)));
+        const tickCount = Math.min(
+          14,
+          Math.max(6, Math.floor(innerWidth / 80)),
+        );
         const xAxis = d3.axisBottom<Date>(xScale).ticks(tickCount);
         const yAxis = d3.axisLeft<number>(yScale).ticks(isCompact ? 6 : 10);
 
@@ -189,28 +148,43 @@ export default component$(() => {
           .attr("transform", `translate(0,${innerHeight})`)
           .call(xAxis);
 
-        chartGroup.append("g").attr("id", "y-axis").attr("class", "project011__axis").call(yAxis);
+        chartGroup
+          .append("g")
+          .attr("id", "y-axis")
+          .attr("class", "project011__axis")
+          .call(yAxis);
 
         const tooltipOffset = isCompact ? 32 : 48;
         const clampVertical = (value: number) =>
-          Math.min(Math.max(value, margin.top + 12), margin.top + innerHeight - 12);
+          Math.min(
+            Math.max(value, margin.top + 12),
+            margin.top + innerHeight - 12,
+          );
 
         const showTooltip = (datum: GdpDatum) => {
           const barCenter =
-            margin.left + (xScale(datum.date) ?? 0) + getBarWidth(datum.date) / 2;
+            margin.left +
+            (xScale(datum.date) ?? 0) +
+            getBarWidth(datum.date) / 2;
           const barTop = margin.top + (yScale(datum.gdp) ?? innerHeight);
           tooltip
             .style("opacity", 1)
             .style("transform", "translate(-50%, -100%) scale(1)")
             .attr("data-date", datum.rawDate)
             .html(
-              `<div class="project011__tooltip-date">${datum.date.toLocaleString("en-US", {
-                month: "short",
-                year: "numeric",
-              })}</div>` +
-                `<div class="project011__tooltip-value">$${datum.gdp.toLocaleString("en-US", {
-                  minimumFractionDigits: 1,
-                })} Billion</div>`,
+              `<div class="project011__tooltip-date">${datum.date.toLocaleString(
+                "en-US",
+                {
+                  month: "short",
+                  year: "numeric",
+                },
+              )}</div>` +
+                `<div class="project011__tooltip-value">$${datum.gdp.toLocaleString(
+                  "en-US",
+                  {
+                    minimumFractionDigits: 1,
+                  },
+                )} Billion</div>`,
             )
             .style("left", `${barCenter}px`)
             .style("top", `${clampVertical(barTop) - tooltipOffset}px`);
@@ -220,7 +194,7 @@ export default component$(() => {
           .selectAll<SVGRectElement, GdpDatum>(".project011__bar")
           .data(dataset)
           .join("rect")
-          .attr("class", "project011__bar")
+          .attr("class", "bar project011__bar")
           .attr("data-date", (d) => d.rawDate)
           .attr("data-gdp", (d) => d.gdp.toString())
           .attr("x", (d) => xScale(d.date) ?? 0)
@@ -228,7 +202,9 @@ export default component$(() => {
           .attr("width", (d) => getBarWidth(d.date))
           .attr("height", (d) => Math.max(0, innerHeight - yScale(d.gdp)))
           .attr("rx", (d) => Math.min(6, getBarWidth(d.date) / 2))
-          .attr("ry", (d) => Math.min(6, Math.max(0, innerHeight - yScale(d.gdp)) / 2))
+          .attr("ry", (d) =>
+            Math.min(6, Math.max(0, innerHeight - yScale(d.gdp)) / 2),
+          )
           .attr("tabindex", 0)
           .on("mouseenter", function (event, datum) {
             showTooltip(datum);
@@ -237,7 +213,9 @@ export default component$(() => {
           .on("mousemove", function (event, datum) {
             const [, pointerY] = d3.pointer(event, wrapperElement);
             const barCenter =
-              margin.left + (xScale(datum.date) ?? 0) + getBarWidth(datum.date) / 2;
+              margin.left +
+              (xScale(datum.date) ?? 0) +
+              getBarWidth(datum.date) / 2;
             tooltip
               .style("left", `${barCenter}px`)
               .style("top", `${clampVertical(pointerY) - tooltipOffset}px`);
@@ -281,21 +259,10 @@ export default component$(() => {
           .text("Gross Domestic Product (Billion USD)");
       };
 
-      renderChart();
-
-      if (typeof ResizeObserver !== "undefined") {
-        const observer = new ResizeObserver(() => {
-          renderChart();
-        });
-        observer.observe(wrapperElement);
-        cleanupResize = () => observer.disconnect();
-      } else {
-        const handleResize = () => {
-          renderChart();
-        };
-        window.addEventListener("resize", handleResize);
-        cleanupResize = () => window.removeEventListener("resize", handleResize);
-      }
+      cleanupResize = bindResponsiveChart({
+        wrapperElement,
+        renderChart,
+      });
     } catch (error) {
       console.error("Failed to load GDP data", error);
       errorMessage.value = "Failed to load GDP data. Please try again.";
@@ -317,23 +284,24 @@ export default component$(() => {
           <p class="project011__eyebrow">Data Storytelling</p>
           <h1 class="project011__title">Visualize Data with a Bar Chart</h1>
           <p class="project011__lead">
-            An interactive D3 visualization of the United States Gross Domestic Product, showcasing over six decades of quarterly
-            economic data with custom styling and responsive tooltips.
+            An interactive D3 visualization of the United States Gross Domestic
+            Product, showcasing over six decades of quarterly economic data with
+            custom styling and responsive tooltips.
           </p>
         </div>
 
         <div class="project011__aside">
           <div class="project011__note">
-            <p class="project011__note-title">
-              Data Visualization Projects
+            <p class="project011__note-title">Data Visualization Projects</p>
+            <p class="project011__note-copy">
+              This build streams the Federal Reserve GDP archive through fetch,
+              then channels the JSON into D3 time and linear scales to plot each
+              quarter with precise axes, transitions, and accessible tooltips.
             </p>
             <p class="project011__note-copy">
-              This build streams the Federal Reserve GDP archive through fetch, then channels the JSON into D3 time and linear
-              scales to plot each quarter with precise axes, transitions, and accessible tooltips.
-            </p>
-            <p class="project011__note-copy">
-              The refresh-and-fetch button reruns the AJAX request on demand, rebuilding the SVG so you can watch the data
-              pipeline power this certification project in real time.
+              The refresh-and-fetch button reruns the AJAX request on demand,
+              rebuilding the SVG so you can watch the data pipeline power this
+              certification project in real time.
             </p>
           </div>
 
@@ -350,7 +318,7 @@ export default component$(() => {
                 fill="none"
                 stroke="currentColor"
                 stroke-width="1.5"
-                class={`project011__refresh-icon${isLoading.value ? " project011__refresh-icon--spinning" : ""}`}
+                class={`project011__refresh-icon${isLoading.value ? "project011__refresh-icon--spinning" : ""}`}
                 aria-hidden="true"
               >
                 <path

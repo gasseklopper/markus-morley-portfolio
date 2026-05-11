@@ -1,5 +1,4 @@
 import {
-  $,
   component$,
   useSignal,
   useStylesScoped$,
@@ -8,15 +7,16 @@ import {
 import * as d3 from "d3";
 import styles from "./project012.scss?inline";
 import { siteMetadata } from "~/config/site";
-import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
+import {
+  bindResponsiveChart,
+  fetchJson,
+  useDemoLoadState,
+  useFccTestLoader,
+} from "~/utils/portfolio-demo";
 
-const DATA_URL = "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
-const triggerDomContentLoaded = () => {
-  if (document.readyState !== "loading") {
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-  }
-};
+const DATA_URL =
+  "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
 
 interface CyclistDatum {
   name: string;
@@ -34,51 +34,10 @@ export default component$(() => {
   const tooltipRef = useSignal<HTMLDivElement>();
   const wrapperRef = useSignal<HTMLDivElement>();
   const cyclists = useSignal<CyclistDatum[]>([]);
-  const isLoading = useSignal(true);
-  const errorMessage = useSignal<string | null>(null);
-  const refreshCounter = useSignal(0);
+  const { isLoading, errorMessage, refreshCounter, handleRefresh } =
+    useDemoLoadState();
 
-  const handleRefresh = $(() => {
-    isLoading.value = true;
-    errorMessage.value = null;
-    refreshCounter.value++;
-  });
-
-  // Load FCC testing bundle for manual verification when available
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-    resetFccTestSuiteUI();
-
-    const existingScript = document.getElementById(
-      FCC_TEST_SCRIPT_ID,
-    ) as HTMLScriptElement | null;
-    const handleLoad = () => {
-      triggerDomContentLoaded();
-    };
-
-    const script = existingScript ?? document.createElement("script");
-    const createdScript = existingScript === null;
-
-    if (existingScript) {
-      triggerDomContentLoaded();
-    } else {
-      script.id = FCC_TEST_SCRIPT_ID;
-      script.src = FCC_TEST_SCRIPT_SRC;
-      script.async = true;
-      script.addEventListener("load", handleLoad);
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (createdScript) {
-        script.removeEventListener("load", handleLoad);
-      }
-      if (script.isConnected) {
-        script.remove();
-      }
-      resetFccTestSuiteUI();
-    };
-  });
+  useFccTestLoader();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async ({ track }) => {
@@ -100,24 +59,15 @@ export default component$(() => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const response = await fetch(DATA_URL, {
-        headers: {
-          Accept: "application/json",
-        },
-        cache: "no-store",
-      });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
-
-      const payload: Array<{
-        Name: string;
-        Nationality: string;
-        Year: number;
-        Time: string;
-        Doping: string;
-      }> = await response.json();
+      const payload = await fetchJson<
+        Array<{
+          Name: string;
+          Nationality: string;
+          Year: number;
+          Time: string;
+          Doping: string;
+        }>
+      >(DATA_URL);
 
       const dataset: CyclistDatum[] = payload.map((item) => {
         const [minutes, seconds] = item.Time.split(":").map(Number);
@@ -153,7 +103,9 @@ export default component$(() => {
           .attr("viewBox", `0 0 ${width} ${height}`)
           .attr("preserveAspectRatio", "xMidYMid meet");
 
-        tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.98)");
+        tooltip
+          .style("opacity", 0)
+          .style("transform", "translate(-50%, -100%) scale(0.98)");
 
         const xExtent = d3.extent(dataset, (d) => d.year) as [number, number];
         const yExtent = d3.extent(dataset, (d) => d.time) as [Date, Date];
@@ -196,12 +148,19 @@ export default component$(() => {
           .selectAll<SVGCircleElement, CyclistDatum>(".dot")
           .data(dataset)
           .join("circle")
-          .attr("class", (d) => `dot ${d.doping ? "dot--doping" : "dot--clean"}`)
+          .attr(
+            "class",
+            (d) => `dot ${d.doping ? "dot--doping" : "dot--clean"}`,
+          )
           .attr("fill", (d) =>
-            d.doping ? "var(--chart-dot-doping-fill)" : "var(--chart-dot-clean-fill)"
+            d.doping
+              ? "var(--chart-dot-doping-fill)"
+              : "var(--chart-dot-clean-fill)",
           )
           .attr("stroke", (d) =>
-            d.doping ? "var(--chart-dot-doping-stroke)" : "var(--chart-dot-clean-stroke)"
+            d.doping
+              ? "var(--chart-dot-doping-stroke)"
+              : "var(--chart-dot-clean-stroke)",
           )
           .attr("r", dotRadius)
           .attr("cx", (d) => xScale(d.year))
@@ -210,7 +169,10 @@ export default component$(() => {
           .attr("data-yvalue", (d) => d.time.toISOString())
           .attr("tabindex", 0);
 
-        const showTooltip = (event: MouseEvent | FocusEvent, datum: CyclistDatum) => {
+        const showTooltip = (
+          event: MouseEvent | FocusEvent,
+          datum: CyclistDatum,
+        ) => {
           let x: number;
           let y: number;
 
@@ -243,13 +205,17 @@ export default component$(() => {
         };
 
         const hideTooltip = () => {
-          tooltip.style("opacity", 0).style("transform", "translate(-50%, -100%) scale(0.98)");
+          tooltip
+            .style("opacity", 0)
+            .style("transform", "translate(-50%, -100%) scale(0.98)");
         };
 
         points
           .on("mouseenter", function (event, d) {
             showTooltip(event as MouseEvent, d);
-            d3.select(this).raise().attr("r", dotRadius + 2);
+            d3.select(this)
+              .raise()
+              .attr("r", dotRadius + 2);
           })
           .on("mousemove", function (event, d) {
             showTooltip(event as MouseEvent, d);
@@ -260,7 +226,9 @@ export default component$(() => {
           })
           .on("focus", function (event, d) {
             showTooltip(event as FocusEvent, d);
-            d3.select(this).raise().attr("r", dotRadius + 2);
+            d3.select(this)
+              .raise()
+              .attr("r", dotRadius + 2);
           })
           .on("blur", () => {
             hideTooltip();
@@ -328,12 +296,12 @@ export default component$(() => {
           .attr("fill", (d) =>
             d.className === "dot--doping"
               ? "var(--chart-dot-doping-fill)"
-              : "var(--chart-dot-clean-fill)"
+              : "var(--chart-dot-clean-fill)",
           )
           .attr("stroke", (d) =>
             d.className === "dot--doping"
               ? "var(--chart-dot-doping-stroke)"
-              : "var(--chart-dot-clean-stroke)"
+              : "var(--chart-dot-clean-stroke)",
           );
 
         legendGroup
@@ -343,19 +311,10 @@ export default component$(() => {
           .text((d) => d.label);
       };
 
-      renderChart();
-
-      if (typeof ResizeObserver !== "undefined") {
-        const observer = new ResizeObserver(() => {
-          renderChart();
-        });
-        observer.observe(wrapperElement);
-        cleanupResize = () => observer.disconnect();
-      } else {
-        const handleResize = () => renderChart();
-        window.addEventListener("resize", handleResize);
-        cleanupResize = () => window.removeEventListener("resize", handleResize);
-      }
+      cleanupResize = bindResponsiveChart({
+        wrapperElement,
+        renderChart,
+      });
     } catch (error) {
       console.error("Failed to load cyclist data", error);
       errorMessage.value = "Failed to load cyclist data. Please try again.";
@@ -377,22 +336,24 @@ export default component$(() => {
           Visualize Data with a Scatterplot Graph
         </h1>
         <p class="project012__lead">
-          A D3 scatterplot plotting professional cycling times against the year of competition. Hover or focus on each
-          racer to explore doping allegations, nationalities, and performance patterns.
+          A D3 scatterplot plotting professional cycling times against the year
+          of competition. Hover or focus on each racer to explore doping
+          allegations, nationalities, and performance patterns.
         </p>
       </div>
 
       <div class="project012__note">
-        <p class="project012__note-title">
-          Data Visualization Projects
+        <p class="project012__note-title">Data Visualization Projects</p>
+        <p class="project012__note-copy">
+          Here we fetch the professional cycling dataset, parse each
+          rider&apos;s record, and map it onto D3 linear and time scales to draw
+          the scatterplot while color-coding doping allegations and wiring up
+          focusable tooltips.
         </p>
         <p class="project012__note-copy">
-          Here we fetch the professional cycling dataset, parse each rider&apos;s record, and map it onto D3 linear and time
-          scales to draw the scatterplot while color-coding doping allegations and wiring up focusable tooltips.
-        </p>
-        <p class="project012__note-copy">
-          Hit the refresh-and-fetch button to issue a fresh AJAX request, rebuild the SVG marks, and explore how the legend
-          and interactions respond to the live dataset.
+          Hit the refresh-and-fetch button to issue a fresh AJAX request,
+          rebuild the SVG marks, and explore how the legend and interactions
+          respond to the live dataset.
         </p>
       </div>
 
@@ -409,7 +370,7 @@ export default component$(() => {
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
-            class={`project012__refresh-icon${isLoading.value ? " project012__refresh-icon--spinning" : ""}`}
+            class={`project012__refresh-icon${isLoading.value ? "project012__refresh-icon--spinning" : ""}`}
             aria-hidden="true"
           >
             <path
@@ -443,12 +404,15 @@ export default component$(() => {
           <div class="project012__leaderboard-inner">
             <h2>Race leaderboard</h2>
             <p>
-              Scroll the mobile table to compare finishing times and see which riders carried doping allegations.
+              Scroll the mobile table to compare finishing times and see which
+              riders carried doping allegations.
             </p>
             <div class="project012__table-shell">
               <div class="project012__table-scroll">
                 <table class="project012__table">
-                  <caption class="project012__sr-only">Cyclist finishing times with doping allegation status</caption>
+                  <caption class="project012__sr-only">
+                    Cyclist finishing times with doping allegation status
+                  </caption>
                   <thead>
                     <tr>
                       <th scope="col">Year</th>
@@ -459,17 +423,19 @@ export default component$(() => {
                   </thead>
                   <tbody>
                     {cyclists.value.map((rider) => (
-                      <tr
-                        key={`${rider.year}-${rider.name}`}
-                      >
+                      <tr key={`${rider.year}-${rider.name}`}>
                         <th scope="row" class="project012__table-year">
                           {rider.year}
                         </th>
                         <td>
                           <div class="project012__table-name">{rider.name}</div>
-                          <div class="project012__table-nationality">{rider.nationality}</div>
+                          <div class="project012__table-nationality">
+                            {rider.nationality}
+                          </div>
                         </td>
-                        <td class="project012__table-time">{rider.timeLabel}</td>
+                        <td class="project012__table-time">
+                          {rider.timeLabel}
+                        </td>
                         <td>
                           <span
                             class={`project012__status-pill ${
@@ -482,7 +448,9 @@ export default component$(() => {
                             {rider.doping ? "ALLEGED" : "CLEAR"}
                           </span>
                           {rider.doping && (
-                            <p class="project012__table-doping">{rider.doping}</p>
+                            <p class="project012__table-doping">
+                              {rider.doping}
+                            </p>
                           )}
                         </td>
                       </tr>

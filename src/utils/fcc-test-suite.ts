@@ -9,6 +9,25 @@ type FccTestSuiteApi = {
   unmount?: () => void;
 };
 
+const clearFccStorage = (storage: Storage) => {
+  for (let index = storage.length - 1; index >= 0; index--) {
+    const key = storage.key(index);
+
+    if (!key) {
+      continue;
+    }
+
+    const normalizedKey = key.toLowerCase();
+    if (
+      normalizedKey.includes("fcc") ||
+      normalizedKey.includes("freecodecamp") ||
+      normalizedKey.includes("testable-project")
+    ) {
+      storage.removeItem(key);
+    }
+  }
+};
+
 export const resetFccTestSuiteUI = () => {
   const globalWindow = window as typeof window & {
     __fccTestSuite?: FccTestSuiteApi | undefined;
@@ -24,6 +43,9 @@ export const resetFccTestSuiteUI = () => {
   document
     .querySelectorAll<HTMLElement>('[id^="fcc_test_suite"]')
     .forEach((node) => node.remove());
+
+  clearFccStorage(window.localStorage);
+  clearFccStorage(window.sessionStorage);
 
   globalWindow.__fccTestSuite = undefined;
 };

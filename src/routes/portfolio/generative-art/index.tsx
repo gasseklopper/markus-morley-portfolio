@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
@@ -140,6 +140,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Generative Art - ${siteConfig.metadata.title}`,
+  `Generative Art - ${siteMetadata.title}`,
   "Interactive generative color stripes example.",
 );

@@ -1,12 +1,12 @@
 import type { DocumentHead } from "@builder.io/qwik-city";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 
 /**
  * Helper to generate `DocumentHead` objects with the default site description.
  */
 export function buildHead(
   title: string,
-  description = siteConfig.metadata.description,
+  description = siteMetadata.description,
 ): DocumentHead {
   return {
     title,

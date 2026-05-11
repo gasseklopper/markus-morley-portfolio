@@ -7,8 +7,9 @@ import {
   useStyles$,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import ImgImageMalkasten from "~/media/assets/images/image_malkasten.png?jsx";
 import styles from "./malkasten.scss?inline";
+
+/* eslint-disable qwik/jsx-img */
 
 export const Malkasten = component$(() => {
   useStyles$(styles);
@@ -75,7 +76,10 @@ export const Malkasten = component$(() => {
         if (!context) return;
         const now = Date.now();
         drips.value = drips.value.filter((drip) => {
-          if (now - drip.startTime > drip.duration || drip.length >= drip.maxLength) {
+          if (
+            now - drip.startTime > drip.duration ||
+            drip.length >= drip.maxLength
+          ) {
             return false;
           }
           const growth = Math.min(
@@ -198,14 +202,12 @@ export const Malkasten = component$(() => {
 
   return (
     <div class="malkasten">
-      <ImgImageMalkasten
+      <img
+        src="/assets/images/image_malkasten.png"
         alt="Portrait"
         class="malkasten__image"
       />
-      <canvas
-        ref={canvasRef}
-        class="malkasten__canvas"
-      />
+      <canvas ref={canvasRef} class="malkasten__canvas" />
       <div class="malkasten__palette" aria-label="Paint colors">
         <button
           type="button"
@@ -222,9 +224,7 @@ export const Malkasten = component$(() => {
         <button
           type="button"
           onClick$={() =>
-            (color.value = getComputedStyle(
-              document.documentElement,
-            )
+            (color.value = getComputedStyle(document.documentElement)
               .getPropertyValue("--brand")
               .trim())
           }
@@ -232,11 +232,7 @@ export const Malkasten = component$(() => {
           aria-label="Use brand paint"
         />
       </div>
-      <button
-        type="button"
-        onClick$={reset}
-        class="malkasten__reset"
-      >
+      <button type="button" onClick$={reset} class="malkasten__reset">
         Reset
       </button>
     </div>

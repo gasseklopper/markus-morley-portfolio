@@ -1,5 +1,5 @@
-import siteConfig from "~/config/siteConfig.json";
+import { headerNavigation } from "~/config/navigation";
 
-export const headerData = siteConfig.header_info;
+export const headerData = headerNavigation;
 export type HeaderData = typeof headerData;
 export default headerData;

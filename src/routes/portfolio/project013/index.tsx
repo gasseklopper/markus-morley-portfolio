@@ -7,7 +7,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import styles from "./project013.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import {
   FCC_TEST_SCRIPT_ID,
   FCC_TEST_SCRIPT_SRC,
@@ -505,6 +505,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Project 013 - ${siteConfig.metadata.title}`,
+  `Project 013 - ${siteMetadata.title}`,
   "Interactive D3 heat map visualizing historical global land-surface temperatures.",
 );

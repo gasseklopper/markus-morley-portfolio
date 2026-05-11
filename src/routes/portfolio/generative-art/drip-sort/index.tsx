@@ -1,5 +1,5 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
@@ -108,6 +108,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Dripping Sort Art - ${siteConfig.metadata.title}`,
+  `Dripping Sort Art - ${siteMetadata.title}`,
   "Black and white dripping rectangles that continuously sort by shade.",
 );

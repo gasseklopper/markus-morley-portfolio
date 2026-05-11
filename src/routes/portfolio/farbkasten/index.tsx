@@ -1,6 +1,6 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
 import { Malkasten } from "~/components/malkasten/Malkasten";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import styles from "./farbkasten.scss?inline";
 
@@ -19,6 +19,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Farbkasten - ${siteConfig.metadata.title}`,
+  `Farbkasten - ${siteMetadata.title}`,
   "Draw on the image with the brand color.",
 );

@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { PrefferencesToggle } from "../template/header/prefferences-toggle";
-import siteConfig from "~/config/siteConfig.json";
+import { themePreferences } from "~/config/theme";
 
 export const themeStorageKey = "theme-preference";
 export const cursorAnimationKey = "theme-cursor-preference";
@@ -39,7 +39,7 @@ export const CursorAnimationScript = component$(() => {
   const script = `
     (() => {
       const stored = localStorage.getItem('${cursorAnimationKey}');
-      const defaultValue = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'false' : '${siteConfig.theme_preferences.cursor}';
+      const defaultValue = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'false' : '${themePreferences.cursor}';
       const value = stored ?? defaultValue;
       if (!stored) localStorage.setItem('${cursorAnimationKey}', value);
       document.firstElementChild.setAttribute('data-cursor', value);
@@ -53,7 +53,7 @@ export const LayoutScript = component$(() => {
       dangerouslySetInnerHTML={createPreferenceScript(
         layoutKey,
         "data-layout",
-        siteConfig.theme_preferences.layout,
+        themePreferences.layout,
       )}
     />
   );
@@ -65,7 +65,7 @@ export const LayoutDirectionScript = component$(() => {
       dangerouslySetInnerHTML={createPreferenceScript(
         layoutDirectionPreferenceKey,
         "data-layout-direction",
-        siteConfig.theme_preferences.layout_direction,
+        themePreferences.layoutDirection,
       )}
     />
   );
@@ -77,7 +77,7 @@ export const OverlayScript = component$(() => {
       dangerouslySetInnerHTML={createPreferenceScript(
         overlayPreferenceKey,
         "data-overlay",
-        siteConfig.theme_preferences.overlay,
+        themePreferences.overlay,
       )}
     />
   );
@@ -87,7 +87,7 @@ export const ReduceMotionScript = component$(() => {
   const reduceMotion = `
     (() => {
       const stored = localStorage.getItem('${motionPreferenceKey}');
-      const defaultValue = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : '${siteConfig.theme_preferences.motion}';
+      const defaultValue = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : '${themePreferences.motion}';
       const value = stored ?? defaultValue;
       if (!stored) localStorage.setItem('${motionPreferenceKey}', value);
       document.firstElementChild.setAttribute('data-motion', value);

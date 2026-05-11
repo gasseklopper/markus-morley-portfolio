@@ -1,6 +1,6 @@
 import { $, Resource, component$, useResource$, useSignal, useStylesScoped$ } from "@builder.io/qwik";
 import { useLocation, type DocumentHead } from "@builder.io/qwik-city";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import type { TodoItem } from "~/utils/todo-types";
 import styles from "./index.scss?inline";
@@ -212,6 +212,6 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = buildHead(
-  `Todo List - ${siteConfig.metadata.title}`,
+  `Todo List - ${siteMetadata.title}`,
   "Collaborative task list demonstrating a Netlify-backed Qwik City API.",
 );

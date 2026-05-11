@@ -1,6 +1,6 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
 import styles from "../index.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
@@ -13,4 +13,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`Konzept - ${siteConfig.metadata.title}`);
+export const head = buildHead(`Konzept - ${siteMetadata.title}`);

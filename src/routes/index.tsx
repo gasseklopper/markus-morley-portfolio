@@ -1,6 +1,6 @@
 import { component$, useStyles$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from "./index.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import { setupHomeHeroAnimations } from "./home-hero.client";
 
@@ -219,4 +219,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(siteConfig.metadata.title);
+export const head = buildHead(siteMetadata.title);

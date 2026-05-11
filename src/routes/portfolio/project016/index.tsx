@@ -1,16 +1,19 @@
-import { component$, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
-import ImgImg2063 from "~/media/assets/images/photography/venedig/IMG_2063.jpg?jsx";
-import ImgImg2094 from "~/media/assets/images/photography/venedig/IMG_2094.jpg?jsx";
+import {
+  component$,
+  useStylesScoped$,
+  useVisibleTask$,
+} from "@builder.io/qwik";
 import gentlyStyles from "./gently.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { loadGsap } from "~/utils/gsapClient";
 import { buildHead } from "~/utils/head";
+
+/* eslint-disable qwik/jsx-img */
 
 const workItems = [
   {
     id: "gently",
-    background:
-      "/public/assets/images/photography/venedig/IMG_2039.jpg",
+    background: "/assets/images/photography/venedig/IMG_2039.jpg",
     lines: [
       { text: "sjksl", className: "text-left", accentClass: "color-1" },
       { text: "Scroll", className: "text-center", accentClass: "color-0" },
@@ -18,27 +21,26 @@ const workItems = [
     ],
     images: [
       {
-        src: "/public/assets/images/photography/venedig/IMG_1939.jpg",
+        src: "/assets/images/photography/venedig/IMG_1939.jpg",
         alt: "Monochrome desktop setup with ambient lighting.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1905.jpg",
+        src: "/assets/images/photography/venedig/IMG_1905.jpg",
         alt: "Designer adjusting colorful post-it notes on a board.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1903.jpg",
+        src: "/assets/images/photography/venedig/IMG_1903.jpg",
         alt: "Close-up of glowing keyboard keys.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1882.jpg",
+        src: "/assets/images/photography/venedig/IMG_1882.jpg",
         alt: "Creative mood board illuminated with neon lights.",
       },
     ],
   },
   {
     id: "ambient",
-    background:
-      "/public/assets/images/photography/venedig/IMG_1859.jpg",
+    background: "/assets/images/photography/venedig/IMG_1859.jpg",
     lines: [
       { text: "Ambient", className: "text-left", accentClass: "color-3" },
       { text: "Motion", className: "text-center", accentClass: "color-1" },
@@ -46,27 +48,26 @@ const workItems = [
     ],
     images: [
       {
-        src: "/public/assets/images/photography/venedig/IMG_1841.jpg",
+        src: "/assets/images/photography/venedig/IMG_1841.jpg",
         alt: "Gradient light wash across geometric shapes.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1846.jpg",
+        src: "/assets/images/photography/venedig/IMG_1846.jpg",
         alt: "Designer sketching storyboard frames.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1859.jpg",
+        src: "/assets/images/photography/venedig/IMG_1859.jpg",
         alt: "Laptop screen showing scroll-triggered animation timeline.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1862.jpg",
+        src: "/assets/images/photography/venedig/IMG_1862.jpg",
         alt: "Atmospheric lighting on a minimalist sculpture.",
       },
     ],
   },
   {
     id: "horizon",
-    background:
-      "/public/assets/images/photography/venedig/IMG_2063.jpg",
+    background: "/assets/images/photography/venedig/IMG_2063.jpg",
     lines: [
       { text: "Future", className: "text-left", accentClass: "color-2" },
       { text: "Scroll", className: "text-center", accentClass: "color-0" },
@@ -74,19 +75,19 @@ const workItems = [
     ],
     images: [
       {
-        src: "/public/assets/images/photography/venedig/IMG_1869.jpg",
+        src: "/assets/images/photography/venedig/IMG_1869.jpg",
         alt: "Vibrant installation with moving projections.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1882.jpg",
+        src: "/assets/images/photography/venedig/IMG_1882.jpg",
         alt: "Team collaborating around illuminated wall.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1905.jpg",
+        src: "/assets/images/photography/venedig/IMG_1905.jpg",
         alt: "Soft focus on color gradients in a studio.",
       },
       {
-        src: "/public/assets/images/photography/venedig/IMG_1939.jpg",
+        src: "/assets/images/photography/venedig/IMG_1939.jpg",
         alt: "Close-up of tactile prototype components.",
       },
     ],
@@ -98,9 +99,11 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    const workSection = document.querySelector<HTMLElement>("[data-work=\"section\"]");
+    const workSection = document.querySelector<HTMLElement>(
+      '[data-work="section"]',
+    );
     const workItemsElements = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-work=\"item\"]"),
+      document.querySelectorAll<HTMLElement>('[data-work="item"]'),
     );
 
     if (!workSection || workItemsElements.length === 0) {
@@ -138,7 +141,10 @@ export default component$(() => {
       zIndex?: number;
     };
 
-    const getImageInitialPosition = (index: number, imageIndex: number): ImageInitialPosition => {
+    const getImageInitialPosition = (
+      index: number,
+      imageIndex: number,
+    ): ImageInitialPosition => {
       const positions: Record<number, ImageInitialPosition> = {
         0: {
           scale: 0.8,
@@ -198,11 +204,17 @@ export default component$(() => {
 
       workItemsElements.forEach((element, index) => {
         const lines = element.querySelectorAll<HTMLElement>("[data-line]");
-        const itemBackground = element.querySelector<HTMLElement>("[data-work=\"item-background\"]");
-        const itemContainer = element.querySelector<HTMLElement>("[data-work=\"item-container\"]");
-        const itemOverlay = element.querySelectorAll<HTMLElement>("[data-work=\"item-overlay\"]");
+        const itemBackground = element.querySelector<HTMLElement>(
+          '[data-work="item-background"]',
+        );
+        const itemContainer = element.querySelector<HTMLElement>(
+          '[data-work="item-container"]',
+        );
+        const itemOverlay = element.querySelectorAll<HTMLElement>(
+          '[data-work="item-overlay"]',
+        );
         const itemImages = Array.from(
-          element.querySelectorAll<HTMLElement>("[data-work=\"item-image\"]"),
+          element.querySelectorAll<HTMLElement>('[data-work="item-image"]'),
         );
 
         if (!itemBackground || !itemContainer) {
@@ -299,7 +311,7 @@ export default component$(() => {
             scrub: true,
             start: "100% bottom",
             toggleActions: "play reverse play reverse",
-             markers: false,
+            markers: false,
           },
         });
       });
@@ -344,7 +356,12 @@ export default component$(() => {
               <a class="nav_link" href="/portfolio">
                 Portfolio Home
               </a>
-              <a class="nav_link" href="https://greensock.com/scrolltrigger/" target="_blank" rel="noreferrer">
+              <a
+                class="nav_link"
+                href="https://greensock.com/scrolltrigger/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 ScrollTrigger Docs
               </a>
             </div>
@@ -355,7 +372,8 @@ export default component$(() => {
         <section class="hero_section sticky" aria-labelledby="hero-title">
           <div class="hero_container">
             <div class="hero_image-wrapper" aria-hidden="true">
-              <ImgImg2063
+              <img
+                src="/assets/images/photography/venedig/IMG_2063.jpg"
                 loading="lazy"
                 sizes="100vw"
                 alt="Ambient lighting across fabric backdrop"
@@ -385,16 +403,38 @@ export default component$(() => {
         <main class="work_section" data-work="section">
           <div class="work_container">
             {workItems.map((item, index) => (
-              <article key={item.id} class="work_item" data-work="item" aria-label={`${item.id} showcase`}>
-                <div class="work_item-background" data-work="item-background" aria-hidden="true">
-                  <img src={item.background} alt="" loading="lazy" width={2400} height={1600} />
+              <article
+                key={item.id}
+                class="work_item"
+                data-work="item"
+                aria-label={`${item.id} showcase`}
+              >
+                <div
+                  class="work_item-background"
+                  data-work="item-background"
+                  aria-hidden="true"
+                >
+                  <img
+                    src={item.background}
+                    alt=""
+                    loading="lazy"
+                    width={2400}
+                    height={1600}
+                  />
                 </div>
-                <div class="work_item-overlay" data-work="item-overlay" aria-hidden="true" />
+                <div
+                  class="work_item-overlay"
+                  data-work="item-overlay"
+                  aria-hidden="true"
+                />
                 <div class="work_item-wrapper" data-work="item-container">
                   <div class="work_text">
                     <div class="work_text-title">
                       {item.lines.map((line, lineIndex) => (
-                        <div key={`${item.id}-line-${line.text}`} class="line-wrapper">
+                        <div
+                          key={`${item.id}-line-${line.text}`}
+                          class="line-wrapper"
+                        >
                           <div
                             class={`line ${line.className}`}
                             data-line={lineIndex < 2 ? "true" : undefined}
@@ -407,11 +447,16 @@ export default component$(() => {
                   </div>
                   <div class="work_item-images">
                     {item.images.map((image, imageIndex) => (
-                      <figure key={`${item.id}-image-${imageIndex}`} class="work_item-image">
+                      <figure
+                        key={`${item.id}-image-${imageIndex}`}
+                        class="work_item-image"
+                      >
                         <img
                           src={image.src}
                           alt={image.alt}
-                          loading={index === 0 && imageIndex < 2 ? "eager" : "lazy"}
+                          loading={
+                            index === 0 && imageIndex < 2 ? "eager" : "lazy"
+                          }
                           width={900}
                           height={1200}
                           data-work="item-image"
@@ -428,7 +473,8 @@ export default component$(() => {
         <footer class="footer_section" aria-labelledby="footer-title">
           <div class="footer_container">
             <div class="footer_image-wrapper" aria-hidden="true">
-              <ImgImg2094
+              <img
+                src="/assets/images/photography/venedig/IMG_2094.jpg"
                 alt=""
                 loading="lazy"
                 class="footer_image"
@@ -459,6 +505,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Project 016 – Scroll Trigger Study | ${siteConfig.metadata.title}`,
+  `Project 016 – Scroll Trigger Study | ${siteMetadata.title}`,
   "Immersive GSAP ScrollTrigger and Lenis powered gallery exploring ambient motion design in a sticky hero layout.",
 );

@@ -1,5 +1,5 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import { setupDynamicButtons } from "./dynamic-buttons.client";
 
@@ -232,4 +232,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`Dynamic Buttons - ${siteConfig.metadata.title}`);
+export const head = buildHead(`Dynamic Buttons - ${siteMetadata.title}`);

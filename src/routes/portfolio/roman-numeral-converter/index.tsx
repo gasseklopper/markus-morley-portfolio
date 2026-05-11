@@ -6,7 +6,7 @@ import {
   useStylesScoped$,
 } from "@builder.io/qwik";
 import styles from "./roman-numeral.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import {
   BASIC_PAIRS,
@@ -182,6 +182,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Roman Numeral Converter - ${siteConfig.metadata.title}`,
+  `Roman Numeral Converter - ${siteMetadata.title}`,
   "Interactive Roman numeral converter with live preview, validation, and history log.",
 );

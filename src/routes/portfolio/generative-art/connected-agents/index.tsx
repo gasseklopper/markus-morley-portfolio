@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import type p5 from "p5";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
@@ -100,7 +100,7 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Connected Agents - ${siteConfig.metadata.title}`,
+  `Connected Agents - ${siteMetadata.title}`,
   "Form morphing process by connected random agents.",
 );
 

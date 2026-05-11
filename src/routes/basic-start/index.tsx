@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik"
-import siteConfig from "~/config/siteConfig.json"
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head"
 import { useGsapAnimations } from "~/hooks/useGsapAnimations"
 
@@ -153,4 +153,4 @@ export default component$(() => {
   )
 })
 
-export const head = buildHead(`Basic Start - ${siteConfig.metadata.title}`)
+export const head = buildHead(`Basic Start - ${siteMetadata.title}`)

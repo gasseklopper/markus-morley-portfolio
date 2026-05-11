@@ -14,13 +14,13 @@ import {
   overlayPreferenceKey,
   motionPreferenceKey,
 } from "../../theme/preference-scripts";
-import siteConfig from "~/config/siteConfig.json";
+import { themePreferences } from "~/config/theme";
 
 export const PrefferencesToggle = component$<{
   onClose$: PropFunction<() => void>;
 }>(({ onClose$ }) => {
   const themes = ["light", "dark", "neon", "pastell"] as const;
-  type Theme = typeof themes[number];
+  type Theme = (typeof themes)[number];
   const currentTheme = useSignal<Theme>("light");
   const cursorEnabled = useSignal(true);
   const boxLayout = useSignal(false);
@@ -41,10 +41,14 @@ export const PrefferencesToggle = component$<{
     }
 
     const storedTheme = localStorage.getItem(themeStorageKey) as Theme | null;
-    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+    const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)")
+      .matches
       ? "dark"
       : "light";
-    const theme = storedTheme && themes.includes(storedTheme) ? storedTheme : preferredTheme;
+    const theme =
+      storedTheme && themes.includes(storedTheme)
+        ? storedTheme
+        : preferredTheme;
     if (!storedTheme) {
       localStorage.setItem(themeStorageKey, theme);
     }
@@ -55,7 +59,7 @@ export const PrefferencesToggle = component$<{
     const defaultCursor = window.matchMedia("(prefers-reduced-motion: reduce)")
       .matches
       ? "false"
-      : siteConfig.theme_preferences.cursor;
+      : themePreferences.cursor;
     const currentCursor = storedCursor ?? defaultCursor;
     if (!storedCursor) {
       localStorage.setItem(cursorAnimationKey, currentCursor);
@@ -64,7 +68,7 @@ export const PrefferencesToggle = component$<{
     document.documentElement.setAttribute("data-cursor", currentCursor);
 
     const storedLayout = localStorage.getItem(layoutKey);
-    const defaultLayout = siteConfig.theme_preferences.layout;
+    const defaultLayout = themePreferences.layout;
     const currentLayout = storedLayout ?? defaultLayout;
     if (!storedLayout) {
       localStorage.setItem(layoutKey, currentLayout);
@@ -73,7 +77,7 @@ export const PrefferencesToggle = component$<{
     document.documentElement.setAttribute("data-layout", currentLayout);
 
     const storedDirection = localStorage.getItem(layoutDirectionPreferenceKey);
-    const defaultDirection = siteConfig.theme_preferences.layout_direction;
+    const defaultDirection = themePreferences.layoutDirection;
     const currentDirection = storedDirection ?? defaultDirection;
     if (!storedDirection) {
       localStorage.setItem(layoutDirectionPreferenceKey, currentDirection);
@@ -85,7 +89,7 @@ export const PrefferencesToggle = component$<{
     );
 
     const storedOverlay = localStorage.getItem(overlayPreferenceKey);
-    const defaultOverlay = siteConfig.theme_preferences.overlay;
+    const defaultOverlay = themePreferences.overlay;
     const currentOverlay = storedOverlay ?? defaultOverlay;
     if (!storedOverlay) {
       localStorage.setItem(overlayPreferenceKey, currentOverlay);
@@ -97,7 +101,7 @@ export const PrefferencesToggle = component$<{
     const defaultMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
       .matches
       ? "reduce"
-      : siteConfig.theme_preferences.motion;
+      : themePreferences.motion;
     const currentMotion = storedMotion ?? defaultMotion;
     if (!storedMotion) {
       localStorage.setItem(motionPreferenceKey, currentMotion);
@@ -223,10 +227,7 @@ export const PrefferencesToggle = component$<{
     "group relative flex items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] px-4 py-3 text-sm font-semibold text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:bg-[var(--surface-glass-2)] hover:text-[var(--text1)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)] aria-[pressed=true]:border-[var(--primary)] aria-[pressed=true]:bg-[var(--surface-glass-2)] aria-[pressed=true]:text-[var(--text1)] aria-[pressed=true]:shadow-[0_18px_48px_var(--surface-shadow)]";
 
   return (
-    <div
-      ref={portalRootRef}
-      class="fixed inset-0 z-[3000] flex justify-end"
-    >
+    <div ref={portalRootRef} class="fixed inset-0 z-[3000] flex justify-end">
       <div
         class={[
           "pointer-events-none absolute inset-0 bg-gradient-to-l from-[color:color-mix(in_srgb,var(--surface2)_40%,transparent)] via-transparent to-transparent transition-opacity duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -237,7 +238,9 @@ export const PrefferencesToggle = component$<{
         ref={panelRef}
         class={[
           "relative z-[3001] flex h-[100dvh] w-full max-w-md flex-col gap-6 overflow-y-auto rounded-l-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] px-6 py-8 text-[var(--text2)] shadow-[0_32px_120px_var(--surface-shadow)] backdrop-blur-2xl transition-[transform,opacity] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity] sm:px-8",
-          isAnimatingIn.value ? "translate-x-0 opacity-100" : "translate-x-full opacity-0",
+          isAnimatingIn.value
+            ? "translate-x-0 opacity-100"
+            : "translate-x-full opacity-0",
         ]}
         role="dialog"
         aria-modal="true"
@@ -245,7 +248,7 @@ export const PrefferencesToggle = component$<{
       >
         <header class="flex items-start justify-between gap-4">
           <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
+            <p class="text-xs font-semibold tracking-[0.35em] text-[var(--text3)] uppercase">
               Personalize
             </p>
             <h1 class="text-2xl font-semibold text-[var(--text1)]">

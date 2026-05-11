@@ -7,7 +7,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import styles from "./project011.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
 
@@ -385,6 +385,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Project 011 - ${siteConfig.metadata.title}`,
+  `Project 011 - ${siteMetadata.title}`,
   "Interactive D3 bar chart visualizing United States GDP from 1947 to 2015.",
 );

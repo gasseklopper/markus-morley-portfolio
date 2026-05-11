@@ -85,14 +85,14 @@ export const Footer = component$(() => {
               <input
                 id="footer-email"
                 type="email"
-                placeholder={footerData.subscription.input_placeholder}
+                placeholder={footerData.subscription.inputPlaceholder}
                 class="w-full flex-1 rounded-full bg-transparent px-4 py-2 text-sm text-[var(--text1)] placeholder:text-[var(--text3)] focus:outline-none"
               />
               <button
                 type="submit"
                 class="rounded-full bg-[var(--primary)] px-5 py-2 text-sm font-semibold text-[var(--brand-inverted)] shadow-[0_18px_50px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
               >
-                {footerData.subscription.button_label}
+                {footerData.subscription.buttonLabel}
               </button>
             </form>
           )}
@@ -102,7 +102,7 @@ export const Footer = component$(() => {
                 <a
                   href={item.link}
                   aria-label={item.name}
-                  class="grid size-10 place-items-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-xs font-semibold uppercase tracking-[0.3em] text-[var(--text2)] shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+                  class="grid size-10 place-items-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-xs font-semibold tracking-[0.3em] text-[var(--text2)] uppercase shadow-[0_12px_36px_var(--surface-shadow)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
                 >
                   {item.abbr}
                 </a>

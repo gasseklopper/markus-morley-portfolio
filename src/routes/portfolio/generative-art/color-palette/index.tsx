@@ -1,6 +1,6 @@
 import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import type p5 from "p5";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 export default component$(() => {
@@ -98,6 +98,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Color Palette - ${siteConfig.metadata.title}`,
+  `Color Palette - ${siteMetadata.title}`,
   "Extract and sort color palette from images with p5.js.",
 );

@@ -1,6 +1,6 @@
-import siteConfig from "~/config/siteConfig.json";
+import { footerConfig } from "~/config/navigation";
 
-export const footerData = siteConfig.footer_info;
+export const footerData = footerConfig;
 export type FooterData = typeof footerData;
 
 export default footerData;

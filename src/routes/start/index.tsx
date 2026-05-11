@@ -1,7 +1,7 @@
 import { component$, useStyles$ } from "@builder.io/qwik"
 // import baseStyles from "../index.scss?inline"
 import styles from "./start.scss?inline"
-import siteConfig from "~/config/siteConfig.json"
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head"
 // import { FooterNew } from "~/components/FooterNew/FooterNew"
 import { Gallery } from "~/components/Gallery/Gallery"
@@ -32,4 +32,4 @@ export default component$(() => {
   )
 })
 
-export const head = buildHead(`Start - ${siteConfig.metadata.title}`)
+export const head = buildHead(`Start - ${siteMetadata.title}`)

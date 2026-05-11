@@ -16,7 +16,7 @@ import type {
 import type { GeoPermissibleObjects } from "d3";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import styles from "./project014.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import {
   FCC_TEST_SCRIPT_ID,
   FCC_TEST_SCRIPT_SRC,
@@ -444,4 +444,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`${siteConfig.metadata.title} - Choropleth Map`);
+export const head = buildHead(`${siteMetadata.title} - Choropleth Map`);

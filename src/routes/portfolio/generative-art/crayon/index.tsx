@@ -1,6 +1,6 @@
 import { component$, useStylesScoped$, useVisibleTask$ } from "@builder.io/qwik";
 import type p5Type from "p5";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 
 const styles = `
@@ -515,6 +515,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Crayon — the Qwik.js way - ${siteConfig.metadata.title}`,
+  `Crayon — the Qwik.js way - ${siteMetadata.title}`,
   "Interactive WebGL sketch that pairs p5.brush trails with responsive pointer physics.",
 );

@@ -7,7 +7,7 @@ import {
 } from "@builder.io/qwik";
 import * as d3 from "d3";
 import styles from "./project012.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { FCC_TEST_SCRIPT_ID, FCC_TEST_SCRIPT_SRC, resetFccTestSuiteUI } from "~/utils/fcc-test-suite";
 import { buildHead } from "~/utils/head";
 
@@ -499,6 +499,6 @@ export default component$(() => {
 });
 
 export const head = buildHead(
-  `Project 012 - ${siteConfig.metadata.title}`,
+  `Project 012 - ${siteMetadata.title}`,
   "Interactive D3 scatterplot visualizing professional cyclist times and doping allegations.",
 );

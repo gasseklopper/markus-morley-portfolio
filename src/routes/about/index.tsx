@@ -1,6 +1,6 @@
 import { component$, useStyles$ } from "@builder.io/qwik";
 import styles from "./about.scss?inline";
-import siteConfig from "~/config/siteConfig.json";
+import { siteMetadata } from "~/config/site";
 import { buildHead } from "~/utils/head";
 import { AboutProfile } from "~/components/about/about-profile";
 import {
@@ -558,4 +558,4 @@ export default component$(() => {
   );
 });
 
-export const head = buildHead(`About - ${siteConfig.metadata.title}`);
+export const head = buildHead(`About - ${siteMetadata.title}`);

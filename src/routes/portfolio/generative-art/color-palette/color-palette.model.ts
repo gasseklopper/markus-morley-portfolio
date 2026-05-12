@@ -2,7 +2,9 @@ import type p5 from "p5";
 
 export type ColorSortMode = "HUE" | "SATURATION" | "BRIGHTNESS" | "GRAYSCALE";
 
-export const getSortModeForKey = (key: string): ColorSortMode | null | undefined => {
+export const getSortModeForKey = (
+  key: string,
+): ColorSortMode | null | undefined => {
   switch (key) {
     case "5":
       return null;

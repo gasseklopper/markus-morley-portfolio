@@ -4,34 +4,16 @@ import {
   useStylesScoped$,
   useVisibleTask$,
 } from "@builder.io/qwik";
-import * as d3 from "d3";
 import styles from "./project012.scss?inline";
 import { buildPortfolioHead } from "~/utils/head";
-import {
-  bindResponsiveChart,
-  fetchJson,
-  useDemoLoadState,
-  useFccTestLoader,
-} from "~/utils/portfolio-demo";
-
-const DATA_URL =
-  "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/cyclist-data.json";
-
-interface CyclistDatum {
-  name: string;
-  nationality: string;
-  year: number;
-  time: Date;
-  timeLabel: string;
-  doping: string;
-}
+import { useDemoLoadState, useFccTestLoader } from "~/utils/portfolio-demo";
+import { setupCyclistScatterplot } from "./cyclist-scatterplot.client";
+import type { CyclistDatum } from "./cyclist-scatterplot.model";
 
 export default component$(() => {
   useStylesScoped$(styles);
 
-  const svgRef = useSignal<SVGSVGElement>();
-  const tooltipRef = useSignal<HTMLDivElement>();
-  const wrapperRef = useSignal<HTMLDivElement>();
+  const rootRef = useSignal<HTMLElement>();
   const cyclists = useSignal<CyclistDatum[]>([]);
   const { isLoading, errorMessage, refreshCounter, handleRefresh } =
     useDemoLoadState();
@@ -42,293 +24,28 @@ export default component$(() => {
   useVisibleTask$(async ({ track }) => {
     track(() => refreshCounter.value);
 
-    const svgElement = svgRef.value;
-    const tooltipElement = tooltipRef.value;
-    const wrapperElement = wrapperRef.value;
-
-    if (!svgElement || !tooltipElement || !wrapperElement) {
+    const root = rootRef.value;
+    if (!root) {
       isLoading.value = false;
       return;
     }
 
-    const svg = d3.select(svgElement);
-    const tooltip = d3.select(tooltipElement);
-    let cleanupResize: (() => void) | undefined;
-
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const payload = await fetchJson<
-        Array<{
-          Name: string;
-          Nationality: string;
-          Year: number;
-          Time: string;
-          Doping: string;
-        }>
-      >(DATA_URL);
-
-      const dataset: CyclistDatum[] = payload.map((item) => {
-        const [minutes, seconds] = item.Time.split(":").map(Number);
-        const time = new Date(Date.UTC(1970, 0, 1, 0, minutes, seconds));
-
-        return {
-          name: item.Name,
-          nationality: item.Nationality,
-          year: item.Year,
-          time,
-          timeLabel: item.Time,
-          doping: item.Doping,
-        };
-      });
-
-      cyclists.value = dataset;
-
-      const renderChart = () => {
-        const measuredWidth = wrapperElement.clientWidth || 960;
-        const width = Math.min(960, Math.max(measuredWidth, 320));
-        const isCompact = width < 720;
-        const height = isCompact ? 480 : 520;
-        const margin = isCompact
-          ? { top: 72, right: 40, bottom: 136, left: 68 }
-          : { top: 84, right: 60, bottom: 124, left: 80 };
-        const innerWidth = Math.max(width - margin.left - margin.right, 200);
-        const innerHeight = height - margin.top - margin.bottom;
-
-        svg.selectAll("*").remove();
-        svg
-          .attr("width", width)
-          .attr("height", height)
-          .attr("viewBox", `0 0 ${width} ${height}`)
-          .attr("preserveAspectRatio", "xMidYMid meet");
-
-        tooltip
-          .style("opacity", 0)
-          .style("transform", "translate(-50%, -100%) scale(0.98)");
-
-        const xExtent = d3.extent(dataset, (d) => d.year) as [number, number];
-        const yExtent = d3.extent(dataset, (d) => d.time) as [Date, Date];
-
-        const xScale = d3.scaleLinear().domain(xExtent).range([0, innerWidth]);
-        const yScale = d3.scaleTime().domain(yExtent).range([innerHeight, 0]);
-
-        const chartGroup = svg
-          .append("g")
-          .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        const xAxis = d3
-          .axisBottom<number>(xScale)
-          .tickFormat(d3.format("d"))
-          .ticks(isCompact ? Math.max(5, Math.floor(innerWidth / 80)) : 10);
-
-        const timeFormatter = d3.timeFormat("%M:%S");
-        const yAxis = d3
-          .axisLeft<Date | d3.NumberValue>(yScale)
-          .tickFormat((value) => timeFormatter(value as Date))
-          .ticks(isCompact ? 6 : 8);
-
-        chartGroup
-          .append("g")
-          .attr("id", "x-axis")
-          .attr("class", "axis")
-          .attr("transform", `translate(0,${innerHeight})`)
-          .call(xAxis);
-
-        chartGroup
-          .append("g")
-          .attr("id", "y-axis")
-          .attr("class", "axis")
-          .call(yAxis);
-
-        const dotRadius = isCompact ? 5 : 6;
-        const tooltipOffset = isCompact ? 40 : 32;
-
-        const points = chartGroup
-          .selectAll<SVGCircleElement, CyclistDatum>(".dot")
-          .data(dataset)
-          .join("circle")
-          .attr(
-            "class",
-            (d) => `dot ${d.doping ? "dot--doping" : "dot--clean"}`,
-          )
-          .attr("fill", (d) =>
-            d.doping
-              ? "var(--chart-dot-doping-fill)"
-              : "var(--chart-dot-clean-fill)",
-          )
-          .attr("stroke", (d) =>
-            d.doping
-              ? "var(--chart-dot-doping-stroke)"
-              : "var(--chart-dot-clean-stroke)",
-          )
-          .attr("r", dotRadius)
-          .attr("cx", (d) => xScale(d.year))
-          .attr("cy", (d) => yScale(d.time))
-          .attr("data-xvalue", (d) => d.year)
-          .attr("data-yvalue", (d) => d.time.toISOString())
-          .attr("tabindex", 0);
-
-        const showTooltip = (
-          event: MouseEvent | FocusEvent,
-          datum: CyclistDatum,
-        ) => {
-          let x: number;
-          let y: number;
-
-          if (event instanceof MouseEvent) {
-            [x, y] = d3.pointer(event, wrapperElement);
-          } else {
-            const target = event.target as SVGCircleElement | null;
-            const cx = Number(target?.getAttribute("cx") ?? 0);
-            const cy = Number(target?.getAttribute("cy") ?? 0);
-            x = margin.left + cx;
-            y = margin.top + cy;
-          }
-
-          const dopingInfo = datum.doping
-            ? `<div class="project012__tooltip-doping">${datum.doping}</div>`
-            : "";
-
-          tooltip
-            .style("opacity", 1)
-            .style("transform", "translate(-50%, -110%) scale(1)")
-            .attr("data-year", datum.year.toString())
-            .html(
-              `<div class="project012__tooltip-meta">${datum.year} - ${datum.timeLabel}</div>` +
-                `<div class="project012__tooltip-name">${datum.name}</div>` +
-                `<div class="project012__tooltip-nationality">${datum.nationality}</div>` +
-                dopingInfo,
-            )
-            .style("left", `${x}px`)
-            .style("top", `${y - tooltipOffset}px`);
-        };
-
-        const hideTooltip = () => {
-          tooltip
-            .style("opacity", 0)
-            .style("transform", "translate(-50%, -100%) scale(0.98)");
-        };
-
-        points
-          .on("mouseenter", function (event, d) {
-            showTooltip(event as MouseEvent, d);
-            d3.select(this)
-              .raise()
-              .attr("r", dotRadius + 2);
-          })
-          .on("mousemove", function (event, d) {
-            showTooltip(event as MouseEvent, d);
-          })
-          .on("mouseleave", () => {
-            hideTooltip();
-            points.attr("r", dotRadius);
-          })
-          .on("focus", function (event, d) {
-            showTooltip(event as FocusEvent, d);
-            d3.select(this)
-              .raise()
-              .attr("r", dotRadius + 2);
-          })
-          .on("blur", () => {
-            hideTooltip();
-            points.attr("r", dotRadius);
-          });
-
-        chartGroup
-          .append("text")
-          .attr("x", innerWidth / 2)
-          .attr("y", isCompact ? -28 : -36)
-          .attr("text-anchor", "middle")
-          .attr("id", "title")
-          .attr("fill", "var(--text1)")
-          .attr("font-size", isCompact ? "1.28rem" : "1.85rem")
-          .attr("font-family", "var(--font-semibold)")
-          .attr("letter-spacing", "0.02em")
-          .text("Professional Cyclist Performance");
-
-        chartGroup
-          .append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("x", -innerHeight / 2)
-          .attr("y", isCompact ? -52 : -58)
-          .attr("text-anchor", "middle")
-          .attr("fill", "var(--text2)")
-          .attr("font-size", isCompact ? "0.8rem" : "0.85rem")
-          .attr("font-family", "var(--font-medium)")
-          .text("Race Time (minutes)");
-
-        chartGroup
-          .append("text")
-          .attr("x", innerWidth / 2)
-          .attr("y", innerHeight + (isCompact ? 56 : 48))
-          .attr("text-anchor", "middle")
-          .attr("fill", "var(--text2)")
-          .attr("font-size", isCompact ? "0.8rem" : "0.85rem")
-          .attr("font-family", "var(--font-medium)")
-          .text("Year");
-
-        const legendYOffset = innerHeight + (isCompact ? 96 : 80);
-        const legendXOffset = 0;
-
-        const legend = chartGroup
-          .append("g")
-          .attr("id", "legend")
-          .attr("transform", `translate(${legendXOffset}, ${legendYOffset})`);
-
-        const legendItems: Array<{ label: string; className: string }> = [
-          { label: "Riders with doping allegations", className: "dot--doping" },
-          { label: "No doping allegations", className: "dot--clean" },
-        ];
-
-        const legendGroup = legend
-          .selectAll<SVGGElement, { label: string; className: string }>("g")
-          .data(legendItems)
-          .join("g")
-          .attr("transform", (_, index) => `translate(0, ${index * 28})`);
-
-        legendGroup
-          .append("circle")
-          .attr("r", dotRadius)
-          .attr("cx", 0)
-          .attr("cy", 0)
-          .attr("class", (d) => `legend-dot ${d.className}`)
-          .attr("fill", (d) =>
-            d.className === "dot--doping"
-              ? "var(--chart-dot-doping-fill)"
-              : "var(--chart-dot-clean-fill)",
-          )
-          .attr("stroke", (d) =>
-            d.className === "dot--doping"
-              ? "var(--chart-dot-doping-stroke)"
-              : "var(--chart-dot-clean-stroke)",
-          );
-
-        legendGroup
-          .append("text")
-          .attr("x", dotRadius + 10)
-          .attr("y", 4)
-          .text((d) => d.label);
-      };
-
-      cleanupResize = bindResponsiveChart({
-        wrapperElement,
-        renderChart,
-      });
+      const runtime = await setupCyclistScatterplot(root);
+      cyclists.value = runtime?.cyclists ?? [];
+      return () => runtime?.cleanup();
     } catch (error) {
       console.error("Failed to load cyclist data", error);
       errorMessage.value = "Failed to load cyclist data. Please try again.";
     } finally {
       isLoading.value = false;
     }
-
-    return () => {
-      cleanupResize?.();
-      svg.selectAll("*").remove();
-    };
   });
 
   return (
-    <section class="layout-shell project012">
+    <section class="layout-shell project012" ref={rootRef}>
       <div class="project012__hero">
         <p class="project012__eyebrow">Data Storytelling</p>
         <h1 class="project012__title">
@@ -388,14 +105,9 @@ export default component$(() => {
         </div>
       </div>
 
-      <div ref={wrapperRef} class="project012__chart project012__chart-theme">
-        <svg ref={svgRef} role="img" aria-labelledby="title" />
-        <div
-          ref={tooltipRef}
-          id="tooltip"
-          class="project012__tooltip"
-          aria-hidden="true"
-        />
+      <div class="project012__chart project012__chart-theme">
+        <svg role="img" aria-labelledby="title" />
+        <div id="tooltip" class="project012__tooltip" aria-hidden="true" />
       </div>
 
       {cyclists.value.length > 0 && (

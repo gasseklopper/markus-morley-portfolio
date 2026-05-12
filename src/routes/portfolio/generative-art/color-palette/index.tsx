@@ -12,4 +12,6 @@ export default component$(() => {
   return <div id="p5-container" />;
 });
 
-export const head = buildPortfolioHead("/portfolio/generative-art/color-palette");
+export const head = buildPortfolioHead(
+  "/portfolio/generative-art/color-palette",
+);

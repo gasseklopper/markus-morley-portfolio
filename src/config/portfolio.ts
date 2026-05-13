@@ -9,7 +9,8 @@ type PortfolioContentIssue = {
   message: string;
 };
 
-const createPortfolioTitle = (name: string) => `${name} - ${siteMetadata.title}`;
+const createPortfolioTitle = (name: string) =>
+  `${name} - ${siteMetadata.title}`;
 
 const portfolioPageEntries = [
   {
@@ -100,6 +101,25 @@ const portfolioPageEntries = [
       image: {
         src: "/assets/portfolio/oststern/preview.jpg",
         alt: "Oststern 121 case study preview",
+      },
+    },
+  },
+  {
+    name: "Swissport",
+    path: "/portfolio/swissport",
+    description:
+      "Editorial case study for Swissport.com, showcasing planning, design thinking, customer integration, design systems, custom map cluster thinking, GSAP motion, QA, and deployment.",
+    badge: "Case Study",
+    date: "2026",
+    category: "Frontend Prototype",
+    status: "Study",
+    tech: ["Qwik", "GSAP", "Google Maps", "Design System", "Deployment"],
+    order: 46,
+    variation: "secondary",
+    preview: {
+      image: {
+        src: "/assets/portfolio/swissport/preview.jpg",
+        alt: "Swissport editorial case study preview",
       },
     },
   },

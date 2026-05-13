@@ -1,0 +1,808 @@
+.swissport {
+  --swissport-bg: #f6f6f3;
+  --swissport-ink: #111315;
+  --swissport-soft: #ececea;
+  --swissport-muted: rgba(17, 19, 21, 0.64);
+  --swissport-line: rgba(17, 19, 21, 0.14);
+  --swissport-panel: rgba(255, 255, 255, 0.86);
+  --swissport-red: #d9142b;
+  --swissport-sky: #dfe9ef;
+  --swissport-blue: #1b4155;
+  --hero-wash: 0.34;
+  --finale-signal: 0;
+
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--swissport-bg);
+  color: var(--swissport-ink);
+  font-family: Barlow, Arial, sans-serif;
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.swissport *,
+.swissport *::before,
+.swissport *::after {
+  box-sizing: border-box;
+}
+
+.swissport h1,
+.swissport h2,
+.swissport h3,
+.swissport p,
+.swissport span,
+.swissport strong,
+.swissport figcaption {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.swissport__progress {
+  position: fixed;
+  z-index: 30;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  height: 3px;
+  pointer-events: none;
+}
+
+.swissport__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--swissport-red),
+    #ffffff,
+    var(--swissport-blue)
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.swissport__hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #ffffff;
+  isolation: isolate;
+}
+
+.swissport__hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+      90deg,
+      rgba(7, 8, 9, calc(0.86 + var(--hero-wash) * 0.08)),
+      rgba(7, 8, 9, calc(0.36 + var(--hero-wash) * 0.3)) 62%,
+      rgba(7, 8, 9, calc(0.78 + var(--hero-wash) * 0.12))
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 8, 9, 0.18),
+      rgba(7, 8, 9, calc(0.72 + var(--hero-wash) * 0.2))
+    );
+}
+
+.swissport__hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: #08090a;
+}
+
+.swissport__hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.08);
+  transform: scale(1.03);
+}
+
+.swissport__nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.8rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(0.72rem, 0.68rem + 0.16vw, 0.86rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.swissport__nav a {
+  transition: color 0.2s ease;
+}
+
+.swissport__nav a:hover {
+  color: #ffffff;
+}
+
+.swissport__hero-content {
+  align-self: center;
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  width: min(100%, 74rem);
+  padding: clamp(5rem, 10vw, 9rem) 0 clamp(3rem, 8vw, 7rem);
+}
+
+.swissport__eyebrow {
+  margin: 0;
+  color: var(--swissport-red);
+  font-size: clamp(0.72rem, 0.68rem + 0.14vw, 0.86rem);
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.swissport__hero .swissport__eyebrow,
+.swissport__section-heading--dark .swissport__eyebrow,
+.swissport__reel-section .swissport__eyebrow,
+.swissport__finale .swissport__eyebrow {
+  color: #ff9aa8;
+}
+
+.swissport__hero h1 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(4rem, 10.5vw, 12rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.swissport__hero-content > p:not(.swissport__eyebrow) {
+  max-width: min(46rem, 100%);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: clamp(1.05rem, 0.98rem + 0.34vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.swissport__hero-actions,
+.swissport__finale-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.swissport__hero-actions a,
+.swissport__finale-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: 0.78rem 1rem;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.swissport__hero-actions a:first-child,
+.swissport__finale-actions a:first-child {
+  background: var(--swissport-red);
+  border-color: var(--swissport-red);
+  color: #ffffff;
+}
+
+.swissport__hero-actions a:hover,
+.swissport__finale-actions a:hover {
+  transform: translateY(-0.12rem);
+}
+
+.swissport__meta {
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.swissport__meta-item {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 7rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: rgba(8, 9, 10, 0.56);
+  backdrop-filter: blur(18px);
+}
+
+.swissport__meta-item span,
+.swissport__service-card span,
+.swissport__reel-card figcaption span,
+.swissport__quality-item span {
+  color: var(--swissport-red);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.swissport__meta-item strong {
+  color: #ffffff;
+  font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.32rem);
+  font-weight: 650;
+  line-height: 1.15;
+}
+
+.swissport__intro {
+  display: grid;
+  place-items: center;
+  min-height: 82vh;
+  padding: clamp(4rem, 11vw, 9rem) clamp(1rem, 6vw, 7rem);
+  background: linear-gradient(
+      90deg,
+      rgba(217, 20, 43, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(180deg, #ffffff, var(--swissport-soft));
+  background-size:
+    clamp(3rem, 7vw, 6rem) 100%,
+    auto;
+}
+
+.swissport__intro p {
+  max-width: min(18ch, 100%);
+  margin: 0;
+  color: var(--swissport-ink);
+  font-size: clamp(2.65rem, 6.2vw, 7rem);
+  font-weight: 650;
+  line-height: 0.96;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.swissport__process,
+.swissport__services,
+.swissport__quality {
+  padding: clamp(5rem, 12vw, 10rem) clamp(1rem, 5vw, 6rem);
+  background: var(--swissport-bg);
+}
+
+.swissport__section-heading,
+.swissport__reel-copy {
+  display: grid;
+  gap: 0.8rem;
+  width: min(100%, 96rem);
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+}
+
+.swissport__section-heading h2,
+.swissport__split-copy h2,
+.swissport__reel-copy h2,
+.swissport__quality-copy h2,
+.swissport__finale h2 {
+  max-width: 13ch;
+  margin: 0;
+  font-size: clamp(2.7rem, 6vw, 6.8rem);
+  font-weight: 650;
+  line-height: 0.94;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.swissport__process-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  width: min(100%, 108rem);
+  margin: 0 auto;
+  border-top: 1px solid var(--swissport-line);
+  border-left: 1px solid var(--swissport-line);
+}
+
+.swissport__process-card {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  min-height: clamp(25rem, 32vw, 34rem);
+  padding: clamp(1rem, 2vw, 1.7rem);
+  border-right: 1px solid var(--swissport-line);
+  border-bottom: 1px solid var(--swissport-line);
+  background: linear-gradient(
+      150deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(255, 255, 255, 0.18)
+    ),
+    var(--swissport-bg);
+}
+
+.swissport__process-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: var(--swissport-red);
+  transform: scaleX(0.18);
+  transform-origin: left center;
+}
+
+.swissport__number {
+  display: block;
+  color: rgba(17, 19, 21, 0.16);
+  font-size: clamp(3.5rem, 6vw, 7rem);
+  font-weight: 700;
+  line-height: 0.8;
+}
+
+.swissport__process-card h3,
+.swissport__service-card h3 {
+  margin: 0;
+  font-size: clamp(1.55rem, 2.1vw, 2.9rem);
+  font-weight: 650;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.swissport__process-card p:not(.swissport__eyebrow),
+.swissport__service-card p,
+.swissport__split-copy p,
+.swissport__quality-copy p,
+.swissport__finale p:not(.swissport__eyebrow) {
+  margin: 0;
+  color: var(--swissport-muted);
+  font-size: clamp(0.98rem, 0.94rem + 0.18vw, 1.12rem);
+  line-height: 1.56;
+}
+
+.swissport__process-card strong {
+  color: var(--swissport-blue);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.swissport__split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: center;
+  padding: clamp(5rem, 12vw, 10rem) clamp(1rem, 6vw, 7rem);
+  background: radial-gradient(
+      circle at 7% 18%,
+      rgba(217, 20, 43, 0.09),
+      transparent 34%
+    ),
+    #ffffff;
+}
+
+.swissport__split-copy,
+.swissport__quality-copy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.swissport__split-copy p:not(.swissport__eyebrow),
+.swissport__quality-copy p,
+.swissport__finale p:not(.swissport__eyebrow) {
+  max-width: min(39rem, 100%);
+}
+
+.swissport__screen {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--swissport-line);
+  background: #ffffff;
+  box-shadow: 0 34px 90px rgba(17, 19, 21, 0.14);
+  transform-style: preserve-3d;
+}
+
+.swissport__screen img {
+  width: 100%;
+  min-height: clamp(24rem, 46vw, 42rem);
+  object-fit: cover;
+}
+
+.swissport__map-section,
+.swissport__reel-section {
+  display: grid;
+  align-content: center;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  background: linear-gradient(180deg, #111315, #0a0c0e),
+    radial-gradient(circle at 84% 22%, rgba(217, 20, 43, 0.18), transparent 36%);
+  color: #ffffff;
+}
+
+.swissport__section-heading--dark {
+  padding: 0 clamp(1rem, 5vw, 6rem);
+}
+
+.swissport__map-board {
+  position: relative;
+  width: min(100% - 2rem, 94rem);
+  min-height: clamp(32rem, 58vw, 48rem);
+  overflow: hidden;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 70% 36%, rgba(217, 20, 43, 0.24), transparent 22%),
+    linear-gradient(135deg, #172631, #0e1217 58%, #191112);
+  background-size:
+    3.6rem 3.6rem,
+    3.6rem 3.6rem,
+    auto,
+    auto;
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.42);
+}
+
+.swissport__map-board::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+}
+
+.swissport__route {
+  position: absolute;
+  left: 16%;
+  width: 68%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.54),
+    var(--swissport-red),
+    transparent
+  );
+}
+
+.swissport__route--one {
+  top: 37%;
+  rotate: -8deg;
+}
+
+.swissport__route--two {
+  top: 55%;
+  rotate: 12deg;
+}
+
+.swissport__route--three {
+  top: 68%;
+  rotate: -18deg;
+}
+
+.swissport__map-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: clamp(4.5rem, 8vw, 7rem);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  background: rgba(217, 20, 43, 0.78);
+  color: #ffffff;
+  text-align: center;
+  box-shadow:
+    0 0 0 0.65rem rgba(217, 20, 43, 0.12),
+    0 18px 46px rgba(0, 0, 0, 0.24);
+}
+
+.swissport__map-node strong {
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  line-height: 1;
+}
+
+.swissport__map-node span {
+  max-width: 8ch;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.swissport__service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  width: min(100%, 96rem);
+  margin: 0 auto;
+  background: var(--swissport-line);
+}
+
+.swissport__service-card {
+  display: grid;
+  align-content: space-between;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  min-height: clamp(18rem, 28vw, 30rem);
+  padding: clamp(1.2rem, 2.8vw, 2.5rem);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.swissport__reel-section {
+  background: linear-gradient(180deg, #0f1113, #17191b),
+    radial-gradient(circle at 10% 18%, rgba(217, 20, 43, 0.16), transparent 34%);
+}
+
+.swissport__reel-copy {
+  padding: 0 clamp(1rem, 5vw, 6rem);
+}
+
+.swissport__reel-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.swissport__reel-track {
+  display: flex;
+  gap: clamp(1rem, 2vw, 2rem);
+  width: max-content;
+  padding: 0 clamp(1rem, 5vw, 6rem);
+  will-change: transform;
+}
+
+.swissport__reel-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(80vw, 60rem);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #111315;
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.48);
+  transform-style: preserve-3d;
+}
+
+.swissport__reel-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 48%, rgba(0, 0, 0, 0.82));
+  pointer-events: none;
+}
+
+.swissport__reel-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.swissport__reel-card figcaption {
+  position: absolute;
+  z-index: 1;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: clamp(1rem, 2vw, 1.5rem);
+  left: clamp(1rem, 2vw, 1.5rem);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #ffffff;
+  font-size: clamp(1.1rem, 1rem + 0.6vw, 1.8rem);
+  font-weight: 650;
+  line-height: 1.05;
+}
+
+.swissport__reel-card figcaption span {
+  color: #ff9aa8;
+  font-size: 0.72rem;
+}
+
+.swissport__quality {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: start;
+  background: linear-gradient(
+      90deg,
+      rgba(27, 65, 85, 0.08) 1px,
+      transparent 1px
+    ),
+    linear-gradient(180deg, #ffffff, var(--swissport-soft));
+  background-size:
+    clamp(3rem, 7vw, 6rem) 100%,
+    auto;
+}
+
+.swissport__quality-list {
+  display: grid;
+  gap: 1px;
+  background: var(--swissport-line);
+}
+
+.swissport__quality-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: center;
+  min-height: 5.5rem;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.swissport__quality-item strong {
+  font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+  font-weight: 650;
+  line-height: 1.05;
+}
+
+.swissport__finale {
+  display: grid;
+  align-content: center;
+  min-height: 88vh;
+  padding: clamp(4rem, 10vw, 9rem) clamp(1rem, 7vw, 8rem);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 8, 9, 0.86),
+      rgba(7, 8, 9, calc(0.42 - var(--finale-signal) * 0.1))
+    ),
+    url("/assets/portfolio/swissport/network.jpg") center / cover;
+  color: #ffffff;
+}
+
+.swissport__finale h2 {
+  max-width: 13ch;
+}
+
+.swissport__finale p:not(.swissport__eyebrow),
+.swissport__finale-actions {
+  margin-top: 1.4rem;
+}
+
+@media (max-width: 1180px) {
+  .swissport__process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .swissport__process-card {
+    min-height: auto;
+  }
+
+  .swissport__service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 899px) {
+  .swissport__meta,
+  .swissport__split,
+  .swissport__quality {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .swissport__intro p,
+  .swissport__section-heading h2,
+  .swissport__split-copy h2,
+  .swissport__reel-copy h2,
+  .swissport__quality-copy h2,
+  .swissport__finale h2 {
+    font-size: clamp(2.25rem, 9vw, 5rem);
+  }
+
+  .swissport__map-section,
+  .swissport__reel-section {
+    min-height: auto;
+  }
+
+  .swissport__reel-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .swissport__reel-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swissport__reel-track {
+    transform: none !important;
+    padding-right: 1rem;
+  }
+
+  .swissport__reel-card {
+    width: min(84vw, 42rem);
+    scroll-snap-align: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .swissport__hero h1 {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+
+  .swissport__nav {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    padding-bottom: 0.8rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+  }
+
+  .swissport__hero-actions a,
+  .swissport__finale-actions a {
+    width: 100%;
+  }
+
+  .swissport__process-grid,
+  .swissport__service-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .swissport__process-card h3,
+  .swissport__service-card h3 {
+    font-size: clamp(1.55rem, 8vw, 2.7rem);
+  }
+
+  .swissport__screen img {
+    min-height: 22rem;
+  }
+
+  .swissport__map-board {
+    min-height: 34rem;
+  }
+
+  .swissport__map-node {
+    width: clamp(3.9rem, 18vw, 5.3rem);
+  }
+
+  .swissport__map-node span {
+    font-size: 0.56rem;
+  }
+
+  .swissport__reel-card {
+    aspect-ratio: 4 / 5;
+  }
+
+  .swissport__reel-card figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swissport *,
+  .swissport *::before,
+  .swissport *::after {
+    animation-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}

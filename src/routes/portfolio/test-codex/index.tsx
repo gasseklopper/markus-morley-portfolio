@@ -72,17 +72,17 @@ const principles = [
 const chapters = [
   {
     label: "Product Systems",
-    title: "Large-scale frontend work shaped into reliable product surfaces.",
+    title: "Product surfaces built to scale.",
     copy: "At Accenture Song, Markus built scalable React and TypeScript systems, connected design systems to delivery, and kept quality, accessibility, and performance in the foreground.",
   },
   {
     label: "Architecture",
-    title: "Hands-on product engineering with a systems point of view.",
+    title: "Hands-on engineering with system sense.",
     copy: "At Sinner Schrader, the work moved through enterprise frontend platforms, reusable component structures, CMS integration, and architecture decisions that could survive real delivery pressure.",
   },
   {
     label: "Translation",
-    title: "Design language becomes usable, maintainable interface code.",
+    title: "Design language translated into interface code.",
     copy: "From Hauser Lacour to comwrap, the recurring thread is the same: visual intent, user journeys, typography, interaction behavior, and frontend implementation moving as one discipline.",
   },
 ];
@@ -136,22 +136,25 @@ const treatments = [
     label: "Frontend Architecture",
     title: "Interfaces are built as systems, not isolated screens.",
     copy: "TypeScript, React, Next.js, Web Components, and CMS-backed architectures are used to make product surfaces scalable, maintainable, and ready for real teams.",
-    image: "/assets/images/photography/black/Template_index_018.jpg",
-    alt: "Black and white texture representing frontend architecture",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_35.png",
+    alt: "Dark product engineering workspace with code, CMS, and interface preview on large monitors",
   },
   {
     label: "UX and Design Systems",
     title: "Visual fidelity stays connected to usability.",
     copy: "Wireframes, prototypes, design systems, responsive behavior, accessibility, and testing turn product ideas into interfaces that people can actually use.",
-    image: "/assets/images/photography/portrait/Portrait_021.jpg",
-    alt: "Soft portrait detail representing UX and design systems",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_40.png",
+    alt: "Design system workspace with mobile wireframes, component controls, sketches, and tablet prototyping",
   },
   {
     label: "Product Alignment",
     title: "The bridge work is technical and human.",
     copy: "Workshops, client advisory, agile collaboration, and design-to-engineering translation keep stakeholders, designers, and developers moving toward the same product.",
-    image: "/assets/images/photography/venedig/IMG_1859.jpg",
-    alt: "Atmospheric image representing product communication",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_42.png",
+    alt: "Product alignment workshop with team discussion, user needs, interface flow, and dashboard code",
   },
 ];
 
@@ -330,9 +333,17 @@ export default component$(() => {
         </div>
       </section>
 
-      <section class="test-codex__chapters" aria-label="Career chapters">
+      <section
+        class="test-codex__chapters"
+        aria-label="Career chapters"
+        data-chapter-section
+      >
         {chapters.map((chapter, index) => (
-          <article class="test-codex__chapter" key={chapter.label} data-chapter>
+          <article
+            class="test-codex__chapter"
+            key={chapter.label}
+            data-chapter-card
+          >
             <span>
               {String(index + 1).padStart(2, "0")} / {chapter.label}
             </span>
@@ -346,10 +357,13 @@ export default component$(() => {
         class="test-codex__visual-notes"
         aria-labelledby="test-codex-visual-notes"
       >
-        <div class="test-codex__section-heading" data-chapter>
+        <div
+          class="test-codex__section-heading test-codex__section-heading--visual"
+          data-chapter
+        >
           <p class="test-codex__eyebrow">Visual treatment</p>
           <h2 id="test-codex-visual-notes">
-            Three working modes connect product thinking with implementation.
+            Three modes, one product practice.
           </h2>
         </div>
         <div class="test-codex__visual-grid">

@@ -21,6 +21,8 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
       floatingImages,
       signalLines,
       chapterCards,
+      careerChapterSection,
+      careerChapterCards,
       reelTrack,
       reelSection,
       progressBar,
@@ -48,6 +50,13 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
     gsap.set(plates, { clipPath: "inset(100% 0 0 0)" });
     gsap.set(signalLines, { scaleX: 0, transformOrigin: "left center" });
     gsap.set(chapterCards, { autoAlpha: 0, y: 54, rotateX: -7 });
+    gsap.set(careerChapterCards, {
+      autoAlpha: 0,
+      x: -36,
+      y: 34,
+      rotateX: -5,
+      transformOrigin: "50% 100%",
+    });
     gsap.set(statementPhrases, {
       autoAlpha: 0,
       yPercent: 118,
@@ -271,6 +280,26 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
         },
       });
     });
+
+    if (careerChapterSection && careerChapterCards.length) {
+      gsap.to(careerChapterCards, {
+        autoAlpha: 1,
+        x: 0,
+        y: 0,
+        rotateX: 0,
+        duration: 0.95,
+        ease: "power3.out",
+        stagger: {
+          each: 0.16,
+          from: "start",
+        },
+        scrollTrigger: {
+          trigger: careerChapterSection,
+          start: "top 76%",
+          toggleActions: "play none none reverse",
+        },
+      });
+    }
 
     marqueeItems.forEach((item, index) => {
       gsap.to(item, {

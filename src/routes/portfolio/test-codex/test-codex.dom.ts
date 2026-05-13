@@ -5,6 +5,10 @@ export const queryTestCodexDom = (root: HTMLElement) => ({
   floatingImages: root.querySelectorAll<HTMLElement>("[data-floating-image]"),
   signalLines: root.querySelectorAll<HTMLElement>("[data-signal-line]"),
   chapterCards: root.querySelectorAll<HTMLElement>("[data-chapter]"),
+  careerChapterSection: root.querySelector<HTMLElement>(
+    "[data-chapter-section]",
+  ),
+  careerChapterCards: root.querySelectorAll<HTMLElement>("[data-chapter-card]"),
   reelTrack: root.querySelector<HTMLElement>("[data-reel-track]"),
   reelSection: root.querySelector<HTMLElement>("[data-reel-section]"),
   progressBar: root.querySelector<HTMLElement>("[data-progress]"),

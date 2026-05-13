@@ -157,11 +157,11 @@ const treatments = [
 
 const motionBeats = [
   [
-    "Human-Centered Products",
+    "Human-Centered Product",
     "The work starts with user journeys, interaction concepts, and product behavior before it becomes implementation detail.",
   ],
   [
-    "Scalable Frontend Systems",
+    "Scalable Frontend",
     "Component libraries, micro-frontends, headless CMS integrations, and typed architectures keep large interfaces coherent.",
   ],
   [
@@ -173,7 +173,7 @@ const motionBeats = [
     "UX, backend engineering, DevOps, stakeholders, and client teams are connected through clear communication and practical frontend decisions.",
   ],
   [
-    "Continuous Development",
+    "Continuous Learning",
     "Recent focus areas include machine learning foundations, algorithmic thinking, data structures, D3, and JavaScript-based visualization.",
   ],
 ];

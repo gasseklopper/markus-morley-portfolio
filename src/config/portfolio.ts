@@ -124,6 +124,25 @@ const portfolioPageEntries = [
     },
   },
   {
+    name: "iTSM Group",
+    path: "/portfolio/itsmgroup",
+    description:
+      "Motion-led portfolio case study for itsmgroup.com, presenting planning, design thinking, customer integration, design systems, information architecture, GSAP animation, QA, and deployment.",
+    badge: "Case Study",
+    date: "2026",
+    category: "Frontend Prototype",
+    status: "Study",
+    tech: ["Qwik", "GSAP", "Service Design", "Design System"],
+    order: 47,
+    variation: "clean",
+    preview: {
+      image: {
+        src: "/assets/portfolio/itsmgroup/preview.svg",
+        alt: "iTSM Group portfolio case study preview",
+      },
+    },
+  },
+  {
     name: "Cycling Scatterplot",
     path: "/portfolio/project012",
     description:

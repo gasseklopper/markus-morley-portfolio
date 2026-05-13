@@ -14,193 +14,196 @@ import { setupTestCodexAnimations } from "./test-codex.client";
 const frames = [
   {
     number: "01",
-    title: "The Waiting Room",
+    title: "Today",
     image: "/assets/images/photography/black/Template_index_014.jpg",
-    alt: "High contrast black and white editorial portrait",
-    caption: "A quiet threshold where light behaves like a clue.",
+    alt: "High contrast black and white editorial frame",
+    caption:
+      "A structured career break focused on family responsibilities, modern frontend learning, machine learning foundations, and data visualization practice.",
   },
   {
     number: "02",
-    title: "Blue Wind",
+    title: "Accenture Song",
     image: "/assets/images/photography/venedig/IMG_2063.jpg",
-    alt: "Soft atmospheric Venice photograph with reflective light",
-    caption: "Slow parallax, floating detail, and animation with breath.",
+    alt: "Soft atmospheric image with reflective light",
+    caption:
+      "Senior Product Engineer building scalable frontend systems with TypeScript, React, Next.js, headless CMS platforms, design systems, and accessible multi-region interfaces.",
   },
   {
     number: "03",
-    title: "Velvet Signal",
+    title: "Sinner Schrader",
     image: "/assets/images/photography/portrait/Portrait_034.jpg",
-    alt: "Portrait photograph with soft cinematic contrast",
-    caption: "A portrait study that turns hover into a tiny edit suite.",
+    alt: "Portrait detail with soft cinematic contrast",
+    caption:
+      "Product engineering for enterprise platforms, expanding from hands-on frontend delivery into architecture, consulting, and reusable component systems.",
   },
   {
     number: "04",
-    title: "Paper Moon",
+    title: "Hauser Lacour",
     image: "/assets/images/photography/black/Template_index_020.jpg",
     alt: "Black and white abstract photographic scene",
     caption:
-      "A masked frame sequence with soft acceleration and a held final beat.",
+      "Creative development at the bridge between visual design and frontend engineering, translating brand concepts into high-performance digital experiences.",
   },
   {
     number: "05",
-    title: "Lantern Drift",
+    title: "Comwrap",
     image: "/assets/images/photography/venedig/IMG_1846.jpg",
-    alt: "Atmospheric Venice sky and city detail",
+    alt: "Atmospheric city detail",
     caption:
-      "A color pass where the photograph stays still but the interface feels weathered by light.",
+      "UX design and frontend development for B2C, B2B, and D2C platforms across finance, fintech, pharma, healthcare, and publishing projects.",
   },
   {
     number: "06",
-    title: "Afterimage",
+    title: "Education",
     image: "/assets/images/photography/portrait/Portrait_049.jpg",
     alt: "Portrait detail in soft light",
     caption:
-      "A closing portrait beat built around restraint, delayed focus, and a soft tactile hover.",
+      "Udacity nanodegrees, XDi UX certification, freeCodeCamp JavaScript and D3/data visualization work, and visual communication studies in Offenbach.",
   },
 ];
 
 const principles = [
-  "Pinned scenes, directional scroll, and elastic micro feedback",
-  "Qwik visible task hydration for client-only GSAP timelines",
-  "Photographic layers, soft holds, tactile reveals, and editorial pacing",
-  "Reduced-motion fallback with the composition intact",
+  "React, TypeScript, Next.js, Web Components, and headless CMS platforms",
+  "Design systems, component libraries, accessibility, and responsive UI",
+  "UX strategy, prototyping, testing, and design-to-engineering translation",
+  "Agile collaboration, client advisory, workshops, and product alignment",
 ];
 
 const chapters = [
   {
-    label: "Atmosphere",
-    title: "A nocturne for images, tempo, and negative space.",
-    copy: "The page opens like a title card: quiet, wide, and slightly uncanny. The motion waits, then arrives with a deliberate cut.",
+    label: "Product Systems",
+    title: "Large-scale frontend work shaped into reliable product surfaces.",
+    copy: "At Accenture Song, Markus built scalable React and TypeScript systems, connected design systems to delivery, and kept quality, accessibility, and performance in the foreground.",
   },
   {
-    label: "Gesture",
-    title: "Micro animations act like a camera assistant.",
-    copy: "Cards tilt with restraint, images drift against scroll, and every reveal has a small anticipation before it settles.",
+    label: "Architecture",
+    title: "Hands-on product engineering with a systems point of view.",
+    copy: "At Sinner Schrader, the work moved through enterprise frontend platforms, reusable component structures, CMS integration, and architecture decisions that could survive real delivery pressure.",
   },
   {
-    label: "System",
-    title: "The implementation stays resumable until the scene is visible.",
-    copy: "Qwik renders the editorial shell first. GSAP is loaded on visibility, then ScrollTrigger takes over the cinematic layer.",
+    label: "Translation",
+    title: "Design language becomes usable, maintainable interface code.",
+    copy: "From Hauser Lacour to comwrap, the recurring thread is the same: visual intent, user journeys, typography, interaction behavior, and frontend implementation moving as one discipline.",
   },
 ];
 
 const reelFrames = [
   {
-    title: "Fog Cut",
+    title: "React",
     image: "/assets/images/photography/black/Template_index_011.jpg",
-    alt: "Black and white photographic frame with strong contrast",
+    alt: "Black and white frame representing React frontend systems",
   },
   {
-    title: "Quiet Lake",
+    title: "TypeScript",
     image: "/assets/images/photography/venedig/IMG_1859.jpg",
-    alt: "Atmospheric Venice photograph",
+    alt: "Atmospheric frame representing typed product engineering",
   },
   {
-    title: "Soft Eye",
+    title: "Next.js",
     image: "/assets/images/photography/portrait/Portrait_021.jpg",
-    alt: "Soft portrait detail",
+    alt: "Portrait detail representing application architecture",
   },
   {
-    title: "Red Room",
+    title: "Design Systems",
     image: "/assets/images/photography/black/Template_index_06.jpg",
-    alt: "High contrast black and white scene",
+    alt: "High contrast scene representing design systems",
   },
   {
-    title: "Sky Breath",
+    title: "Accessibility",
     image: "/assets/images/photography/venedig/IMG_1846.jpg",
-    alt: "Venice sky and city detail",
+    alt: "Sky and city detail representing accessibility",
   },
   {
-    title: "Signal Face",
+    title: "CMS",
     image: "/assets/images/photography/portrait/Portrait_034.jpg",
-    alt: "Portrait with cinematic contrast",
+    alt: "Portrait with cinematic contrast representing CMS integration",
   },
   {
-    title: "Black Pool",
+    title: "D3",
     image: "/assets/images/photography/black/Template_index_020.jpg",
-    alt: "Abstract black and white photographic scene",
+    alt: "Abstract black and white scene representing data visualization",
   },
 ];
 
 const metrics = [
-  ["13", "scroll-linked scenes"],
-  ["64", "masked image beats"],
-  ["07", "responsive breakpoints"],
+  ["08", "years product and frontend practice"],
+  ["03", "core skill areas"],
+  ["05", "selected certifications"],
 ];
 
 const treatments = [
   {
-    label: "Art Direction",
-    title: "The image is treated like a room, not a thumbnail.",
-    copy: "Every crop has an entrance, an exit, and a held silence. The design lets texture, blur, and contrast carry as much narrative weight as the text.",
+    label: "Frontend Architecture",
+    title: "Interfaces are built as systems, not isolated screens.",
+    copy: "TypeScript, React, Next.js, Web Components, and CMS-backed architectures are used to make product surfaces scalable, maintainable, and ready for real teams.",
     image: "/assets/images/photography/black/Template_index_018.jpg",
-    alt: "Black and white photographic texture study",
+    alt: "Black and white texture representing frontend architecture",
   },
   {
-    label: "Interaction",
-    title: "Pointer motion becomes a small lens test.",
-    copy: "Hover does not shout. It bends the frame, breathes the image forward, and then releases with an elastic return that feels physical.",
+    label: "UX and Design Systems",
+    title: "Visual fidelity stays connected to usability.",
+    copy: "Wireframes, prototypes, design systems, responsive behavior, accessibility, and testing turn product ideas into interfaces that people can actually use.",
     image: "/assets/images/photography/portrait/Portrait_021.jpg",
-    alt: "Soft portrait detail with shallow focus",
+    alt: "Soft portrait detail representing UX and design systems",
   },
   {
-    label: "Scroll Edit",
-    title: "ScrollTrigger is used like an edit decision list.",
-    copy: "Pinned contact sheets, parallax fragments, and masked image reveals are sequenced as scenes instead of isolated tricks.",
+    label: "Product Alignment",
+    title: "The bridge work is technical and human.",
+    copy: "Workshops, client advisory, agile collaboration, and design-to-engineering translation keep stakeholders, designers, and developers moving toward the same product.",
     image: "/assets/images/photography/venedig/IMG_1859.jpg",
-    alt: "Atmospheric Venice photograph with water and city light",
+    alt: "Atmospheric image representing product communication",
   },
 ];
 
 const motionBeats = [
   [
-    "Opening Hold",
-    "The hero waits long enough to feel composed before the title rises into frame.",
+    "Human-Centered Products",
+    "The work starts with user journeys, interaction concepts, and product behavior before it becomes implementation detail.",
   ],
   [
-    "Mask Reveal",
-    "Images uncover from the center with a small contrast shift, like a print arriving in developer.",
+    "Scalable Frontend Systems",
+    "Component libraries, micro-frontends, headless CMS integrations, and typed architectures keep large interfaces coherent.",
   ],
   [
-    "Pinned Contact",
-    "The horizontal reel turns scrolling into a slow editorial inspection pass.",
+    "Design Fidelity",
+    "High-fidelity designs from Figma, Adobe XD, and Sketch are translated into production-ready architecture without losing the original intent.",
   ],
   [
-    "Micro Return",
-    "Cards always return home with a soft spring so interaction feels handmade.",
+    "Cross-Functional Delivery",
+    "UX, backend engineering, DevOps, stakeholders, and client teams are connected through clear communication and practical frontend decisions.",
   ],
   [
-    "Reduced Motion",
-    "The composition remains readable when motion is reduced; animation enhances, it does not carry meaning alone.",
+    "Continuous Development",
+    "Recent focus areas include machine learning foundations, algorithmic thinking, data structures, D3, and JavaScript-based visualization.",
   ],
 ];
 
 const productionNotes = [
   {
-    title: "Qwik shell",
-    copy: "The markup stays useful before hydration. GSAP enters only when the project is visible, keeping the route direct and resilient.",
+    title: "Accessible UI",
+    copy: "Interfaces are judged by how well they work across devices, abilities, and real product contexts, not only by how clean the first screen looks.",
   },
   {
-    title: "Scoped motion layer",
-    copy: "All selectors are rooted in the page container, so timelines stay local to the project and cleanup remains predictable.",
+    title: "Component systems",
+    copy: "Reusable patterns, atomic design principles, and clear interface contracts make product teams faster without flattening the design.",
   },
   {
-    title: "Responsive pacing",
-    copy: "Pinned desktop passages become native scrolling on compact screens, keeping the rhythm without trapping the viewport.",
+    title: "CMS integration",
+    copy: "Contentful, Adobe Experience Manager, TYPO3, and frontend templating experience keep editorial systems tied to flexible interfaces.",
   },
   {
-    title: "Photographic system",
-    copy: "Portrait, black-and-white, and Venice frames are mixed as a visual score: heavy contrast, air, interruption, release.",
+    title: "Reliable delivery",
+    copy: "Quality, maintainability, performance optimization, and pragmatic collaboration turn ambitious designs into products that ship.",
   },
 ];
 
 const finaleWords = [
-  "Motion",
-  "should",
-  "feel",
-  "edited,",
-  "not",
-  "decorated.",
+  "Product,",
+  "frontend,",
+  "and",
+  "design",
+  "move",
+  "together.",
 ];
 
 export default component$(() => {
@@ -216,7 +219,7 @@ export default component$(() => {
     });
   });
 
-  const title = "test-codex";
+  const title = "Markus Morley";
 
   return (
     <main class="test-codex" data-test-codex ref={rootRef}>
@@ -243,12 +246,12 @@ export default component$(() => {
 
         <nav class="test-codex__nav" aria-label="Project navigation">
           <a href="/portfolio">Portfolio</a>
-          <span>GSAP / ScrollTrigger / Qwik</span>
+          <span>CV Storytelling / GSAP / Qwik</span>
         </nav>
 
         <div class="test-codex__hero-grid">
           <div class="test-codex__title-wrap" data-hero-float>
-            <p class="test-codex__eyebrow">Motion art direction study</p>
+            <p class="test-codex__eyebrow">Senior Product Engineer</p>
             <h1
               id="test-codex-title"
               class="test-codex__title"
@@ -262,7 +265,7 @@ export default component$(() => {
 
           <div
             class="test-codex__plates"
-            aria-label="Motion notes"
+            aria-label="Professional strengths"
             data-hero-float
           >
             {principles.map((principle, index) => (
@@ -281,21 +284,21 @@ export default component$(() => {
         </div>
 
         <div class="test-codex__kinetic" aria-hidden="true" data-hero-float>
-          <span data-kinetic-word>surreal</span>
-          <span data-kinetic-word>photographic</span>
-          <span data-kinetic-word>resumable</span>
+          <span data-kinetic-word>human-centered</span>
+          <span data-kinetic-word>frontend</span>
+          <span data-kinetic-word>design systems</span>
         </div>
       </section>
 
-      <section class="test-codex__statement" aria-label="Creative direction">
+      <section class="test-codex__statement" aria-label="Professional profile">
         <p>
-          A photographic motion page built as a small modern art object: surreal
-          contrast, soft environmental drift, and frame-by-frame pacing
-          translated into scroll.
+          Frontend Engineer and Designer with a focus on human-centered
+          products, scalable product systems, design fidelity, and the craft of
+          turning complex ideas into usable digital interfaces.
         </p>
       </section>
 
-      <section class="test-codex__chapters" aria-label="Design chapters">
+      <section class="test-codex__chapters" aria-label="Career chapters">
         {chapters.map((chapter, index) => (
           <article class="test-codex__chapter" key={chapter.label} data-chapter>
             <span>
@@ -314,7 +317,7 @@ export default component$(() => {
         <div class="test-codex__section-heading" data-chapter>
           <p class="test-codex__eyebrow">Visual treatment</p>
           <h2 id="test-codex-visual-notes">
-            Three image rules keep the piece cinematic.
+            Three working modes connect product thinking with implementation.
           </h2>
         </div>
         <div class="test-codex__visual-grid">
@@ -344,12 +347,13 @@ export default component$(() => {
         </div>
       </section>
 
-      <section class="test-codex__marquee" aria-label="Motion language">
+      <section class="test-codex__marquee" aria-label="Professional language">
         <div data-marquee>
-          photography as interface / scroll as edit / motion as atmosphere
+          product engineering / frontend architecture / design systems / UX
+          strategy
         </div>
         <div data-marquee>
-          masked reveals / pinned passages / tactile hover / cinematic restraint
+          accessibility / responsive UI / CMS integration / data visualization
         </div>
       </section>
 
@@ -382,7 +386,7 @@ export default component$(() => {
         <div class="test-codex__reel-copy">
           <p class="test-codex__eyebrow">Pinned passage</p>
           <h2 id="test-codex-reel">
-            The page becomes a slow moving contact sheet.
+            The skill set moves as a slow contact sheet of product craft.
           </h2>
         </div>
         <div class="test-codex__reel-viewport">
@@ -415,7 +419,7 @@ export default component$(() => {
         <div class="test-codex__section-heading" data-chapter>
           <p class="test-codex__eyebrow">Motion score</p>
           <h2 id="test-codex-motion-board">
-            The interaction system is written as a sequence of beats.
+            The career reads as a sequence of product and delivery beats.
           </h2>
         </div>
         <div class="test-codex__beat-list">
@@ -431,7 +435,7 @@ export default component$(() => {
 
       <section
         class="test-codex__frames"
-        aria-label="Animated photographic frames"
+        aria-label="Animated career frames"
       >
         {frames.map((frame, index) => (
           <article
@@ -482,7 +486,7 @@ export default component$(() => {
         </div>
       </section>
 
-      <section class="test-codex__metrics" aria-label="Motion system metrics">
+      <section class="test-codex__metrics" aria-label="Professional metrics">
         {metrics.map(([value, label]) => (
           <div class="test-codex__metric" key={label} data-chapter>
             <strong data-metric-value data-metric-target={value}>
@@ -509,7 +513,7 @@ export default component$(() => {
         <h2
           id="test-codex-finale"
           data-finale-title
-          aria-label="Motion should feel edited, not decorated."
+          aria-label="Product, frontend, and design move together."
         >
           {finaleWords.map((word) => (
             <span class="test-codex__finale-word-mask" key={word}>
@@ -518,9 +522,9 @@ export default component$(() => {
           ))}
         </h2>
         <p data-finale-copy>
-          The piece keeps the Qwik page static until visible, then lets GSAP own
-          the timeline: title assembly, masked image reveals, scroll-linked
-          parallax, and small pointer-responsive image cards.
+          Markus bridges product engineering, frontend architecture, and design
+          practice so teams can move from intent to interface without losing
+          clarity, quality, or the human reason for building.
         </p>
       </section>
     </main>

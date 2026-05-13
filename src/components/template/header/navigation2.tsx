@@ -440,9 +440,7 @@ export default component$(() => {
         <div ref={menuInfoRef} class="menu__col menu__col-info">
           <p>Get in touch</p>
           <h3>m-morley@gmx.de</h3>
-          <h3>+49 177 371 6791</h3>
-          <h6>Loewenstrasse 1</h6>
-          <h6>63067 Offenbach</h6>
+          <h3>linkedin.com/in/markus-morley</h3>
         </div>
 
         <div ref={menuLinksWrapRef} class="menu__col menu__col-links">

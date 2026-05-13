@@ -182,7 +182,7 @@
   z-index: 10000;
   left: clamp(1.5rem, 4vw, 4.5rem);
   top: clamp(8rem, 24vh, 15rem);
-  max-width: min(52vw, 54rem);
+  max-width: min(60vw, 64rem);
   pointer-events: auto;
 }
 
@@ -199,10 +199,10 @@
   position: relative;
   z-index: 7;
   display: block;
-  max-width: 7ch;
+  max-width: 9ch;
   margin: 0.35rem 0 0;
   color: var(--codex-ink) !important;
-  font-size: clamp(4.2rem, 13vw, 13rem);
+  font-size: clamp(3.8rem, 11vw, 12rem);
   font-weight: 700;
   line-height: 0.82;
   text-transform: lowercase;
@@ -1077,11 +1077,11 @@
 
 @media (max-width: 1180px) {
   .test-codex__title-wrap {
-    max-width: min(48vw, 42rem);
+    max-width: min(56vw, 48rem);
   }
 
   .test-codex__title {
-    font-size: clamp(4rem, 11vw, 9.5rem);
+    font-size: clamp(3.6rem, 9.5vw, 8.5rem);
   }
 
   .test-codex__plates {
@@ -1109,8 +1109,8 @@
   }
 
   .test-codex__title {
-    max-width: 6ch;
-    font-size: clamp(3.5rem, 17vw, 8rem);
+    max-width: 9ch;
+    font-size: clamp(3.3rem, 14vw, 7rem);
   }
 
   .test-codex__plates {
@@ -1281,8 +1281,8 @@
   }
 
   .test-codex__title {
-    max-width: 6ch;
-    font-size: clamp(3.1rem, 18vw, 6.6rem);
+    max-width: 9ch;
+    font-size: clamp(2.9rem, 14vw, 5.8rem);
   }
 
   .test-codex__plates {
@@ -1355,7 +1355,7 @@
   }
 
   .test-codex__title {
-    font-size: clamp(2.75rem, 19vw, 5.1rem);
+    font-size: clamp(2.45rem, 13vw, 4.4rem);
   }
 
   .test-codex__plates {

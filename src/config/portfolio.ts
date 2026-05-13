@@ -66,21 +66,21 @@ const portfolioPageEntries = [
     },
   },
   {
-    name: "Photographic Motion Study",
+    name: "Markus Morley CV Story",
     path: "/portfolio/test-codex",
     description:
-      "Photographic GSAP motion art direction study with ScrollTrigger, masked reveals, and micro interactions.",
-    badge: "Motion Study",
-    date: "2025",
+      "Animated CV storytelling page for Markus Morley, focused on product engineering, frontend architecture, UX, and design systems.",
+    badge: "CV Story",
+    date: "2026",
     category: "Frontend Prototype",
     status: "Study",
-    tech: ["Qwik", "GSAP", "ScrollTrigger"],
+    tech: ["Qwik", "GSAP", "TypeScript"],
     order: 40,
     variation: "secondary",
     preview: {
       image: {
         src: "/assets/images/photography/black/Template_index_014.jpg",
-        alt: "Photographic motion study preview",
+        alt: "Markus Morley CV storytelling preview",
       },
     },
   },

@@ -26,6 +26,9 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
       progressBar,
       heroFloat,
       hero,
+      statement,
+      statementPhrases,
+      statementLine,
       marqueeItems,
       kineticWords,
       iris,
@@ -45,6 +48,15 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
     gsap.set(plates, { clipPath: "inset(100% 0 0 0)" });
     gsap.set(signalLines, { scaleX: 0, transformOrigin: "left center" });
     gsap.set(chapterCards, { autoAlpha: 0, y: 54, rotateX: -7 });
+    gsap.set(statementPhrases, {
+      autoAlpha: 0,
+      yPercent: 118,
+      rotateX: -58,
+      rotateZ: 2,
+      filter: "blur(18px)",
+      transformOrigin: "50% 100%",
+    });
+    gsap.set(statementLine, { scaleX: 0, transformOrigin: "left center" });
     gsap.set(kineticWords, { yPercent: 100, opacity: 0 });
     gsap.set(metricValues, { yPercent: 34, opacity: 0, filter: "blur(12px)" });
     gsap.set(metricLabels, { y: 18, opacity: 0 });
@@ -149,6 +161,100 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
         },
       });
     });
+
+    if (statement && statementPhrases.length) {
+      const statementTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: statement,
+          start: "top top",
+          end: () =>
+            `+=${Math.max(window.innerHeight * 1.6, statement.offsetHeight)}`,
+          scrub: 0.9,
+          pin: !isCompactViewport,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      statementTimeline
+        .to(statement, {
+          "--statement-glow": "1",
+          "--statement-shift": "68%",
+          duration: 0.2,
+          ease: "none",
+        })
+        .to(
+          statementLine,
+          {
+            scaleX: 1,
+            duration: 0.34,
+            ease: "power2.out",
+          },
+          0.04,
+        )
+        .to(
+          statementPhrases,
+          {
+            autoAlpha: 1,
+            yPercent: 0,
+            rotateX: 0,
+            rotateZ: 0,
+            filter: "blur(0px)",
+            duration: 0.78,
+            ease: "expo.out",
+            stagger: {
+              each: 0.08,
+              from: "start",
+            },
+          },
+          0.08,
+        )
+        .to(
+          statementPhrases,
+          {
+            color: (_index: number, target: HTMLElement) =>
+              target.classList.contains(
+                "test-codex__statement-phrase--accent",
+              )
+                ? "#86b8c8"
+                : "#f8f4ea",
+            textShadow: (_index: number, target: HTMLElement) =>
+              target.classList.contains(
+                "test-codex__statement-phrase--accent",
+              )
+                ? "0 0 34px rgba(134, 184, 200, 0.24)"
+                : "0 0 18px rgba(248, 244, 234, 0.1)",
+            duration: 0.3,
+            stagger: 0.035,
+            ease: "none",
+          },
+          0.5,
+        )
+        .to(
+          statementPhrases,
+          {
+            yPercent: (index: number) => (index % 2 === 0 ? -9 : 7),
+            xPercent: (index: number) => (index % 3 === 0 ? -2 : 2),
+            duration: 0.42,
+            ease: "none",
+            stagger: {
+              each: 0.025,
+              from: "center",
+            },
+          },
+          0.76,
+        )
+        .to(
+          statement,
+          {
+            "--statement-glow": "0.35",
+            "--statement-shift": "18%",
+            duration: 0.26,
+            ease: "none",
+          },
+          0.96,
+        );
+    }
 
     chapterCards.forEach((card, index) => {
       gsap.to(card, {

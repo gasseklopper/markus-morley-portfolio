@@ -10,6 +10,11 @@ export const queryTestCodexDom = (root: HTMLElement) => ({
   progressBar: root.querySelector<HTMLElement>("[data-progress]"),
   heroFloat: root.querySelectorAll<HTMLElement>("[data-hero-float]"),
   hero: root.querySelector<HTMLElement>("[data-hero]"),
+  statement: root.querySelector<HTMLElement>("[data-statement]"),
+  statementPhrases: root.querySelectorAll<HTMLElement>(
+    "[data-statement-phrase]",
+  ),
+  statementLine: root.querySelector<HTMLElement>("[data-statement-line]"),
   marqueeItems: root.querySelectorAll<HTMLElement>("[data-marquee]"),
   kineticWords: root.querySelectorAll<HTMLElement>("[data-kinetic-word]"),
   iris: root.querySelector<HTMLElement>("[data-iris]"),

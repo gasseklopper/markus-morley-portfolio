@@ -197,6 +197,20 @@ const productionNotes = [
   },
 ];
 
+const statementText =
+  "Frontend Engineer & Designer focused on human-centered products, scalable systems, and turning complex ideas into intuitive digital experiences.";
+
+const statementPhrases = [
+  "Frontend Engineer",
+  "& Designer",
+  "focused on",
+  "human-centered products,",
+  "scalable systems,",
+  "and turning",
+  "complex ideas",
+  "into intuitive digital experiences.",
+];
+
 const finaleWords = [
   "Product,",
   "frontend,",
@@ -290,12 +304,30 @@ export default component$(() => {
         </div>
       </section>
 
-      <section class="test-codex__statement" aria-label="Professional profile">
-        <p>
-          Frontend Engineer and Designer with a focus on human-centered
-          products, scalable product systems, design fidelity, and the craft of
-          turning complex ideas into usable digital interfaces.
+      <section
+        class="test-codex__statement"
+        aria-label="Professional profile"
+        data-statement
+      >
+        <p aria-label={statementText}>
+          {statementPhrases.map((phrase, index) => (
+            <span
+              class={`test-codex__statement-phrase ${
+                index === 3 || index === 4 || index === 7
+                  ? "test-codex__statement-phrase--accent"
+                  : ""
+              }`}
+              aria-hidden="true"
+              data-statement-phrase
+              key={phrase}
+            >
+              {phrase}
+            </span>
+          ))}
         </p>
+        <div class="test-codex__statement-line" aria-hidden="true">
+          <span data-statement-line />
+        </div>
       </section>
 
       <section class="test-codex__chapters" aria-label="Career chapters">

@@ -8,24 +8,27 @@ export default component$(() => {
   useGsapAnimations();
 
   return (
-    <div class="basic-start">
-      <section class="basic-start-grid-1" aria-label="Golden ratio grid layout">
-        <div class="basic-start-column" data-anim="fade">
-          <div class="basic-start-content">
-            <strong class="basic-start-name">Portfolio</strong>
-            <span>Interaction Designer </span>
-            <span>Rhein-Main-Gebiet </span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span>10+ Jahre digitale Produkte & Erlebnisse</span>
-          </div>
+    <main class="portfolio-index">
+      <section class="portfolio-hero" aria-labelledby="portfolio-title">
+        <div class="portfolio-hero__content" data-anim="fade">
+          <p class="portfolio-hero__eyebrow">Selected work</p>
+          <h1 id="portfolio-title">Portfolio</h1>
+          <p class="portfolio-hero__intro">
+            Interaction design, frontend architecture, creative coding, and
+            case studies from 10+ years of building digital products.
+          </p>
+        </div>
+        <div class="portfolio-hero__aside" data-anim="fade" data-y="8">
+          <span>Interaction Designer</span>
+          <span>Rhein-Main-Gebiet</span>
+          <span>{portfolioPages.length} Projekte</span>
         </div>
       </section>
-      <section class="basic-start-grid" aria-label="Golden ratio grid layout">
+
+      <section class="portfolio-grid" aria-label="Portfolio projects">
         {portfolioPages.map((page, index) => (
           <div
-            class="basic-start-column"
+            class="portfolio-grid__item"
             data-anim="reveal"
             data-y="12"
             data-duration="0.7"
@@ -46,20 +49,31 @@ export default component$(() => {
               ) : null}
 
               <Card.Body>
-                <Card.Tagline>{page.badge}</Card.Tagline>
+                <div class="card__meta">
+                  <Card.Tagline>{page.badge}</Card.Tagline>
+                  <span class="card__status">{page.status}</span>
+                </div>
                 <Card.Headline>{page.name}</Card.Headline>
                 <Card.Description>{page.description}</Card.Description>
+                <div class="card__tags" aria-label={`${page.name} technologies`}>
+                  {page.tech.slice(0, 3).map((tech) => (
+                    <Card.Tag key={tech}>{tech}</Card.Tag>
+                  ))}
+                </div>
               </Card.Body>
 
               <Card.Footer>
-                <Card.Date>{page.date}</Card.Date>
-                <Card.Link href={page.path}>Read more</Card.Link>
+                <div>
+                  <Card.Date>{page.date}</Card.Date>
+                  <span class="card__category">{page.category}</span>
+                </div>
+                <Card.Link href={page.path}>Open case</Card.Link>
               </Card.Footer>
             </Card.Root>
           </div>
         ))}
       </section>
-    </div>
+    </main>
   );
 });
 

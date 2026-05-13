@@ -85,6 +85,25 @@ const portfolioPageEntries = [
     },
   },
   {
+    name: "Oststern 121",
+    path: "/portfolio/oststern",
+    description:
+      "Process-led case study for the Oststern 121 real-estate microsite, showcasing planning, design thinking, customer integration, GSAP motion, responsive frontend delivery, and Netlify deployment.",
+    badge: "Case Study",
+    date: "2026",
+    category: "Frontend Prototype",
+    status: "Live",
+    tech: ["Qwik", "GSAP", "Netlify", "Responsive UI"],
+    order: 45,
+    variation: "clean",
+    preview: {
+      image: {
+        src: "/assets/portfolio/oststern/preview.jpg",
+        alt: "Oststern 121 case study preview",
+      },
+    },
+  },
+  {
     name: "Cycling Scatterplot",
     path: "/portfolio/project012",
     description:

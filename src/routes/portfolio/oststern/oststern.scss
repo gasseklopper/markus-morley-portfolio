@@ -1,0 +1,596 @@
+.oststern {
+  --oststern-bg: #f4f1e9;
+  --oststern-ink: #191816;
+  --oststern-muted: rgba(25, 24, 22, 0.66);
+  --oststern-line: rgba(25, 24, 22, 0.16);
+  --oststern-panel: rgba(255, 252, 244, 0.86);
+  --oststern-red: #bd3f31;
+  --oststern-green: #667a56;
+  --oststern-blue: #355e73;
+  --hero-dim: 0.28;
+
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--oststern-bg);
+  color: var(--oststern-ink);
+  font-family: Barlow, Arial, sans-serif;
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.oststern *,
+.oststern *::before,
+.oststern *::after {
+  box-sizing: border-box;
+}
+
+.oststern h1,
+.oststern h2,
+.oststern h3,
+.oststern p,
+.oststern span,
+.oststern strong,
+.oststern figcaption {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.oststern__progress {
+  position: fixed;
+  z-index: 20;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  height: 3px;
+  pointer-events: none;
+}
+
+.oststern__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--oststern-red), var(--oststern-blue), var(--oststern-green));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.oststern__hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: #fffaf0;
+  isolation: isolate;
+}
+
+.oststern__hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(8, 8, 7, calc(0.78 + var(--hero-dim) * 0.08)), rgba(8, 8, 7, calc(0.24 + var(--hero-dim) * 0.32)) 58%, rgba(8, 8, 7, calc(0.72 + var(--hero-dim) * 0.1))),
+    linear-gradient(180deg, rgba(8, 8, 7, 0.2), rgba(8, 8, 7, calc(0.64 + var(--hero-dim) * 0.24)));
+}
+
+.oststern__hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: #111;
+}
+
+.oststern__hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.05);
+  transform: scale(1.03);
+}
+
+.oststern__nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+  padding-left: clamp(4.25rem, 8vw, 6.5rem);
+  padding-right: clamp(6rem, 10vw, 8rem);
+  border-bottom: 1px solid rgba(255, 250, 240, 0.26);
+  color: rgba(255, 250, 240, 0.78);
+  font-size: clamp(0.72rem, 0.68rem + 0.18vw, 0.88rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.oststern__nav a {
+  transition: color 0.2s ease;
+}
+
+.oststern__nav a:hover {
+  color: #fffaf0;
+}
+
+.oststern__hero-content {
+  align-self: center;
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  width: min(100%, 68rem);
+  padding: clamp(5rem, 10vw, 9rem) 0 clamp(3rem, 8vw, 7rem);
+}
+
+.oststern__eyebrow {
+  margin: 0;
+  color: var(--oststern-red);
+  font-size: clamp(0.72rem, 0.68rem + 0.14vw, 0.86rem);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.oststern__hero .oststern__eyebrow {
+  color: #f1b6a7;
+}
+
+.oststern__hero h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(4rem, 11vw, 12rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.oststern__hero-content > p:not(.oststern__eyebrow) {
+  max-width: min(42rem, 100%);
+  margin: 0;
+  color: rgba(255, 250, 240, 0.78);
+  font-size: clamp(1.05rem, 0.98rem + 0.34vw, 1.35rem);
+  line-height: 1.55;
+}
+
+.oststern__hero-actions,
+.oststern__finale-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.oststern__hero-actions a,
+.oststern__finale-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.8rem;
+  padding: 0.78rem 1rem;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.oststern__hero-actions a:first-child,
+.oststern__finale-actions a:first-child {
+  background: #fffaf0;
+  color: #161410;
+}
+
+.oststern__hero-actions a:hover,
+.oststern__finale-actions a:hover {
+  transform: translateY(-0.12rem);
+}
+
+.oststern__meta {
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: rgba(255, 250, 240, 0.24);
+}
+
+.oststern__meta-item {
+  display: grid;
+  gap: 0.4rem;
+  min-height: 7rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: rgba(10, 10, 9, 0.46);
+  backdrop-filter: blur(16px);
+}
+
+.oststern__meta-item span,
+.oststern__step span,
+.oststern__delivery-card span,
+.oststern__device figcaption span {
+  color: var(--oststern-red);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.oststern__meta-item strong {
+  color: #fffaf0;
+  font-size: clamp(1.05rem, 0.98rem + 0.3vw, 1.32rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.oststern__intro {
+  display: grid;
+  place-items: center;
+  min-height: 82vh;
+  padding: clamp(4rem, 11vw, 9rem) clamp(1rem, 6vw, 7rem);
+  background:
+    radial-gradient(circle at 84% 18%, rgba(189, 63, 49, 0.13), transparent 34%),
+    linear-gradient(180deg, #f4f1e9, #e7e0d2);
+}
+
+.oststern__intro p {
+  max-width: min(17ch, 100%);
+  margin: 0;
+  color: var(--oststern-ink);
+  font-size: clamp(2.7rem, 6.5vw, 7.2rem);
+  font-weight: 600;
+  line-height: 0.96;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.oststern__process,
+.oststern__delivery {
+  padding: clamp(5rem, 12vw, 10rem) clamp(1rem, 5vw, 6rem);
+  background: #f7f3ea;
+}
+
+.oststern__section-heading {
+  display: grid;
+  gap: 0.8rem;
+  width: min(100%, 92rem);
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+}
+
+.oststern__section-heading h2,
+.oststern__showcase-copy h2,
+.oststern__split-copy h2,
+.oststern__finale h2 {
+  max-width: 13ch;
+  margin: 0;
+  font-size: clamp(2.8rem, 6.5vw, 7rem);
+  font-weight: 650;
+  line-height: 0.94;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.oststern__timeline {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  width: min(100%, 100rem);
+  margin: 0 auto;
+  border-top: 1px solid var(--oststern-line);
+  border-left: 1px solid var(--oststern-line);
+}
+
+.oststern__step {
+  display: grid;
+  align-content: space-between;
+  min-height: clamp(20rem, 30vw, 32rem);
+  padding: clamp(1rem, 2vw, 1.7rem);
+  border-right: 1px solid var(--oststern-line);
+  border-bottom: 1px solid var(--oststern-line);
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.12)),
+    var(--oststern-bg);
+}
+
+.oststern__step h3,
+.oststern__delivery-card h3 {
+  max-width: 11ch;
+  margin: clamp(2.8rem, 7vw, 6rem) 0 0;
+  font-size: clamp(1.85rem, 2.2vw, 3.25rem);
+  font-weight: 650;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.oststern__step p,
+.oststern__delivery-card p,
+.oststern__split-copy p {
+  margin: 1rem 0 0;
+  color: var(--oststern-muted);
+  font-size: clamp(0.98rem, 0.94rem + 0.18vw, 1.12rem);
+  line-height: 1.56;
+}
+
+.oststern__showcase {
+  display: grid;
+  align-content: center;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  background:
+    linear-gradient(180deg, #1a1814, #0f1211),
+    radial-gradient(circle at 84% 20%, rgba(189, 63, 49, 0.2), transparent 38%);
+  color: #fffaf0;
+}
+
+.oststern__showcase-copy {
+  display: grid;
+  gap: 0.8rem;
+  width: min(100% - 2rem, 92rem);
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+}
+
+.oststern__showcase .oststern__eyebrow {
+  color: #f1b6a7;
+}
+
+.oststern__reel-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.oststern__reel-track {
+  display: flex;
+  gap: clamp(1rem, 2vw, 2rem);
+  width: max-content;
+  padding: 0 clamp(1rem, 5vw, 6rem);
+  will-change: transform;
+}
+
+.oststern__device {
+  position: relative;
+  flex: 0 0 auto;
+  width: min(78vw, 58rem);
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255, 250, 240, 0.22);
+  background: #151515;
+  box-shadow: 0 40px 110px rgba(0, 0, 0, 0.48);
+  transform-style: preserve-3d;
+}
+
+.oststern__device::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 48%, rgba(0, 0, 0, 0.78));
+  pointer-events: none;
+}
+
+.oststern__device img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.oststern__device figcaption {
+  position: absolute;
+  z-index: 1;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: clamp(1rem, 2vw, 1.5rem);
+  left: clamp(1rem, 2vw, 1.5rem);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #fffaf0;
+  font-size: clamp(1.1rem, 1rem + 0.6vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.oststern__device figcaption span {
+  color: #f1b6a7;
+  font-size: 0.72rem;
+}
+
+.oststern__split {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  align-items: center;
+  padding: clamp(5rem, 12vw, 10rem) clamp(1rem, 6vw, 7rem);
+  background:
+    radial-gradient(circle at 8% 18%, rgba(53, 94, 115, 0.12), transparent 34%),
+    #ede7dc;
+}
+
+.oststern__split-copy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.oststern__split-copy p:not(.oststern__eyebrow) {
+  max-width: min(37rem, 100%);
+}
+
+.oststern__map {
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid var(--oststern-line);
+  background: #fff;
+  box-shadow: 0 34px 90px rgba(25, 24, 22, 0.14);
+}
+
+.oststern__map img {
+  width: 100%;
+  height: 100%;
+  min-height: clamp(24rem, 46vw, 42rem);
+  object-fit: cover;
+}
+
+.oststern__delivery {
+  background:
+    linear-gradient(180deg, #f7f3ea, #e7e0d2),
+    radial-gradient(circle at 88% 22%, rgba(102, 122, 86, 0.14), transparent 34%);
+}
+
+.oststern__delivery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  width: min(100%, 92rem);
+  margin: 0 auto;
+  background: var(--oststern-line);
+}
+
+.oststern__delivery-card {
+  display: grid;
+  align-content: space-between;
+  min-height: clamp(18rem, 28vw, 30rem);
+  padding: clamp(1.2rem, 2.8vw, 2.5rem);
+  background: rgba(255, 252, 244, 0.88);
+}
+
+.oststern__finale {
+  display: grid;
+  align-content: center;
+  min-height: 82vh;
+  padding: clamp(4rem, 10vw, 9rem) clamp(1rem, 7vw, 8rem);
+  background:
+    linear-gradient(90deg, rgba(10, 10, 9, 0.78), rgba(10, 10, 9, 0.32)),
+    url("/assets/portfolio/oststern/architecture-2.jpg") center / cover;
+  color: #fffaf0;
+}
+
+.oststern__finale .oststern__eyebrow {
+  color: #f1b6a7;
+}
+
+.oststern__finale h2 {
+  max-width: 12ch;
+}
+
+.oststern__finale-actions {
+  margin-top: 1.6rem;
+}
+
+@media (max-width: 1180px) {
+  .oststern__timeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .oststern__step {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 899px) {
+  .oststern__meta,
+  .oststern__delivery-grid,
+  .oststern__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oststern__intro p,
+  .oststern__section-heading h2,
+  .oststern__showcase-copy h2,
+  .oststern__split-copy h2,
+  .oststern__finale h2 {
+    font-size: clamp(2.3rem, 9vw, 5rem);
+  }
+
+  .oststern__showcase {
+    min-height: auto;
+  }
+
+  .oststern__reel-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .oststern__reel-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .oststern__reel-track {
+    transform: none !important;
+    padding-right: 1rem;
+  }
+
+  .oststern__device {
+    width: min(84vw, 42rem);
+    scroll-snap-align: center;
+  }
+}
+
+@media (max-width: 620px) {
+  .oststern__hero h1 {
+    font-size: clamp(3rem, 16vw, 5rem);
+  }
+
+  .oststern__nav {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+    padding-left: clamp(4.25rem, 18vw, 5rem);
+    padding-right: clamp(5.5rem, 22vw, 7rem);
+    padding-bottom: 0.8rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+  }
+
+  .oststern__hero-actions a,
+  .oststern__finale-actions a {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .oststern__timeline {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .oststern__step h3,
+  .oststern__delivery-card h3 {
+    margin-top: 2rem;
+    font-size: clamp(1.7rem, 9vw, 3rem);
+  }
+
+  .oststern__device {
+    aspect-ratio: 4 / 5;
+  }
+
+  .oststern__device figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oststern *,
+  .oststern *::before,
+  .oststern *::after {
+    animation-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}

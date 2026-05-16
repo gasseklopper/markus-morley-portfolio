@@ -1,9 +1,42 @@
-import { createCleanupBag, prefersReducedMotion } from "~/utils/browserClient";
+import {
+  createCleanupBag,
+  on,
+  prefersReducedMotion,
+} from "~/utils/browserClient";
 import { loadGsap } from "~/utils/gsapClient";
 import { cleanupTestCodexAnimations } from "./test-codex.cleanup";
 import { testCodexConfig } from "./test-codex.config";
 import { queryTestCodexDom } from "./test-codex.dom";
 import { bindTestCodexPointerEvents } from "./test-codex.events";
+
+const toRgbChannels = (color: string) => {
+  const trimmed = color.trim();
+
+  if (trimmed.startsWith("#")) {
+    const hex =
+      trimmed.length === 4
+        ? trimmed
+            .slice(1)
+            .split("")
+            .map((channel) => channel + channel)
+            .join("")
+        : trimmed.slice(1);
+
+    const value = Number.parseInt(hex, 16);
+
+    if (Number.isFinite(value)) {
+      return `${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}`;
+    }
+  }
+
+  const rgbMatch = trimmed.match(
+    /^rgba?\((\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)[,\s]+(\d+(?:\.\d+)?)/,
+  );
+
+  return rgbMatch
+    ? `${rgbMatch[1]}, ${rgbMatch[2]}, ${rgbMatch[3]}`
+    : "248, 244, 234";
+};
 
 export const setupTestCodexAnimations = async (root: HTMLElement) => {
   if (prefersReducedMotion()) {
@@ -43,6 +76,15 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
       finaleKicker,
       microCards,
     } = queryTestCodexDom(root);
+    const codexTokens = getComputedStyle(root);
+    const codexColor = (name: string, fallback: string) =>
+      codexTokens.getPropertyValue(name).trim() || fallback;
+    const codexInk = codexColor("--codex-ink", "#f8f4ea");
+    const codexRed = codexColor("--codex-red", "#c94635");
+    const codexBlue = codexColor("--codex-blue", "#86b8c8");
+    const codexInkRgb = toRgbChannels(codexInk);
+    const codexRedRgb = toRgbChannels(codexRed);
+    const codexBlueRgb = toRgbChannels(codexBlue);
     const isCompactViewport = window.matchMedia(
       testCodexConfig.compactViewportQuery,
     ).matches;
@@ -75,21 +117,54 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
 
     bindTestCodexPointerEvents(root, gsap, microCards, cleanupBag);
 
+    let setProgressVisibility: (isVisible: boolean) => void = () => undefined;
+
     if (progressBar) {
-      gsap.fromTo(
-        progressBar,
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: root,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,
-          },
-        },
+      let progressFrame = 0;
+      let isProgressVisible = false;
+      const scrollingElement =
+        document.scrollingElement ?? document.documentElement;
+      const progressTrack = progressBar.parentElement;
+
+      gsap.set(progressTrack, { autoAlpha: 0 });
+      setProgressVisibility = (isVisible: boolean) => {
+        if (!progressTrack) return;
+        if (isVisible === isProgressVisible) return;
+
+        isProgressVisible = isVisible;
+
+        gsap.to(progressTrack, {
+          autoAlpha: isVisible ? 1 : 0,
+          duration: 0.22,
+          ease: "power2.out",
+          overwrite: true,
+        });
+      };
+
+      const updateProgress = () => {
+        progressFrame = 0;
+
+        const maxScroll =
+          scrollingElement.scrollHeight - scrollingElement.clientHeight;
+        const progress =
+          maxScroll > 0 ? scrollingElement.scrollTop / maxScroll : 0;
+
+        progressBar.style.transform = `scaleX(${gsap.utils.clamp(0, 1, progress)})`;
+      };
+
+      const requestProgressUpdate = () => {
+        if (progressFrame) return;
+        progressFrame = window.requestAnimationFrame(updateProgress);
+      };
+
+      cleanupBag.add(
+        on(window, "scroll", requestProgressUpdate, { passive: true }),
       );
+      cleanupBag.add(on(window, "resize", requestProgressUpdate));
+      cleanupBag.add(() => {
+        if (progressFrame) window.cancelAnimationFrame(progressFrame);
+      });
+      updateProgress();
     }
 
     const intro = gsap.timeline({
@@ -192,6 +267,10 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self: { progress: number }) =>
+            setProgressVisibility(self.progress >= 1),
+          onLeave: () => setProgressVisibility(true),
+          onEnterBack: () => setProgressVisibility(false),
         },
       });
 
@@ -326,7 +405,7 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
                     "test-codex__statement-phrase--warm",
                   )
                 ) {
-                  return "#ff7542";
+                  return codexRed;
                 }
 
                 if (
@@ -337,10 +416,10 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
                     "test-codex__statement-phrase--blend",
                   )
                 ) {
-                  return "#67bce2";
+                  return codexBlue;
                 }
 
-                return "#f8f4ea";
+                return codexInk;
               },
               textShadow: (_index: number, target: HTMLElement) => {
                 if (
@@ -348,7 +427,7 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
                     "test-codex__statement-phrase--warm",
                   )
                 ) {
-                  return "0 0 28px rgba(255, 117, 66, 0.24)";
+                  return `0 0 28px rgba(${codexRedRgb}, 0.24)`;
                 }
 
                 if (
@@ -359,10 +438,10 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
                     "test-codex__statement-phrase--blend",
                   )
                 ) {
-                  return "0 0 34px rgba(103, 188, 226, 0.24)";
+                  return `0 0 34px rgba(${codexBlueRgb}, 0.24)`;
                 }
 
-                return "0 0 18px rgba(248, 244, 234, 0.1)";
+                return `0 0 18px rgba(${codexInkRgb}, 0.1)`;
               },
               duration: 0.28,
               stagger: 0.035,

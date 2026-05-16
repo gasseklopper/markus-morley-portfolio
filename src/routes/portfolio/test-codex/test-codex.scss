@@ -59,6 +59,8 @@
   bottom: 1rem;
   left: 1rem;
   height: 2px;
+  visibility: hidden;
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -308,7 +310,7 @@
   gap: 0.45rem;
   max-width: min(32rem, 70vw);
   overflow: hidden;
-  color: rgba(248, 244, 234, 0.72);
+  color: var(--codex-muted);
   font-size: clamp(0.7rem, 0.68rem + 0.18vw, 0.9rem);
   letter-spacing: 0.26em;
   text-transform: uppercase;
@@ -455,26 +457,31 @@
 
 .test-codex__statement-phrase {
   display: inline-block;
-  color: rgba(248, 244, 234, 0.72);
+  color: var(--codex-muted);
   letter-spacing: 0;
   will-change: transform, opacity, filter;
 }
 
 .test-codex__statement-phrase--warm {
-  color: #ff7542;
+  color: var(--codex-red);
 }
 
 .test-codex__statement-phrase--cool {
-  color: #67bce2;
+  color: var(--codex-blue);
 }
 
 .test-codex__statement-phrase--blend {
-  color: #67bce2;
+  color: var(--codex-blue);
 }
 
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   .test-codex__statement-phrase--blend {
-    background: linear-gradient(90deg, #ff7542 0%, #f5b09b 48%, #67bce2 100%);
+    background: linear-gradient(
+      90deg,
+      var(--codex-red) 0%,
+      var(--codex-ink) 48%,
+      var(--codex-blue) 100%
+    );
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

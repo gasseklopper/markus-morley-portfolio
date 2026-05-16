@@ -90,38 +90,71 @@ const chapters = [
 const reelFrames = [
   {
     title: "React",
-    image: "/assets/images/photography/black/Template_index_011.jpg",
+    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_07_38.png",
     alt: "Black and white frame representing React frontend systems",
   },
   {
     title: "TypeScript",
-    image: "/assets/images/photography/venedig/IMG_1859.jpg",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 21_55_25.png",
     alt: "Atmospheric frame representing typed product engineering",
   },
   {
     title: "Next.js",
-    image: "/assets/images/photography/portrait/Portrait_021.jpg",
+    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_26_06.png",
     alt: "Portrait detail representing application architecture",
   },
   {
     title: "Design Systems",
-    image: "/assets/images/photography/black/Template_index_06.jpg",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 21_53_08.png",
     alt: "High contrast scene representing design systems",
   },
   {
     title: "Accessibility",
-    image: "/assets/images/photography/venedig/IMG_1846.jpg",
+    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_23_58.png",
     alt: "Sky and city detail representing accessibility",
   },
   {
     title: "CMS",
-    image: "/assets/images/photography/portrait/Portrait_034.jpg",
+    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_34_32.png",
     alt: "Portrait with cinematic contrast representing CMS integration",
   },
   {
     title: "D3",
-    image: "/assets/images/photography/black/Template_index_020.jpg",
+    image: "/assets/portfolio/test-codex/d3-js.png",
     alt: "Abstract black and white scene representing data visualization",
+  },
+];
+
+const floatingFragments = [
+  {
+    image: "/assets/images/photography/black/Template_index_01.jpg",
+    alt: "Black and white architectural fragment with hard contrast",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_03.jpg",
+    alt: "Black and white photographic detail with graphic shadow",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_06.jpg",
+    alt: "High contrast monochrome image with layered texture",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_09.jpg",
+    alt: "Abstract black and white street photography fragment",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_011.jpg",
+    alt: "Black and white image with dramatic light and structure",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_014.jpg",
+    alt: "Editorial monochrome photography with deep shadows",
+  },
+  {
+    image: "/assets/images/photography/black/Template_index_020.jpg",
+    alt: "Black and white abstract photographic scene",
   },
 ];
 
@@ -137,7 +170,7 @@ const treatments = [
     title: "Interfaces are built as systems, not isolated screens.",
     copy: "TypeScript, React, Next.js, Web Components, and CMS-backed architectures are used to make product surfaces scalable, maintainable, and ready for real teams.",
     image:
-      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_35.png",
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 21_38_58.png",
     alt: "Dark product engineering workspace with code, CMS, and interface preview on large monitors",
   },
   {
@@ -145,7 +178,7 @@ const treatments = [
     title: "Visual fidelity stays connected to usability.",
     copy: "Wireframes, prototypes, design systems, responsive behavior, accessibility, and testing turn product ideas into interfaces that people can actually use.",
     image:
-      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_40.png",
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 21_39_49.png",
     alt: "Design system workspace with mobile wireframes, component controls, sketches, and tablet prototyping",
   },
   {
@@ -153,7 +186,7 @@ const treatments = [
     title: "The bridge work is technical and human.",
     copy: "Workshops, client advisory, agile collaboration, and design-to-engineering translation keep stakeholders, designers, and developers moving toward the same product.",
     image:
-      "/assets/portfolio/test-codex/ChatGPT%20Image%2013.%20Mai%202026,%2011_52_42.png",
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 21_42_08.png",
     alt: "Product alignment workshop with team discussion, user needs, interface flow, and dashboard code",
   },
 ];
@@ -431,24 +464,21 @@ export default component$(() => {
       </section>
 
       <section class="test-codex__floating" aria-label="Photographic fragments">
-        <figure
-          class="test-codex__float test-codex__float--left"
-          data-floating-image
-        >
-          <img
-            src="/assets/images/photography/black/Template_index_018.jpg"
-            alt="Black and white photographic fragment"
-          />
-        </figure>
-        <figure
-          class="test-codex__float test-codex__float--right"
-          data-floating-image
-        >
-          <img
-            src="/assets/images/photography/portrait/Portrait_049.jpg"
-            alt="Portrait detail in soft light"
-          />
-        </figure>
+        <div class="test-codex__floating-track">
+          {floatingFragments.map((fragment, index) => (
+            <figure
+              class={`test-codex__float test-codex__float--${index + 1}`}
+              key={fragment.image}
+              data-floating-image
+            >
+              <img
+                src={fragment.image}
+                alt={fragment.alt}
+                loading={index < 3 ? "eager" : "lazy"}
+              />
+            </figure>
+          ))}
+        </div>
       </section>
 
       <section

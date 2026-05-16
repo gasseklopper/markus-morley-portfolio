@@ -206,26 +206,26 @@ const statementText =
 const statementGroups = [
   {
     phrases: [
-      { text: "Frontend Engineer" },
-      { text: "& Designer", tone: "blend" },
+      { text: "Frontend Engineer", tone: "cool" },
+      { text: "& Designer", tone: "warm" },
     ],
   },
   {
     phrases: [
       { text: "focused on" },
-      { text: "human-centered", tone: "cool" },
-      { text: "products," },
-      { text: "scalable", tone: "warm" },
+      { text: "human-centered", tone: "warm" },
+      { text: "products and" },
+      { text: "scalable", tone: "cool" },
       { text: "systems," },
     ],
   },
   {
     phrases: [
       { text: "turning" },
-      { text: "complex ideas" },
+      { text: "complex ideas", tone: "blend" },
       { text: "into" },
-      { text: "intuitive", tone: "cool" },
-      { text: "digital", tone: "warm" },
+      { text: "intuitive", tone: "warm" },
+      { text: "digital", tone: "cool" },
       { text: "experiences.", tone: "blend" },
     ],
   },

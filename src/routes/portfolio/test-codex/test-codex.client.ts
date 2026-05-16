@@ -38,6 +38,152 @@ const toRgbChannels = (color: string) => {
     : "248, 244, 234";
 };
 
+const setupHeroParticleField = (
+  hero: HTMLElement | null,
+  canvas: HTMLCanvasElement | null,
+  colors: string[],
+  cleanupBag: ReturnType<typeof createCleanupBag>,
+) => {
+  if (!hero || !canvas) return;
+
+  const context = canvas.getContext("2d", { alpha: true });
+
+  if (!context) return;
+
+  type Particle = {
+    angle: number;
+    color: string;
+    depth: number;
+    radius: number;
+    speed: number;
+    vx: number;
+    vy: number;
+    x: number;
+    y: number;
+  };
+
+  const pointer = {
+    active: false,
+    x: 0,
+    y: 0,
+  };
+  const particles: Particle[] = [];
+  let animationFrame = 0;
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+
+  const seedParticles = () => {
+    const area = width * height;
+    const count = Math.min(118, Math.max(46, Math.floor(area / 15000)));
+
+    particles.length = 0;
+
+    for (let index = 0; index < count; index += 1) {
+      particles.push({
+        angle: Math.random() * Math.PI * 2,
+        color: colors[index % colors.length],
+        depth: 0.55 + Math.random() * 0.9,
+        radius: 0.85 + Math.random() * 2.4,
+        speed: 0.12 + Math.random() * 0.22,
+        vx: 0,
+        vy: 0,
+        x: Math.random() * width,
+        y: Math.random() * height,
+      });
+    }
+  };
+
+  const resize = () => {
+    const bounds = canvas.getBoundingClientRect();
+    width = Math.max(1, bounds.width);
+    height = Math.max(1, bounds.height);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seedParticles();
+  };
+
+  const updatePointer = (event: PointerEvent) => {
+    const bounds = canvas.getBoundingClientRect();
+    pointer.active = true;
+    pointer.x = event.clientX - bounds.left;
+    pointer.y = event.clientY - bounds.top;
+  };
+
+  const clearPointer = () => {
+    pointer.active = false;
+  };
+
+  const render = () => {
+    context.clearRect(0, 0, width, height);
+
+    particles.forEach((particle) => {
+      particle.angle += 0.006 * particle.depth;
+
+      const driftX = Math.cos(particle.angle) * particle.speed;
+      const driftY = Math.sin(particle.angle * 0.8) * particle.speed;
+
+      if (pointer.active) {
+        const dx = particle.x - pointer.x;
+        const dy = particle.y - pointer.y;
+        const distanceSquared = dx * dx + dy * dy;
+        const influence = Math.max(0, 1 - distanceSquared / 44000);
+
+        if (influence > 0) {
+          const distance = Math.sqrt(distanceSquared) || 1;
+          particle.vx += (dx / distance) * influence * 0.36 * particle.depth;
+          particle.vy += (dy / distance) * influence * 0.36 * particle.depth;
+        }
+      }
+
+      particle.vx = (particle.vx + driftX) * 0.93;
+      particle.vy = (particle.vy + driftY) * 0.93;
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+
+      if (particle.x < -24) particle.x = width + 24;
+      if (particle.x > width + 24) particle.x = -24;
+      if (particle.y < -24) particle.y = height + 24;
+      if (particle.y > height + 24) particle.y = -24;
+
+      context.beginPath();
+      context.fillStyle = particle.color;
+      context.globalAlpha = 0.18 + particle.depth * 0.24;
+      context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+      context.fill();
+
+      if (pointer.active) {
+        const dx = particle.x - pointer.x;
+        const dy = particle.y - pointer.y;
+        const distance = Math.hypot(dx, dy);
+
+        if (distance < 145) {
+          context.beginPath();
+          context.strokeStyle = particle.color;
+          context.globalAlpha = (1 - distance / 145) * 0.18;
+          context.lineWidth = 0.8;
+          context.moveTo(pointer.x, pointer.y);
+          context.lineTo(particle.x, particle.y);
+          context.stroke();
+        }
+      }
+    });
+
+    context.globalAlpha = 1;
+    animationFrame = window.requestAnimationFrame(render);
+  };
+
+  resize();
+  render();
+
+  cleanupBag.add(on(window, "resize", resize));
+  cleanupBag.add(on(hero, "pointermove", updatePointer));
+  cleanupBag.add(on(hero, "pointerleave", clearPointer));
+  cleanupBag.add(() => window.cancelAnimationFrame(animationFrame));
+};
+
 export const setupTestCodexAnimations = async (root: HTMLElement) => {
   if (prefersReducedMotion()) {
     return () => undefined;
@@ -59,6 +205,7 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
       reelTrack,
       reelSection,
       progressBar,
+      backdropImage,
       heroFloat,
       hero,
       statement,
@@ -68,6 +215,7 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
       marqueeItems,
       kineticWords,
       iris,
+      particles,
       metricValues,
       metricLabels,
       finale,
@@ -116,6 +264,37 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
     gsap.set(finaleCopy, { y: 46, opacity: 0 });
 
     bindTestCodexPointerEvents(root, gsap, microCards, cleanupBag);
+    setupHeroParticleField(
+      hero,
+      particles,
+      [
+        `rgba(${codexInkRgb}, 0.72)`,
+        `rgba(${codexRedRgb}, 0.78)`,
+        `rgba(${codexBlueRgb}, 0.82)`,
+      ],
+      cleanupBag,
+    );
+
+    if (backdropImage) {
+      gsap.set(backdropImage, {
+        scale: 1.06,
+        xPercent: -0.8,
+        yPercent: -0.5,
+        filter: "grayscale(0.72) contrast(1.2) brightness(0.72)",
+        transformOrigin: "54% 46%",
+      });
+
+      gsap.to(backdropImage, {
+        scale: 1.105,
+        xPercent: 1,
+        yPercent: 0.8,
+        filter: "grayscale(0.68) contrast(1.24) brightness(0.78)",
+        duration: 18,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
+    }
 
     let setProgressVisibility: (isVisible: boolean) => void = () => undefined;
 

@@ -271,10 +271,12 @@ export default component$(() => {
           <img
             src="/assets/images/photography/venedig/IMG_2094.jpg"
             class="test-codex__backdrop-image"
+            data-backdrop-image
             alt=""
             loading="eager"
             sizes="100vw"
           />
+          <canvas class="test-codex__particles" data-particles />
           <div class="test-codex__iris" data-iris />
         </div>
 

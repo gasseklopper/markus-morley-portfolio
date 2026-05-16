@@ -104,6 +104,12 @@ export const FooterNew = component$(
       <section>
         <div class="footer" ref={footerRef} id="site-footer">
           <div class="footer__layout-container" ref={footerLayoutRef}>
+            <div class="footer__ambient" aria-hidden="true" />
+            <div class="footer__orbit" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
             <div class="footer__headlayout">
               <div class="footer__logo">
                 {/* <h2>MARKUS MORLEY</h2> */}

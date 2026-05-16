@@ -201,17 +201,34 @@ const productionNotes = [
 ];
 
 const statementText =
-  "Frontend Engineer & Designer focused on human-centered products, scalable systems, and turning complex ideas into intuitive digital experiences.";
+  "Frontend Engineer & Designer focused on human-centered products, scalable systems, turning complex ideas into intuitive digital experiences.";
 
-const statementPhrases = [
-  "Frontend Engineer",
-  "& Designer",
-  "focused on",
-  "human-centered products,",
-  "scalable systems,",
-  "and turning",
-  "complex ideas",
-  "into intuitive digital experiences.",
+const statementGroups = [
+  {
+    phrases: [
+      { text: "Frontend Engineer" },
+      { text: "& Designer", tone: "blend" },
+    ],
+  },
+  {
+    phrases: [
+      { text: "focused on" },
+      { text: "human-centered", tone: "cool" },
+      { text: "products," },
+      { text: "scalable", tone: "warm" },
+      { text: "systems," },
+    ],
+  },
+  {
+    phrases: [
+      { text: "turning" },
+      { text: "complex ideas" },
+      { text: "into" },
+      { text: "intuitive", tone: "cool" },
+      { text: "digital", tone: "warm" },
+      { text: "experiences.", tone: "blend" },
+    ],
+  },
 ];
 
 const finaleWords = [
@@ -313,18 +330,26 @@ export default component$(() => {
         data-statement
       >
         <p aria-label={statementText}>
-          {statementPhrases.map((phrase, index) => (
+          {statementGroups.map((group, groupIndex) => (
             <span
-              class={`test-codex__statement-phrase ${
-                index === 3 || index === 4 || index === 7
-                  ? "test-codex__statement-phrase--accent"
-                  : ""
-              }`}
+              class="test-codex__statement-group"
               aria-hidden="true"
-              data-statement-phrase
-              key={phrase}
+              data-statement-group
+              key={`statement-group-${groupIndex}`}
             >
-              {phrase}
+              {group.phrases.map((phrase) => (
+                <span
+                  class={`test-codex__statement-phrase ${
+                    phrase.tone
+                      ? `test-codex__statement-phrase--${phrase.tone}`
+                      : ""
+                  }`}
+                  data-statement-phrase
+                  key={phrase.text}
+                >
+                  {phrase.text}
+                </span>
+              ))}
             </span>
           ))}
         </p>
@@ -479,10 +504,7 @@ export default component$(() => {
         </div>
       </section>
 
-      <section
-        class="test-codex__frames"
-        aria-label="Animated career frames"
-      >
+      <section class="test-codex__frames" aria-label="Animated career frames">
         {frames.map((frame, index) => (
           <article
             key={frame.number}

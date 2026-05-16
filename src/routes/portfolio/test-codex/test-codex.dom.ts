@@ -18,6 +18,7 @@ export const queryTestCodexDom = (root: HTMLElement) => ({
   statementPhrases: root.querySelectorAll<HTMLElement>(
     "[data-statement-phrase]",
   ),
+  statementGroups: root.querySelectorAll<HTMLElement>("[data-statement-group]"),
   statementLine: root.querySelector<HTMLElement>("[data-statement-line]"),
   marqueeItems: root.querySelectorAll<HTMLElement>("[data-marquee]"),
   kineticWords: root.querySelectorAll<HTMLElement>("[data-kinetic-word]"),

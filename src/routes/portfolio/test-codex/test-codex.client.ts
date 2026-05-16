@@ -196,8 +196,8 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
           statementLine,
           {
             scaleX: 1,
-            duration: 0.34,
-            ease: "power2.out",
+            duration: 1.18,
+            ease: "none",
           },
           0.04,
         )

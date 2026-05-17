@@ -35,6 +35,24 @@ const getFilteredNavItems = () =>
       (!item.flag || isFeatureEnabled(item.flag as FeatureFlag)),
   )
 
+const MarkIcon = component$(() => (
+  <svg
+    viewBox="0 0 1024 1024"
+    xmlns="http://www.w3.org/2000/svg"
+    class="size-full"
+    aria-hidden="true"
+  >
+    <rect x="92" y="92" width="280" height="280" fill="currentColor" />
+    <rect x="92" y="372" width="280" height="280" fill="currentColor" />
+    <rect x="92" y="652" width="280" height="280" fill="currentColor" />
+    <rect x="372" y="92" width="280" height="280" fill="currentColor" />
+    <rect x="372" y="372" width="280" height="280" fill="currentColor" />
+    <rect x="652" y="92" width="280" height="280" fill="currentColor" />
+    <rect x="652" y="372" width="280" height="280" fill="currentColor" />
+    <rect x="652" y="652" width="280" height="280" fill="currentColor" />
+  </svg>
+))
+
 export default component$(() => {
   useStyles$(styles)
 
@@ -244,7 +262,7 @@ export default component$(() => {
         nav.classList.add("is-menu-open")
         menu.classList.add("is-open")
         gsap.set(menuLinks, { opacity: 1 })
-        splits.forEach(split => {
+        splits.forEach((split) => {
           gsap.set(split.chars, { opacity: 0, x: "750%" })
         })
         gsap.set(menu, { pointerEvents: "auto" })
@@ -268,7 +286,7 @@ export default component$(() => {
           ease: "none",
           delay: 0.25,
         },
-        0
+        0,
       )
       .to(menuBg, {
         duration: 0.5,
@@ -287,7 +305,7 @@ export default component$(() => {
           opacity: 1,
           ease: "none",
         },
-        "-=0.75"
+        "-=0.75",
       )
       .to(
         menuInfoItems,
@@ -298,27 +316,39 @@ export default component$(() => {
           ease: "power3.out",
           stagger: 0.075,
         },
-        "-=0.35"
+        "-=0.35",
       )
-      .to(menuLinksChars, {
-        duration: 0.65,
-        opacity: 0,
-      }, 0.45)
+      .to(
+        menuLinksChars,
+        {
+          duration: 0.65,
+          opacity: 0,
+        },
+        0.45,
+      )
 
-      .to(menuLinksChars, {
-        duration: 1.5,
-        opacity: 1,
-        x: "0%",
-        ease: "elastic.out(1, 0.25)",
-        stagger: 0.01,
-      }, ">") // start when previous ends
+      .to(
+        menuLinksChars,
+        {
+          duration: 1.5,
+          opacity: 1,
+          x: "0%",
+          ease: "elastic.out(1, 0.25)",
+          stagger: 0.01,
+        },
+        ">",
+      ) // start when previous ends
 
-      .to(menuLinksChars, {
-        duration: 0.75,
-        opacity: 1,
-        ease: "power2.out",
-        stagger: 0.01,
-      }, "<0.2") // start 0.2s after previous starts
+      .to(
+        menuLinksChars,
+        {
+          duration: 0.75,
+          opacity: 1,
+          ease: "power2.out",
+          stagger: 0.01,
+        },
+        "<0.2",
+      ) // start 0.2s after previous starts
 
     const closeTl = gsap.timeline({
       paused: true,
@@ -355,7 +385,7 @@ export default component$(() => {
           ease: "none",
           delay: 0.25,
         },
-        0
+        0,
       )
       .to(menuLogo, { duration: 0.3, opacity: 0 })
       .to(menuLinks, { duration: 0.3, opacity: 0 }, "<")
@@ -367,7 +397,7 @@ export default component$(() => {
           attr: { d: CLOSE_BULGE },
           ease: "power3.in",
         },
-        "<"
+        "<",
       )
       .to(menuBg, {
         duration: 0.5,
@@ -388,23 +418,15 @@ export default component$(() => {
   })
 
   return (
-    <nav ref={navRef} class="navigation" id="site-header" aria-label="Primary navigation">
+    <nav
+      ref={navRef}
+      class="navigation"
+      id="site-header"
+      aria-label="Primary navigation"
+    >
       <div class="navigation__logo">
         <a href="">
-          <svg
-            viewBox="0 0 1024 1024"
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-full"
-          >
-            <rect x="92" y="92" width="280" height="280" fill="currentColor" />
-            <rect x="92" y="372" width="280" height="280" fill="currentColor" />
-            <rect x="92" y="652" width="280" height="280" fill="currentColor" />
-            <rect x="372" y="92" width="280" height="280" fill="currentColor" />
-            <rect x="372" y="372" width="280" height="280" fill="currentColor" />
-            <rect x="652" y="92" width="280" height="280" fill="currentColor" />
-            <rect x="652" y="372" width="280" height="280" fill="currentColor" />
-            <rect x="652" y="652" width="280" height="280" fill="currentColor" />
-          </svg>
+          <MarkIcon />
         </a>
       </div>
 
@@ -426,14 +448,23 @@ export default component$(() => {
         </button>
       </div>
 
-      <div ref={menuRef} id="site-menu" class="menu" aria-hidden={!isMenuOpen.value}>
-        <svg class="menu__bg-svg" viewBox="0 0 1131 861" preserveAspectRatio="none">
+      <div
+        ref={menuRef}
+        id="site-menu"
+        class="menu"
+        aria-hidden={!isMenuOpen.value}
+      >
+        <svg
+          class="menu__bg-svg"
+          viewBox="0 0 1131 861"
+          preserveAspectRatio="none"
+        >
           <path ref={menuBgPathRef} fill="var(--surfaceAccent)" />
         </svg>
 
         <div ref={menuLogoRef} class="menu__logo">
-          <Link href="/" onClick$={closeMenu$}>
-            Logo
+          <Link href="/" onClick$={closeMenu$} aria-label="Markus Morley home">
+            <MarkIcon />
           </Link>
         </div>
 
@@ -454,8 +485,6 @@ export default component$(() => {
     </nav>
   )
 })
-
-
 
 // import {
 //   Signal,
@@ -526,11 +555,8 @@ export default component$(() => {
 // export default component$(() => {
 //   useStyles$(styles)
 
-
-
 //   const navItems = getFilteredNavItems()
 //   const isMenuOpen = useSignal(false);
-
 
 //   const openMenu$ = $(() => {
 //     isMenuOpen.value = true
@@ -589,7 +615,6 @@ export default component$(() => {
 //       })
 //     }
 //   })
-
 
 //   return (
 //     <>

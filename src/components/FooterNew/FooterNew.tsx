@@ -112,7 +112,7 @@ export const FooterNew = component$(() => {
             <span />
             <span />
           </div>
-          <div class="footer__headlayout">
+          <div class="footer__headlayout footer__headlayout--intro">
             <div class="footer__logo">{/* <h2>MARKUS MORLEY</h2> */}</div>
             <div class="footer__slogan">
               <h2>MARKUS MORLEY</h2>
@@ -132,7 +132,7 @@ export const FooterNew = component$(() => {
               </a>
             </div>
           </div>
-          <div class="footer__headlayout">
+          <div class="footer__headlayout footer__headlayout--links">
             <div class="footer__logo">
               <h2></h2>
             </div>

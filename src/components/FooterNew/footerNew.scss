@@ -27,17 +27,32 @@
 
   &::before {
     z-index: -2;
-    background:
-      radial-gradient(circle at 18% 28%, rgba(134, 184, 200, 0.18), transparent 30%),
-      radial-gradient(circle at 78% 72%, rgba(201, 70, 53, 0.16), transparent 34%),
+    background: radial-gradient(
+        circle at 18% 28%,
+        rgba(134, 184, 200, 0.18),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 78% 72%,
+        rgba(201, 70, 53, 0.16),
+        transparent 34%
+      ),
       linear-gradient(180deg, #070707 0%, rgba(11, 16, 15, 0.96) 100%);
   }
 
   &::after {
     z-index: -1;
-    background:
-      linear-gradient(115deg, transparent 0 28%, rgba(248, 244, 234, 0.055) 34%, transparent 42% 100%),
-      repeating-linear-gradient(0deg, rgba(248, 244, 234, 0.025) 0 1px, transparent 1px 4rem);
+    background: linear-gradient(
+        115deg,
+        transparent 0 28%,
+        rgba(248, 244, 234, 0.055) 34%,
+        transparent 42% 100%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        rgba(248, 244, 234, 0.025) 0 1px,
+        transparent 1px 4rem
+      );
     opacity: 0.5;
   }
 
@@ -50,9 +65,17 @@
     justify-content: space-between;
     padding: clamp(1rem, 4vw, 3rem);
     border: 1px solid var(--footer-line);
-    background:
-      linear-gradient(90deg, rgba(201, 70, 53, 0.1), transparent 22% 76%, rgba(134, 184, 200, 0.1)),
-      linear-gradient(180deg, rgba(248, 244, 234, 0.052), rgba(248, 244, 234, 0.018)),
+    background: linear-gradient(
+        90deg,
+        rgba(201, 70, 53, 0.1),
+        transparent 22% 76%,
+        rgba(134, 184, 200, 0.1)
+      ),
+      linear-gradient(
+        180deg,
+        rgba(248, 244, 234, 0.052),
+        rgba(248, 244, 234, 0.018)
+      ),
       rgba(7, 7, 7, 0.8);
     box-shadow: 0 32px 120px rgba(0, 0, 0, 0.55);
     transform-origin: bottom center;
@@ -63,9 +86,17 @@
     content: "";
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(90deg, transparent, rgba(248, 244, 234, 0.055), transparent),
-      repeating-linear-gradient(90deg, transparent 0 8.5rem, rgba(248, 244, 234, 0.035) 8.5rem 8.57rem);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(248, 244, 234, 0.055),
+        transparent
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 8.5rem,
+        rgba(248, 244, 234, 0.035) 8.5rem 8.57rem
+      );
     opacity: 0.68;
     pointer-events: none;
     animation: footer-codex-scan 9s linear infinite;
@@ -80,10 +111,21 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    background:
-      radial-gradient(circle at 20% 34%, rgba(134, 184, 200, 0.24), transparent 26%),
-      radial-gradient(circle at 74% 68%, rgba(201, 70, 53, 0.18), transparent 30%),
-      radial-gradient(circle at 58% 44%, rgba(146, 165, 111, 0.15), transparent 18%);
+    background: radial-gradient(
+        circle at 20% 34%,
+        rgba(134, 184, 200, 0.24),
+        transparent 26%
+      ),
+      radial-gradient(
+        circle at 74% 68%,
+        rgba(201, 70, 53, 0.18),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 58% 44%,
+        rgba(146, 165, 111, 0.15),
+        transparent 18%
+      );
     filter: blur(1px);
     mix-blend-mode: screen;
     opacity: 0.7;
@@ -122,7 +164,11 @@
     span:nth-child(3) {
       inset: 36%;
       border-color: rgba(146, 165, 111, 0.28);
-      background: radial-gradient(circle, rgba(146, 165, 111, 0.18), transparent 62%);
+      background: radial-gradient(
+        circle,
+        rgba(146, 165, 111, 0.18),
+        transparent 62%
+      );
     }
   }
 
@@ -163,6 +209,75 @@
   &__header h2,
   &__content h2 {
     margin: 0;
+  }
+
+  &__cv-download {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.72rem;
+    width: fit-content;
+    min-height: 3rem;
+    padding: 0.78rem 1.05rem 0.82rem;
+    border: 1px solid rgba(248, 244, 234, 0.26);
+    background: rgba(10, 10, 9, 0.44);
+    box-shadow: 0 22px 62px rgba(0, 0, 0, 0.42);
+    color: var(--footer-ink);
+    font-size: clamp(0.78rem, 0.72rem + 0.18vw, 0.94rem);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    backdrop-filter: blur(16px);
+    transition:
+      border-color 0.22s ease,
+      background 0.22s ease,
+      box-shadow 0.22s ease,
+      color 0.22s ease,
+      transform 0.22s ease;
+  }
+
+  &__cv-download::after {
+    content: "";
+    width: 0.54rem;
+    height: 0.54rem;
+    border-right: 2px solid currentcolor;
+    border-bottom: 2px solid currentcolor;
+    transform: translateY(-0.12rem) rotate(45deg);
+    transition: transform 0.22s ease;
+  }
+
+  &__cv-download span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.35rem;
+    min-height: 1.7rem;
+    border: 1px solid rgba(201, 70, 53, 0.54);
+    color: var(--footer-red);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
+
+  &__cv-download:hover,
+  &__cv-download:focus-visible {
+    border-color: rgba(134, 184, 200, 0.78);
+    background: rgba(8, 8, 7, 0.66);
+    box-shadow:
+      0 28px 78px rgba(0, 0, 0, 0.5),
+      0 0 32px rgba(134, 184, 200, 0.14);
+    color: #fffaf0;
+    transform: translateY(-0.12rem);
+  }
+
+  &__cv-download:hover::after,
+  &__cv-download:focus-visible::after {
+    transform: translateY(0.08rem) rotate(45deg);
+  }
+
+  &__cv-download:focus-visible {
+    outline: 2px solid var(--footer-blue);
+    outline-offset: 0.22rem;
   }
 
   &__footer {
@@ -228,7 +343,12 @@
   bottom: 0.35rem;
   left: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--footer-red), var(--footer-blue), var(--footer-moss));
+  background: linear-gradient(
+    90deg,
+    var(--footer-red),
+    var(--footer-blue),
+    var(--footer-moss)
+  );
   opacity: 0;
   transform: scaleX(0);
   transform-origin: left center;
@@ -297,7 +417,9 @@
     }
 
     &__headlayout {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.35fr) minmax(10rem, 0.75fr) minmax(10rem, 0.75fr);
+      grid-template-columns:
+        minmax(0, 1.1fr) minmax(0, 1.35fr) minmax(10rem, 0.75fr)
+        minmax(10rem, 0.75fr);
       gap: clamp(1rem, 4vw, 3rem);
     }
 

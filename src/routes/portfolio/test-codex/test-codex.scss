@@ -259,6 +259,75 @@
   will-change: transform;
 }
 
+.test-codex__cv-download {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.72rem;
+  width: fit-content;
+  min-height: 3rem;
+  margin-top: clamp(1rem, 2.1vw, 1.55rem);
+  padding: 0.78rem 1.05rem 0.82rem;
+  border: 1px solid rgba(248, 244, 234, 0.26);
+  background: rgba(10, 10, 9, 0.44);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.42);
+  color: var(--codex-ink);
+  font-size: clamp(0.78rem, 0.72rem + 0.18vw, 0.94rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  backdrop-filter: blur(16px);
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.test-codex__cv-download::after {
+  content: "";
+  width: 0.54rem;
+  height: 0.54rem;
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: translateY(-0.12rem) rotate(45deg);
+  transition: transform 0.22s ease;
+}
+
+.test-codex__cv-download span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.35rem;
+  min-height: 1.7rem;
+  border: 1px solid rgba(201, 70, 53, 0.54);
+  color: var(--codex-red);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+}
+
+.test-codex__cv-download:hover,
+.test-codex__cv-download:focus-visible {
+  border-color: rgba(134, 184, 200, 0.78);
+  background: rgba(8, 8, 7, 0.66);
+  box-shadow:
+    0 28px 78px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba(134, 184, 200, 0.14);
+  color: #fffaf0;
+  transform: translateY(-0.12rem);
+}
+
+.test-codex__cv-download:hover::after,
+.test-codex__cv-download:focus-visible::after {
+  transform: translateY(0.08rem) rotate(45deg);
+}
+
+.test-codex__cv-download:focus-visible {
+  outline: 2px solid var(--codex-blue);
+  outline-offset: 0.22rem;
+}
+
 .test-codex__plates {
   position: fixed;
   z-index: 10000;

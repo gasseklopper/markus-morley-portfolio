@@ -90,7 +90,8 @@ const chapters = [
 const reelFrames = [
   {
     title: "React",
-    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_07_38.png",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_07_38.png",
     alt: "Black and white frame representing React frontend systems",
   },
   {
@@ -101,7 +102,8 @@ const reelFrames = [
   },
   {
     title: "Next.js",
-    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_26_06.png",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_26_06.png",
     alt: "Portrait detail representing application architecture",
   },
   {
@@ -112,12 +114,14 @@ const reelFrames = [
   },
   {
     title: "Accessibility",
-    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_23_58.png",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_23_58.png",
     alt: "Sky and city detail representing accessibility",
   },
   {
     title: "CMS",
-    image: "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_34_32.png",
+    image:
+      "/assets/portfolio/test-codex/ChatGPT Image 16. Mai 2026, 22_34_32.png",
     alt: "Portrait with cinematic contrast representing CMS integration",
   },
   {
@@ -236,6 +240,8 @@ const productionNotes = [
 const statementText =
   "Frontend Engineer & Designer focused on human-centered products, scalable systems, turning complex ideas into intuitive digital experiences.";
 
+const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_2203.pdf";
+
 const statementGroups = [
   {
     phrases: [
@@ -330,6 +336,15 @@ export default component$(() => {
                 {title}
               </span>
             </h1>
+            <a
+              class="test-codex__cv-download"
+              href={cvDownloadHref}
+              download="markus-morley-cv-2026_2203.pdf"
+              aria-label="Download Markus Morley CV as PDF"
+            >
+              <span aria-hidden="true">PDF</span>
+              Download CV
+            </a>
           </div>
 
           <div

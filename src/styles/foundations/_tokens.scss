@@ -2,13 +2,13 @@
 
 :root {
   /* Colors */
-  --color-text: #303030;
-  --color-text-soft: #303030;
-  --color-surface: #b7b7b7;
-  --color-surface-accent: #8fdc55;
-  --color-inverse: #111111;
-  --color-border: #111111;
-  --black: #303030;
+  --color-text: #f8f4ea;
+  --color-text-soft: rgba(248, 244, 234, 0.68);
+  --color-surface: #0a0a09;
+  --color-surface-accent: #c94635;
+  --color-inverse: #86b8c8;
+  --color-border: rgba(248, 244, 234, 0.18);
+  --black: #0a0a09;
 
   /* Typography */
   --font-sans: "Inter", sans-serif;

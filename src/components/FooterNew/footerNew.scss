@@ -6,7 +6,7 @@
   --footer-line: rgba(248, 244, 234, 0.18);
   --footer-red: #c94635;
   --footer-blue: #86b8c8;
-  --footer-moss: #92a56f;
+  --footer-moss: rgba(248, 244, 234, 0.58);
   --footer-header-clearance: var(--headerHeight, 80px);
 
   position: relative;
@@ -126,7 +126,7 @@
       ),
       radial-gradient(
         circle at 58% 44%,
-        rgba(146, 165, 111, 0.15),
+        rgba(248, 244, 234, 0.1),
         transparent 18%
       );
     filter: blur(1px);
@@ -166,10 +166,10 @@
 
     span:nth-child(3) {
       inset: 36%;
-      border-color: rgba(146, 165, 111, 0.28);
+      border-color: rgba(248, 244, 234, 0.18);
       background: radial-gradient(
         circle,
-        rgba(146, 165, 111, 0.18),
+        rgba(134, 184, 200, 0.12),
         transparent 62%
       );
     }
@@ -350,8 +350,8 @@
   background: linear-gradient(
     90deg,
     var(--footer-red),
-    var(--footer-blue),
-    var(--footer-moss)
+    var(--footer-moss) 48%,
+    var(--footer-blue)
   );
   opacity: 0;
   transform: scaleX(0);

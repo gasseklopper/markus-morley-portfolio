@@ -5,7 +5,7 @@ export const themePreferences = {
   dark: "dark",
   theme: "miami",
   cursor: "true",
-  layout: "box",
+  layout: "fullwidth",
   layoutDirection: "ltr",
   overlay: "off",
   motion: "normal",

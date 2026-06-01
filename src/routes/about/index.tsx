@@ -8,36 +8,38 @@ import {
   type ExpertiseItem,
 } from "~/components/about/about-expertise";
 
+/* eslint-disable qwik/jsx-img */
+
 const expertiseItems: ExpertiseItem[] = [
   {
     title: "Design",
     description:
-      "I have a deep love for design. Whether it’s creating visually stunning layouts or ensuring seamless user experiences, I strive to merge creativity with functionality in every project. My design philosophy is rooted in understanding user needs and crafting intuitive, engaging interfaces.",
+      "I shape clear, expressive interfaces that balance brand character with usability, accessibility, and measurable product goals.",
   },
   {
     title: "Prototyping",
     description:
-      "Building UX prototypes is a core part of my work. I transform ideas into interactive prototypes that allow for early user testing and feedback. This iterative process helps refine the user experience and ensures that the final product meets user expectations.",
+      "I turn early ideas into interactive prototypes that make decisions tangible, speed up feedback, and reduce delivery risk.",
   },
   {
     title: "Large-Scale Digital Projects",
     description:
-      "I develop and manage large-scale digital projects, leveraging modern technologies to create high-performance applications. My expertise spans from initial concept to final deployment, ensuring each project is executed with precision and meets the highest standards of quality.",
+      "I help teams move from concept to production with resilient systems, thoughtful collaboration, and a strong eye for quality.",
   },
   {
     title: "Development",
     description:
-      "Specializing in frontend development, I create robust components using atomic design principles. This methodology allows for the development of scalable and maintainable user interfaces by breaking down designs into their simplest, reusable parts.",
+      "I build modular frontend experiences with modern frameworks, type-safe tooling, and component patterns that scale.",
   },
   {
-    title: "My Mission",
+    title: "Product Thinking",
     description:
-      "My goal is to bridge the gap between design and development, creating digital experiences that are not only visually appealing but also highly functional. I am committed to continuous learning and staying updated with the latest industry trends to deliver cutting-edge solutions.",
+      "I connect design, engineering, and stakeholder needs so the finished product feels useful, coherent, and ready to evolve.",
   },
   {
-    title: "Forward",
+    title: "Collaboration",
     description:
-      "I look forward to collaborating with like-minded professionals and organizations to push the boundaries of what’s possible in the digital space. Let's create something extraordinary together!",
+      "I enjoy working with teams that value craft, momentum, and honest iteration from discovery through launch.",
   },
 ];
 
@@ -67,12 +69,11 @@ const rawToolStack = [
   "Edge",
   "Emmet",
   "eslint",
-  "EZ",
   "Firefox",
   "Flaticon",
   "Foundation",
-  "GitHub Desktop",
   "GitHub",
+  "GitHub Desktop",
   "Google Chrome",
   "Google Fonts",
   "GreenSock-JS",
@@ -94,15 +95,15 @@ const rawToolStack = [
   "Rest API",
   "Safari",
   "Sass/SCSS",
+  "Semantic UI",
   "Sketch",
   "Skeleton",
   "SMACSS",
   "Spectre.css",
-  "Semantic UI",
   "Storybook",
   "stylelint",
-  "Typo3",
   "TypeKit",
+  "Typo3",
   "Unsplash",
   "Visual Studio Code",
   "webpack",
@@ -111,7 +112,7 @@ const rawToolStack = [
 ];
 
 const toolStack = Array.from(new Set(rawToolStack)).sort((a, b) =>
-  a.localeCompare(b, undefined, { sensitivity: "base" })
+  a.localeCompare(b, undefined, { sensitivity: "base" }),
 );
 
 type ResumeHighlight = {
@@ -126,55 +127,185 @@ type ContactDetail = {
   value: string;
 };
 
+type TimelineItem = {
+  date: string;
+  title: string;
+  href?: string;
+  linkLabel?: string;
+  detail?: string;
+};
+
 const contactDetails: ContactDetail[] = [
   {
-    label: "Adresse",
-    value: "Lonsserstr. 1 · 60433 Frankfurt am Main",
+    label: "Address",
+    value: "Lonsserstr. 1, 60433 Frankfurt am Main",
   },
   {
-    label: "E-Mail",
+    label: "Email",
     value: "info@markusmorley.de",
   },
   {
-    label: "Telefon",
+    label: "Phone",
     value: "+49 177 231 9774",
   },
   {
-    label: "Geboren",
-    value: "18.09.1981 · Flörsheim am Main",
+    label: "Born",
+    value: "September 18, 1981, Floersheim am Main",
   },
 ];
 
 const resumeHighlights: ResumeHighlight[] = [
   {
-    period: "07/2021 – 06/2023",
-    role: "Senior Product Engineer · IT-Consultant",
+    period: "Jul 2021 - Jun 2023",
+    role: "Senior Product Engineer / IT Consultant",
     company: "Accenture, Frankfurt am Main",
     description:
-      "Entwicklung von Frontend-Lösungen mit TypeScript, Next.js und D3.js sowie Zusammenarbeit in interdisziplinären Teams.",
+      "Built frontend solutions with TypeScript, Next.js, and D3.js in interdisciplinary product teams.",
   },
   {
-    period: "07/2021 – 01/2022",
-    role: "Product Engineer · Frontend-Developer",
-    company: "Sinner Schrader, Frankfurt am Main",
+    period: "Jul 2021 - Jan 2022",
+    role: "Product Engineer / Frontend Developer",
+    company: "SinnerSchrader, Frankfurt am Main",
     description:
-      "Implementierung und Integration moderner Webanwendungen mit TypeScript, React und Web Components.",
+      "Implemented and integrated modern web applications with TypeScript, React, and Web Components.",
   },
   {
-    period: "01/2021 – 06/2021",
-    role: "Creative Developer · Frontend-Developer",
-    company: "hauserlacour, Frankfurt am Main",
+    period: "Jan 2021 - Jun 2021",
+    role: "Creative Developer / Frontend Developer",
+    company: "hauser lacour, Frankfurt am Main",
     description:
-      "Konzeption und Umsetzung von Webauftritten mit Fokus auf Designsysteme, UX und performante Interfaces.",
+      "Designed and delivered web experiences with a focus on design systems, UX, and performant interfaces.",
   },
+];
+
+const resumeItems: TimelineItem[] = [
+  {
+    date: "Jan 2021 - Jun 2021",
+    title: "Creative Developer / Frontend Developer",
+    href: "https://hauserlacour.de",
+    linkLabel: "hauserlacour.de",
+  },
+  {
+    date: "Jul 2021 - Jan 2022",
+    title: "Accenture / Senior Product Engineer / Frontend Developer",
+    href: "https://accenture.com",
+    linkLabel: "accenture.com",
+    detail: "TypeScript, Next.js, D3.js",
+  },
+  {
+    date: "Jul 2021 - Jan 2022",
+    title: "SinnerSchrader / Product Engineer / Frontend Developer",
+    href: "https://sinnerschrader.com",
+    linkLabel: "sinnerschrader.com",
+    detail: "TypeScript, React, Web Components",
+  },
+  { date: "2021", title: "synbionik.com" },
+  {
+    date: "Sep 2017 - Dec 2020",
+    title: "UX Designer / Frontend Developer",
+    href: "https://comwrap.com",
+    linkLabel: "comwrap.com",
+  },
+  { date: "2020", title: "Digital Thinking Concepts and Tools Workshop" },
+  {
+    date: "2020",
+    title: "Adobe Experience Manager Frontend Developer",
+    detail: "HTML5, CSS3, JavaScript, Webpack",
+  },
+  { date: "2020", title: "UX Design Theory Workshop", detail: "XDi" },
+  {
+    date: "2020",
+    title: "Adobe Experience Manager Core Components Workshop",
+    detail: "HTL, Java, CSS, Webpack, JavaScript",
+  },
+  {
+    date: "2019",
+    title: "Presentation and communication workshop",
+    detail: "Communication and body language",
+  },
+  {
+    date: "2019",
+    title: "Udacity Certificate: React Developer",
+    detail: "HTML5, CSS3, JavaScript, React, React Native, Ajax, Redux",
+  },
+  { date: "2018", title: "css.conf / js.conf.eu", detail: "Berlin" },
+  {
+    date: "2018",
+    title: "Udacity Certificate: Frontend Developer",
+    detail: "HTML5, responsive design, ARIA, CSS3, JavaScript",
+  },
+  {
+    date: "2017",
+    title: "Malvid Atomic Design Components Library Workshop",
+    detail: "BEM, SCSS, Nunjucks, JavaScript ECMA6",
+  },
+  { date: "2016", title: "Web design", detail: "Dieter Roosen" },
+  { date: "2015", title: "Digital operator", detail: "Frank Weinert" },
+  { date: "2015", title: "Web design", detail: "Stefanie Koesling" },
+  {
+    date: "2014",
+    title: "Retouching",
+    detail: "Maggi & Thommy recipe ideas",
+  },
+  { date: "2014", title: "CleverPrinting color management certificate" },
+  { date: "2012", title: "Digital operator", detail: "Dieter Roosen" },
+  {
+    date: "2011",
+    title: "Web design",
+    detail: "friedrich und ruppel / hauser lacour",
+  },
+  { date: "2011", title: "Digital operator", detail: "Stefanie Koesling" },
+  { date: "2011", title: "Digital operator", detail: "Becker Lacour" },
+  { date: "2010", title: "Digital operator", detail: "Thomas Goos" },
+  { date: "2010", title: "Set construction", detail: "Andreas Kopp" },
+  {
+    date: "2008 - 2014",
+    title: "Photo assistant",
+    detail: "Bernd Mayer",
+    href: "http://berndmayer.com",
+    linkLabel: "berndmayer.com",
+  },
+  { date: "2014", title: "Phase One: Lighting for Digital Cameras" },
+  { date: "2013", title: "Phase One: Capture One Digital Operator Workshop" },
+];
+
+const educationItems = [
+  "2008 - 2014: Visual Communication, Photography, Painting, Digital Media, HFG Offenbach am Main",
+  "2006 - 2008: Photography, Peter Behrens School, Darmstadt",
+  "2003 - 2006: Information Technology Assistant, Werner von Siemens School, Frankfurt am Main",
+];
+
+const exhibitionItems = [
+  "2019: Matias Hidalgo, fashion photography, New Talents, Vogue.it",
+  "2019: Matias Hidalgo, documentary photography, Kunstverein Lola Montez, Frankfurt",
+  '2015: Rainer Buchman Porsche 911 "bb Moonracer", fashion photography book',
+  "2014: Ernst & Young Benefit Auction New Talents, painting, Museum Angewandte Kunst",
+  "2013: Street art, photography, Kunstverein Lola Montez, Frankfurt",
+  "2012: 8 Portrait photo show, photography, Landtag Dresden",
+  "2012: A Piece of the Cake, photography, Kunstverein Lola Montez, Frankfurt",
+  "2011: Satelite, photography, Satelite, Berlin",
+  "2011: Is This Supposed to Be Art?, painting, Kunstverein Lola Montez, Frankfurt",
+  "2011: Gallus Calling, painting, Projektraum Balken, Frankfurt",
+  "2010: V2, photography, Sixt Gallusviertel, Frankfurt",
+  "2009: V1, sound performance, Landungsbruecken, Frankfurt",
+  "2009: The City Loves You, photography, Kunstverein Lola Montez, Frankfurt",
+  "2008: faites le jeu!, painting, occupied house Westend, Frankfurt",
 ];
 
 export default component$(() => {
   useStyles$(styles);
   return (
     <div class="about-page page relative text-[var(--text1)]">
-      {/* Hero */}
       <section class="relative overflow-hidden border-b border-[color-mix(in_srgb,var(--surface-border)_80%,transparent)] bg-[radial-gradient(circle_at_top_left,_var(--surface2)_0%,_var(--surface1)_75%)] text-[var(--text1)]">
+        <div class="about-page__backdrop" aria-hidden="true">
+          <img
+            src="/assets/images/photography/venedig/IMG_2094.jpg"
+            alt=""
+            loading="eager"
+            sizes="100vw"
+          />
+          <div class="about-page__iris" />
+        </div>
         <div
           class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,color-mix(in_srgb,var(--primary)_18%,transparent)_0%,transparent_68%)]"
           aria-hidden="true"
@@ -182,25 +313,33 @@ export default component$(() => {
         <div class="layout-shell relative px-6 py-20 sm:px-8 md:px-12 lg:px-16">
           <div class="relative grid items-start gap-12 rounded-[2.5rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface1)_88%,transparent)] px-6 py-12 shadow-[0_28px_120px_-52px_var(--surface-shadow)] backdrop-blur-sm transition-colors duration-300 sm:px-10 sm:py-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,1fr)] lg:gap-20">
             <div class="space-y-10">
-              <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_72%,transparent)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
-                <span class="h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-                Profil
+              <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_70%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_72%,transparent)] px-4 py-2 text-[11px] font-semibold tracking-[0.35em] text-[var(--text3)] uppercase">
+                <span
+                  class="h-2 w-2 rounded-full bg-[var(--primary)]"
+                  aria-hidden="true"
+                />
+                Profile
               </span>
               <div class="space-y-6">
-                <h1 class="max-w-3xl text-4xl font-extrabold uppercase tracking-tight text-[var(--text1)] sm:text-5xl lg:text-6xl lg:leading-[1.05]">
-                  Senior Frontend Engineer & Designer mit Fokus auf menschenzentrierte Produkte.
+                <h1 class="max-w-3xl text-4xl font-extrabold tracking-tight text-[var(--text1)] uppercase sm:text-5xl lg:text-6xl lg:leading-[1.05]">
+                  Markus Morley
                 </h1>
                 <p class="max-w-2xl text-base leading-relaxed text-[var(--text2)] sm:text-lg">
-                  Ich verbinde Design, Prototyping und performante Frontend-Entwicklung, um erlebnisstarke Markenerlebnisse zu schaffen. Mein Ansatz basiert auf präziser Gestaltung, technischer Exzellenz und enger Zusammenarbeit mit Stakeholdern.
+                  I connect design, prototyping, and performant frontend
+                  development to create digital experiences with clarity,
+                  character, and technical depth.
                 </p>
               </div>
-              <div class="flex flex-col gap-4 text-[11px] uppercase tracking-[0.35em] text-[var(--text3)] sm:flex-row sm:items-center sm:gap-6">
+              <div class="flex flex-col gap-4 text-[11px] tracking-[0.35em] text-[var(--text3)] uppercase sm:flex-row sm:items-center sm:gap-6">
                 <span class="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_72%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_80%,transparent)] px-4 py-3 font-semibold text-[var(--text2)]">
-                  <span class="h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]" aria-hidden="true" />
+                  <span
+                    class="h-2 w-2 animate-pulse rounded-full bg-[var(--primary)]"
+                    aria-hidden="true"
+                  />
                   Available for collaborations
                 </span>
                 <span class="text-[var(--text3)]">
-                  Frankfurt am Main · Remote-friendly
+                  Frankfurt am Main / Remote-friendly
                 </span>
               </div>
             </div>
@@ -208,20 +347,27 @@ export default component$(() => {
               <header class="space-y-4">
                 <div class="flex flex-wrap items-start justify-between gap-4">
                   <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.38em] text-[var(--text3)]">Lebenslauf</p>
-                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[var(--text1)] sm:text-3xl">Markus Morley</h2>
-                    <p class="mt-1 text-sm font-medium uppercase tracking-[0.24em] text-[var(--text3)]">
-                      Senior Product Engineer · Frontend-Entwickler
+                    <p class="text-xs font-semibold tracking-[0.38em] text-[var(--text3)] uppercase">
+                      Resume
+                    </p>
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[var(--text1)] sm:text-3xl">
+                      Markus Morley
+                    </h2>
+                    <p class="mt-1 text-sm font-medium tracking-[0.24em] text-[var(--text3)] uppercase">
+                      Senior Product Engineer / Frontend Developer
                     </p>
                   </div>
-                  <span class="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_92%,transparent)] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--text2)]">
-                    Fokus
+                  <span class="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_92%,transparent)] px-4 py-1.5 text-[11px] font-semibold tracking-[0.32em] text-[var(--text2)] uppercase">
+                    Focus
                   </span>
                 </div>
                 <dl class="grid gap-2 text-sm text-[var(--text2)]">
                   {contactDetails.map((detail) => (
-                    <div key={detail.label} class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                      <dt class="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--text3)]">
+                    <div
+                      key={detail.label}
+                      class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"
+                    >
+                      <dt class="text-xs font-semibold tracking-[0.32em] text-[var(--text3)] uppercase">
                         {detail.label}
                       </dt>
                       <dd class="text-right text-sm text-[var(--text2)] sm:text-base">
@@ -237,19 +383,23 @@ export default component$(() => {
                     key={`${item.period}-${item.company}`}
                     class="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--surface-border)_68%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_96%,transparent)]/95 p-5 shadow-[0_18px_70px_-60px_var(--surface-shadow)]"
                   >
-                    <p class="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
+                    <p class="text-[11px] font-semibold tracking-[0.35em] text-[var(--text3)] uppercase">
                       {item.period}
                     </p>
                     <h3 class="mt-2 text-base font-semibold tracking-tight text-[var(--text1)] sm:text-lg">
                       {item.role}
                     </h3>
-                    <p class="mt-1 text-sm font-medium text-[var(--text2)]">{item.company}</p>
-                    <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">{item.description}</p>
+                    <p class="mt-1 text-sm font-medium text-[var(--text2)]">
+                      {item.company}
+                    </p>
+                    <p class="mt-3 text-sm leading-relaxed text-[var(--text2)]">
+                      {item.description}
+                    </p>
                   </article>
                 ))}
               </div>
-              <p class="text-xs uppercase tracking-[0.32em] text-[var(--text3)]">
-                Auszug aus dem vollständigen Lebenslauf
+              <p class="text-xs tracking-[0.32em] text-[var(--text3)] uppercase">
+                Snapshot from the full resume
               </p>
             </aside>
           </div>
@@ -259,30 +409,28 @@ export default component$(() => {
       <AboutProfile />
 
       <div class="layout-shell py-16">
-        {/* Intro */}
         <section class="max-w-3xl">
           <h2 class="text-3xl font-semibold tracking-tight text-[var(--text1)] sm:text-4xl">
             Hi, I'm Markus Morley
           </h2>
           <p class="mt-4 text-base leading-relaxed text-[var(--text2)] sm:text-lg">
-            I'm passionate about coding digital experiences and crafting user
-            interfaces. Based in Frankfurt am Main, I dedicate my professional
-            life to designing, developing, and bringing to life innovative
-            digital solutions.
+            I design and code digital experiences for teams that care about
+            craft, usability, and resilient delivery. Based in Frankfurt am
+            Main, I work across product design, frontend architecture, and
+            interactive brand experiences.
           </p>
         </section>
 
         <AboutExpertise
           class="mt-24"
           items={expertiseItems}
-          description="My approach blends research-led design exploration with code that ships. Each engagement flexes between discovery, prototyping, and resilient delivery so brands feel fearless across every touchpoint."
+          description="My approach blends research-led design exploration with code that ships. Each engagement moves between discovery, prototyping, and resilient delivery so products feel coherent across every touchpoint."
         />
 
-        {/* Tool Stack */}
         <section class="mt-24 overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface1)_88%,transparent)] px-6 py-10 shadow-[0_22px_90px_-60px_var(--surface-shadow)] sm:px-10">
           <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div class="space-y-3">
-              <span class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--text3)]">
+              <span class="text-xs font-semibold tracking-[0.4em] text-[var(--text3)] uppercase">
                 Craft
               </span>
               <h2 class="text-3xl font-semibold tracking-tight text-[var(--text1)] sm:text-4xl">
@@ -290,26 +438,31 @@ export default component$(() => {
               </h2>
             </div>
             <p class="max-w-xl text-sm leading-relaxed text-[var(--text2)] sm:text-base">
-              A curated set of tools, frameworks, and platforms I rely on to design, build, and refine digital products.
+              A curated set of tools, frameworks, and platforms I use to design,
+              build, and refine digital products.
             </p>
           </div>
-          <ul class="mt-10 grid list-none gap-3 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" aria-label="Tool stack">
+          <ul
+            class="mt-10 grid list-none gap-3 p-0 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+            aria-label="Tool stack"
+          >
             {toolStack.map((tool) => (
               <li key={tool}>
                 <span class="inline-flex w-full items-center justify-between gap-3 rounded-full border border-[color-mix(in_srgb,var(--surface-border)_75%,transparent)] bg-[color-mix(in_srgb,var(--surface2)_82%,transparent)] px-4 py-2 text-sm font-medium text-[var(--text2)] shadow-[0_8px_24px_-18px_var(--surface-shadow)] transition-colors duration-200 hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--surface-border))] hover:bg-[color-mix(in_srgb,var(--surface3)_88%,transparent)] hover:text-[var(--text1)]">
                   {tool}
-                  <span class="text-[10px] font-semibold uppercase tracking-[0.4em] text-[var(--text3)]">Tool</span>
+                  <span class="text-[10px] font-semibold tracking-[0.4em] text-[var(--text3)] uppercase">
+                    Tool
+                  </span>
                 </span>
               </li>
             ))}
           </ul>
         </section>
 
-        {/* Resume */}
         <section class="mt-24 overflow-hidden rounded-[2rem] border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface1)_90%,transparent)] px-6 py-10 text-[var(--text2)] shadow-[0_22px_90px_-60px_var(--surface-shadow)] transition-colors duration-300 sm:px-10">
           <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div class="space-y-3">
-              <span class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--text3)]">
+              <span class="text-xs font-semibold tracking-[0.4em] text-[var(--text3)] uppercase">
                 Experience
               </span>
               <h2 class="text-3xl font-semibold tracking-tight text-[var(--text1)] sm:text-4xl">
@@ -317,166 +470,33 @@ export default component$(() => {
               </h2>
             </div>
             <p class="max-w-xl text-sm leading-relaxed text-[var(--text2)] sm:text-base">
-              A quick view into the collaborations, workshops, and milestones that shaped my craft across design and engineering.
+              A quick view of the collaborations, workshops, and milestones that
+              shaped my craft across design and engineering.
             </p>
           </div>
+
           <ol class="mt-10 space-y-5 border-l border-[color-mix(in_srgb,var(--surface-border)_85%,transparent)] pl-6">
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">01.01.2021 - 30.06.2021:</span>{" "}
-              Creative Developer / Frontend-Developer
-              <a href="https://hauserlacour.de" class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]">
-                hauserlacour.de
-              </a>
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">01.07.2021 - 01.01.2022:</span>{" "}
-              Accenture / Senior Product Engineer / Frontend-Developer
-              <a href="https://accenture.com" class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]">
-                accenture.com
-              </a>
-              – TypeScript, Next.js, D3.js
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">01.07.2021 - 01.01.2022:</span> Sinner
-              Schrader / Product Engineer / Frontend-Developer
-              <a href="https://sinnerschrader.com" class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]">
-                sinnerschrader.com
-              </a>
-              – TypeScript, React, Web Components
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2021:</span> synbionik.com
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">01.09.2017 - 31.12.2020:</span>
-              UX-Designer / Frontend-Developer
-              <a href="https://comwrap.com" class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]">
-                comwrap.com
-              </a>
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2020:</span> Digital Thinking Concepts
-              and Tools Workshop
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2020:</span> Adobe Experience Manager
-              – Frontend Developer (HTML5/CSS3/JavaScript/Webpack)
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2020:</span> UX Design Theory Workshop
-              – XDi
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2020:</span> Adobe Experience Manager
-              – Core Components Workshop (HTL/Java/CSS/Webpack/JavaScript)
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2019:</span> "Wie präsentiere ich
-              richtig" – Kommunikations/Körpersprache Workshop
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2019:</span> Udacity Certificate –
-              React Developer (HTML5/CSS3/JavaScript/React/React
-              Native/Ajax/Redux)
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2018:</span> css.conf / js.conf.eu –
-              Berlin
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2018:</span> Udacity Certificate –
-              Frontend Developer (HTML5/Responsive/ARIA/CSS3/JavaScript)
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2017:</span> Malvid Atomic Design
-              Components Library Workshop (BEM/SCSS/Nunjucks/JavaScript ECMA6)
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2016:</span> Webdesign – Dieter Roosen
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2015:</span> Digital Operator – Frank
-              Weinert
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2015:</span> Webdesign – Stefanie
-              Koesling
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2014:</span> Retouching – Maggi &
-              Thommy Rezept Ideen
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2014:</span> CleverPrinting
-              Colormanagement Certificate
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2012:</span> Digital Operator – Dieter
-              Roosen
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2011:</span> Webdesign – friedrich und
-              ruppel – hauser lacour
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2011:</span> Digital Operator –
-              Stefanie Koesling
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2011:</span> Digital Operator – Becker
-              Lacour
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2010:</span> Digital Operator – Thomas
-              Goos
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2010:</span> Kulissen Bau – Andreas
-              Kopp
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2008 - 2014:</span> Fotoassistent –
-              Bernd Mayer
-              <a href="http://berndmayer.com" class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]">
-                berndmayer.com
-              </a>
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2014:</span> Phase One – Lighting for
-              Digital Cameras
-            </li>
-            <li class="relative">
-              <span class="absolute left-[-19px] top-2 h-2 w-2 rounded-full bg-[var(--primary)]" aria-hidden="true" />
-              <span class="font-semibold text-[var(--text1)]">2013:</span> Phase One – Capture One
-              Digital Operator Workshop
-            </li>
+            {resumeItems.map((item) => (
+              <li key={`${item.date}-${item.title}`} class="relative">
+                <span
+                  class="absolute top-2 left-[-19px] h-2 w-2 rounded-full bg-[var(--primary)]"
+                  aria-hidden="true"
+                />
+                <span class="font-semibold text-[var(--text1)]">
+                  {item.date}:
+                </span>{" "}
+                {item.title}
+                {item.href && item.linkLabel && (
+                  <a
+                    href={item.href}
+                    class="ml-1 underline decoration-[var(--surface-border)] decoration-2 underline-offset-4 transition-colors hover:text-[var(--text1)]"
+                  >
+                    {item.linkLabel}
+                  </a>
+                )}
+                {item.detail && <> - {item.detail}</>}
+              </li>
+            ))}
           </ol>
 
           <div class="mt-12 grid gap-10 md:grid-cols-2">
@@ -485,18 +505,9 @@ export default component$(() => {
                 Education
               </h3>
               <ul class="mt-4 list-disc space-y-3 pl-5 text-sm leading-relaxed text-[var(--text2)] sm:text-base">
-                <li>
-                  2008-2014: Visuele Kommunikation – Photography/Painting/Digitale
-                  Medien – HFG, Offenbach a.M.
-                </li>
-                <li>
-                  2006-2008: Photographer – Photography Peter Behrens Schule –
-                  Darmstadt
-                </li>
-                <li>
-                  2003-2006: Informationstechnischer Assistent – Werner-von-Siemens
-                  Schule, Frankfurt am Main
-                </li>
+                {educationItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
             </div>
             <div>
@@ -504,51 +515,9 @@ export default component$(() => {
                 Exhibitions
               </h3>
               <ul class="mt-4 list-disc space-y-3 pl-5 text-sm leading-relaxed text-[var(--text2)] sm:text-base">
-                <li>
-                  2019: Matias Hidalgo – Fashion Photography – New Talents –
-                  Vogue.it
-                </li>
-                <li>
-                  2019: Matias Hidalgo – Documentation Photography – Kunstverein
-                  Lola Montez, Frankfurt
-                </li>
-                <li>
-                  2015: Rainer Buchman Porsche 911 „bb Moonracer“ – Fashion
-                  Photography, Buch
-                </li>
-                <li>
-                  2014: Ernst and Young Benefitt Auktion Neue Talente – Painting –
-                  Museum für Angewandte Kunst
-                </li>
-                <li>
-                  2013: Streetart – Photography – Kunstverein Lola Montez, Frankfurt
-                </li>
-                <li>
-                  2012: 8 Portrait Fotoschau Deutschlands – Photography – Landtag,
-                  Dresden
-                </li>
-                <li>
-                  2012: Ein Stück vom Kuchen – Photography – Kunstverein Lola
-                  Montez, Frankfurt
-                </li>
-                <li>2011: Satelite – Photography – Satelite, Berlin</li>
-                <li>
-                  2011: Und das soll Kunst sein – Painting – Kunstverein Lola
-                  Montez, Frankfurt
-                </li>
-                <li>
-                  2011: Gallus Calling – Painting – Projektraum Balken, Frankfurt
-                </li>
-                <li>2010: V2 – Photography – Sixt Gallusviertel, Frankfurt</li>
-                <li>2009: V1 – Soundperformance – Landungsbrücken, Frankfurt</li>
-                <li>
-                  2009: The City Loves You – Photography – Kunstverein Lola Montez,
-                  Frankfurt
-                </li>
-                <li>
-                  2008: faites le jeu! – Painting – besetztes Haus Westend,
-                  Frankfurt
-                </li>
+                {exhibitionItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
               </ul>
             </div>
           </div>

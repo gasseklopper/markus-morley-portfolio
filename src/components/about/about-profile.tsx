@@ -79,8 +79,10 @@ export const AboutProfile = component$(() => {
             />
           </div>
           <div>
-            <h2 class="text-2xl font-semibold text-[var(--text1)]">Markus Morley</h2>
-            <p class="mt-1 text-sm font-medium uppercase tracking-[0.4em] text-[var(--text3)]">
+            <h2 class="text-2xl font-semibold text-[var(--text1)]">
+              Markus Morley
+            </h2>
+            <p class="mt-1 text-sm font-medium tracking-[0.4em] text-[var(--text3)] uppercase">
               Senior Frontend Engineer
             </p>
           </div>
@@ -91,7 +93,7 @@ export const AboutProfile = component$(() => {
             Download CV
           </a>
           <div class="flex flex-col items-center gap-3 text-sm text-[var(--text3)]">
-            <span class="font-semibold uppercase tracking-[0.3em] text-[var(--text3)]">
+            <span class="font-semibold tracking-[0.3em] text-[var(--text3)] uppercase">
               Follow me
             </span>
             <div class="flex items-center gap-3">
@@ -104,7 +106,7 @@ export const AboutProfile = component$(() => {
                   aria-label={`Follow Markus on ${social.name}`}
                   class="grid h-10 w-10 place-items-center rounded-full border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-[var(--text2)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,_var(--surface1)_35%,_transparent)] transition-all duration-300 hover:scale-105 hover:border-[var(--primary)] hover:text-[var(--primary)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
                 >
-                  <span class="text-xs font-semibold uppercase tracking-widest">
+                  <span class="text-xs font-semibold tracking-widest uppercase">
                     {social.abbr}
                   </span>
                 </a>
@@ -117,14 +119,20 @@ export const AboutProfile = component$(() => {
           <article class="about-profile__biography rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
+                <p class="text-xs font-semibold tracking-[0.4em] text-[var(--primary)] uppercase">
                   Biography
                 </p>
-                <h3 class="text-3xl font-semibold text-[var(--text1)]">Biography</h3>
+                <h3 class="text-3xl font-semibold text-[var(--text1)]">
+                  Biography
+                </h3>
               </div>
             </header>
             <p class="max-w-3xl text-base leading-relaxed text-[var(--text2)]">
-              I pair visual design craft with full-stack interface engineering to help teams ship accessible digital products. From rapid prototyping and user research to design system governance, I create experiences that feel fast, cohesive, and delightful across every theme mode.
+              I pair visual design craft with full-stack interface engineering
+              to help teams ship accessible digital products. From rapid
+              prototyping and user research to design system governance, I
+              create experiences that feel fast, cohesive, and delightful across
+              every theme mode.
             </p>
             <dl class="about-profile__facts mt-8 gap-4">
               {biographyItems.map((item) => (
@@ -132,10 +140,12 @@ export const AboutProfile = component$(() => {
                   key={item.label}
                   class="flex flex-col gap-1 rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-1)] p-4 transition-colors duration-300"
                 >
-                  <dt class="text-xs font-semibold uppercase tracking-wide text-[var(--text3)]">
+                  <dt class="text-xs font-semibold tracking-wide text-[var(--text3)] uppercase">
                     {item.label}
                   </dt>
-                  <dd class="text-base font-semibold text-[var(--text1)]">{item.value}</dd>
+                  <dd class="text-base font-semibold text-[var(--text1)]">
+                    {item.value}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -144,10 +154,12 @@ export const AboutProfile = component$(() => {
           <article class="about-profile__services rounded-[2.5rem] border border-[var(--surface-border)] bg-[var(--surface-glass-2)] p-8 text-[var(--text2)] shadow-[0_20px_70px_var(--surface-shadow)] transition-colors duration-300">
             <header class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p class="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--primary)]">
+                <p class="text-xs font-semibold tracking-[0.4em] text-[var(--primary)] uppercase">
                   My Services
                 </p>
-                <h3 class="text-3xl font-semibold text-[var(--text1)]">My Services</h3>
+                <h3 class="text-3xl font-semibold text-[var(--text1)]">
+                  My Services
+                </h3>
               </div>
             </header>
             <div class="about-profile__services-grid gap-6">
@@ -159,9 +171,13 @@ export const AboutProfile = component$(() => {
                   <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[var(--surface-glass-2)] text-2xl font-semibold text-[var(--primary)] shadow-[0_8px_24px_var(--surface-shadow)] transition-colors duration-300">
                     {service.title[0]}
                   </span>
-                  <h4 class="text-xl font-semibold text-[var(--text1)]">{service.title}</h4>
-                  <p class="leading-relaxed text-[var(--text2)]">{service.description}</p>
-                  <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[var(--primary)] transition-colors duration-300 group-hover:text-[var(--brand-core)]">
+                  <h4 class="text-xl font-semibold text-[var(--text1)]">
+                    {service.title}
+                  </h4>
+                  <p class="leading-relaxed text-[var(--text2)]">
+                    {service.description}
+                  </p>
+                  <span class="mt-auto inline-flex items-center gap-2 text-xs font-semibold tracking-[0.3em] text-[var(--primary)] uppercase transition-colors duration-300 group-hover:text-[var(--brand-core)]">
                     Learn More
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

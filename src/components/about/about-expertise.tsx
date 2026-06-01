@@ -18,8 +18,7 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
   ({
     heading = "What I Do",
     kicker = "Capabilities",
-    description =
-      "Bridging brutalist aesthetics with engineered precision across every engagement.",
+    description = "Bridging brutalist aesthetics with engineered precision across every engagement.",
     items,
     ...sectionProps
   }) => {
@@ -38,7 +37,7 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
             />
             <div class="relative grid gap-12 p-10 sm:p-12 lg:grid-cols-[320px_1fr] lg:gap-16 lg:p-16">
               <div class="max-w-md space-y-6">
-                <span class="inline-flex items-center rounded-full border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface-glass-2)_65%,transparent)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.4em] text-[var(--text3)]">
+                <span class="inline-flex items-center rounded-full border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface-glass-2)_65%,transparent)] px-4 py-2 text-[10px] font-semibold tracking-[0.4em] text-[var(--text3)] uppercase">
                   {kicker}
                 </span>
                 <div>
@@ -49,7 +48,7 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
                     {description}
                   </p>
                 </div>
-                <p class="text-sm uppercase tracking-[0.35em] text-[color-mix(in_srgb,var(--text3)_80%,transparent)]">
+                <p class="text-sm tracking-[0.35em] text-[color-mix(in_srgb,var(--text3)_80%,transparent)] uppercase">
                   Hybrid designer & technologist
                 </p>
               </div>
@@ -60,10 +59,10 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
                     class="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface-glass-1)_82%,transparent)] p-6 text-[var(--text2)] shadow-[0_18px_40px_-28px_var(--surface-shadow)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[color-mix(in_srgb,var(--primary)_35%,var(--surface-border))] hover:bg-[color-mix(in_srgb,var(--surface-glass-2)_88%,transparent)] hover:text-[var(--text1)]"
                   >
                     <div class="flex items-baseline justify-between gap-4">
-                      <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface-glass-2)_80%,transparent)] text-xs font-semibold uppercase tracking-[0.3em] text-[var(--primary)] transition-colors duration-300 group-hover:border-[color-mix(in_srgb,var(--primary)_45%,var(--surface-border))] group-hover:text-[var(--brand-inverted)] group-hover:bg-[color-mix(in_srgb,var(--primary)_30%,var(--surface-glass-2))]">
+                      <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[var(--surface-border)] bg-[color-mix(in_srgb,var(--surface-glass-2)_80%,transparent)] text-xs font-semibold tracking-[0.3em] text-[var(--primary)] uppercase transition-colors duration-300 group-hover:border-[color-mix(in_srgb,var(--primary)_45%,var(--surface-border))] group-hover:bg-[color-mix(in_srgb,var(--primary)_30%,var(--surface-glass-2))] group-hover:text-[var(--brand-inverted)]">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <span class="text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)]">
+                      <span class="text-[11px] font-semibold tracking-[0.35em] text-[var(--text3)] uppercase">
                         Focus Area
                       </span>
                     </div>
@@ -71,14 +70,12 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
                       <h3 class="text-xl font-semibold text-[var(--text1)]">
                         {item.title}
                       </h3>
-                      <p class="text-sm leading-relaxed">
-                        {item.description}
-                      </p>
+                      <p class="text-sm leading-relaxed">{item.description}</p>
                     </div>
-                    <div class="mt-8 inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.35em] text-[var(--text3)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--primary)]">
+                    <div class="mt-8 inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.35em] text-[var(--text3)] uppercase transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--primary)]">
                       <span>Explore</span>
                       <span aria-hidden="true" class="text-base">
-                        →
+                        -&gt;
                       </span>
                     </div>
                     <div
@@ -97,5 +94,5 @@ export const AboutExpertise = component$<AboutExpertiseProps>(
         </div>
       </section>
     );
-  }
+  },
 );

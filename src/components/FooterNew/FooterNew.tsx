@@ -209,7 +209,7 @@ export const FooterNew = component$(() => {
                   <a
                     class="sticky-link"
                     data-sticky="1"
-                    href="/"
+                    href="https://www.instagram.com/yelrom_/"
                     onMouseMove$={(e, el) => moveSticky(e, el)}
                     onMouseEnter$={(e, el) => enterSticky(e, el)}
                     onMouseLeave$={(_, el) => leaveSticky(el)}

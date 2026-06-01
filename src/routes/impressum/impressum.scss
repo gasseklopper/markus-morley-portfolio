@@ -1,0 +1,245 @@
+.imprint-page {
+  --imprint-ink: #f8f4ea;
+  --imprint-muted: rgba(248, 244, 234, 0.68);
+  --imprint-line: rgba(248, 244, 234, 0.18);
+  --imprint-panel: rgba(10, 10, 9, 0.76);
+  --imprint-red: #c94635;
+  --imprint-blue: #86b8c8;
+  --imprint-moss: #92a56f;
+
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 80% 16%, rgba(134, 184, 200, 0.18), transparent 31rem),
+    radial-gradient(circle at 20% 74%, rgba(201, 70, 53, 0.17), transparent 29rem),
+    linear-gradient(180deg, #050505 0%, #11100d 52%, #0a0a09 100%);
+  color: var(--imprint-ink);
+  font-family: Barlow, Arial, sans-serif;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+.imprint-page::before {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(90deg, transparent, rgba(248, 244, 234, 0.055), transparent),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 8.5rem,
+      rgba(248, 244, 234, 0.032) 8.5rem 8.57rem
+    );
+  opacity: 0.44;
+}
+
+.imprint-page__shell {
+  position: relative;
+  z-index: 1;
+  width: min(100% - clamp(1.25rem, 5vw, 6rem), 82rem);
+  margin-inline: auto;
+}
+
+.imprint-page__hero {
+  display: grid;
+  min-height: min(76svh, 46rem);
+  align-items: end;
+  padding-block: clamp(7rem, 16vw, 13rem) clamp(3rem, 7vw, 6rem);
+}
+
+.imprint-page__eyebrow,
+.imprint-page__summary p,
+.imprint-card__label {
+  margin: 0;
+  color: var(--imprint-blue);
+  font-size: clamp(0.72rem, 0.68rem + 0.12vw, 0.82rem);
+  font-family: var(--font-semibold, Barlow, Arial, sans-serif);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.imprint-page h1 {
+  max-width: 9ch;
+  margin: 1.1rem 0 0;
+  color: var(--imprint-ink);
+  font-size: clamp(4rem, 13vw, 11rem);
+  font-family: var(--font-semibold, Barlow, Arial, sans-serif);
+  font-weight: 600;
+  line-height: 0.84;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  text-wrap: balance;
+}
+
+.imprint-page__intro {
+  max-width: 43rem;
+  margin: clamp(1.4rem, 3vw, 2.2rem) 0 0;
+  color: var(--imprint-muted);
+  font-size: clamp(1.05rem, 0.98rem + 0.35vw, 1.32rem);
+  line-height: 1.58;
+}
+
+.imprint-page__content {
+  position: relative;
+  z-index: 1;
+  padding-block: 0 clamp(5rem, 10vw, 9rem);
+}
+
+.imprint-page__layout {
+  display: grid;
+  gap: clamp(1rem, 4vw, 4rem);
+  align-items: start;
+}
+
+.imprint-page__summary {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--imprint-line);
+  background: var(--imprint-line);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.3);
+}
+
+.imprint-page__summary p,
+.imprint-page__summary a {
+  display: block;
+  margin: 0;
+  padding: 1rem;
+  background: rgba(8, 8, 7, 0.82);
+}
+
+.imprint-page__summary a {
+  color: var(--imprint-muted);
+  font-family: var(--font-medium, Barlow, Arial, sans-serif);
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.08rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-decoration-color: rgba(134, 184, 200, 0.42);
+  text-underline-offset: 0.28rem;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.imprint-page__summary a:hover,
+.imprint-page__summary a:focus-visible {
+  background: rgba(248, 244, 234, 0.06);
+  color: var(--imprint-ink);
+  text-decoration-color: var(--imprint-red);
+}
+
+.imprint-page__summary a:focus-visible,
+.imprint-card a:focus-visible {
+  outline: 2px solid var(--imprint-blue);
+  outline-offset: 0.18rem;
+}
+
+.imprint-page__cards {
+  display: grid;
+  gap: 1px;
+  border: 1px solid var(--imprint-line);
+  background: var(--imprint-line);
+  box-shadow: 0 34px 120px rgba(0, 0, 0, 0.38);
+}
+
+.imprint-card {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.28fr) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.4rem);
+  min-width: 0;
+  padding: clamp(1.15rem, 4vw, 3rem);
+  background:
+    linear-gradient(135deg, rgba(248, 244, 234, 0.04), transparent 42%),
+    var(--imprint-panel);
+}
+
+.imprint-card--lead {
+  min-height: clamp(15rem, 28vw, 24rem);
+  align-items: end;
+  background:
+    linear-gradient(120deg, rgba(134, 184, 200, 0.12), transparent 32%),
+    linear-gradient(300deg, rgba(201, 70, 53, 0.1), transparent 34%),
+    var(--imprint-panel);
+}
+
+.imprint-card h2 {
+  margin: 0;
+  color: var(--imprint-ink);
+  font-size: clamp(1.9rem, 4vw, 4.6rem);
+  font-family: var(--font-semibold, Barlow, Arial, sans-serif);
+  font-weight: 600;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.imprint-card p {
+  max-width: 52rem;
+  margin: clamp(0.8rem, 1.8vw, 1.2rem) 0 0;
+  color: var(--imprint-muted);
+  font-size: clamp(1rem, 0.95rem + 0.18vw, 1.1rem);
+  line-height: 1.68;
+}
+
+.imprint-card a {
+  display: inline-flex;
+  margin-inline: 0.32rem;
+  color: var(--imprint-blue);
+  font-family: var(--font-medium, Barlow, Arial, sans-serif);
+  overflow-wrap: anywhere;
+  text-decoration-color: rgba(134, 184, 200, 0.42);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28rem;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.imprint-card a:hover {
+  color: var(--imprint-ink);
+  text-decoration-color: var(--imprint-red);
+}
+
+@media (min-width: 860px) {
+  .imprint-page__layout {
+    grid-template-columns: minmax(13rem, 0.3fr) minmax(0, 1fr);
+  }
+
+  .imprint-page__summary {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .imprint-page__hero {
+    min-height: 66svh;
+    padding-block: 6.5rem 2.5rem;
+  }
+
+  .imprint-page h1 {
+    font-size: clamp(3.2rem, 19vw, 5.7rem);
+  }
+
+  .imprint-card {
+    grid-template-columns: 1fr;
+  }
+
+  .imprint-card__label {
+    color: var(--imprint-red);
+  }
+}

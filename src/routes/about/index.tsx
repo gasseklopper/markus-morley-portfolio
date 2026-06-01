@@ -138,66 +138,64 @@ type TimelineItem = {
 const contactDetails: ContactDetail[] = [
   {
     label: "Address",
-    value: "Lonsserstr. 1, 60433 Frankfurt am Main",
+    value: "Offenbach am Main",
   },
   {
     label: "Email",
-    value: "info@markusmorley.de",
-  },
-  {
-    label: "Phone",
-    value: "+49 177 231 9774",
-  },
-  {
-    label: "Born",
-    value: "September 18, 1981, Floersheim am Main",
+    value: "m-morley@gmx.de",
   },
 ];
 
 const resumeHighlights: ResumeHighlight[] = [
   {
-    period: "Jul 2021 - Jun 2023",
-    role: "Senior Product Engineer / IT Consultant",
-    company: "Accenture, Frankfurt am Main",
+    period: "Jul 2025 - Today",
+    role: "Career Break",
+    company: "Offenbach am Main",
     description:
-      "Built frontend solutions with TypeScript, Next.js, and D3.js in interdisciplinary product teams.",
+      "Focused on parental responsibilities and targeted professional development in modern frontend and data-driven technologies.",
   },
   {
-    period: "Jul 2021 - Jan 2022",
-    role: "Product Engineer / Frontend Developer",
-    company: "SinnerSchrader, Frankfurt am Main",
+    period: "Jul 2022 - Jul 2025",
+    role: "Senior Product Engineer",
+    company: "Accenture Song, Frankfurt",
     description:
-      "Implemented and integrated modern web applications with TypeScript, React, and Web Components.",
+      "Architected scalable frontend systems with TypeScript, React, Next.js, design systems, and headless CMS platforms.",
   },
   {
-    period: "Jan 2021 - Jun 2021",
-    role: "Creative Developer / Frontend Developer",
-    company: "hauser lacour, Frankfurt am Main",
+    period: "Jul 2021 - Jun 2022",
+    role: "Product Engineer",
+    company: "SinnerSchrader, Frankfurt",
     description:
-      "Designed and delivered web experiences with a focus on design systems, UX, and performant interfaces.",
+      "Developed enterprise web applications with TypeScript, React, Web Components, and reusable component systems.",
   },
 ];
 
 const resumeItems: TimelineItem[] = [
   {
+    date: "Jul 2025 - Today",
+    title: "Career Break / Personal & Professional Development",
+    detail:
+      "Parental responsibilities, machine learning foundations, algorithmic thinking, and data visualization with D3.js",
+  },
+  {
+    date: "Jul 2022 - Jul 2025",
+    title: "Accenture Song / Senior Product Engineer",
+    href: "https://accenture.com",
+    linkLabel: "accenture.com",
+    detail: "TypeScript, React, Next.js, Contentful, Adobe Experience Manager",
+  },
+  {
+    date: "Jul 2021 - Jun 2022",
+    title: "SinnerSchrader / Product Engineer",
+    href: "https://sinnerschrader.com",
+    linkLabel: "sinnerschrader.com",
+    detail: "TypeScript, React, Web Components",
+  },
+  {
     date: "Jan 2021 - Jun 2021",
     title: "Creative Developer / Frontend Developer",
     href: "https://hauserlacour.de",
     linkLabel: "hauserlacour.de",
-  },
-  {
-    date: "Jul 2021 - Jan 2022",
-    title: "Accenture / Senior Product Engineer / Frontend Developer",
-    href: "https://accenture.com",
-    linkLabel: "accenture.com",
-    detail: "TypeScript, Next.js, D3.js",
-  },
-  {
-    date: "Jul 2021 - Jan 2022",
-    title: "SinnerSchrader / Product Engineer / Frontend Developer",
-    href: "https://sinnerschrader.com",
-    linkLabel: "sinnerschrader.com",
-    detail: "TypeScript, React, Web Components",
   },
   { date: "2021", title: "synbionik.com" },
   {
@@ -270,9 +268,12 @@ const resumeItems: TimelineItem[] = [
 ];
 
 const educationItems = [
-  "2008 - 2014: Visual Communication, Photography, Painting, Digital Media, HFG Offenbach am Main",
-  "2006 - 2008: Photography, Peter Behrens School, Darmstadt",
-  "2003 - 2006: Information Technology Assistant, Werner von Siemens School, Frankfurt am Main",
+  "Nov 2025: freeCodeCamp Legacy JavaScript Algorithms and Data Structures V7 Certification",
+  "Oct 2025: freeCodeCamp Data Visualization V8 / D3.js",
+  "Oct 2019: Certified UX & Usability Professional, XDi - Experience Design Institut GmbH",
+  "Aug 2019: React / React Native Nanodegree, Udacity",
+  "Oct 2018: Front-End Web Developer Nanodegree, Udacity",
+  "Oct 2014 - Aug 2018: Visual Communication, Hochschule fuer Gestaltung Offenbach",
 ];
 
 const exhibitionItems = [
@@ -339,7 +340,7 @@ export default component$(() => {
                   Available for collaborations
                 </span>
                 <span class="text-[var(--text3)]">
-                  Frankfurt am Main / Remote-friendly
+                  Offenbach am Main / Remote-friendly
                 </span>
               </div>
             </div>
@@ -354,7 +355,7 @@ export default component$(() => {
                       Markus Morley
                     </h2>
                     <p class="mt-1 text-sm font-medium tracking-[0.24em] text-[var(--text3)] uppercase">
-                      Senior Product Engineer / Frontend Developer
+                      Senior Product Engineer
                     </p>
                   </div>
                   <span class="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--surface-border)_65%,transparent)] bg-[color-mix(in_srgb,var(--surface1)_92%,transparent)] px-4 py-1.5 text-[11px] font-semibold tracking-[0.32em] text-[var(--text2)] uppercase">
@@ -415,7 +416,7 @@ export default component$(() => {
           </h2>
           <p class="mt-4 text-base leading-relaxed text-[var(--text2)] sm:text-lg">
             I design and code digital experiences for teams that care about
-            craft, usability, and resilient delivery. Based in Frankfurt am
+            craft, usability, and resilient delivery. Based in Offenbach am
             Main, I work across product design, frontend architecture, and
             interactive brand experiences.
           </p>

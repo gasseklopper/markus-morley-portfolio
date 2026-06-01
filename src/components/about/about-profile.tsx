@@ -2,6 +2,8 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import ImgHeroPortrait from "~/media/assets/images/heros/image.png?jsx";
 import styles from "./about-profile.css?inline";
 
+const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_2203.pdf";
+
 type BiographyItem = {
   label: string;
   value: string;
@@ -20,9 +22,9 @@ type SocialLink = {
 
 const biographyItems: BiographyItem[] = [
   { label: "Name", value: "Markus Morley" },
-  { label: "Role", value: "Senior Frontend Engineer" },
-  { label: "Location", value: "Frankfurt am Main, Germany" },
-  { label: "Email", value: "hello@markusmorley.de" },
+  { label: "Role", value: "Senior Product Engineer" },
+  { label: "Location", value: "Offenbach am Main, Germany" },
+  { label: "Email", value: "m-morley@gmx.de" },
   { label: "Experience", value: "10+ years" },
   { label: "Freelance", value: "Available" },
   { label: "Website", value: "markusmorley.de" },
@@ -83,12 +85,14 @@ export const AboutProfile = component$(() => {
               Markus Morley
             </h2>
             <p class="mt-1 text-sm font-medium tracking-[0.4em] text-[var(--text3)] uppercase">
-              Senior Frontend Engineer
+              Senior Product Engineer
             </p>
           </div>
           <a
-            class="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--brand-inverted)] shadow-[0_18px_45px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)] hover:shadow-[0_22px_60px_var(--brand-glow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
-            href="#download-cv"
+            class="about-profile__cv-link inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--brand-inverted)] shadow-[0_18px_45px_var(--brand-glow)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[color-mix(in_srgb,_var(--primary)_85%,_var(--brand-core)_15%)] hover:shadow-[0_22px_60px_var(--brand-glow)] focus:outline-none focus-visible:ring focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface1)]"
+            href={cvDownloadHref}
+            download="markus-morley-cv-2026_2203.pdf"
+            aria-label="Download Markus Morley CV as PDF"
           >
             Download CV
           </a>

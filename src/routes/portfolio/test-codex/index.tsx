@@ -240,7 +240,7 @@ const productionNotes = [
 const statementText =
   "Frontend Engineer & Designer focused on human-centered products, scalable systems, turning complex ideas into intuitive digital experiences.";
 
-const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_2203.pdf";
+const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_1506.pdf";
 
 const statementGroups = [
   {
@@ -339,7 +339,7 @@ export default component$(() => {
             <a
               class="test-codex__cv-download"
               href={cvDownloadHref}
-              download="markus-morley-cv-2026_2203.pdf"
+              download="markus-morley-cv-2026_1506.pdf"
               aria-label="Download Markus Morley CV as PDF"
             >
               <span aria-hidden="true">PDF</span>

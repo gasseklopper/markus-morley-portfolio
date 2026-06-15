@@ -9,7 +9,7 @@ import { Link } from "@builder.io/qwik-city";
 import { loadGsap } from "~/utils/gsapClient";
 import styles from "./footerNew.scss?inline";
 
-const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_2203.pdf";
+const cvDownloadHref = "/assets/cv/markus-morley-cv-2026_1506.pdf";
 
 export const FooterNew = component$(() => {
   useStyles$(styles);
@@ -124,7 +124,7 @@ export const FooterNew = component$(() => {
               <a
                 class="footer__cv-download"
                 href={cvDownloadHref}
-                download="markus-morley-cv-2026_2203.pdf"
+                download="markus-morley-cv-2026_1506.pdf"
                 aria-label="Download Markus Morley CV as PDF"
               >
                 <span aria-hidden="true">PDF</span>

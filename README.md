@@ -89,9 +89,9 @@ The `/todos` route demonstrates how to wire the UI to a Qwik City backend withou
 leaving the repository:
 
 - `src/routes/api/todos/index.ts` exposes `GET`, `POST`, `PATCH`, and `DELETE`
-  handlers that run as Netlify Edge Functions. Todos are stored in a shared
-  in-memory map, making the endpoint simple to reason about while keeping the
-  TypeScript types shared with the front end.
+  handlers that run as Netlify Edge Functions. Todos persist per visitor inside
+  an HTTP-only cookie, so they survive deployments without requiring a separate
+  database while keeping the TypeScript types shared with the front end.
 - `src/routes/todos/index.tsx` contains the client experience, fetching todos
   with `useResource$`, submitting form data, and reacting to backend updates in
   real time.

@@ -16,36 +16,44 @@ export const FooterNew = component$(() => {
   const footerLayoutRef = useSignal<HTMLElement>();
   const footerRef = useSignal<HTMLElement>();
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    if (!footerLayoutRef.value) return;
+  useVisibleTask$(async ({ cleanup }) => {
+    const el = footerLayoutRef.value;
+    if (!el) return;
+
+    let disposed = false;
+    cleanup(() => {
+      disposed = true;
+    });
 
     const { gsap } = await loadGsap();
+    if (disposed) return;
 
-    const el = footerLayoutRef.value;
+    const context = gsap.context(() => {
+      gsap.set(el, {
+        opacity: 0,
+        y: 140,
+        scaleY: 0.92,
+        transformOrigin: "top center",
+        clipPath: "inset(100% 0% 0% 0% round 18px 18px 0 0)",
+        willChange: "transform, opacity, clip-path",
+      });
 
-    gsap.set(el, {
-      opacity: 0,
-      y: 140,
-      scaleY: 0.92,
-      transformOrigin: "top center",
-      clipPath: "inset(100% 0% 0% 0% round 18px 18px 0 0)",
-      willChange: "transform, opacity, clip-path",
-    });
-
-    gsap.to(el, {
-      opacity: 1,
-      y: 0,
-      scaleY: 1,
-      clipPath: "inset(0% 0% 0% 0% round 18px 18px 0 0)",
-      duration: 3,
-      ease: "sine.out",
-      scrollTrigger: {
-        trigger: el,
-        start: "top 85%",
-        toggleActions: "play none none none",
-        once: true,
-      },
-    });
+      gsap.to(el, {
+        opacity: 1,
+        y: 0,
+        scaleY: 1,
+        clipPath: "inset(0% 0% 0% 0% round 18px 18px 0 0)",
+        duration: 3,
+        ease: "sine.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          toggleActions: "play none none none",
+          once: true,
+        },
+      });
+    }, el);
+    cleanup(() => context.revert());
   });
 
   const moveSticky = $(async (e: MouseEvent, el: HTMLElement) => {

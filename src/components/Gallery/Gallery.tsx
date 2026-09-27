@@ -1,4 +1,12 @@
-import { component$, $, useSignal, useTask$, useStyles$ } from "@builder.io/qwik"
+import {
+	component$,
+	$,
+	useSignal,
+	useComputed$,
+	useVisibleTask$,
+	useOnWindow,
+	useStyles$,
+} from "@builder.io/qwik"
 import styles from "./gallery.scss?inline"
 
 type GalleryImage = {
@@ -47,27 +55,30 @@ export const Gallery = component$(() => {
 	const currentIndex = useSignal(0)
 	const visibleCount = useSignal(3)
 
-	useTask$(() => {
-		if (typeof window !== "undefined") {
-			const updateVisibleCount = () => {
-				visibleCount.value = window.innerWidth < 768 ? 1 : 3
-			}
-
-			updateVisibleCount()
-			window.addEventListener("resize", updateVisibleCount)
-
-			return () => window.removeEventListener("resize", updateVisibleCount)
-		}
+	const updateVisibleCount = $(() => {
+		const count = window.innerWidth < 768 ? 1 : 3
+		visibleCount.value = count
+		currentIndex.value = Math.min(
+			currentIndex.value,
+			Math.max(0, images.length - count),
+		)
 	})
 
-	const maxIndex = Math.max(0, images.length - visibleCount.value)
+	// Browser width must be measured after both SSR resume and client-side mounts.
+	// eslint-disable-next-line qwik/no-use-visible-task
+	useVisibleTask$(() => updateVisibleCount())
+	useOnWindow("resize", updateVisibleCount)
+
+	const maxIndex = useComputed$(() =>
+		Math.max(0, images.length - visibleCount.value),
+	)
 
 	const goPrev = $(() => {
 		currentIndex.value = Math.max(0, currentIndex.value - 1)
 	})
 
 	const goNext = $(() => {
-		currentIndex.value = Math.min(maxIndex, currentIndex.value + 1)
+		currentIndex.value = Math.min(maxIndex.value, currentIndex.value + 1)
 	})
 
 	const translateX = `translate3d(-${currentIndex.value * (100 / visibleCount.value)}%, 0, 0)`
@@ -83,6 +94,7 @@ export const Gallery = component$(() => {
 
 					<div class="gallery__controls">
 						<button
+							type="button"
 							class="gallery__button"
 							onClick$={goPrev}
 							disabled={currentIndex.value === 0}
@@ -94,13 +106,14 @@ export const Gallery = component$(() => {
 						<div class="gallery__meta" aria-live="polite">
 							<span>{String(currentIndex.value + 1).padStart(2, "0")}</span>
 							<span>/</span>
-							<span>{String(maxIndex + 1).padStart(2, "0")}</span>
+							<span>{String(maxIndex.value + 1).padStart(2, "0")}</span>
 						</div>
 
 						<button
+							type="button"
 							class="gallery__button"
 							onClick$={goNext}
-							disabled={currentIndex.value >= maxIndex}
+							disabled={currentIndex.value >= maxIndex.value}
 							aria-label="Next images"
 						>
 							→
@@ -109,10 +122,7 @@ export const Gallery = component$(() => {
 				</div>
 
 				<div class="gallery__viewport">
-					<div
-						class="gallery__track"
-						style={{ transform: translateX }}
-					>
+					<div class="gallery__track" style={{ transform: translateX }}>
 						{images.map((image) => (
 							<figure class="gallery__slide" key={image.src}>
 								<img

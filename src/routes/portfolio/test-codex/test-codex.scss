@@ -12,8 +12,9 @@
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: clip;
+  // Clip horizontal artwork without creating a nested scroll container.
+  overflow-x: clip;
+  overflow-y: visible;
   background: #0a0a09;
   color: var(--codex-ink);
   font-family: Barlow, Arial, sans-serif;
@@ -527,13 +528,17 @@
 }
 
 .test-codex__statement-group {
-  grid-area: 1 / 1;
+  grid-area: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.08em 0.22em;
   width: 100%;
   will-change: transform, opacity, filter;
+}
+
+.test-codex[data-animation="active"] .test-codex__statement-group {
+  grid-area: 1 / 1;
 }
 
 .test-codex__statement-phrase {
@@ -952,7 +957,7 @@
 .test-codex__reel-viewport {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: visible;
 }
 

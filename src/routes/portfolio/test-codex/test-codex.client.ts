@@ -191,6 +191,8 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
 
   const { gsap, ScrollTrigger } = await loadGsap();
   const cleanupBag = createCleanupBag();
+  root.dataset.animation = "active";
+  cleanupBag.add(() => delete root.dataset.animation);
 
   const ctx = gsap.context(() => {
     const {
@@ -906,6 +908,28 @@ export const setupTestCodexAnimations = async (root: HTMLElement) => {
   }, root);
 
   ScrollTrigger.refresh();
+
+  // Font metrics and lazy images can change trigger positions after initial setup.
+  let disposed = false;
+  let refreshFrame = 0;
+  const refreshLayout = () => {
+    if (disposed || refreshFrame) return;
+    refreshFrame = requestAnimationFrame(() => {
+      refreshFrame = 0;
+      if (!disposed) ScrollTrigger.refresh();
+    });
+  };
+  cleanupBag.add(() => {
+    disposed = true;
+    cancelAnimationFrame(refreshFrame);
+  });
+  void document.fonts.ready.then(refreshLayout);
+  root.querySelectorAll("img").forEach((image) => {
+    if (!image.complete) {
+      cleanupBag.add(on(image, "load", refreshLayout));
+      cleanupBag.add(on(image, "error", refreshLayout));
+    }
+  });
 
   return () => {
     cleanupTestCodexAnimations(ctx, cleanupBag.run);

@@ -56,8 +56,10 @@ html[data-header-visible] .navClass__logo-text {
   mix-blend-mode: normal;
   background: transparent;
   font-family: Barlow, Arial, sans-serif;
+  visibility: hidden;
 
   &.is-open {
+    visibility: visible;
     pointer-events: all;
   }
 

@@ -28,6 +28,8 @@
     "storybook": "storybook dev -p 6006",
     "test.unit": "vitest components",
     "test.unit.ui": "vitest --ui components",
+    "test.e2e": "cypress run --e2e --config-file cypress.e2e.config.ts",
+    "test.firefox": "node scripts/firefox-smoke.mjs",
     "postinstall": "patch-package",
     "qwik": "qwik"
   },
